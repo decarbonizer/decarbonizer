@@ -1,0 +1,21 @@
+# Compiled Files
+dist
+
+# OS Files
+.DS_STORE
+
+# npm/yarn
+node_modules
+yarn.lock
+
+# Editor Files (VS Code files are published).
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Misc Files
+*.log
+.vscode/settings.json
+
+# Caches
+.parcel-cache
