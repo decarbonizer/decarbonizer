@@ -19,3 +19,6 @@ yarn.lock
 
 # Caches
 .parcel-cache
+
+# Sensitive files
+.env

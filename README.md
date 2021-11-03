@@ -37,6 +37,13 @@ npm run uninstall-packages
 npx lerna bootstrap
 ```
 
+### Backend Configuration
+
+The backend requires a MongoDB connection in order to run properly.
+The connection string must be configured in the [`packages/backend/.env`](./packages/backend/.env) file.
+To get started, you can copy and rename the [`packages/backend/.env.example`](./packages/backend/.env.example)
+file and fill it with your custom values.
+
 ### Running the Frontend and Backend
 
 To run **both** the frontend and backend project at the same time, simply run `npm start` in the
