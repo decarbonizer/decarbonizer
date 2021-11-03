@@ -4,9 +4,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .appContainer h1 {
   font-size: 20pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
