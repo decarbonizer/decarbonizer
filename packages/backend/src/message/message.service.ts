@@ -15,6 +15,6 @@ export class MessageService {
       message = await newMessage.save();
     }
 
-    return message.content;
+    return message;
   }
 }
