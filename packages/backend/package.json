@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "name": "@decarbonizer/backend",
+  "description": "The backend of the Decarbonizer project.",
+  "scripts": {
+    "start": "npm run clean && npm run watch",
+    "watch": "nest start --debug --watch",
+    "clean": "rimraf dist",
+    "build": "nest build",
+    "test": "jest",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint \"src/**.{ts,tsx}\""
+  },
+  "dependencies": {
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.0.3",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/mongoose": "^9.0.1",
+    "@nestjs/platform-express": "^8.0.0",
+    "mongoose": "^6.0.12",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.2.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^8.0.0",
+    "@nestjs/schematics": "^8.0.0",
+    "@nestjs/testing": "^8.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.0.0",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "jest": "^27.2.5",
+    "source-map-support": "^0.5.20",
+    "ts-jest": "^27.0.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.10.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
