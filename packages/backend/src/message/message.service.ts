@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Message, MessageDocument } from './message';
+import { GenericCrudService } from '../common';
+import { MessageRepository } from './message.repository';
+import { Message, MessagePut } from './message.schema';
 
 @Injectable()
-export class MessageService {
-  constructor(@InjectModel(Message.name) private messageModel: Model<MessageDocument>) {}
+export class MessageService extends GenericCrudService<Message, Message, MessagePut, MessageRepository> {
+  constructor(messageRepository: MessageRepository) {
+    super(messageRepository);
+  }
 
-  async getOrCreateMessage() {
-    let message = await this.messageModel.findOne();
+  protected mapCreateToEntity(entity: Message): Message {
+    return entity;
+  }
 
-    if (!message) {
-      const newMessage = new this.messageModel({ content: 'Hello world!' });
-      message = await newMessage.save();
-    }
-
-    return message;
+  protected mapUpdateToEntity(entity: MessagePut): Partial<Message> {
+    return entity;
   }
 }
