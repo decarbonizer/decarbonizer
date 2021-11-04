@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { GenericCrudService } from '../common';
 import { MessageRepository } from './message.repository';
-import { Message, MessagePut } from './message.schema';
+import { Message, MessageUpdate } from './message.schema';
 
 @Injectable()
-export class MessageService extends GenericCrudService<Message, Message, MessagePut, MessageRepository> {
+export class MessageService extends GenericCrudService<Message, Message, MessageUpdate, MessageRepository> {
   constructor(messageRepository: MessageRepository) {
     super(messageRepository);
   }
@@ -13,7 +13,7 @@ export class MessageService extends GenericCrudService<Message, Message, Message
     return entity;
   }
 
-  protected mapUpdateToEntity(entity: MessagePut): Partial<Message> {
+  protected mapUpdateToEntity(entity: MessageUpdate): Partial<Message> {
     return entity;
   }
 }

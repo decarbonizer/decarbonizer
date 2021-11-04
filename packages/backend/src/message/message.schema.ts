@@ -23,4 +23,4 @@ export class Message extends DbObject {
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
 
-export class MessagePut extends PartialType(Message) {}
+export class MessageUpdate extends PartialType(Message) {}

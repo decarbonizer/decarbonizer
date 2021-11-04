@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { Message, MessagePut } from './message.schema';
+import { Message, MessageUpdate } from './message.schema';
 import { MessageService } from './message.service';
 
 @Controller('api/v1/message')
@@ -28,7 +28,7 @@ export class MessageController {
 
   @Patch(':id')
   @ApiResponse({ status: HttpStatus.OK, type: Message })
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() body: MessagePut) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() body: MessageUpdate) {
     return await this.messageService.update(id, body);
   }
 
