@@ -1,23 +1,29 @@
 import { useEffect, useState } from 'react';
-import { getMessage } from './api/message';
+import { getMessages } from './api/message';
 import * as styles from './App.css';
 
 export default function App() {
-  const [message, setMessage] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Array<string>>([]);
 
   useEffect(() => {
-    getMessage().then((res) => setMessage(res.data.content));
+    getMessages().then((res) => setMessages(res.data.map((message) => message.content)));
   }, []);
 
   return (
     <div className={styles.appContainer}>
       <h1>👋🏻 Hello from the frontend!</h1>
-      {message && (
+      {messages.length ? (
         <>
           <br />
-          <b>Message from the backend:</b>
-          <code>{message}</code>
+          <b>Messages from the backend:</b>
+          {messages.map((message, i) => (
+            <code key={i}>{message}</code>
+          ))}
         </>
+      ) : (
+        <b>
+          No messages found. Create some via <code>http://localhost:3000/swagger</code>.
+        </b>
       )}
     </div>
   );
