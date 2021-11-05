@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { User, UserCreate, UserRead } from './user.schema';
+import { User, UserCreate, UserRead, UserRoles } from './user.schema';
 import { compareSync, hashSync } from 'bcrypt';
 import { authHashRounds } from '../constants';
 
@@ -26,7 +26,7 @@ export class UserService {
     const newUser = await this.userRepository.add({
       ...userCreate,
       passwordHash: hashSync(userCreate.password, authHashRounds),
-      roles: ['user'],
+      roles: [UserRoles.User],
     });
     return this.stripDangerousProps(newUser);
   }
