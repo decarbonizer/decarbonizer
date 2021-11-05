@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "stopOnEntry": false,
+      "protocol": "inspector"
+    },
+    {
+      "name": "Frontend (Edge)",
+      "request": "launch",
+      "type": "pwa-msedge",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}",
+      "pathMapping": {
+        "__parcel_source_root": "${webRoot}"
+      }
+    },
+    {
+      "name": "Frontend (Chrome)",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}",
+      "pathMapping": {
+        "__parcel_source_root": "${webRoot}"
+      }
+    }
+  ]
+}
