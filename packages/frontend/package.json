@@ -9,12 +9,17 @@
     "lint": "eslint \"src/**.{ts,tsx}\""
   },
   "dependencies": {
+    "@chakra-ui/react": "1.6.10",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "framer-motion": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.3.0"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.3.0",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@types/react-router": "^5.1.17",
