@@ -7,6 +7,9 @@ import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { User } from '../user/user.schema';
 
+/**
+ * A service which provides functions in the area of user authentication and management.
+ */
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService {
   constructor(
@@ -15,6 +18,10 @@ export class AuthService {
     @Inject(REQUEST) private request: Request,
   ) {}
 
+  /**
+   * Returns the user which is currently signed in.
+   * @returns The signed-in user.
+   */
   getCurrentUser() {
     const user = this.request.user as User;
 
@@ -25,6 +32,10 @@ export class AuthService {
     return user;
   }
 
+  /**
+   * Attempts to sign-in a user using the given credentials.
+   * If successful, issues a JWT which can be used to access protected endpoints.
+   */
   async loginAndSignJwt({ email, password }: LoginPayload) {
     const user = await this.getUserByCredentials(email, password);
 

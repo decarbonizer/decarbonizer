@@ -3,6 +3,9 @@ import { Reflector } from '@nestjs/core';
 import { rolesKey } from './roles.decorator';
 import { UserRoles } from '../user/user.schema';
 
+/**
+ * A guard which ensures that the signed-in user has the specified user roles.
+ */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
