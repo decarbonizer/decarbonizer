@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
-import { DbObject, Repository } from '../db';
+import { DbObject } from '../db/db-object.schema';
+import { Repository } from '../db/repository';
 
 /**
  * An abstract base class for a generic CRUD service for a normal non-nested entity.

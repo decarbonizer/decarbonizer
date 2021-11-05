@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { DbObject } from '.';
+import { DbObject } from './db-object.schema';
 
 /**
  * A simple base repository leveraging an underlying Mongoose model.

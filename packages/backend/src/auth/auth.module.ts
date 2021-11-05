@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { RolesGuard } from './roles.guard';
 import { authJwtDevExpiresIn, authJwtDevSecret } from '../constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { UserService } from '../user/user.service';
-import { UserModule } from '../user/user.module';
 
+@Global()
 @Module({
   imports: [
     PassportModule,
@@ -15,9 +15,9 @@ import { UserModule } from '../user/user.module';
       secret: authJwtDevSecret,
       signOptions: { expiresIn: authJwtDevExpiresIn },
     }),
-    UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, UserService],
+  providers: [AuthService, JwtStrategy, RolesGuard],
+  exports: [AuthService],
 })
 export class AuthModule {}

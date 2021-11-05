@@ -13,6 +13,6 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.OK, type: LoginResult })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Invalid username or password.' })
   async login(@Body() loginPayload: LoginPayload) {
-    return this.authService.login(loginPayload);
+    return this.authService.loginAndSignJwt(loginPayload);
   }
 }

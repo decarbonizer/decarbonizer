@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Message, MessageUpdate } from './message.schema';
 import { MessageService } from './message.service';
 

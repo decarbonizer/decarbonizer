@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsArray, IsEmail, IsEnum, IsString, Matches, MaxLength, MinLength, ValidateNested } from 'class-validator';
 import { Document } from 'mongoose';
-import { DbObject } from '../common';
+import { DbObject } from '../common/db/db-object.schema';
 
 export type UserDocument = User & Document;
 
@@ -32,7 +32,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
 /**
  * A user object with sensitive attributes stripped away.
  */
-export type SafeUser = Omit<User, 'passwordHash'>;
+export class SafeUser extends OmitType(User, ['passwordHash']) {}
 
 export class UserCreate extends OmitType(User, ['passwordHash', 'roles']) {
   @ApiProperty()

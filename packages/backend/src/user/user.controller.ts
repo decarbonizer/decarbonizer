@@ -1,5 +1,8 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SafeUser } from './user.schema';
+import { UserIdPipe } from './user-id.pipe';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User, UserCreate } from './user.schema';
 import { UserService } from './user.service';
 
@@ -7,6 +10,14 @@ import { UserService } from './user.service';
 @ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: SafeUser })
+  async get(@Param('id', UserIdPipe) id: string) {
+    return await this.userService.getById(id);
+  }
 
   @Post()
   @ApiResponse({ status: HttpStatus.CREATED, type: User })

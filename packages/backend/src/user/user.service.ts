@@ -1,25 +1,22 @@
-import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { User, UserCreate, SafeUser, UserRoles } from './user.schema';
-import { compareSync, hashSync } from 'bcrypt';
+import { hashSync } from 'bcrypt';
 import { authHashRounds } from '../constants';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository, private readonly authService: AuthService) {}
 
   async getById(id: string) {
-    return this.stripDangerousProps(await this.userRepository.getById(id));
-  }
+    const currentUser = this.authService.getCurrentUser();
 
-  async getByCredentials(email: string, password: string) {
-    const user = await this.userRepository.getByEmail(email);
-
-    if (user && compareSync(password, user.passwordHash)) {
-      return this.stripDangerousProps(user);
+    if (currentUser._id === id) {
+      return this.stripDangerousProps(currentUser);
     }
 
-    return undefined;
+    throw new ForbiddenException();
   }
 
   async create(userCreate: UserCreate) {

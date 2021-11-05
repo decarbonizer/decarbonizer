@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GenericCrudService } from '../common';
+import { GenericCrudService } from '../common/services/generic-crud.service';
 import { MessageRepository } from './message.repository';
 import { Message, MessageUpdate } from './message.schema';
 
