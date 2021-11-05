@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsArray, IsEmail, IsIn, IsString, Matches, MaxLength, MinLength, ValidateNested } from 'class-validator';
+import { IsArray, IsEmail, IsEnum, IsString, Matches, MaxLength, MinLength, ValidateNested } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObject } from '../common';
 
 export type UserDocument = User & Document;
 
-export const knownUserRoles = ['user', 'admin'] as const;
-export type UserRoles = typeof knownUserRoles[number];
+export enum UserRoles {
+  User = 'user',
+}
 
 @Schema()
 export class User extends DbObject {
@@ -19,10 +20,10 @@ export class User extends DbObject {
   @Prop({ required: true })
   passwordHash: string;
 
-  @Prop({ required: true, default: ['user'] })
+  @Prop({ required: true, default: [UserRoles.User] })
   @IsArray()
   @ValidateNested({ each: true })
-  @IsIn(knownUserRoles)
+  @IsEnum(UserRoles)
   roles: Array<UserRoles>;
 }
 
