@@ -14,6 +14,7 @@ async function bootstrap() {
     .setTitle('Decarbonizer')
     .setDescription('The Decarbonizer application.')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   SwaggerModule.setup('swagger', app, SwaggerModule.createDocument(app, swaggerConfig));
 

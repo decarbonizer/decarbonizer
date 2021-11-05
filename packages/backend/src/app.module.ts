@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfig } from './app-config';
+import { AuthModule } from './auth';
 import { MessageModule } from './message';
+import { UserModule } from './user';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { MessageModule } from './message';
         uri: configService.get('DB_CONNECTION_STRING'),
       }),
     }),
+    AuthModule,
+    UserModule,
     MessageModule,
   ],
 })

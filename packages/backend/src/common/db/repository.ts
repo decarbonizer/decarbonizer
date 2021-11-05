@@ -14,7 +14,8 @@ export abstract class Repository<T extends DbObject> {
    * Returns all entities within the repository.
    */
   async getAll(): Promise<Array<T>> {
-    return await this.model.find();
+    const docs = await this.model.find();
+    return docs.map((doc) => doc.toObject() as unknown as T);
   }
 
   /**
@@ -38,7 +39,8 @@ export abstract class Repository<T extends DbObject> {
    * @returns The entity with the given ID. A nullish value if no such entity exists.
    */
   async tryGetById(id: string): Promise<T | undefined | null> {
-    return await this.model.findById(id);
+    const doc = await this.model.findById(id);
+    return doc?.toObject() as unknown as T;
   }
 
   /**
@@ -50,7 +52,7 @@ export abstract class Repository<T extends DbObject> {
   async add(entity: T): Promise<T> {
     const doc = new this.model(entity);
     await doc.save();
-    return doc;
+    return doc.toObject() as unknown as T;
   }
 
   /**
@@ -84,7 +86,8 @@ export abstract class Repository<T extends DbObject> {
       );
     }
 
-    return await this.model.findByIdAndUpdate(id, entity as any, { new: true });
+    const doc = await this.model.findByIdAndUpdate(id, entity as any, { new: true });
+    return doc?.toObject() as unknown as T;
   }
 
   /**
