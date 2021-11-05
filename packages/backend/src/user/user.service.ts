@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { User, UserCreate, UserRead, UserRoles } from './user.schema';
+import { User, UserCreate, SafeUser, UserRoles } from './user.schema';
 import { compareSync, hashSync } from 'bcrypt';
 import { authHashRounds } from '../constants';
 
@@ -31,7 +31,7 @@ export class UserService {
     return this.stripDangerousProps(newUser);
   }
 
-  private stripDangerousProps(user: User): UserRead {
+  private stripDangerousProps(user: User): SafeUser {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, ...rest } = user;
     return rest;

@@ -29,7 +29,10 @@ export class User extends DbObject {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-export type UserRead = Omit<User, 'passwordHash'>;
+/**
+ * A user object with sensitive attributes stripped away.
+ */
+export type SafeUser = Omit<User, 'passwordHash'>;
 
 export class UserCreate extends OmitType(User, ['passwordHash', 'roles']) {
   @ApiProperty()
