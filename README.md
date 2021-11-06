@@ -57,6 +57,7 @@ respective directory and then running `npm start` there:
 cd packages/frontend/src
 npm start
 ```
+Then open http://localhost:1234 in your browser.
 
 ### Formatting and Linting
 
