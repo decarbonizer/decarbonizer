@@ -1,9 +1,8 @@
-import { Box, Heading, Divider, VStack } from '@chakra-ui/layout';
-import { Input, Button } from '@chakra-ui/react';
+import { Input, Button, Heading, Divider, VStack, Box } from '@chakra-ui/react';
 
 export default function LoginBox() {
   return (
-    <Box w="md" p="4" borderRadius="lg" borderWidth="1px" boxShadow="xl">
+    <Box w="100%">
       <Heading as="h1" size="lg" mb="4">
         Login
       </Heading>
@@ -16,9 +15,9 @@ export default function LoginBox() {
       </VStack>
       <Divider my="6" />
       <Heading as="h1" size="md" mb="4">
-        New to Decarbonizer?
+        New here?
       </Heading>
-      <Button w="100%" colorScheme="green">
+      <Button w="100%" colorScheme="gray">
         Create an account
       </Button>
     </Box>

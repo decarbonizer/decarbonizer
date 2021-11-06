@@ -1,24 +1,26 @@
-import { Flex, Heading, Stack, Box } from '@chakra-ui/react';
-import LoginBox from './LoginBox';
+import { Box, Flex } from '@chakra-ui/react';
+import Hero from './Hero';
+import LoginForm from './LoginForm';
 
 export default function LandingPage() {
   return (
-    <Flex minH="100%" display="flex" flexDirection="column">
-      <Flex mt="10%" justify="space-between" align="center" direction="row" wrap="nowrap" px="10%">
-        <Stack w="60%">
-          <Heading as="h1" size="4xl">
-            Decarbonizer
-          </Heading>
-          <Heading as="h2" size="2xl">
-            Subtitle
-          </Heading>
-          <Heading as="h3" size="md" mt="8" color="primary" opacity="0.8" fontWeight="normal" lineHeight={1.5}>
-            Information
-          </Heading>
-        </Stack>
-        <Box>
-          <LoginBox />
-        </Box>
+    <Flex minH="100%">
+      <Box w="100%" grow={1}>
+        <Hero />
+      </Box>
+      <Flex
+        as="aside"
+        direction="column"
+        justify="center"
+        align="center"
+        pos="sticky"
+        minW="md"
+        p="8"
+        bg="gray.50"
+        border="1px"
+        borderColor="gray.200"
+        shadow="xl">
+        <LoginForm />
       </Flex>
     </Flex>
   );
