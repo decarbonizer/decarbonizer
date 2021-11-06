@@ -1,10 +1,11 @@
 import { Box, Flex } from '@chakra-ui/react';
 import Hero from './Hero';
 import LoginForm from './LoginForm';
+import bg from './bg.svg';
 
 export default function LandingPage() {
   return (
-    <Flex minH="100%">
+    <Flex minH="100%" backgroundImage={bg}>
       <Box w="100%" grow={1}>
         <Hero />
       </Box>
