@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfig } from './app-config';
 import { AuthModule } from './auth/auth.module';
+import { BulbModule } from './bulbs/bulb.module';
 import { MessageModule } from './message/message.module';
 import { UserModule } from './user/user.module';
 
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
       }),
     }),
     AuthModule,
+    BulbModule,
     UserModule,
     MessageModule,
   ],
