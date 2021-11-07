@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfig } from './app-config';
 import { AuthModule } from './auth/auth.module';
 import { BulbModule } from './bulbs/bulb.module';
+import { EnergyFormModule } from './energy-type/energy-form.module';
 import { MessageModule } from './message/message.module';
 import { UserModule } from './user/user.module';
 
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     BulbModule,
+    EnergyFormModule,
     UserModule,
     MessageModule,
   ],
