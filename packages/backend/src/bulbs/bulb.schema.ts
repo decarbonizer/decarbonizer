@@ -31,13 +31,13 @@ export class Bulb extends DbObject {
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  costEuro: number;
+  costInEuro: number;
 
   @Prop()
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  lifetimeHours: number;
+  lifetimeInHours: number;
 }
 
 export const BulbSchema = SchemaFactory.createForClass(Bulb);
