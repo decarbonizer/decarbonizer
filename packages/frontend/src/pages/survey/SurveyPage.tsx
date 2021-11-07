@@ -1,0 +1,32 @@
+import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
+
+export default function SurveyPage() {
+  return (
+    <Flex minH="100%">
+      <Flex
+        as="aside"
+        direction="column"
+        justify="flex-start"
+        align="center"
+        pos="sticky"
+        minW="200"
+        p="8"
+        bg="gray.50"
+        border="1px"
+        borderColor="gray.200"
+        shadow="xl">
+        <Heading as="h3" color="darkgreen">
+          Decarbonizer
+        </Heading>
+      </Flex>
+      <Box w="100%" grow={1}>
+        <Stack align="center">
+          <Heading as="h1">Survey</Heading>
+          <Heading as="h2" size="lg" color="gray.600">
+            Topic-Placeholder
+          </Heading>
+        </Stack>
+      </Box>
+    </Flex>
+  );
+}
