@@ -17,7 +17,16 @@ import {
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { BiCube } from 'react-icons/bi';
 
-export default function CityBoxComponent(props) {
+interface CityBoxComponentProps {
+    cities: Array<{
+      name: string;
+      description: string;
+      capacity: number;
+      size: number;
+    }>;
+  }
+
+export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleTabsChange = (index) => {
@@ -25,18 +34,18 @@ export default function CityBoxComponent(props) {
   };
 
   function startSurvey() {
-    console.log(props.cities[tabIndex]); //TODO: implement start survey
+    console.log(cities[tabIndex]); //TODO: implement start survey
   }
   return (
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">
       <Tabs variant="enclosed" colorScheme="green" p="4" height="90%" onChange={handleTabsChange}>
         <TabList>
-          {props.cities.map((city, index) => (
+          {cities.map((city, index) => (
             <Tab key={index}>{city.name}</Tab>
           ))}
         </TabList>
         <TabPanels height="100%">
-          {props.cities.map((city, index) => (
+          {cities.map((city, index) => (
             <TabPanel key={index} roundedBottom="md" height="100%" position="relative">
               <Box>
                 <SimpleGrid columns={2} rows={2} spacing={10} h="xs">
@@ -85,7 +94,3 @@ export default function CityBoxComponent(props) {
     </Box>
   );
 }
-
-CityBoxComponent.PropTypes = {
-  cities: PropTypes.array,
-};
