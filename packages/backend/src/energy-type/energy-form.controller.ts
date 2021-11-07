@@ -6,18 +6,18 @@ import { EnergyFormService } from './energy-form.service';
 @Controller('api/v1/energyForms')
 @ApiTags('EnergyForm')
 export class EnergyFormController {
-  constructor(private readonly messageService: EnergyFormService) {}
+  constructor(private readonly energyFormService: EnergyFormService) {}
 
   @Get()
   @ApiResponse({ status: HttpStatus.OK, type: [EnergyForm] })
   async getAll() {
-    return await this.messageService.getAll();
+    return await this.energyFormService.getAll();
   }
 
   @Get(':id')
   @ApiResponse({ status: HttpStatus.OK, type: EnergyForm })
   @ApiResponse({ status: HttpStatus.NOT_FOUND })
   async get(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.messageService.get(id);
+    return await this.energyFormService.get(id);
   }
 }
