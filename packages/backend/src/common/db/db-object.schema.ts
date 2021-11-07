@@ -21,6 +21,7 @@ export class DbObject {
   createdAt?: Date;
 
   @Prop()
+  @ApiProperty()
   @IsDate()
   updatedAt?: Date;
 }
