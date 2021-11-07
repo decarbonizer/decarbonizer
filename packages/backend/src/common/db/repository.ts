@@ -112,6 +112,15 @@ export abstract class Repository<T extends DbObject> {
     return !!result;
   }
 
+  /**
+   * Removes all entities from the repository.
+   * @return The number of removed entities.
+   */
+  async removeAll() {
+    const result = await this.model.deleteMany();
+    return result.deletedCount;
+  }
+
   private createNotFoundException(id: string) {
     return new NotFoundException(`The ${this.model.modelName} entity with the ID ${id} does not exist.`);
   }
