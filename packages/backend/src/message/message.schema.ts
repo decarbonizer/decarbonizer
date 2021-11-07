@@ -1,12 +1,13 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNumber, IsString, Length, Min } from 'class-validator';
 import { Document } from 'mongoose';
+import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
 
 export type MessageDocument = Message & Document;
 
-@Schema()
+@DbObjectSchema()
 export class Message extends DbObject {
   @Prop()
   @ApiProperty()
