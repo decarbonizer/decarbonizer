@@ -5,23 +5,29 @@ import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
 
-export type MessageDocument = Message & Document;
+export type EnergyFormDocument = EnergyForm & Document;
 
 @DbObjectSchema()
-export class Message extends DbObject {
+export class EnergyForm extends DbObject {
   @Prop()
   @ApiProperty()
   @IsString()
-  @Length(3, 100)
-  content: string;
+  @Length(1, 255)
+  name: string;
 
   @Prop()
   @ApiProperty()
-  @IsNumber({ maxDecimalPlaces: 0 })
+  @IsNumber()
   @Min(0)
-  version: number;
+  co2PerGramPerKwh: number;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  euroPerKwh: number;
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message);
+export const EnergyFormSchema = SchemaFactory.createForClass(EnergyForm);
 
-export class MessageUpdate extends PartialType(Message) {}
+export class EnergyFormUpdate extends PartialType(EnergyForm) {}

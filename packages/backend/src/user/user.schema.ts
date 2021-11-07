@@ -1,7 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsArray, IsEmail, IsEnum, IsString, Matches, MaxLength, MinLength, ValidateNested } from 'class-validator';
 import { Document } from 'mongoose';
+import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
 
 export type UserDocument = User & Document;
@@ -10,7 +11,7 @@ export enum UserRoles {
   User = 'user',
 }
 
-@Schema()
+@DbObjectSchema({ timestamps: true })
 export class User extends DbObject {
   @Prop({ required: true, unique: true })
   @ApiProperty()

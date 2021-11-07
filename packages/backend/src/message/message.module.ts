@@ -4,6 +4,7 @@ import { Message, MessageSchema } from './message.schema';
 import { MessageController } from './message.controller';
 import { MessageService } from './message.service';
 import { MessageRepository } from './message.repository';
+import { MessageSeeder } from './message.seeder';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MessageRepository } from './message.repository';
     ]),
   ],
   controllers: [MessageController],
-  providers: [MessageService, MessageRepository],
+  providers: [MessageService, MessageRepository, MessageSeeder],
+  exports: [MessageSeeder],
 })
 export class MessageModule {}

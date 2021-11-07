@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Tabs,
   TabList,
@@ -18,13 +17,13 @@ import { AiOutlineArrowRight } from 'react-icons/ai';
 import { BiCube } from 'react-icons/bi';
 
 interface CityBoxComponentProps {
-    cities: Array<{
-      name: string;
-      description: string;
-      capacity: number;
-      size: number;
-    }>;
-  }
+  cities: Array<{
+    name: string;
+    description: string;
+    capacity: number;
+    size: number;
+  }>;
+}
 
 export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
   const [tabIndex, setTabIndex] = React.useState(0);
