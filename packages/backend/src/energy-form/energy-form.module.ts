@@ -4,6 +4,7 @@ import { EnergyForm, EnergyFormSchema } from './energy-form.schema';
 import { EnergyFormController } from './energy-form.controller';
 import { EnergyFormService } from './energy-form.service';
 import { EnergyFormRepository } from './energy-form.repository';
+import { EnergyFormSeeder } from './energy-form.seeder';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EnergyFormRepository } from './energy-form.repository';
     ]),
   ],
   controllers: [EnergyFormController],
-  providers: [EnergyFormService, EnergyFormRepository],
+  providers: [EnergyFormService, EnergyFormRepository, EnergyFormSeeder],
+  exports: [EnergyFormSeeder],
 })
 export class EnergyFormModule {}

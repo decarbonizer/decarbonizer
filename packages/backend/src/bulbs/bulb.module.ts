@@ -4,6 +4,7 @@ import { Bulb, BulbSchema } from './bulb.schema';
 import { BulbController } from './bulb.controller';
 import { BulbService } from './bulb.service';
 import { BulbRepository } from './bulb.repository';
+import { BulbSeeder } from './bulb.seeder';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { BulbRepository } from './bulb.repository';
     ]),
   ],
   controllers: [BulbController],
-  providers: [BulbService, BulbRepository],
+  providers: [BulbService, BulbRepository, BulbSeeder],
+  exports: [BulbSeeder],
 })
 export class BulbModule {}

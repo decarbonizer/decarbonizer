@@ -4,6 +4,7 @@ import { RealEstate, RealEstateSchema } from './real-estate.schema';
 import { RealEstateController } from './real-estate.controller';
 import { RealEstateService } from './real-estate.service';
 import { RealEstateRepository } from './real-estate.repository';
+import { RealEstateSeeder } from './real-estate.seeder';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RealEstateRepository } from './real-estate.repository';
     ]),
   ],
   controllers: [RealEstateController],
-  providers: [RealEstateService, RealEstateRepository],
+  providers: [RealEstateService, RealEstateRepository, RealEstateSeeder],
+  exports: [RealEstateSeeder],
 })
 export class RealEstateModule {}

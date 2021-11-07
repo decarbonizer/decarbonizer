@@ -11,7 +11,7 @@ export class UserSeeder extends DefaultDbSeeder<User> {
     super(userRepository);
   }
 
-  override getSeed(): Array<User> {
+  protected override getSeed(): Array<User> {
     return [
       {
         _id: '00000000-0000-0000-0000-000000000000',
