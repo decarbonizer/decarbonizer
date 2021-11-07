@@ -1,0 +1,46 @@
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { MaxLength, IsOptional, IsString, Length, IsNumber, Min } from 'class-validator';
+import { Document } from 'mongoose';
+import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
+import { DbObject } from '../common/db/db-object.schema';
+
+export type RealEstateDocument = RealEstate & Document;
+
+@DbObjectSchema()
+export class RealEstate extends DbObject {
+  @Prop()
+  @ApiProperty()
+  @IsString()
+  @Length(1, 255)
+  cityName: string;
+
+  @Prop()
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @MaxLength(10_000)
+  description?: string;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  employees: number;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  averageEmployeesPerDay: number;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  electricityConsumptionInKwh: number;
+}
+
+export const RealEstateSchema = SchemaFactory.createForClass(RealEstate);
+
+export class RealEstateUpdate extends PartialType(RealEstate) {}

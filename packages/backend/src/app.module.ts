@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { BulbModule } from './bulbs/bulb.module';
 import { EnergyFormModule } from './energy-type/energy-form.module';
 import { MessageModule } from './message/message.module';
+import { RealEstateModule } from './real-estate/real-estate.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -20,8 +21,9 @@ import { UserModule } from './user/user.module';
     AuthModule,
     BulbModule,
     EnergyFormModule,
-    UserModule,
     MessageModule,
+    UserModule,
+    RealEstateModule,
   ],
 })
 export class AppModule {}
