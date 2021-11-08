@@ -2,7 +2,6 @@ import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
 import CityBoxComponent from '../../components/CityBoxComponent';
 
 export default function SurveyPage() {
-
   const cities = [
     {
       name: 'Munich',
@@ -41,7 +40,7 @@ export default function SurveyPage() {
           <Heading as="h2" size="lg" color="gray.600">
             Topic-Placeholder
           </Heading>
-          <CityBoxComponent cities={cities}/>
+          <CityBoxComponent cities={cities} />
         </Stack>
       </Box>
     </Flex>
