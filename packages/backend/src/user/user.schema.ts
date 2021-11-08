@@ -35,7 +35,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
  */
 export class SafeUser extends OmitType(User, ['passwordHash']) {}
 
-export class UserCreate extends OmitType(User, ['passwordHash', 'roles']) {
+export class UserCreate extends OmitType(User, ['createdAt', 'updatedAt', 'passwordHash', 'roles']) {
   @ApiProperty()
   @IsString()
   @MinLength(6)
