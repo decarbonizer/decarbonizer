@@ -1,19 +1,15 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { appTheme } from './theme';
-import { Route, Switch } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
-import LandingPage from './pages/landing/LandingPage';
-import SurveyPage from './pages/survey/SurveyPage';
+import { Provider } from 'react-redux';
+import AppRoutes from './AppRoutes';
+import { store } from './store/store';
 
 export default function App() {
   return (
     <ChakraProvider theme={appTheme}>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/survey" component={SurveyPage} />
-        </Switch>
-      </BrowserRouter>
+      <Provider store={store}>
+        <AppRoutes />
+      </Provider>
     </ChakraProvider>
   );
 }
