@@ -22,7 +22,11 @@ export default function LoginBox() {
 
   return (
     <Box w="100%">
-      <form onSubmit={handleLogin}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}>
         <Heading as="h1" size="lg" mb="4">
           Login
         </Heading>
@@ -34,8 +38,7 @@ export default function LoginBox() {
             colorScheme="primary"
             type="submit"
             isLoading={isLoading}
-            isDisabled={email.length === 0 || password.length === 0}
-            onClick={handleLogin}>
+            isDisabled={email.length === 0 || password.length === 0}>
             Login
           </Button>
           <FormControl mb="3" isInvalid={hasLoginError}>
