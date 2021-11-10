@@ -17,7 +17,7 @@ export default function HomePage() {
       <Heading>Home</Heading>
       <Button onClick={handleLogout}>Logout</Button>
 
-      <UnitInput template={energyTemplate} />
+      <UnitInput template={energyTemplate} onValueChange={e => console.log(e)} />
     </VStack>
   );
 }

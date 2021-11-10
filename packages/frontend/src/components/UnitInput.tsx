@@ -1,6 +1,6 @@
-import { Flex, HTMLChakraProps, Input, InputProps, Select } from '@chakra-ui/react';
-import { AllMeasuresUnits, Unit } from 'convert-units';
-import { useMemo, useState } from 'react';
+import { Flex, HTMLChakraProps, Input, InputGroup, InputProps, InputRightAddon, Select, Tag, Text } from '@chakra-ui/react';
+import { AllMeasuresUnits } from 'convert-units';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { convert } from '../utils/convert';
 
 export interface UnitInputTemplate {
@@ -17,42 +17,55 @@ export const energyTemplate: UnitInputTemplate = {
 
 export interface UnitInputProps extends HTMLChakraProps<'div'> {
   template: UnitInputTemplate;
+  onValueChange?(e: { value?: number; unit: AllMeasuresUnits; normedValue?: number; normedUnit: AllMeasuresUnits });
 }
 
 export default function UnitInput({
-  template: { units, defaultUnit, defaultValue = 0, inputProps },
+  template: { units, defaultUnit, defaultValue, inputProps },
+  onValueChange,
   ...rest
 }: UnitInputProps) {
-  const [value, setValue] = useState<number>(defaultValue);
+  const [value, setValue] = useState<number | undefined>(defaultValue);
   const [selectedUnit, setSelectedUnit] = useState<AllMeasuresUnits>(defaultUnit);
-  const unitInfo = useMemo(() => {
-    const conversions = units.map((unit) => convert().getUnit(unit));
-    return conversions.reduce<Record<string, Unit>>(
-      (result, conversion) => ({ ...result, [conversion!.abbr]: conversion!.unit }),
-      {},
-    );
-  }, [units]);
+  const normedValue = convert(value).from(selectedUnit).to(defaultUnit);
 
-  const handleSelectedUnitChanged = (newUnit: AllMeasuresUnits) => {
-    setValue(convert(value).from(selectedUnit).to(newUnit));
+  const handleSelectedUnitChanged = (e: ChangeEvent<HTMLSelectElement>) => {
+    const previousUnit = selectedUnit;
+    const newUnit = e.target.value as AllMeasuresUnits;
     setSelectedUnit(newUnit);
+
+    if (value !== undefined) {
+      setValue(convert(value).from(previousUnit).to(newUnit));
+    }
   };
 
-  const handleValueChanged = (newValue: number) => {
+  const handleValueChanged = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = isNaN(e.target.valueAsNumber) ? undefined : e.target.valueAsNumber;
     setValue(newValue);
   };
 
+  useEffect(() => {
+    onValueChange?.({ value, unit: selectedUnit, normedValue, normedUnit: defaultUnit });
+  }, [onValueChange, value, selectedUnit, normedValue, defaultUnit]);
+
   return (
-    <Flex {...rest}>
-      <Input type="number" value={value} onChange={(e) => handleValueChanged(+e.target.value)} {...inputProps} />
-      <Select value={selectedUnit} onChange={(e) => handleSelectedUnitChanged(e.target.value as AllMeasuresUnits)}>
-        <option disabled>Select a unit</option>
-        {units.map((unit) => (
-          <option key={unit} value={unit}>
-            {unit}
-          </option>
-        ))}
-      </Select>
+    <Flex direction="column" {...rest}>
+      <InputGroup>
+        <Input type="number" value={value ?? ''} onChange={handleValueChanged} {...inputProps} />
+        <InputRightAddon>
+          <Select variant="unstyled" value={selectedUnit} onChange={handleSelectedUnitChanged}>
+            <option disabled></option>
+            {units.map((unit) => (
+              <option key={unit} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </Select>
+        </InputRightAddon>
+      </InputGroup>
+      <Text color="gray" fontSize="xs">
+        {normedValue} {defaultUnit}
+      </Text>
     </Flex>
   );
 }
