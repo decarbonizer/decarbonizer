@@ -12,9 +12,12 @@ import {
   Icon,
   SimpleGrid,
   Center,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
+import AddCityComponent from './AddCityComponent';
 
 interface CityBoxComponentProps {
   cities: Array<{
@@ -28,6 +31,8 @@ interface CityBoxComponentProps {
 export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
   const [tabIndex, setTabIndex] = React.useState(0);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleTabsChange = (index) => {
     setTabIndex(index);
   };
@@ -35,13 +40,24 @@ export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
   function startSurvey() {
     console.log(cities[tabIndex]); //TODO: implement start survey
   }
+
   return (
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">
       <Tabs variant="enclosed" colorScheme="green" p="4" height="90%" onChange={handleTabsChange}>
-        <TabList>
+        <TabList position="relative">
           {cities.map((city, index) => (
             <Tab key={index}>{city.name}</Tab>
           ))}
+          <Button
+            rightIcon={<RiAddLine />}
+            position="absolute"
+            top="0"
+            right="12px"
+            colorScheme="green"
+            onClick={onOpen}>
+            Add city
+          </Button>
+          <AddCityComponent isOpen={isOpen} onClose={onClose} />
         </TabList>
         <TabPanels height="100%">
           {cities.map((city, index) => (
