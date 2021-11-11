@@ -17,10 +17,6 @@ export interface FormSchemaBaseElement<TType extends string> {
 
 export interface StringFormSchemaElement extends FormSchemaBaseElement<'string'> {
   placeholder?: string;
-}
-
-export interface StringMultiLineFormSchemaElement extends FormSchemaBaseElement<'string-multi-line'> {
-  placeholder?: string;
   rows?: number;
 }
 
