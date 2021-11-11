@@ -48,7 +48,6 @@ export interface ChoiceFormSchemaElement extends FormSchemaBaseElement<'choice'>
 
 export type FormSchemaElement =
   | StringFormSchemaElement
-  | StringMultiLineFormSchemaElement
   | NumberFormSchemaElement
   | NumberUnitFormSchemaElement
   | BooleanFormSchemaElement
