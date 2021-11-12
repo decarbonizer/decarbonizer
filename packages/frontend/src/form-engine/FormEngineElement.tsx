@@ -7,7 +7,6 @@ import { Text } from '@chakra-ui/react';
 import NumberSliderFormEngineControl from './controls/NumberSliderFormEngineControl';
 import ChoiceSelectFormEngineControl from './controls/ChoiceSelectFormEngineControl';
 
-
 const controls = {
   ['string']: StringFormEngineControl,
   ['number']: NumberFormEngineControl,
