@@ -24,6 +24,18 @@ export const energySurvey: FormSchema = {
     },
     {
       elements: [
+        {
+          property: 'lampCount',
+          required: true,
+          type: 'number-slider',
+          label: 'How many lamps are used?',
+          min: 0,
+          max: 150,
+        },
+      ],
+    },
+    {
+      elements: [
         // TODO: Q3, dynamic choice.
       ],
     },
@@ -34,6 +46,8 @@ export const energySurvey: FormSchema = {
           required: true,
           type: 'boolean',
           label: 'Can the illuminant be exchanged?',
+          trueText: 'Yes',
+          falseText: 'No',
         },
       ],
     },
@@ -91,6 +105,30 @@ export const energySurvey: FormSchema = {
             {
               value: 'manuallySwitchedOff',
               display: 'Switched off manually',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      elements: [
+        {
+          property: 'illuminationTriggerEvent',
+          required: true,
+          type: 'choice-select',
+          label: 'What is the triggering event?',
+          options: [
+            {
+              value: 'brightness',
+              display: 'Brightness controlled',
+            },
+            {
+              value: 'timeTriggered',
+              display: 'Time-triggered',
+            },
+            {
+              value: 'motionTriggered',
+              display: 'Motion-triggered',
             },
           ],
         },

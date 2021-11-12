@@ -13,6 +13,7 @@ export interface FormSchemaBaseElement<TType extends string> {
   required: boolean;
   label: string;
   type: TType;
+  helperText?: string;
 }
 
 export interface StringFormSchemaElement extends FormSchemaBaseElement<'string'> {
@@ -33,24 +34,38 @@ export interface NumberUnitFormSchemaElement extends FormSchemaBaseElement<'numb
   max?: number;
 }
 
+export interface NumberSliderFormSchemaElement extends FormSchemaBaseElement<'number-slider'> {
+  min: number;
+  max: number;
+}
+
 export interface BooleanFormSchemaElement extends FormSchemaBaseElement<'boolean'> {
-  trueText?: string;
-  falseText?: string;
+  trueText: string;
+  falseText: string;
+}
+
+export interface ChoiceOption {
+  value: string;
+  display?: string;
 }
 
 export interface ChoiceFormSchemaElement extends FormSchemaBaseElement<'choice'> {
   mode: 'single' | 'multi';
-  options: Array<{
-    value: string;
-    display?: string;
-  }>;
+  options: Array<ChoiceOption>;
+}
+
+export interface ChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'choice-select'> {
+  placeholder?: string;
+  options: Array<ChoiceOption>;
 }
 
 export type FormSchemaElement =
   | StringFormSchemaElement
   | NumberFormSchemaElement
   | NumberUnitFormSchemaElement
+  | NumberSliderFormSchemaElement
   | BooleanFormSchemaElement
-  | ChoiceFormSchemaElement;
+  | ChoiceFormSchemaElement
+  | ChoiceSelectFormSchemaElement;
 
 export type FormSchemaElementType = FormSchemaElement['type'];

@@ -1,10 +1,16 @@
 import { StringFormSchemaElement } from '../formSchema';
-import { Text } from '@chakra-ui/react';
+import { Input, Text, Textarea, VStack } from '@chakra-ui/react';
 
 export interface StringFormEngineControlProps {
   element: StringFormSchemaElement;
 }
 
 export default function StringFormEngineControl({ element }: StringFormEngineControlProps) {
-  return <Text>{element.label}</Text>;
+  const actualRows = element.rows ?? 1;
+  return (
+    <VStack>
+      <Text>{element.label}</Text>;
+      {actualRows > 1 ? <Textarea placeholder={element.placeholder} /> : <Input placeholder={element.placeholder} />}
+    </VStack>
+  );
 }
