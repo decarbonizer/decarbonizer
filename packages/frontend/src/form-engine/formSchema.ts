@@ -51,12 +51,11 @@ export interface ChoiceOption {
 
 export type ChoiceOptionSource = Array<ChoiceOption> | string;
 
-export interface ChoiceFormSchemaElement extends FormSchemaBaseElement<'choice'> {
-  mode: 'single' | 'multi';
+export interface SingleChoiceFormSchemaElement extends FormSchemaBaseElement<'single-choice'> {
   options: ChoiceOptionSource;
 }
 
-export interface ChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'choice-select'> {
+export interface SingleChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'single-choice-select'> {
   placeholder?: string;
   options: ChoiceOptionSource;
 }
@@ -67,7 +66,7 @@ export type FormSchemaElement =
   | NumberUnitFormSchemaElement
   | NumberSliderFormSchemaElement
   | BooleanFormSchemaElement
-  | ChoiceFormSchemaElement
-  | ChoiceSelectFormSchemaElement;
+  | SingleChoiceFormSchemaElement
+  | SingleChoiceSelectFormSchemaElement;
 
 export type FormSchemaElementType = FormSchemaElement['type'];
