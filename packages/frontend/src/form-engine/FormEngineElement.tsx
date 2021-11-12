@@ -1,19 +1,19 @@
+import { Text } from '@chakra-ui/react';
+import { FormSchemaElement } from './formSchema';
 import StringFormEngineControl from './controls/StringFormEngineControl';
 import NumberFormEngineControl from './controls/NumberFormEngineControl';
 import BooleanFormEngineControl from './controls/BooleanFormEngineControl';
-import ChoiceFormEngineControl from './controls/ChoiceFormEngineControl';
-import { FormSchemaElement } from './formSchema';
-import { Text } from '@chakra-ui/react';
+import SingleChoiceFormEngineControl from './controls/SingleChoiceFormEngineControl';
 import NumberSliderFormEngineControl from './controls/NumberSliderFormEngineControl';
-import ChoiceSelectFormEngineControl from './controls/ChoiceSelectFormEngineControl';
+import SingleChoiceSelectFormEngineControl from './controls/SingleChoiceSelectFormEngineControl';
 
 const controls = {
   ['string']: StringFormEngineControl,
   ['number']: NumberFormEngineControl,
   ['boolean']: BooleanFormEngineControl,
-  ['choice']: ChoiceFormEngineControl,
   ['number-slider']: NumberSliderFormEngineControl,
-  ['choice-select']: ChoiceSelectFormEngineControl,
+  ['single-choice']: SingleChoiceFormEngineControl,
+  ['single-choice-select']: SingleChoiceSelectFormEngineControl,
 };
 
 export interface FormEngineElementProps {

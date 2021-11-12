@@ -46,10 +46,10 @@ export default function SurveyContainer() {
                 choiceOptionProviders={{
                   bulbs: bulbs!.map((bulb) => ({ value: bulb._id, display: bulb.name })),
                 }}
-                currentPage={page}
-                currentValue={value}
-                onCurrentPageChanged={(e) => setPage(e.currentPage)}
-                onCurrentValueChanged={(e) => setValue(e.currentValue)}
+                page={page}
+                value={value}
+                onPageChanged={(e) => setPage(e.page)}
+                onValueChanged={(e) => setValue(e.value)}
               />
               <HStack w="100%" marginTop="4" paddingTop="4" justify="flex-end" borderTopWidth="1px" borderColor="gray">
                 <Text>Page:</Text>
