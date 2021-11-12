@@ -5,9 +5,8 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Text,
-  VStack,
 } from '@chakra-ui/react';
+import DefaultFormControlLayout from './DefaultFormControlLayout';
 
 export interface NumberFormEngineControlProps {
   element: NumberFormSchemaElement;
@@ -15,14 +14,13 @@ export interface NumberFormEngineControlProps {
 
 export default function NumberFormEngineControl({ element }: NumberFormEngineControlProps) {
   return (
-    <VStack>
-      <Text>{element.label}</Text>;
+    <DefaultFormControlLayout element={element}>
       <NumberInput defaultValue={element.placeholder} min={element.min} max={element.max}>
         <NumberInputField />
         <NumberInputStepper>
           <NumberIncrementStepper /> <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-    </VStack>
+    </DefaultFormControlLayout>
   );
 }

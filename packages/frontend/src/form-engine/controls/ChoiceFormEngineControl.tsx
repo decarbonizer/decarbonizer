@@ -1,5 +1,6 @@
 import { ChoiceFormSchemaElement } from '../formSchema';
-import { Checkbox, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react';
+import { Checkbox, Radio, RadioGroup, VStack } from '@chakra-ui/react';
+import DefaultFormControlLayout from './DefaultFormControlLayout';
 
 export interface ChoiceFormEngineControlProps {
   element: ChoiceFormSchemaElement;
@@ -7,27 +8,26 @@ export interface ChoiceFormEngineControlProps {
 
 export default function ChoiceFormEngineControl({ element }: ChoiceFormEngineControlProps) {
   return (
-    <VStack>
-      <Text>{element.label}</Text>;
+    <DefaultFormControlLayout element={element}>
       {element.mode === 'single' ? (
         <RadioGroup defaultValue={element.options.length}>
-          <HStack spacing={5}>
+          <VStack spacing={2} align="flex-start" ml="4">
             {element.options.map((option) => (
               <Radio key={option.value} value={option.value}>
                 {option.display ?? option.value}
               </Radio>
             ))}
-          </HStack>
+          </VStack>
         </RadioGroup>
       ) : (
-        <HStack>
+        <VStack spacing={2} align="flex-start" ml="4">
           {element.options.map((option) => (
             <Checkbox key={option.value} value={option.value}>
               {option.display ?? option.value}
             </Checkbox>
           ))}
-        </HStack>
+        </VStack>
       )}
-    </VStack>
+    </DefaultFormControlLayout>
   );
 }

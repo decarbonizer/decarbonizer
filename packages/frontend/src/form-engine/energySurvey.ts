@@ -149,7 +149,7 @@ export const energySurvey: FormSchema = {
             },
             {
               value: 'onDemand',
-              display: 'onDemand',
+              display: 'On demand',
             },
           ],
         },

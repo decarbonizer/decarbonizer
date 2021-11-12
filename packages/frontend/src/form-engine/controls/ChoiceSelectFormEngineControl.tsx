@@ -1,5 +1,6 @@
 import { ChoiceSelectFormSchemaElement } from '../formSchema';
-import { Select, Text, VStack } from '@chakra-ui/react';
+import { Select } from '@chakra-ui/react';
+import DefaultFormControlLayout from './DefaultFormControlLayout';
 
 export interface ChoiceSelectFormEngineControlProps {
   element: ChoiceSelectFormSchemaElement;
@@ -7,8 +8,7 @@ export interface ChoiceSelectFormEngineControlProps {
 
 export default function ChoiceSelectFormEngineControl({ element }: ChoiceSelectFormEngineControlProps) {
   return (
-    <VStack>
-      <Text>{element.label}</Text>
+    <DefaultFormControlLayout element={element}>
       <Select placeholder={element.placeholder} variant="filled">
         {element.options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -16,6 +16,6 @@ export default function ChoiceSelectFormEngineControl({ element }: ChoiceSelectF
           </option>
         ))}
       </Select>
-    </VStack>
+    </DefaultFormControlLayout>
   );
 }

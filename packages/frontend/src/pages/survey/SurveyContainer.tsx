@@ -34,7 +34,7 @@ export default function SurveyContainer() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <VStack>
+            <VStack align="flex-start">
               <FormEngine
                 schema={schema}
                 currentPage={page}

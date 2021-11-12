@@ -1,5 +1,6 @@
 import { BooleanFormSchemaElement } from '../formSchema';
-import { HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react';
+import { HStack, Radio, RadioGroup } from '@chakra-ui/react';
+import DefaultFormControlLayout from './DefaultFormControlLayout';
 
 export interface BooleanFormEngineControlProps {
   element: BooleanFormSchemaElement;
@@ -7,14 +8,13 @@ export interface BooleanFormEngineControlProps {
 
 export default function BooleanFormEngineControl({ element }: BooleanFormEngineControlProps) {
   return (
-    <VStack>
-      <Text>{element.label}</Text>;
-      <RadioGroup defaultValue="2">
-        <HStack spacing={5}>
+    <DefaultFormControlLayout element={element}>
+      <RadioGroup>
+        <HStack spacing={5} align="flex-start" ml="4">
           <Radio value="true">{element.trueText}</Radio>
           <Radio value="false">{element.falseText}</Radio>
         </HStack>
       </RadioGroup>
-    </VStack>
+    </DefaultFormControlLayout>
   );
 }

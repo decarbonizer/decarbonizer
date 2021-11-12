@@ -1,5 +1,6 @@
 import { StringFormSchemaElement } from '../formSchema';
-import { Input, Text, Textarea, VStack } from '@chakra-ui/react';
+import { Input, Textarea } from '@chakra-ui/react';
+import DefaultFormControlLayout from './DefaultFormControlLayout';
 
 export interface StringFormEngineControlProps {
   element: StringFormSchemaElement;
@@ -8,9 +9,8 @@ export interface StringFormEngineControlProps {
 export default function StringFormEngineControl({ element }: StringFormEngineControlProps) {
   const actualRows = element.rows ?? 1;
   return (
-    <VStack>
-      <Text>{element.label}</Text>;
+    <DefaultFormControlLayout element={element}>
       {actualRows > 1 ? <Textarea placeholder={element.placeholder} /> : <Input placeholder={element.placeholder} />}
-    </VStack>
+    </DefaultFormControlLayout>
   );
 }
