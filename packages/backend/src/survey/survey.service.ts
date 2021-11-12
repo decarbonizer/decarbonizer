@@ -5,8 +5,8 @@ import { Survey } from './survey.schema';
 
 @Injectable()
 export class SurveyService extends GenericCrudService<Survey, Survey, Survey, SurveyRepository> {
-  constructor(bulbRepository: SurveyRepository) {
-    super(bulbRepository);
+  constructor(surveyRepository: SurveyRepository) {
+    super(surveyRepository);
   }
 
   protected mapCreateToEntity(entity: Survey): Survey {
