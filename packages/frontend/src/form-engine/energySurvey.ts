@@ -36,7 +36,13 @@ export const energySurvey: FormSchema = {
     },
     {
       elements: [
-        // TODO: Q3, dynamic choice.
+        {
+          property: 'bulbType',
+          required: true,
+          type: 'choice-select',
+          label: 'What kind of illuminant is used?',
+          options: 'bulbs',
+        },
       ],
     },
     {
@@ -105,30 +111,6 @@ export const energySurvey: FormSchema = {
             {
               value: 'manuallySwitchedOff',
               display: 'Switched off manually',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      elements: [
-        {
-          property: 'illuminationTriggerEvent',
-          required: true,
-          type: 'choice-select',
-          label: 'What is the triggering event?',
-          options: [
-            {
-              value: 'brightness',
-              display: 'Brightness controlled',
-            },
-            {
-              value: 'timeTriggered',
-              display: 'Time-triggered',
-            },
-            {
-              value: 'motionTriggered',
-              display: 'Motion-triggered',
             },
           ],
         },

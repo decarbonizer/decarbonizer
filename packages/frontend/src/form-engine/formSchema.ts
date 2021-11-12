@@ -49,14 +49,16 @@ export interface ChoiceOption {
   display?: string;
 }
 
+export type ChoiceOptionSource = Array<ChoiceOption> | string;
+
 export interface ChoiceFormSchemaElement extends FormSchemaBaseElement<'choice'> {
   mode: 'single' | 'multi';
-  options: Array<ChoiceOption>;
+  options: ChoiceOptionSource;
 }
 
 export interface ChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'choice-select'> {
   placeholder?: string;
-  options: Array<ChoiceOption>;
+  options: ChoiceOptionSource;
 }
 
 export type FormSchemaElement =

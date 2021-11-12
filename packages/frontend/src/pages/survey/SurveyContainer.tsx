@@ -18,11 +18,17 @@ import { useState } from 'react';
 import ReactJson from 'react-json-view';
 import { energySurvey } from '../../form-engine/energySurvey';
 import FormEngine from '../../form-engine/FormEngine';
+import { useGetAllBulbsQuery } from '../../store/api';
 
 export default function SurveyContainer() {
   const schema = energySurvey;
   const [page, setPage] = useState(1);
   const [value, setValue] = useState({});
+  const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
+
+  if (isLoadingBulbs) {
+    return <>Loading...</>;
+  }
 
   return (
     <Center w="100%" h="100%">
@@ -37,6 +43,9 @@ export default function SurveyContainer() {
             <VStack align="flex-start">
               <FormEngine
                 schema={schema}
+                choiceOptionProviders={{
+                  bulbs: bulbs!.map((bulb) => ({ value: bulb._id, display: bulb.name })),
+                }}
                 currentPage={page}
                 currentValue={value}
                 onCurrentPageChanged={(e) => setPage(e.currentPage)}
