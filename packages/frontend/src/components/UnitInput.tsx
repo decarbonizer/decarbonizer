@@ -25,6 +25,12 @@ export const energyTemplate: UnitInputTemplate = {
   defaultUnit: 'kWh',
 };
 
+const knownUnitInputTemplates = {
+  energy: energyTemplate,
+} as const;
+
+export type KnownUnitInputTemplate = keyof typeof knownUnitInputTemplates;
+
 export interface UnitInputProps extends HTMLChakraProps<'div'> {
   template: UnitInputTemplate;
   onValueChange?(e: { value?: number; unit: AllMeasuresUnits; normedValue?: number; normedUnit: AllMeasuresUnits });
