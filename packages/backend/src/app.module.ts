@@ -8,6 +8,7 @@ import { DebugModule } from './debug/debug.module';
 import { EnergyFormModule } from './energy-form/energy-form.module';
 import { MessageModule } from './message/message.module';
 import { RealEstateModule } from './real-estate/real-estate.module';
+import { SurveyModule } from './survey/survey.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { UserModule } from './user/user.module';
     MessageModule,
     UserModule,
     RealEstateModule,
+    SurveyModule,
   ],
 })
 export class AppModule {}
