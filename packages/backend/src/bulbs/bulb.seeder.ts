@@ -29,7 +29,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
       },
       {
         _id: '00000000-0000-0000-0000-000000000002',
-        name: 'Bulb 710 lum',
+        name: 'LED 1300 lum',
         watt: 10,
         productionKwh: 9.9,
         costInEuro: 8.5,
@@ -37,7 +37,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
       },
       {
         _id: '00000000-0000-0000-0000-000000000003',
-        name: 'Bulb 710 lum',
+        name: 'LED 800 lum',
         watt: 6,
         productionKwh: 9.9,
         costInEuro: 5,
