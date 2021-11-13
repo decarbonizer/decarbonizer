@@ -1,5 +1,4 @@
-import { KnownUnitInputTemplate } from '../components/UnitInput';
-
+import { AllMeasuresUnits } from 'convert-units';
 export interface FormSchema {
   pages: Array<FormSchemaPage>;
 }
@@ -27,11 +26,20 @@ export interface NumberFormSchemaElement extends FormSchemaBaseElement<'number'>
   max?: number;
 }
 
+export const knownUnitInputTemplates: Record<string, Array<AllMeasuresUnits>> = {
+  energy: ['Wh', 'kWh', 'GWh'],
+  time: ['d', 'h', 'min', 's'],
+};
+
+export type KnownUnitInputTemplate = keyof typeof knownUnitInputTemplates;
+
 export interface NumberUnitFormSchemaElement extends FormSchemaBaseElement<'number-unit'> {
-  unitTemplate: KnownUnitInputTemplate;
+  units: KnownUnitInputTemplate | Array<AllMeasuresUnits>;
+  normedUnit: AllMeasuresUnits;
+  defaultSelectedUnit?: AllMeasuresUnits;
+  normedMin?: number;
+  normedMax?: number;
   placeholder?: string;
-  min?: number;
-  max?: number;
 }
 
 export interface NumberSliderFormSchemaElement extends FormSchemaBaseElement<'number-slider'> {
