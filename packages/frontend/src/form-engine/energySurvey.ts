@@ -51,7 +51,7 @@ export const energySurvey: FormSchema = {
           property: 'illuminationTriggerMode',
           required: true,
           type: 'single-choice',
-          label: 'How is the illumunation triggered?',
+          label: 'How is the illumination triggered?',
           options: [
             {
               value: 'automatically',
@@ -82,6 +82,23 @@ export const energySurvey: FormSchema = {
               display: 'Motion-triggered',
             },
           ],
+          rules: [
+            {
+              effect: 'hide',
+              satisfy: 'any',
+              conditions: [
+                {
+                  property: 'illuminationTriggerMode',
+                  op: 'absent',
+                },
+                {
+                  property: 'illuminationTriggerMode',
+                  op: 'eq',
+                  value: 'manually',
+                },
+              ],
+            },
+          ],
         },
         {
           property: 'illuminationSwitchOffMode',
@@ -96,6 +113,23 @@ export const energySurvey: FormSchema = {
             {
               value: 'manuallySwitchedOff',
               display: 'Switched off manually',
+            },
+          ],
+          rules: [
+            {
+              effect: 'hide',
+              satisfy: 'any',
+              conditions: [
+                {
+                  property: 'illuminationTriggerMode',
+                  op: 'absent',
+                },
+                {
+                  property: 'illuminationTriggerMode',
+                  op: 'eq',
+                  value: 'automatically',
+                },
+              ],
             },
           ],
         },
@@ -132,7 +166,7 @@ export const energySurvey: FormSchema = {
           normedUnit: 'd',
           defaultSelectedUnit: 'h',
           normedMin: 0,
-          normedMax: 1
+          normedMax: 1,
         },
       ],
     },

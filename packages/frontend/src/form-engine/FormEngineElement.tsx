@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { FormSchemaElement } from './formSchema';
+import { FormSchemaElement, FormSchemaElementType } from './formSchema';
 import StringFormEngineControl from './controls/StringFormEngineControl';
 import NumberFormEngineControl from './controls/NumberFormEngineControl';
 import BooleanFormEngineControl from './controls/BooleanFormEngineControl';
@@ -7,8 +7,11 @@ import SingleChoiceFormEngineControl from './controls/SingleChoiceFormEngineCont
 import NumberSliderFormEngineControl from './controls/NumberSliderFormEngineControl';
 import SingleChoiceSelectFormEngineControl from './controls/SingleChoiceSelectFormEngineControl';
 import NumberUnitFormEngineControl from './controls/NumberUnitFormEngineControl';
+import { ComponentType } from 'react';
+import { FormEngineControlProps } from './controls/types';
+import { useCurrentRuleEffects } from './rules';
 
-const controls = {
+const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
   ['boolean']: BooleanFormEngineControl,
   ['number']: NumberFormEngineControl,
@@ -23,11 +26,12 @@ export interface FormEngineElementProps {
 }
 
 export default function FormEngineElement({ element }: FormEngineElementProps) {
+  const ruleEvaluationResult = useCurrentRuleEffects(element);
   const Control = controls[element.type];
 
   if (!Control) {
     return <Text>Unkown form schema element type: {element.type}.</Text>;
   }
 
-  return <Control element={element} />;
+  return <>{!ruleEvaluationResult.hide && <Control element={element} ruleEvaluationResult={ruleEvaluationResult} />}</>;
 }

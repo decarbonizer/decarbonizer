@@ -27,6 +27,7 @@ export interface UnitInputProps {
   normedMax?: number;
   defaultSelectedUnit?: AllMeasuresUnits;
   placeholder?: string;
+  isDisabled?: boolean;
   onValueChange(args: UnitInputValueChangedArgs);
 }
 
@@ -38,6 +39,7 @@ export default function UnitInput({
   normedMax,
   defaultSelectedUnit,
   placeholder,
+  isDisabled,
   onValueChange,
 }: UnitInputProps) {
   const [selectedUnit, setSelectedUnit] = useState<AllMeasuresUnits>(defaultSelectedUnit ?? normedUnit);
@@ -69,6 +71,7 @@ export default function UnitInput({
     <Flex direction="column">
       <Flex>
         <NumberInput
+          isDisabled={isDisabled}
           w="100%"
           zIndex={1}
           min={min}
@@ -82,6 +85,7 @@ export default function UnitInput({
           </NumberInputStepper>
         </NumberInput>
         <Select
+          isDisabled={isDisabled}
           minW="28"
           flex={1}
           variant="filled"
@@ -95,7 +99,7 @@ export default function UnitInput({
           ))}
         </Select>
       </Flex>
-      <Text color="gray" fontSize="xs" ml="1">
+      <Text isDisabled={isDisabled} color="gray" fontSize="xs" ml="1">
         {normedValue !== undefined && selectedUnit !== normedUnit && (
           <>
             = {normedValue} {normedUnit}
