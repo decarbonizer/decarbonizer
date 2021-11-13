@@ -14,13 +14,10 @@ import React from 'react';
 import { useCreateRealEstateMutation } from '../../store/api';
 
 interface CityFormComponentProps {
-  props: {
     onClose: () => void,
-    createCity: (name: string, description: string, capacity: number, area: number) => void
-  }
 }
 
-export default function CityFormComponent({props} : CityFormComponentProps) {
+export default function CityFormComponent({onClose} : CityFormComponentProps) {
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [employees, setEmployees] = React.useState(1);
@@ -30,7 +27,7 @@ export default function CityFormComponent({props} : CityFormComponentProps) {
 
   const addNewRealEstate = async () => {
     await addRealEstate({cityName: name, description: description, employees: employees, area: area});
-    props.onClose();
+    onClose();
 
   }
 
@@ -93,7 +90,7 @@ export default function CityFormComponent({props} : CityFormComponentProps) {
     </Box>
     <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
   <GridItem colSpan={2}>
-    <Button onClick={props.onClose} width="40" colorScheme="gray">Cancel</Button>
+    <Button onClick={onClose} width="40" colorScheme="gray">Cancel</Button>
   </GridItem>
   <GridItem colStart={4} colEnd={6}>
     <Button onClick={addNewRealEstate}  isDisabled={name.length < 2} isLoading={isAdding} position="absolute"  width="40" right="6" colorScheme="green">Save</Button>

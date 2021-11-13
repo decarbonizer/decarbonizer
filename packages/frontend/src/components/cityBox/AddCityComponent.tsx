@@ -15,12 +15,6 @@ interface AddCityComponentProps {
 
 export default function AddCityComponent({ isOpen, onClose }: AddCityComponentProps) {
 
-  function createCity(name: string, description: string, capacity: number, area: number) {
-    throw new Error('Function not implemented.');
-  }
-
-  const props = {createCity, onClose};
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -29,7 +23,7 @@ export default function AddCityComponent({ isOpen, onClose }: AddCityComponentPr
           <ModalHeader>Add a new city</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <CityFormComponent props={props}/>
+            <CityFormComponent onClose={onClose}/>
           </ModalBody>
         </ModalContent>
       </Modal>
