@@ -13,14 +13,25 @@ export interface FormEngineProps {
   onCurrentPageChanged(e: { currentPage: number });
 }
 
-export default function FormEngine({ schema, currentPage, choiceOptionProviders = {} }: FormEngineProps) {
+export default function FormEngine({
+  schema,
+  currentPage,
+  choiceOptionProviders = {},
+  onCurrentValueChanged,
+  currentValue,
+}: FormEngineProps) {
   const currentSchemaPage = schema.pages[currentPage - 1];
 
   return (
     <formEngineContext.Provider value={{ schema, choiceOptionProviders }}>
       <VStack spacing="4">
         {currentSchemaPage.elements.map((element, index) => (
-          <FormEngineElement key={index} element={element} />
+          <FormEngineElement
+            key={index}
+            element={element}
+            onCurrentValueChanged={onCurrentValueChanged}
+            currentValue={currentValue}
+          />
         ))}
       </VStack>
     </formEngineContext.Provider>

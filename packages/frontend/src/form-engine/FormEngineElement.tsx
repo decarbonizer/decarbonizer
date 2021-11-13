@@ -18,14 +18,16 @@ const controls = {
 
 export interface FormEngineElementProps {
   element: FormSchemaElement;
+  onCurrentValueChanged(e: { currentValue: object });
+  currentValue: object;
 }
 
-export default function FormEngineElement({ element }: FormEngineElementProps) {
+export default function FormEngineElement({ element, onCurrentValueChanged, currentValue }: FormEngineElementProps) {
   const Control = controls[element.type];
 
   if (!Control) {
-    return <Text>Unkown form schema element type: {element.type}.</Text>;
+    return <Text>Unknown form schema element type: {element.type}.</Text>;
   }
 
-  return <Control element={element} />;
+  return <Control element={element} onCurrentValueChanged={onCurrentValueChanged} currentValue={currentValue} />;
 }
