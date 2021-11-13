@@ -1,6 +1,6 @@
 import { Button, Heading, VStack } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
-import CityBoxComponent from '../../components/CityBoxComponent';
+import CityBoxComponent from '../../components/cityBox/CityBoxComponent';
 import { loggedOut } from '../../store/auth';
 import { useAppDispatch } from '../../store/store';
 
