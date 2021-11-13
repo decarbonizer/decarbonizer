@@ -1,4 +1,5 @@
 import { AllMeasuresUnits } from 'convert-units';
+import { JsonConditionsRule } from 'json-conditions';
 export interface FormSchema {
   pages: Array<FormSchemaPage>;
 }
@@ -13,7 +14,16 @@ export interface FormSchemaBaseElement<TType extends string> {
   label: string;
   type: TType;
   helperText?: string;
+  rules?: Array<FormSchemaElementRule>;
 }
+
+export interface FormSchemaElementRule {
+  effect: FormSchemaElementRuleEffect;
+  conditions: Array<JsonConditionsRule>;
+  satisfy: 'all' | 'any';
+}
+
+export type FormSchemaElementRuleEffect = 'hide' | 'disable';
 
 export interface StringFormSchemaElement extends FormSchemaBaseElement<'string'> {
   placeholder?: string;

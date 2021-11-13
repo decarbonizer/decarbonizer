@@ -1,16 +1,8 @@
 import { createContext, useContext, useMemo } from 'react';
-import { ChoiceOptionSource, FormSchema } from './formSchema';
-import { FormEngineChoiceOptionProviders } from './types';
+import { ChoiceOptionSource } from './formSchema';
 import get from 'lodash-es/get';
 import set from 'lodash-es/set';
 import { FormEngineProps } from './FormEngine';
-
-export interface FormEngineContext {
-  schema: FormSchema;
-  choiceOptionProviders: FormEngineChoiceOptionProviders;
-  value: object;
-  setValue(newValue: object);
-}
 
 export const formEngineContext = createContext<FormEngineProps>(null!);
 
