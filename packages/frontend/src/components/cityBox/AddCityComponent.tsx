@@ -1,16 +1,12 @@
 import {
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
 } from '@chakra-ui/react';
+import CityFormComponent from './CityFormComponent';
 
 interface AddCityComponentProps {
   isOpen: boolean;
@@ -18,6 +14,13 @@ interface AddCityComponentProps {
 }
 
 export default function AddCityComponent({ isOpen, onClose }: AddCityComponentProps) {
+
+  function createCity(name: string, description: string, capacity: number, area: number) {
+    throw new Error('Function not implemented.');
+  }
+
+  const props = {createCity, onClose};
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -26,25 +29,12 @@ export default function AddCityComponent({ isOpen, onClose }: AddCityComponentPr
           <ModalHeader>Add a new city</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input placeholder="First name" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Input placeholder="Last name" />
-            </FormControl>
+            <CityFormComponent props={props}/>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="green" mr={3}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
   );
 }
+
+
