@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Bulb } from '../api/bulb';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 
@@ -24,7 +25,12 @@ export const api = createApi({
         body,
       }),
     }),
+    getAllBulbs: builder.query<Array<Bulb>, void>({
+      query: () => ({
+        url: 'api/v1/bulbs',
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = api;
+export const { useLoginMutation, useGetAllBulbsQuery } = api;
