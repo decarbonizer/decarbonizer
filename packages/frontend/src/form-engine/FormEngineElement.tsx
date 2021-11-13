@@ -30,7 +30,7 @@ export default function FormEngineElement({ element }: FormEngineElementProps) {
   const Control = controls[element.type];
 
   if (!Control) {
-    return <Text>Unkown form schema element type: {element.type}.</Text>;
+    return <Text>Unknown form schema element type: {element.type}.</Text>;
   }
 
   return <>{!ruleEvaluationResult.hide && <Control element={element} ruleEvaluationResult={ruleEvaluationResult} />}</>;
