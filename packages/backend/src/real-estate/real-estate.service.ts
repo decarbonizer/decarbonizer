@@ -15,7 +15,7 @@ export class RealEstateService extends GenericCrudService<
   }
 
   protected mapCreateToEntity(entity: RealEstate): RealEstate {
-   return entity;
+    return entity;
   }
 
   protected mapUpdateToEntity(entity: RealEstateUpdate): Partial<RealEstate> {

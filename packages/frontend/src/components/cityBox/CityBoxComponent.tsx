@@ -26,10 +26,7 @@ export default function CityBoxComponent() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const {
-    isLoading: isLoadingRealEstates,
-    data: realEstates
-  } = useGetAllRealEstatesQuery();
+  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
 
   const handleTabsChange = (index) => {
     setTabIndex(index);

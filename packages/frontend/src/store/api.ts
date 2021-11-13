@@ -6,7 +6,7 @@ import { AppState } from './store';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000",
+    baseUrl: 'http://localhost:3000',
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as AppState;
       const token = state.auth.token;
@@ -36,16 +36,16 @@ export const api = createApi({
       query: () => ({
         url: 'api/v1/realEstates',
       }),
-      providesTags: ['RealEstate']
+      providesTags: ['RealEstate'],
     }),
-    createRealEstate: builder.mutation ({
+    createRealEstate: builder.mutation({
       query: (body) => ({
         url: 'api/v1/realEstates',
         method: 'POST',
-        body: body
+        body: body,
       }),
-      invalidatesTags: ['RealEstate']
-    })
+      invalidatesTags: ['RealEstate'],
+    }),
   }),
 });
 

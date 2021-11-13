@@ -33,7 +33,6 @@ export class RealEstate extends DbObject {
   @IsNumber()
   @Min(1)
   area: number;
-
 }
 
 export const RealEstateSchema = SchemaFactory.createForClass(RealEstate);
