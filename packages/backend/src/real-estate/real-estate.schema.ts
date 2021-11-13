@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { MaxLength, IsOptional, IsString, Length, IsNumber, Min } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
@@ -37,4 +37,5 @@ export class RealEstate extends DbObject {
 
 export const RealEstateSchema = SchemaFactory.createForClass(RealEstate);
 
-export class RealEstateUpdate extends PartialType(RealEstate) {}
+export class RealEstateCreate extends OmitType(RealEstate, ['createdAt', 'updatedAt']) {}
+export class RealEstateUpdate extends OmitType(RealEstate, ['createdAt', 'updatedAt']) {}

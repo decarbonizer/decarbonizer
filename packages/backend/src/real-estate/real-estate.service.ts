@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { GenericCrudService } from '../common/services/generic-crud.service';
 import { RealEstateRepository } from './real-estate.repository';
-import { RealEstate, RealEstateUpdate } from './real-estate.schema';
+import { RealEstate, RealEstateCreate, RealEstateUpdate } from './real-estate.schema';
 
 @Injectable()
 export class RealEstateService extends GenericCrudService<
   RealEstate,
-  RealEstate,
+  RealEstateCreate,
   RealEstateUpdate,
   RealEstateRepository
 > {
@@ -14,11 +14,11 @@ export class RealEstateService extends GenericCrudService<
     super(realEstateRepository);
   }
 
-  protected mapCreateToEntity(entity: RealEstate): RealEstate {
+  protected mapCreateToEntity(entity: RealEstateCreate): RealEstate {
     return entity;
   }
 
   protected mapUpdateToEntity(entity: RealEstateUpdate): Partial<RealEstate> {
-    throw 'Not implemented.';
+    return entity;
   }
 }
