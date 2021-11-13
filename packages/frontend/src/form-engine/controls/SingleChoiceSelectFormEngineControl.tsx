@@ -17,8 +17,8 @@ export default function SingleChoiceSelectFormEngineControl({ element }: SingleC
         placeholder={element.placeholder}
         value={value}
         variant="filled"
-        onChange={(e) => setValue(e.target.value)}>
-        {!element.placeholder && <option disabled></option>}
+        onChange={(e) => setValue(e.target.value ? e.target.value : undefined)}>
+        {!element.placeholder && <option></option>}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.display ?? option.value}
