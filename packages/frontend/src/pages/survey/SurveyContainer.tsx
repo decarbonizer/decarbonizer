@@ -126,6 +126,7 @@ export default function SurveyContainer() {
               </TabPanel>
             </TabPanels>
           </Tabs>
+          {page == 1 ? null : <Button onClick={() => setPage(page - 1)}>Back</Button>}
         </Box>
       </Center>
 
