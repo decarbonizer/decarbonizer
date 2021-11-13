@@ -16,7 +16,6 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import ReactJson from 'react-json-view';
-import UnitInput from '../../components/UnitInput';
 import { energySurvey } from '../../form-engine/energySurvey';
 import FormEngine from '../../form-engine/FormEngine';
 import { useGetAllBulbsQuery } from '../../store/api';
