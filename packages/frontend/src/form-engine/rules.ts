@@ -5,7 +5,7 @@ import { formEngineContext } from './formEngineContext';
 
 export type FormEngineRuleEvaluationResult = Record<FormSchemaElementRuleEffect, boolean>;
 
-export function useCurrentRuleEffects(element: FormSchemaElement): FormEngineRuleEvaluationResult {
+export function useRuleEvaluationResultForElement(element: FormSchemaElement): FormEngineRuleEvaluationResult {
   const { value } = useContext(formEngineContext);
   const rules = element.rules ?? [];
   const effects = rules.map((rule) => evaluateFormEngineRule(rule, value));

@@ -9,7 +9,7 @@ import SingleChoiceSelectFormEngineControl from './controls/SingleChoiceSelectFo
 import NumberUnitFormEngineControl from './controls/NumberUnitFormEngineControl';
 import { ComponentType } from 'react';
 import { FormEngineControlProps } from './controls/types';
-import { useCurrentRuleEffects } from './rules';
+import { useRuleEvaluationResultForElement } from './rules';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
@@ -26,7 +26,7 @@ export interface FormEngineElementProps {
 }
 
 export default function FormEngineElement({ element }: FormEngineElementProps) {
-  const ruleEvaluationResult = useCurrentRuleEffects(element);
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const Control = controls[element.type];
 
   if (!Control) {
