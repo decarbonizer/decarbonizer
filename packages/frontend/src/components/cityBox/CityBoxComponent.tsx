@@ -13,40 +13,42 @@ import {
   SimpleGrid,
   Center,
   useDisclosure,
+  Spinner,
 } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
 import AddCityComponent from './AddCityComponent';
+import { useGetAllRealEstatesQuery } from '../../store/api';
 
-interface CityBoxComponentProps {
-  cities: Array<{
-    name: string;
-    description: string;
-    capacity: number;
-    size: number;
-  }>;
-}
-
-export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
+export default function CityBoxComponent() {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    isLoading: isLoadingRealEstates,
+    data: realEstates
+  } = useGetAllRealEstatesQuery();
 
   const handleTabsChange = (index) => {
     setTabIndex(index);
   };
 
   function startSurvey() {
-    console.log(cities[tabIndex]); //TODO: implement start survey
+    console.log(tabIndex); //TODO: implement start survey
   }
+
+  if (isLoadingRealEstates)
+    return <Spinner thickness="4px" speed="0.65s" emptyColor="green.200" color="green.500" size="xl" />;
+  if (!realEstates) return <Box>Something went wrong!</Box>;
 
   return (
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">
       <Tabs variant="enclosed" colorScheme="green" p="4" height="90%" onChange={handleTabsChange}>
         <TabList position="relative">
-          {cities.map((city, index) => (
-            <Tab key={index}>{city.name}</Tab>
+          {realEstates.map((city, index) => (
+            <Tab key={index}>{city.cityName}</Tab>
           ))}
           <Button
             rightIcon={<RiAddLine />}
@@ -60,7 +62,7 @@ export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
           <AddCityComponent isOpen={isOpen} onClose={onClose} />
         </TabList>
         <TabPanels height="100%">
-          {cities.map((city, index) => (
+          {realEstates.map((city, index) => (
             <TabPanel key={index} roundedBottom="md" height="100%" position="relative">
               <Box>
                 <SimpleGrid columns={2} rows={2} spacing={10} h="xs">
@@ -82,13 +84,13 @@ export default function CityBoxComponent({ cities }: CityBoxComponentProps) {
                       <SimpleGrid rows={2} spacing={5}>
                         <Box>
                           <p>
-                            <b>Size of the office:</b> {city.size} m<sup>2</sup>
+                            <b>Size of the office:</b> {city.area} m<sup>2</sup>
                           </p>
                         </Box>
                         <Box>
                           <p>
                             <b>Number of employees: </b>
-                            {city.capacity}
+                            {city.employees}
                           </p>
                         </Box>
                       </SimpleGrid>

@@ -25,20 +25,15 @@ export class RealEstate extends DbObject {
   @Prop()
   @ApiProperty()
   @IsNumber()
-  @Min(0)
+  @Min(1)
   employees: number;
 
   @Prop()
   @ApiProperty()
   @IsNumber()
-  @Min(0)
-  averageEmployeesPerDay: number;
+  @Min(1)
+  area: number;
 
-  @Prop()
-  @ApiProperty()
-  @IsNumber()
-  @Min(0)
-  electricityConsumptionInKwh: number;
 }
 
 export const RealEstateSchema = SchemaFactory.createForClass(RealEstate);
