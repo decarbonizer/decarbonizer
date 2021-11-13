@@ -132,8 +132,7 @@ export const energySurvey: FormSchema = {
           normedUnit: 'd',
           defaultSelectedUnit: 'h',
           normedMin: 0,
-          normedMax: 1,
-          placeholder: 'Test',
+          normedMax: 1
         },
       ],
     },
