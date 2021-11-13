@@ -10,7 +10,10 @@ import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useValueProperty } from '../formEngineContext';
 import { FormEngineControlProps } from './types';
 
-export default function NumberFormEngineControl({ element, ruleEvaluationResult }: FormEngineControlProps<NumberFormSchemaElement>) {
+export default function NumberFormEngineControl({
+  element,
+  ruleEvaluationResult,
+}: FormEngineControlProps<NumberFormSchemaElement>) {
   const [value, setValue] = useValueProperty<number | undefined>(element.property);
 
   return (
