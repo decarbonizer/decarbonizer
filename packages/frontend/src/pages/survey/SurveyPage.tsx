@@ -1,5 +1,4 @@
 import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
-import CityBoxComponent from '../../components/cityBox/CityBoxComponent';
 
 export default function SurveyPage() {
   return (
