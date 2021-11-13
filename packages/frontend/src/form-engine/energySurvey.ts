@@ -39,7 +39,7 @@ export const energySurvey: FormSchema = {
         {
           property: 'bulbType',
           required: true,
-          type: 'choice-select',
+          type: 'single-choice-select',
           label: 'What kind of illuminant is used?',
           options: 'bulbs',
         },
@@ -62,9 +62,8 @@ export const energySurvey: FormSchema = {
         {
           property: 'illuminationTriggerMode',
           required: true,
-          type: 'choice',
+          type: 'single-choice',
           label: 'How is the illumunation triggered?',
-          mode: 'single',
           options: [
             {
               value: 'automatically',
@@ -79,9 +78,8 @@ export const energySurvey: FormSchema = {
         {
           property: 'illuminationTriggerEvent',
           required: true,
-          type: 'choice',
+          type: 'single-choice',
           label: 'What is the triggering event?',
-          mode: 'single',
           options: [
             {
               value: 'brightness',
@@ -100,9 +98,8 @@ export const energySurvey: FormSchema = {
         {
           property: 'illuminationSwitchOffMode',
           required: true,
-          type: 'choice',
+          type: 'single-choice',
           label: 'How is it switched off?',
-          mode: 'single',
           options: [
             {
               value: 'automaticTimeout',
@@ -121,9 +118,8 @@ export const energySurvey: FormSchema = {
         {
           property: 'illuminationSwitchOnMode',
           required: true,
-          type: 'choice',
+          type: 'single-choice',
           label: 'When is the illumination switched on?',
-          mode: 'single',
           options: [
             {
               value: 'always',

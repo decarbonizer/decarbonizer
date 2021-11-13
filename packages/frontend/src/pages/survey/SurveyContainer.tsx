@@ -34,13 +34,13 @@ export default function SurveyContainer() {
     return acc + curr;
   });
 
-  const progress = ((page - 1) * 100) / schema.pages.length;
   const answeredQuestions = Object.keys(value).length;
+  const progress = (answeredQuestions * 100) / numQuestions;
 
   if (isLoadingBulbs) {
     return <>Loading...</>;
   }
-  console.log('value ', value);
+
   return (
     <Center w="100%" h="100%">
       <Box w="100%" h="100%" maxH="70vh" maxW="70vw">
@@ -64,10 +64,10 @@ export default function SurveyContainer() {
                   choiceOptionProviders={{
                     bulbs: bulbs!.map((bulb) => ({ value: bulb._id, display: bulb.name })),
                   }}
-                  currentPage={page}
-                  currentValue={value}
-                  onCurrentPageChanged={(e) => setPage(e.currentPage)}
-                  onCurrentValueChanged={(e) => setValue(e.currentValue)}
+                  page={page}
+                  value={value}
+                  onPageChanged={(e) => setPage(e.page)}
+                  onValueChanged={(e) => setValue(e.value)}
                 />
                 <HStack
                   w="100%"

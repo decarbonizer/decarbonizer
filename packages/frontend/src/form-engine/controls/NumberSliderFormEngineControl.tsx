@@ -1,26 +1,26 @@
 import { NumberSliderFormSchemaElement } from '../formSchema';
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
-import { useState } from 'react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
+import { useValueProperty } from '../formEngineContext';
 
 export interface NumberSliderFormEngineControlProps {
   element: NumberSliderFormSchemaElement;
 }
 
 export default function NumberSliderFormEngineControl({ element }: NumberSliderFormEngineControlProps) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useValueProperty<number | undefined>(element.property);
 
   return (
     <DefaultFormControlLayout element={element}>
       <Slider
+        colorScheme="primary"
         flex="1"
+        ml="8"
+        step={1}
         min={element.min}
         max={element.max}
-        step={1}
-        onChange={setValue}
-        value={value}
-        colorScheme="primary"
-        ml="8">
+        defaultValue={value ?? 0}
+        onChangeEnd={setValue}>
         <SliderTrack>
           <SliderFilledTrack />
         </SliderTrack>
