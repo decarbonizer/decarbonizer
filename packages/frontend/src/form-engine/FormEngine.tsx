@@ -3,7 +3,6 @@ import FormEngineElement from './FormEngineElement';
 import { FormSchema } from './formSchema';
 import { FormEngineChoiceOptionProviders } from './types';
 import { formEngineContext } from './formEngineContext';
-import { useEffect, useState } from 'react';
 
 export interface FormEngineProps {
   schema: FormSchema;
@@ -14,26 +13,12 @@ export interface FormEngineProps {
   onPageChanged(e: { page: number });
 }
 
-export default function FormEngine({
-  schema,
-  value: currentValue,
-  page: currentPage,
-  choiceOptionProviders = {},
-  onValueChanged: onCurrentValueChanged,
-}: FormEngineProps) {
-  const [value, setValue] = useState(currentValue);
-  const currentSchemaPage = schema.pages[currentPage - 1];
-
-  useEffect(() => {
-    setValue(currentValue);
-  }, [currentValue]);
-
-  useEffect(() => {
-    onCurrentValueChanged({ value: value });
-  }, [value, onCurrentValueChanged]);
+export default function FormEngine(props: FormEngineProps) {
+  const { schema, page } = props;
+  const currentSchemaPage = schema.pages[page - 1];
 
   return (
-    <formEngineContext.Provider value={{ schema, choiceOptionProviders, value, setValue }}>
+    <formEngineContext.Provider value={props}>
       <VStack spacing="4">
         {currentSchemaPage.elements.map((element, index) => (
           <FormEngineElement key={index} element={element} />

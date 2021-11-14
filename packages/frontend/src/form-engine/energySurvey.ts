@@ -25,18 +25,6 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'lampCount',
-          required: true,
-          type: 'number-slider',
-          label: 'How many lamps are used?',
-          min: 0,
-          max: 150,
-        },
-      ],
-    },
-    {
-      elements: [
-        {
           property: 'bulbType',
           required: true,
           type: 'single-choice-select',
@@ -135,7 +123,17 @@ export const energySurvey: FormSchema = {
     },
     {
       elements: [
-        // TODO: Q9, unit selection.
+        {
+          property: 'avgIlluminationPerDay',
+          required: true,
+          type: 'number-unit',
+          label: 'How long is the location illuminated on average per day?',
+          units: 'time',
+          normedUnit: 'd',
+          defaultSelectedUnit: 'h',
+          normedMin: 0,
+          normedMax: 1,
+        },
       ],
     },
   ],

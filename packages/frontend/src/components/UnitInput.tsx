@@ -1,87 +1,128 @@
 import {
   Flex,
-  HTMLChakraProps,
-  Input,
-  InputGroup,
-  InputProps,
-  InputRightAddon,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
-  Tag,
   Text,
 } from '@chakra-ui/react';
 import { AllMeasuresUnits } from 'convert-units';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { convert } from '../utils/convert';
 
-export interface UnitInputTemplate {
-  units: Array<AllMeasuresUnits>;
-  defaultUnit: AllMeasuresUnits;
-  defaultValue?: number;
-  inputProps?: InputProps;
+export interface UnitInputValueChangedArgs {
+  value?: number;
+  unit: AllMeasuresUnits;
+  normedValue?: number;
+  normedUnit: AllMeasuresUnits;
 }
 
-export const energyTemplate: UnitInputTemplate = {
-  units: ['Wh', 'kWh', 'GWh'],
-  defaultUnit: 'kWh',
-};
-
-const knownUnitInputTemplates = {
-  energy: energyTemplate,
-} as const;
-
-export type KnownUnitInputTemplate = keyof typeof knownUnitInputTemplates;
-
-export interface UnitInputProps extends HTMLChakraProps<'div'> {
-  template: UnitInputTemplate;
-  onValueChange?(e: { value?: number; unit: AllMeasuresUnits; normedValue?: number; normedUnit: AllMeasuresUnits });
+export interface UnitInputProps {
+  units: Array<AllMeasuresUnits>;
+  normedUnit: AllMeasuresUnits;
+  normedValue: number | undefined;
+  normedMin?: number;
+  normedMax?: number;
+  defaultSelectedUnit?: AllMeasuresUnits;
+  placeholder?: string;
+  onValueChange(args: UnitInputValueChangedArgs);
 }
 
 export default function UnitInput({
-  template: { units, defaultUnit, defaultValue, inputProps },
+  units,
+  normedUnit,
+  normedValue,
+  normedMin,
+  normedMax,
+  defaultSelectedUnit,
+  placeholder,
   onValueChange,
-  ...rest
 }: UnitInputProps) {
-  const [value, setValue] = useState<number | undefined>(defaultValue);
-  const [selectedUnit, setSelectedUnit] = useState<AllMeasuresUnits>(defaultUnit);
-  const normedValue = convert(value).from(selectedUnit).to(defaultUnit);
+  const [selectedUnit, setSelectedUnit] = useState<AllMeasuresUnits>(defaultSelectedUnit ?? normedUnit);
+  const value = convertNorm(normedValue, 'unnorm', normedUnit, selectedUnit);
+  const min = convertNorm(normedMin, 'unnorm', normedUnit, selectedUnit);
+  const max = convertNorm(normedMax, 'unnorm', normedUnit, selectedUnit);
+
+  const raiseValueChange = (nextValue: number | undefined, nextValueUnit: AllMeasuresUnits) => {
+    onValueChange({
+      value: nextValue,
+      unit: nextValueUnit,
+      normedValue: convertNorm(nextValue, 'norm', normedUnit, nextValueUnit),
+      normedUnit,
+    });
+  };
 
   const handleSelectedUnitChanged = (e: ChangeEvent<HTMLSelectElement>) => {
     const previousUnit = selectedUnit;
     const newUnit = e.target.value as AllMeasuresUnits;
     setSelectedUnit(newUnit);
-
-    if (value !== undefined) {
-      setValue(convert(value).from(previousUnit).to(newUnit));
-    }
+    raiseValueChange(value, previousUnit);
   };
 
-  const handleValueChanged = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = isNaN(e.target.valueAsNumber) ? undefined : e.target.valueAsNumber;
-    setValue(newValue);
+  const handleValueChanged = (newValue: string) => {
+    raiseValueChange(parseValue(newValue), selectedUnit);
   };
-
-  useEffect(() => {
-    onValueChange?.({ value, unit: selectedUnit, normedValue, normedUnit: defaultUnit });
-  }, [onValueChange, value, selectedUnit, normedValue, defaultUnit]);
 
   return (
-    <Flex direction="column" {...rest}>
-      <InputGroup>
-        <Input type="number" value={value ?? ''} onChange={handleValueChanged} {...inputProps} />
-        <InputRightAddon>
-          <Select variant="unstyled" value={selectedUnit} onChange={handleSelectedUnitChanged}>
-            <option disabled></option>
-            {units.map((unit) => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </Select>
-        </InputRightAddon>
-      </InputGroup>
-      <Text color="gray" fontSize="xs">
-        {normedValue} {defaultUnit}
+    <Flex direction="column">
+      <Flex>
+        <NumberInput
+          w="100%"
+          zIndex={1}
+          min={min}
+          max={max}
+          value={value ?? ''}
+          onChange={(newValue) => handleValueChanged(newValue)}>
+          <NumberInputField borderRightRadius={0} placeholder={placeholder} />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+        <Select
+          minW="28"
+          flex={1}
+          variant="filled"
+          borderLeftRadius={0}
+          value={selectedUnit}
+          onChange={handleSelectedUnitChanged}>
+          {units.map((unit) => (
+            <option key={unit} value={unit}>
+              {unit}
+            </option>
+          ))}
+        </Select>
+      </Flex>
+      <Text color="gray" fontSize="xs" ml="1">
+        {normedValue !== undefined && selectedUnit !== normedUnit && (
+          <>
+            = {normedValue} {normedUnit}
+          </>
+        )}
+        &nbsp;
       </Text>
     </Flex>
   );
+}
+
+function parseValue(value: string) {
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? undefined : parsed;
+}
+
+function convertNorm(
+  value: number | undefined,
+  direction: 'norm' | 'unnorm',
+  normedUnit: AllMeasuresUnits,
+  selectedUnit: AllMeasuresUnits,
+) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const from = direction === 'norm' ? selectedUnit : normedUnit;
+  const to = direction === 'norm' ? normedUnit : selectedUnit;
+  return convert(value).from(from).to(to);
 }

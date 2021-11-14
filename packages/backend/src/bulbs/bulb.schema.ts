@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString, Length, Min } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
@@ -41,5 +41,3 @@ export class Bulb extends DbObject {
 }
 
 export const BulbSchema = SchemaFactory.createForClass(Bulb);
-
-export class BulbUpdate extends PartialType(Bulb) {}

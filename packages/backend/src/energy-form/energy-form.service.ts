@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { GenericCrudService } from '../common/services/generic-crud.service';
 import { EnergyFormRepository } from './energy-form.repository';
-import { EnergyForm, EnergyFormUpdate } from './energy-form.schema';
+import { EnergyForm } from './energy-form.schema';
 
 @Injectable()
-export class EnergyFormService extends GenericCrudService<
-  EnergyForm,
-  EnergyForm,
-  EnergyFormUpdate,
-  EnergyFormRepository
-> {
+export class EnergyFormService extends GenericCrudService<EnergyForm, EnergyForm, EnergyForm, EnergyFormRepository> {
   constructor(energyFormRepository: EnergyFormRepository) {
     super(energyFormRepository);
   }
@@ -18,7 +13,7 @@ export class EnergyFormService extends GenericCrudService<
     throw 'Not implemented.';
   }
 
-  protected mapUpdateToEntity(entity: EnergyFormUpdate): Partial<EnergyForm> {
+  protected mapUpdateToEntity(entity: EnergyForm): Partial<EnergyForm> {
     throw 'Not implemented.';
   }
 }
