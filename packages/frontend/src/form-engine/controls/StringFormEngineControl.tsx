@@ -1,14 +1,12 @@
 import { StringFormSchemaElement } from '../formSchema';
 import { Input, Textarea } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
-import { useValueProperty } from '../formEngineContext';
+import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
 
-export default function StringFormEngineControl({
-  element,
-  ruleEvaluationResult,
-}: FormEngineControlProps<StringFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<string | undefined>(element.property);
+export default function StringFormEngineControl({ element }: FormEngineControlProps<StringFormSchemaElement>) {
+  const [value, setValue] = useValueProperty<string | undefined>(element);
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const actualRows = element.rows ?? 1;
 
   return (

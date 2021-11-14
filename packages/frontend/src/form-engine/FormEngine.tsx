@@ -1,16 +1,24 @@
+import { createContext } from 'react';
 import { VStack } from '@chakra-ui/react';
 import FormEngineElement from './FormEngineElement';
 import { FormSchema } from './formSchema';
-import { FormEngineChoiceOptionProviders } from './types';
-import { formEngineContext } from './formEngineContext';
+import {
+  FormEngineChoiceOptionProviders,
+  FormEngineRuleEvaluationResults,
+  FormEngineValidationErrors,
+  FormEngineValue,
+} from './types';
+
+export const FormEnginePropsContext = createContext<FormEngineProps>(null!);
 
 export interface FormEngineProps {
   schema: FormSchema;
   choiceOptionProviders?: FormEngineChoiceOptionProviders;
-  value: object;
+  value: FormEngineValue;
   page: number;
-  onValueChanged(e: { value: object });
-  onPageChanged(e: { page: number });
+  ruleEvaluationResults: FormEngineRuleEvaluationResults;
+  validationErrors: FormEngineValidationErrors;
+  onValueChanged(e: { value: FormEngineValue });
 }
 
 export default function FormEngine(props: FormEngineProps) {
@@ -18,12 +26,12 @@ export default function FormEngine(props: FormEngineProps) {
   const currentSchemaPage = schema.pages[page - 1];
 
   return (
-    <formEngineContext.Provider value={props}>
+    <FormEnginePropsContext.Provider value={props}>
       <VStack spacing="4">
         {currentSchemaPage.elements.map((element, index) => (
           <FormEngineElement key={index} element={element} />
         ))}
       </VStack>
-    </formEngineContext.Provider>
+    </FormEnginePropsContext.Provider>
   );
 }

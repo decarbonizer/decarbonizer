@@ -100,11 +100,9 @@ export default function UnitInput({
         </Select>
       </Flex>
       <Text isDisabled={isDisabled} color="gray" fontSize="xs" ml="1">
-        {normedValue !== undefined && selectedUnit !== normedUnit && (
-          <>
-            = {normedValue} {normedUnit}
-          </>
-        )}
+        <>
+          = {normedValue ?? '?'} {normedUnit}
+        </>
         &nbsp;
       </Text>
     </Flex>

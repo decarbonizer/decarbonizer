@@ -6,7 +6,7 @@ declare module 'json-conditions' {
   export interface CheckConditionsConfig {
     rules: Array<JsonConditionsRule>;
     satisfy: 'ANY' | 'ALL';
-    log: typeof console.log;
+    log?: typeof console.log;
   }
 
   export interface JsonConditionsRule {

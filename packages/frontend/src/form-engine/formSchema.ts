@@ -9,7 +9,7 @@ export interface FormSchemaPage {
 }
 
 export interface FormSchemaBaseElement<TType extends string> {
-  property: string;
+  id: string;
   required: boolean;
   label: string;
   type: TType;
