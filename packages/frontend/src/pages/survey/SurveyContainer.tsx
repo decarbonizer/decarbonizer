@@ -18,6 +18,8 @@ import {
   Button,
   Flex,
   useDisclosure,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import ReactJson from 'react-json-view';
@@ -34,11 +36,13 @@ import {
   AlertDialogCloseButton,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
+import { evaluateEngineRuleForElement } from '../../form-engine/rules';
 
 export default function SurveyContainer() {
   const schema = energySurvey;
   const [page, setPage] = useState(1);
   const [value, setValue] = useState({});
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const numQuestionsPerPage = schema.pages.map((x) => {
     return x.elements.length;
@@ -47,12 +51,25 @@ export default function SurveyContainer() {
     return acc + curr;
   });
 
-  const answeredQuestions = Object.keys(value).length;
-  const progress = (answeredQuestions * 100) / numQuestions;
+  const numAnsweredQuestions = Object.keys(value).length;
+  const progress = (numAnsweredQuestions * 100) / numQuestions;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const history = useHistory();
+
+  const questionsOfCurrentPage = schema.pages[page - 1].elements;
+  const requiredQuestionsOfCurrentPage = questionsOfCurrentPage.filter((question) => {
+    const ruleEvaluationResult = evaluateEngineRuleForElement(question, value);
+    return question.required && !ruleEvaluationResult.hide;
+  });
+
+  const error = requiredQuestionsOfCurrentPage.some((question) => {
+    console.log(value[question.property]);
+    return value[question.property] === undefined || value[question.property] === '';
+  });
+
+  console.log(error);
 
   function handleClick() {
     history.push('/');
@@ -73,7 +90,7 @@ export default function SurveyContainer() {
           </Flex>
           <Box mb="10">
             <Text>
-              Questions answered: {answeredQuestions} of {numQuestions}
+              Questions answered: {numAnsweredQuestions} of {numQuestions}
             </Text>
             <Progress value={progress} colorScheme="green" size="sm" />
           </Box>
@@ -86,6 +103,12 @@ export default function SurveyContainer() {
             <TabPanels>
               <TabPanel>
                 <VStack align="flex-start">
+                  {showErrorMessage && error ? (
+                    <Alert status="error">
+                      <AlertIcon />
+                      Please fill out all the required (*) questions.
+                    </Alert>
+                  ) : null}
                   <FormEngine
                     schema={schema}
                     choiceOptionProviders={{
@@ -126,7 +149,47 @@ export default function SurveyContainer() {
               </TabPanel>
             </TabPanels>
           </Tabs>
-          {page == 1 ? null : <Button onClick={() => setPage(page - 1)}>Back</Button>}
+          <Flex justifyContent={'space-between'}>
+            {page == 1 ? (
+              <div />
+            ) : (
+              <Button
+                onClick={() => {
+                  setPage(page - 1);
+                  setShowErrorMessage(true);
+                }}>
+                Back
+              </Button>
+            )}
+
+            {page == schema.pages.length ? (
+              <Button
+                colorScheme="green"
+                onClick={() => {
+                  if (error) {
+                    setShowErrorMessage(true);
+                  } else {
+                    // TODO: Save in DB
+                  }
+                }}
+                variant={error ? 'ghost' : 'solid'}>
+                Submit
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  if (error) {
+                    setShowErrorMessage(true);
+                  } else {
+                    setPage(page + 1);
+                    setShowErrorMessage(false);
+                  }
+                }}
+                variant={error ? 'ghost' : 'solid'}>
+                Next
+              </Button>
+            )}
+          </Flex>
         </Box>
       </Center>
 

@@ -4,7 +4,10 @@ import { useValueProperty } from '../formEngineContext';
 import UnitInput from '../../components/UnitInput';
 import { FormEngineControlProps } from './types';
 
-export default function NumberUnitFormEngineControl({ element, ruleEvaluationResult }: FormEngineControlProps<NumberUnitFormSchemaElement>) {
+export default function NumberUnitFormEngineControl({
+  element,
+  ruleEvaluationResult,
+}: FormEngineControlProps<NumberUnitFormSchemaElement>) {
   const [value, setValue] = useValueProperty<number | undefined>(element.property);
   const units = typeof element.units === 'string' ? knownUnitInputTemplates[element.units] : element.units;
 

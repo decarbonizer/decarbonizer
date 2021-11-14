@@ -5,8 +5,10 @@ import { formEngineContext } from './formEngineContext';
 
 export type FormEngineRuleEvaluationResult = Record<FormSchemaElementRuleEffect, boolean>;
 
-export function useRuleEvaluationResultForElement(element: FormSchemaElement): FormEngineRuleEvaluationResult {
-  const { value } = useContext(formEngineContext);
+export function evaluateEngineRuleForElement(
+  element: FormSchemaElement,
+  value: object,
+): FormEngineRuleEvaluationResult {
   const rules = element.rules ?? [];
   const effects = rules.map((rule) => evaluateFormEngineRule(rule, value));
 
@@ -14,6 +16,11 @@ export function useRuleEvaluationResultForElement(element: FormSchemaElement): F
     hide: effects.some((effect) => effect === 'hide'),
     disable: effects.some((effect) => effect === 'disable'),
   };
+}
+
+export function useRuleEvaluationResultForElement(element: FormSchemaElement): FormEngineRuleEvaluationResult {
+  const { value } = useContext(formEngineContext);
+  return evaluateEngineRuleForElement(element, value);
 }
 
 export function evaluateFormEngineRule(rule: FormSchemaElementRule, value: object): null | FormSchemaElementRuleEffect {
