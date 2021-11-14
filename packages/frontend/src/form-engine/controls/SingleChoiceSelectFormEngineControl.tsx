@@ -2,18 +2,19 @@ import { SingleChoiceSelectFormSchemaElement } from '../formSchema';
 import { Select } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useChoiceOptions, useValueProperty } from '../formEngineContext';
+import { FormEngineControlProps } from './types';
 
-export interface SingleChoiceSelectFormEngineControlProps {
-  element: SingleChoiceSelectFormSchemaElement;
-}
-
-export default function SingleChoiceSelectFormEngineControl({ element }: SingleChoiceSelectFormEngineControlProps) {
+export default function SingleChoiceSelectFormEngineControl({
+  element,
+  ruleEvaluationResult,
+}: FormEngineControlProps<SingleChoiceSelectFormSchemaElement>) {
   const [value, setValue] = useValueProperty<string | undefined>(element.property);
   const options = useChoiceOptions(element.options);
 
   return (
     <DefaultFormControlLayout element={element}>
       <Select
+        isDisabled={ruleEvaluationResult.disable}
         placeholder={element.placeholder}
         value={value}
         variant="filled"

@@ -8,17 +8,18 @@ import {
 } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useValueProperty } from '../formEngineContext';
+import { FormEngineControlProps } from './types';
 
-export interface NumberFormEngineControlProps {
-  element: NumberFormSchemaElement;
-}
-
-export default function NumberFormEngineControl({ element }: NumberFormEngineControlProps) {
+export default function NumberFormEngineControl({
+  element,
+  ruleEvaluationResult,
+}: FormEngineControlProps<NumberFormSchemaElement>) {
   const [value, setValue] = useValueProperty<number | undefined>(element.property);
 
   return (
     <DefaultFormControlLayout element={element}>
       <NumberInput
+        isDisabled={ruleEvaluationResult.disable}
         value={value ?? ''}
         min={element.min}
         max={element.max}
