@@ -12,7 +12,7 @@ export default function AddCityComponent({ isOpen, onClose }: AddCityComponentPr
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add a new city</ModalHeader>
+          <ModalHeader>Add a new real estate</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <CityFormComponent onClose={onClose} />

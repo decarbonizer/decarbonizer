@@ -8,6 +8,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Text,
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
 import React from 'react';
@@ -18,32 +19,41 @@ interface CityFormComponentProps {
 }
 
 export default function CityFormComponent({ onClose }: CityFormComponentProps) {
-  const [name, setName] = React.useState('');
+  const [cityName, setCityName] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [employees, setEmployees] = React.useState(1);
   const [area, setArea] = React.useState(1);
+  const [error, setError] = React.useState('');
 
   const [addRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
 
   const addNewRealEstate = async () => {
-    await addRealEstate({ cityName: name, description: description, employees: employees, area: area });
-    onClose();
+    try {
+      await addRealEstate({ cityName: cityName, description: description, employees: employees, area: area }).unwrap();
+      onClose();
+    } catch (e) {
+      setError('An error occured while creating a new real estate. Please check all fields and try again');
+    }
   };
 
   const onChangeName = (e) => {
-    setName(e.target.value);
+    if (error != '') setError('');
+    setCityName(e.target.value);
   };
 
   const onChangeDescription = (e) => {
+    if (error != '') setError('');
     setDescription(e.target.value);
   };
 
   const onChangeEmployees = (value) => {
+    if (error != '') setError('');
     const intValue: number = +value;
     setEmployees(intValue);
   };
 
   const onChangeArea = (value) => {
+    if (error != '') setError('');
     const intValue: number = +value;
     setArea(intValue);
   };
@@ -53,7 +63,7 @@ export default function CityFormComponent({ onClose }: CityFormComponentProps) {
       <Box>
         <FormControl isRequired>
           <FormLabel>City</FormLabel>
-          <Input placeholder="e.g Stuttgart" type="text" value={name} onChange={onChangeName} />
+          <Input placeholder="e.g Stuttgart" type="text" value={cityName} onChange={onChangeName} />
         </FormControl>
         <FormControl mt={4}>
           <FormLabel>Description</FormLabel>
@@ -85,6 +95,11 @@ export default function CityFormComponent({ onClose }: CityFormComponentProps) {
             </NumberInputStepper>
           </NumberInput>
         </FormControl>
+        <Box>
+          <Text fontSize="sm" color="red">
+            {error}
+          </Text>
+        </Box>
       </Box>
       <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
         <GridItem colSpan={2}>
@@ -95,7 +110,7 @@ export default function CityFormComponent({ onClose }: CityFormComponentProps) {
         <GridItem colStart={4} colEnd={6}>
           <Button
             onClick={addNewRealEstate}
-            isDisabled={name.length < 2}
+            isDisabled={cityName.length < 2}
             isLoading={isAdding}
             position="absolute"
             width="40"
