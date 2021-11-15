@@ -20,11 +20,13 @@ import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
 import AddCityComponent from './AddCityComponent';
 import { useGetAllRealEstatesQuery } from '../../store/api';
+import { useHistory } from 'react-router';
 
 export default function CityBoxComponent() {
   const [tabIndex, setTabIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const history = useHistory();
 
   const handleTabsChange = (index) => {
     setTabIndex(index);
@@ -32,6 +34,7 @@ export default function CityBoxComponent() {
 
   function startSurvey() {
     console.log(tabIndex); //TODO: implement start survey
+    history.push('/survey');
   }
 
   if (isLoadingRealEstates)
