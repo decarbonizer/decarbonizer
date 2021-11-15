@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
+import SurveyContainer from './SurveyContainer';
 
 export default function SurveyPage() {
   return (
@@ -23,9 +24,7 @@ export default function SurveyPage() {
       <Box w="100%" grow={1}>
         <Stack align="center">
           <Heading as="h1">Survey</Heading>
-          <Heading as="h2" size="lg" color="gray.600">
-            Topic-Placeholder
-          </Heading>
+          <SurveyContainer />
         </Stack>
       </Box>
     </Flex>
