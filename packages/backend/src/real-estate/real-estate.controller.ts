@@ -15,7 +15,7 @@ export class RealEstateController {
   }
 
   @Post()
-  @ApiResponse({ status: HttpStatus.OK })
+  @ApiResponse({ status: HttpStatus.CREATED, type: RealEstate })
   async create(@Body() realEstate: RealEstateCreate) {
     return await this.realEstateService.create(realEstate);
   }

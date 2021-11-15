@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   Tabs,
   TabList,
@@ -22,10 +22,8 @@ import AddCityComponent from './AddCityComponent';
 import { useGetAllRealEstatesQuery } from '../../store/api';
 
 export default function CityBoxComponent() {
-  const [tabIndex, setTabIndex] = React.useState(0);
-
+  const [tabIndex, setTabIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
 
   const handleTabsChange = (index) => {

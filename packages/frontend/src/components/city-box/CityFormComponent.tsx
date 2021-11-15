@@ -11,49 +11,53 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
-import React from 'react';
+import { useState } from 'react';
 import { useCreateRealEstateMutation } from '../../store/api';
 
 interface CityFormComponentProps {
-  onClose: () => void;
+  onClose(): void;
 }
 
 export default function CityFormComponent({ onClose }: CityFormComponentProps) {
-  const [cityName, setCityName] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [employees, setEmployees] = React.useState(1);
-  const [area, setArea] = React.useState(1);
-  const [error, setError] = React.useState('');
-
-  const [addRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
+  const [cityName, setCityName] = useState('');
+  const [description, setDescription] = useState('');
+  const [employees, setEmployees] = useState(1);
+  const [area, setArea] = useState(1);
+  const [error, setError] = useState('');
+  const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
 
   const addNewRealEstate = async () => {
     try {
-      await addRealEstate({ cityName: cityName, description: description, employees: employees, area: area }).unwrap();
+      await createRealEstate({
+        cityName: cityName,
+        description: description,
+        employees: employees,
+        area: area,
+      }).unwrap();
       onClose();
     } catch (e) {
-      setError('An error occured while creating a new real estate. Please check all fields and try again');
+      setError('An error occured while creating a new real estate. Please check all fields and try again.');
     }
   };
 
   const onChangeName = (e) => {
-    if (error != '') setError('');
+    if (error !== '') setError('');
     setCityName(e.target.value);
   };
 
   const onChangeDescription = (e) => {
-    if (error != '') setError('');
+    if (error !== '') setError('');
     setDescription(e.target.value);
   };
 
   const onChangeEmployees = (value) => {
-    if (error != '') setError('');
+    if (error !== '') setError('');
     const intValue: number = +value;
     setEmployees(intValue);
   };
 
   const onChangeArea = (value) => {
-    if (error != '') setError('');
+    if (error !== '') setError('');
     const intValue: number = +value;
     setArea(intValue);
   };

@@ -6,7 +6,7 @@ import { AppState } from './store';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: process.env.API_BASE_URL ?? 'http://localhost:3000',
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as AppState;
       const token = state.auth.token;
