@@ -1,10 +1,5 @@
 import {
   Center,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   VStack,
   HStack,
   Box,
@@ -12,8 +7,8 @@ import {
   useDisclosure,
   Spacer,
   Icon,
+  Heading,
 } from '@chakra-ui/react';
-import ReactJson from 'react-json-view';
 import { energySurvey } from './energySurvey';
 import FormEngine from '../../form-engine/FormEngine';
 import { useHistory } from 'react-router';
@@ -61,38 +56,26 @@ export default function SurveyContainer() {
     <>
       <Center w="100%" h="100%">
         <Box w="100%" h="100%" maxH="70vh" maxW="70vw">
+          <Center p="4">
+        <Heading as="h2" size="lg" color="gray.600">
+           {energySurvey.title}
+          </Heading>
+          </Center>
           <Box mb="10">
             <SurveyProgressBar schema={schema} value={value} />
           </Box>
-          <Tabs>
-            <TabList>
-              <Tab>Survey</Tab>
-              <Tab>Schema</Tab>
-              <Tab>Value</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <VStack align="flex-start">
-                  <FormEngine
-                    schema={schema}
-                    choiceOptionProviders={providers}
-                    value={value}
-                    page={page}
-                    ruleEvaluationResults={ruleEvaluationResults}
-                    validationErrors={validationErrors}
-                    onValueChanged={handleValueChanged}
-                  />
-                </VStack>
-              </TabPanel>
-              <TabPanel>
-                <ReactJson src={schema} />
-              </TabPanel>
-              <TabPanel>
-                <ReactJson src={{ value, ruleEvaluationResults, validationErrors }} />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-          <HStack w="100%">
+          <VStack align="flex-start">
+            <FormEngine
+              schema={schema}
+              choiceOptionProviders={providers}
+              value={value}
+              page={page}
+              ruleEvaluationResults={ruleEvaluationResults}
+              validationErrors={validationErrors}
+              onValueChanged={handleValueChanged}
+            />
+          </VStack>
+          <HStack w="100%" paddingTop="4">
             <Button colorScheme="red" variant="outline" onClick={cancelSurveyDisclosure.onOpen} size="sm">
               Cancel
             </Button>
