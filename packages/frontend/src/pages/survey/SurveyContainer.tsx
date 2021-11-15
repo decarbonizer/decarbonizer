@@ -49,6 +49,7 @@ export default function SurveyContainer() {
   const submitSurvey = () => {
     if (verifySubmit()) {
       alert('Form submitted!');
+      history.push('/');
     }
   };
 
