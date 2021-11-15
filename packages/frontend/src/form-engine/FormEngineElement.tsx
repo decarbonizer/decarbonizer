@@ -9,7 +9,7 @@ import SingleChoiceSelectFormEngineControl from './controls/SingleChoiceSelectFo
 import NumberUnitFormEngineControl from './controls/NumberUnitFormEngineControl';
 import { ComponentType } from 'react';
 import { FormEngineControlProps } from './controls/types';
-import { useRuleEvaluationResultForElement } from './rules';
+import { useRuleEvaluationResultForElement } from './internals/hooks';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
@@ -33,5 +33,5 @@ export default function FormEngineElement({ element }: FormEngineElementProps) {
     return <Text>Unknown form schema element type: {element.type}.</Text>;
   }
 
-  return <>{!ruleEvaluationResult.hide && <Control element={element} ruleEvaluationResult={ruleEvaluationResult} />}</>;
+  return <>{!ruleEvaluationResult.hide && <Control element={element} />}</>;
 }

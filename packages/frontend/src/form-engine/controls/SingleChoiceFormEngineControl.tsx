@@ -1,14 +1,14 @@
 import { SingleChoiceFormSchemaElement } from '../formSchema';
 import { Radio, RadioGroup, VStack } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
-import { useChoiceOptions, useValueProperty } from '../formEngineContext';
+import { useChoiceOptions, useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
 
 export default function SingleChoiceFormEngineControl({
   element,
-  ruleEvaluationResult,
 }: FormEngineControlProps<SingleChoiceFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<string | undefined>(element.property);
+  const [value, setValue] = useValueProperty<string | undefined>(element);
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const options = useChoiceOptions(element.options);
 
   return (

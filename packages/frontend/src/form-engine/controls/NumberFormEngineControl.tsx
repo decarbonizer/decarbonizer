@@ -7,14 +7,12 @@ import {
   NumberInputStepper,
 } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
-import { useValueProperty } from '../formEngineContext';
+import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
 
-export default function NumberFormEngineControl({
-  element,
-  ruleEvaluationResult,
-}: FormEngineControlProps<NumberFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<number | undefined>(element.property);
+export default function NumberFormEngineControl({ element }: FormEngineControlProps<NumberFormSchemaElement>) {
+  const [value, setValue] = useValueProperty<number | undefined>(element);
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
 
   return (
     <DefaultFormControlLayout element={element}>

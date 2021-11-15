@@ -1,14 +1,14 @@
 import { NumberSliderFormSchemaElement } from '../formSchema';
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
-import { useValueProperty } from '../formEngineContext';
+import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
 
 export default function NumberSliderFormEngineControl({
   element,
-  ruleEvaluationResult,
 }: FormEngineControlProps<NumberSliderFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<number | undefined>(element.property);
+  const [value, setValue] = useValueProperty<number | undefined>(element);
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
 
   return (
     <DefaultFormControlLayout element={element}>

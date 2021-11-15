@@ -1,11 +1,11 @@
-import { FormSchema } from './formSchema';
+import { FormSchema } from '../../form-engine/formSchema';
 
 export const energySurvey: FormSchema = {
   pages: [
     {
       elements: [
         {
-          property: 'realEstateName',
+          id: 'realEstateName',
           required: true,
           type: 'string',
           label: 'Where is the illumination used?',
@@ -15,7 +15,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'lampCount',
+          id: 'lampCount',
           required: true,
           type: 'number',
           label: 'How many lamps are used?',
@@ -25,7 +25,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'bulbType',
+          id: 'bulbType',
           required: true,
           type: 'single-choice-select',
           label: 'What kind of illuminant is used?',
@@ -36,7 +36,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'isIlluminantExchangeable',
+          id: 'isIlluminantExchangeable',
           required: true,
           type: 'boolean',
           label: 'Can the illuminant be exchanged?',
@@ -48,7 +48,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'illuminationTriggerMode',
+          id: 'illuminationTriggerMode',
           required: true,
           type: 'single-choice',
           label: 'How is the illumination triggered?',
@@ -64,7 +64,7 @@ export const energySurvey: FormSchema = {
           ],
         },
         {
-          property: 'illuminationTriggerEvent',
+          id: 'illuminationTriggerEvent',
           required: true,
           type: 'single-choice',
           label: 'What is the triggering event?',
@@ -101,7 +101,7 @@ export const energySurvey: FormSchema = {
           ],
         },
         {
-          property: 'illuminationSwitchOffMode',
+          id: 'illuminationSwitchOffMode',
           required: true,
           type: 'single-choice',
           label: 'How is it switched off?',
@@ -138,7 +138,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'illuminationSwitchOnMode',
+          id: 'illuminationSwitchOnMode',
           required: true,
           type: 'single-choice',
           label: 'When is the illumination switched on?',
@@ -158,7 +158,7 @@ export const energySurvey: FormSchema = {
     {
       elements: [
         {
-          property: 'avgIlluminationPerDay',
+          id: 'avgIlluminationPerDay',
           required: true,
           type: 'number-unit',
           label: 'How long is the location illuminated on average per day?',
