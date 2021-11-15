@@ -1,15 +1,13 @@
 import { BooleanFormSchemaElement } from '../formSchema';
 import { HStack, Radio, RadioGroup } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
-import { useValueProperty } from '../formEngineContext';
+import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
 
-export default function BooleanFormEngineControl({
-  element,
-  ruleEvaluationResult,
-}: FormEngineControlProps<BooleanFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<boolean | undefined>(element.property);
+export default function BooleanFormEngineControl({ element }: FormEngineControlProps<BooleanFormSchemaElement>) {
+  const [value, setValue] = useValueProperty<boolean | undefined>(element);
   const defaultValue = value?.toString();
+  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
 
   return (
     <DefaultFormControlLayout element={element}>
