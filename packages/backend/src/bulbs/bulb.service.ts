@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { GenericCrudService } from '../common/services/generic-crud.service';
 import { BulbRepository } from './bulb.repository';
-import { Bulb, BulbUpdate } from './bulb.schema';
+import { Bulb } from './bulb.schema';
 
 @Injectable()
-export class BulbService extends GenericCrudService<Bulb, Bulb, BulbUpdate, BulbRepository> {
+export class BulbService extends GenericCrudService<Bulb, Bulb, Bulb, BulbRepository> {
   constructor(bulbRepository: BulbRepository) {
     super(bulbRepository);
   }
@@ -13,7 +13,7 @@ export class BulbService extends GenericCrudService<Bulb, Bulb, BulbUpdate, Bulb
     throw 'Not implemented.';
   }
 
-  protected mapUpdateToEntity(entity: BulbUpdate): Partial<Bulb> {
+  protected mapUpdateToEntity(entity: Bulb): Partial<Bulb> {
     throw 'Not implemented.';
   }
 }

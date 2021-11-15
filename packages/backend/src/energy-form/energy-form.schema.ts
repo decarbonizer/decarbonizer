@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString, Length, Min } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
@@ -29,5 +29,3 @@ export class EnergyForm extends DbObject {
 }
 
 export const EnergyFormSchema = SchemaFactory.createForClass(EnergyForm);
-
-export class EnergyFormUpdate extends PartialType(EnergyForm) {}

@@ -1,6 +1,6 @@
-import { Controller, Get, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RealEstate } from './real-estate.schema';
+import { RealEstate, RealEstateCreate } from './real-estate.schema';
 import { RealEstateService } from './real-estate.service';
 
 @Controller('api/v1/realEstates')
@@ -12,6 +12,12 @@ export class RealEstateController {
   @ApiResponse({ status: HttpStatus.OK, type: [RealEstate] })
   async getAll() {
     return await this.realEstateService.getAll();
+  }
+
+  @Post()
+  @ApiResponse({ status: HttpStatus.OK })
+  async create(@Body() realEstate: RealEstateCreate) {
+    return await this.realEstateService.create(realEstate);
   }
 
   @Get(':id')
