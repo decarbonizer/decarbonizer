@@ -1,5 +1,6 @@
 import { Switch, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import DashboardPage from './pages/dashboard/DashboardPage';
 import HomePage from './pages/home/HomePage';
 import LandingPage from './pages/landing/LandingPage';
 import SurveyContainer from './pages/survey/SurveyContainer';
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Switch>
         <Route exact path="/" render={() => (isLoggedIn ? <HomePage /> : <LandingPage />)} />
         <Route exact path="/survey" component={SurveyPage} />
+        <Route exact path="/dashboard" component={DashboardPage} />
         <Route exact path="/survey-dev" component={SurveyContainer} />
       </Switch>
     </BrowserRouter>
