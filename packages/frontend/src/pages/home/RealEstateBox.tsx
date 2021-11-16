@@ -20,7 +20,7 @@ import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import { useGetAllRealEstatesQuery } from '../../store/api';
-import { useHistory } from 'react-router';
+import { generatePath, useHistory } from 'react-router';
 import { routes } from '../../constants';
 
 export default function RealEstateBox() {
@@ -35,7 +35,7 @@ export default function RealEstateBox() {
 
   function startSurvey() {
     console.log(tabIndex); //TODO: implement start survey
-    history.push(routes.survey);
+    history.push(generatePath(routes.surveys));
   }
 
   if (isLoadingRealEstates)

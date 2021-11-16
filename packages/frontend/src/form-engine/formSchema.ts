@@ -1,7 +1,6 @@
 import { AllMeasuresUnits } from 'convert-units';
 import { JsonConditionsRule } from 'json-conditions';
 export interface FormSchema {
-  title: string,
   pages: Array<FormSchemaPage>;
 }
 

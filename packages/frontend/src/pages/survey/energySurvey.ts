@@ -1,7 +1,6 @@
 import { FormSchema } from '../../form-engine/formSchema';
 
 export const energySurvey: FormSchema = {
-  title: 'Energy',
   pages: [
     {
       elements: [

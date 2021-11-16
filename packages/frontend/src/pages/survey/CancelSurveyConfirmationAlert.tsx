@@ -39,10 +39,10 @@ export default function CancelSurveyConfirmationAlert({
         </AlertDialogBody>
         <AlertDialogFooter>
           <Button ref={cancelRef} onClick={onCancel}>
-            No, stay on this page
+            No, continue the survey
           </Button>
           <Button colorScheme="red" ml={3} onClick={onConfirm}>
-            Yes, go back
+            Yes, stop the survey
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

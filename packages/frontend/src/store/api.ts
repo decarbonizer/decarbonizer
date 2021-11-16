@@ -3,6 +3,7 @@ import { Bulb } from '../api/bulb';
 import { RealEstate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
+import { Survey } from '../api/survey';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -27,11 +28,13 @@ export const api = createApi({
         body,
       }),
     }),
+
     getAllBulbs: builder.query<Array<Bulb>, void>({
       query: () => ({
         url: 'api/v1/bulbs',
       }),
     }),
+
     getAllRealEstates: builder.query<Array<RealEstate>, void>({
       query: () => ({
         url: 'api/v1/realEstates',
@@ -46,7 +49,25 @@ export const api = createApi({
       }),
       invalidatesTags: ['RealEstate'],
     }),
+
+    getAllSurveys: builder.query<Array<Survey>, void>({
+      query: () => ({
+        url: 'api/v1/surveys',
+      }),
+    }),
+    getSurvey: builder.query<Array<Survey>, { id: string }>({
+      query: ({ id }) => ({
+        url: `api/v1/surveys/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useGetAllBulbsQuery, useGetAllRealEstatesQuery, useCreateRealEstateMutation } = api;
+export const {
+  useLoginMutation,
+  useGetAllBulbsQuery,
+  useGetAllRealEstatesQuery,
+  useCreateRealEstateMutation,
+  useGetAllSurveysQuery,
+  useGetSurveyQuery,
+} = api;
