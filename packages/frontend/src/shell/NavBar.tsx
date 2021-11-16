@@ -1,7 +1,8 @@
-import { Heading, HStack } from '@chakra-ui/react';
+import { Heading, HStack, Spacer } from '@chakra-ui/react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsClipboardData } from 'react-icons/bs';
 import { routes } from '../constants';
+import NavBarAccountItem from './NavBarAccountItem';
 import NavBarLink, { NavBarLinkProps } from './NavBarLink';
 
 const links: Array<NavBarLinkProps> = [
@@ -26,6 +27,8 @@ export default function NavBar() {
       {links.map((navBarLink) => (
         <NavBarLink key={navBarLink.to} {...navBarLink} />
       ))}
+      <Spacer />
+      <NavBarAccountItem />
     </HStack>
   );
 }
