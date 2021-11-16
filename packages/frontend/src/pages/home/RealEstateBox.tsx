@@ -18,12 +18,12 @@ import {
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
-import AddCityComponent from './AddCityComponent';
+import CreateRealEstateModal from './CreateRealEstateModal';
 import { useGetAllRealEstatesQuery } from '../../store/api';
 import { useHistory } from 'react-router';
 import { routes } from '../../constants';
 
-export default function CityBoxComponent() {
+export default function RealEstateBox() {
   const [tabIndex, setTabIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
@@ -87,7 +87,7 @@ export default function CityBoxComponent() {
             onClick={onOpen}>
             Add new
           </Button>
-          <AddCityComponent isOpen={isOpen} onClose={onClose} />
+          <CreateRealEstateModal isOpen={isOpen} onClose={onClose} />
         </Box>
         <TabPanels height="100%">
           {realEstates.map((city, index) => (
