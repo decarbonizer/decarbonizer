@@ -21,7 +21,6 @@ export default function NavBarLink({ name, to, icon }: NavBarLinkProps) {
           leftIcon={<Icon as={icon} />}
           color={isSelected ? 'primary.600' : undefined}
           opacity={isSelected ? 1.0 : 0.6}
-          fontWeight="semibold"
           _hover={{ opacity: 1.0, bg: 'gray.100' }}>
           {name}
         </Button>
