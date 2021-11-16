@@ -17,6 +17,7 @@ import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
+import { routes } from '../../constants';
 
 export default function SurveyContainer() {
   const history = useHistory();
@@ -38,13 +39,13 @@ export default function SurveyContainer() {
 
   const cancelSurvey = () => {
     cancelSurveyDisclosure.onClose();
-    history.push('/');
+    history.push(routes.home);
   };
 
   const submitSurvey = () => {
     if (verifySubmit()) {
       alert('Form submitted!');
-      history.push('/');
+      history.push(routes.home);
     }
   };
 

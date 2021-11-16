@@ -21,6 +21,7 @@ import { BiCube } from 'react-icons/bi';
 import AddCityComponent from './AddCityComponent';
 import { useGetAllRealEstatesQuery } from '../../store/api';
 import { useHistory } from 'react-router';
+import { routes } from '../../constants';
 
 export default function CityBoxComponent() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -34,7 +35,7 @@ export default function CityBoxComponent() {
 
   function startSurvey() {
     console.log(tabIndex); //TODO: implement start survey
-    history.push('/survey');
+    history.push(routes.survey);
   }
 
   if (isLoadingRealEstates)
