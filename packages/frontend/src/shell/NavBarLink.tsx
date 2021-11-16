@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, Icon } from '@chakra-ui/react';
 import { ComponentType } from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -15,15 +15,16 @@ export default function NavBarLink({ name, to, icon }: NavBarLinkProps) {
   return (
     <Box>
       <Link to={to}>
-        <HStack
+        <Button
+          variant="ghost"
+          aria-label={name}
+          leftIcon={<Icon as={icon} />}
           color={isSelected ? 'primary.600' : undefined}
           opacity={isSelected ? 1.0 : 0.6}
           fontWeight="semibold"
-          transition="all 250ms"
-          _hover={{ opacity: 1.0 }}>
-          <Icon as={icon} />
-          <Text>{name}</Text>
-        </HStack>
+          _hover={{ opacity: 1.0, bg: 'gray.100' }}>
+          {name}
+        </Button>
       </Link>
     </Box>
   );
