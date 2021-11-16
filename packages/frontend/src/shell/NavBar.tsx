@@ -1,7 +1,5 @@
 import { Heading, HStack, Spacer } from '@chakra-ui/react';
 import { AiOutlineHome } from 'react-icons/ai';
-import { BsClipboardData } from 'react-icons/bs';
-import { generatePath } from 'react-router';
 import { routes } from '../constants';
 import NavBarAccountItem from './NavBarAccountItem';
 import NavBarLink, { NavBarLinkProps } from './NavBarLink';
@@ -9,13 +7,8 @@ import NavBarLink, { NavBarLinkProps } from './NavBarLink';
 const links: Array<NavBarLinkProps> = [
   {
     name: 'Dashboard',
-    to: routes.home,
+    to: routes.home(),
     icon: AiOutlineHome,
-  },
-  {
-    name: 'Surveys',
-    to: generatePath(routes.surveys),
-    icon: BsClipboardData,
   },
 ];
 

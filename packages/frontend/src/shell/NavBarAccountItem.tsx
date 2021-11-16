@@ -28,6 +28,6 @@ function useLogout() {
 
   return () => {
     dispatch(loggedOut());
-    history.push(routes.root);
+    history.push(routes.root());
   };
 }

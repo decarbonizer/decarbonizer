@@ -33,9 +33,8 @@ export default function RealEstateBox() {
     setTabIndex(index);
   };
 
-  function startSurvey() {
-    console.log(tabIndex); //TODO: implement start survey
-    history.push(generatePath(routes.surveys));
+  function startSurvey(realEstateId: string) {
+    history.push(routes.surveys({ realEstateId }));
   }
 
   if (isLoadingRealEstates)
@@ -126,7 +125,10 @@ export default function RealEstateBox() {
                   </SimpleGrid>
                   <Flex p="3" position="absolute" bottom="0" right="0">
                     <Spacer />
-                    <Button rightIcon={<AiOutlineArrowRight />} colorScheme="green" onClick={startSurvey}>
+                    <Button
+                      rightIcon={<AiOutlineArrowRight />}
+                      colorScheme="green"
+                      onClick={() => startSurvey(city._id)}>
                       Start survey
                     </Button>
                   </Flex>

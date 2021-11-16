@@ -3,7 +3,7 @@ import { generatePath, Link, useParams } from 'react-router-dom';
 import { Survey } from '../../api/survey';
 import { useGetAllSurveysQuery } from '../../store/api';
 import range from 'lodash-es/range';
-import { routes } from '../../constants';
+import { routes, SurveysPageParams } from '../../constants';
 
 export default function SurveyMenu() {
   const { isLoading, data = [] } = useGetAllSurveysQuery();
@@ -23,11 +23,11 @@ interface SurveyMenuItemProps {
 }
 
 function SurveyMenuItem({ survey }: SurveyMenuItemProps) {
-  const params = useParams();
+  const params = useParams<SurveysPageParams>();
   const isSelected = params['surveyId'] === survey._id;
 
   return (
-    <Link to={generatePath(routes.surveys, { surveyId: survey._id })}>
+    <Link to={routes.surveys({ ...params, surveyId: survey._id })}>
       <Button w="100%" colorScheme={isSelected ? 'primary' : undefined} variant={isSelected ? 'solid' : 'ghost'}>
         {survey.name}
       </Button>

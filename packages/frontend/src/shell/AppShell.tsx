@@ -10,9 +10,9 @@ export default function AppShell() {
     <Box minH="100%">
       <NavBar />
       <Switch>
-        <Route exact path={routes.home} component={HomePage} />
-        <Route exact path={routes.surveys} component={SurveyOverviewPage} />
-        <Route render={() => <Redirect to={routes.home} />} />
+        <Route exact path={routes.home()} component={HomePage} />
+        <Route exact path={routes.surveys.route} component={SurveyOverviewPage} />
+        <Route render={() => <Redirect to={routes.home.route} />} />
       </Switch>
     </Box>
   );
