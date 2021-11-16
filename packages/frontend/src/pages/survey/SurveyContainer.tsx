@@ -1,14 +1,4 @@
-import {
-  Center,
-  VStack,
-  HStack,
-  Box,
-  Button,
-  useDisclosure,
-  Spacer,
-  Icon,
-  Heading,
-} from '@chakra-ui/react';
+import { Center, VStack, HStack, Box, Button, useDisclosure, Spacer, Icon, Heading } from '@chakra-ui/react';
 import { energySurvey } from './energySurvey';
 import FormEngine from '../../form-engine/FormEngine';
 import { useHistory } from 'react-router';
@@ -55,51 +45,45 @@ export default function SurveyContainer() {
 
   return (
     <>
-      <Center w="100%" h="100%">
-        <Box w="100%" h="100%" maxH="70vh" maxW="70vw">
-          <Center p="4">
-        <Heading as="h2" size="lg" color="gray.600">
-           {energySurvey.title}
-          </Heading>
-          </Center>
-          <Box mb="10">
-            <SurveyProgressBar schema={schema} value={value} />
-          </Box>
-          <VStack align="flex-start">
-            <FormEngine
-              schema={schema}
-              choiceOptionProviders={providers}
-              value={value}
-              page={page}
-              ruleEvaluationResults={ruleEvaluationResults}
-              validationErrors={validationErrors}
-              onValueChanged={handleValueChanged}
-            />
-          </VStack>
-          <HStack w="100%" paddingTop="4">
-            <Button colorScheme="red" variant="outline" onClick={cancelSurveyDisclosure.onOpen} size="sm">
-              Cancel
-            </Button>
-            <Spacer />
-            <Button
-              variant="outline"
-              leftIcon={<Icon as={IoIosArrowBack} />}
-              isDisabled={!canGoToPrevious}
-              onClick={goToPrevious}>
-              Previous
-            </Button>
-            {canGoToNext ? (
-              <Button rightIcon={<Icon as={IoIosArrowForward} />} onClick={goToNext}>
-                Next
-              </Button>
-            ) : (
-              <Button colorScheme="primary" leftIcon={<Icon as={IoIosCheckmark} />} onClick={submitSurvey}>
-                Submit
-              </Button>
-            )}
-          </HStack>
-        </Box>
-      </Center>
+      <Heading as="h3" color="gray.600">
+        {energySurvey.title}
+      </Heading>
+      <Box mb="10">
+        <SurveyProgressBar schema={schema} value={value} />
+      </Box>
+      <VStack align="flex-start">
+        <FormEngine
+          schema={schema}
+          choiceOptionProviders={providers}
+          value={value}
+          page={page}
+          ruleEvaluationResults={ruleEvaluationResults}
+          validationErrors={validationErrors}
+          onValueChanged={handleValueChanged}
+        />
+      </VStack>
+      <HStack w="100%" paddingTop="4">
+        <Button colorScheme="red" variant="outline" onClick={cancelSurveyDisclosure.onOpen} size="sm">
+          Cancel
+        </Button>
+        <Spacer />
+        <Button
+          variant="outline"
+          leftIcon={<Icon as={IoIosArrowBack} />}
+          isDisabled={!canGoToPrevious}
+          onClick={goToPrevious}>
+          Previous
+        </Button>
+        {canGoToNext ? (
+          <Button rightIcon={<Icon as={IoIosArrowForward} />} onClick={goToNext}>
+            Next
+          </Button>
+        ) : (
+          <Button colorScheme="primary" leftIcon={<Icon as={IoIosCheckmark} />} onClick={submitSurvey}>
+            Submit
+          </Button>
+        )}
+      </HStack>
       <CancelSurveyConfirmationAlert
         isOpen={cancelSurveyDisclosure.isOpen}
         onCancel={cancelSurveyDisclosure.onClose}

@@ -1,32 +1,20 @@
-import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react';
+import DefaultPageLayout from '../../components/DefaultPageLayout';
 import SurveyContainer from './SurveyContainer';
 
 export default function SurveyPage() {
+  const surveysMenu = (
+    <VStack minW="20vw" align="stretch">
+      <Button variant="solid">Energy</Button>
+      <Button variant="solid">Energy</Button>
+      <Button variant="solid">Energy</Button>
+      <Button variant="solid">Energy</Button>
+    </VStack>
+  );
+
   return (
-    <Flex minH="100%">
-      <Flex
-        as="aside"
-        direction="column"
-        justify="flex-start"
-        align="center"
-        pos="sticky"
-        minW="200"
-        p="8"
-        bg="gray.50"
-        border="1px"
-        borderColor="gray.200"
-        shadow="xl"
-        zIndex="100">
-        <Heading as="h3" color="darkgreen">
-          Decarbonizer
-        </Heading>
-      </Flex>
-      <Box w="100%" grow={1}>
-        <Stack align="center">
-          <Heading as="h1">Survey</Heading>
-          <SurveyContainer />
-        </Stack>
-      </Box>
-    </Flex>
+    <DefaultPageLayout title="Surveys" leftArea={surveysMenu}>
+      <SurveyContainer />
+    </DefaultPageLayout>
   );
 }

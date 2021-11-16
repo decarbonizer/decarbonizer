@@ -1,11 +1,10 @@
-import { Heading, VStack } from '@chakra-ui/react';
+import DefaultPageLayout from '../../components/DefaultPageLayout';
 import RealEstateBox from './RealEstateBox';
 
 export default function HomePage() {
   return (
-    <VStack>
-      <Heading>Home</Heading>
+    <DefaultPageLayout title="Dashboard">
       <RealEstateBox />
-    </VStack>
+    </DefaultPageLayout>
   );
 }

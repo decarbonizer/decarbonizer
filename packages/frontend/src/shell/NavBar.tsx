@@ -20,7 +20,7 @@ const links: Array<NavBarLinkProps> = [
 
 export default function NavBar() {
   return (
-    <HStack as="nav" p="4" spacing="8">
+    <HStack as="nav" px="8" py="4" spacing="4">
       <Heading as="h1" role="figure" fontSize="lg" color="primary.500" mr="8">
         Decarbonizer
       </Heading>
