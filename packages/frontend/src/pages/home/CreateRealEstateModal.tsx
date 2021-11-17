@@ -1,12 +1,12 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
-import CityFormComponent from './CityFormComponent';
+import CreateRealEstateForm from './CreateRealEstateForm';
 
-interface AddCityComponentProps {
+interface CreateRealEstateModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function AddCityComponent({ isOpen, onClose }: AddCityComponentProps) {
+export default function CreateRealEstateModal({ isOpen, onClose }: CreateRealEstateModalProps) {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -15,7 +15,7 @@ export default function AddCityComponent({ isOpen, onClose }: AddCityComponentPr
           <ModalHeader>Add a new real estate</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <CityFormComponent onClose={onClose} />
+            <CreateRealEstateForm onClose={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>

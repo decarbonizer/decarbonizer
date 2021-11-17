@@ -14,11 +14,11 @@ import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
 import { useCreateRealEstateMutation } from '../../store/api';
 
-interface CityFormComponentProps {
+interface CreateRealEstateFormProps {
   onClose(): void;
 }
 
-export default function CityFormComponent({ onClose }: CityFormComponentProps) {
+export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormProps) {
   const [cityName, setCityName] = useState('');
   const [description, setDescription] = useState('');
   const [employees, setEmployees] = useState(1);
@@ -63,7 +63,7 @@ export default function CityFormComponent({ onClose }: CityFormComponentProps) {
   };
 
   return (
-    <Box>
+    <>
       <Box>
         <FormControl isRequired>
           <FormLabel>City</FormLabel>
@@ -124,6 +124,6 @@ export default function CityFormComponent({ onClose }: CityFormComponentProps) {
           </Button>
         </GridItem>
       </Grid>
-    </Box>
+    </>
   );
 }

@@ -1,25 +1,32 @@
 import {
-  Center,
-  VStack,
-  HStack,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
   Box,
   Button,
-  useDisclosure,
-  Spacer,
-  Icon,
   Heading,
+  HStack,
+  Icon,
+  Spacer,
+  VStack,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { energySurvey } from './energySurvey';
+import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import FormEngine from '../../form-engine/FormEngine';
-import { useHistory } from 'react-router';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
-import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
+import { energySurvey } from './energySurvey';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
 
-export default function SurveyContainer() {
-  const history = useHistory();
+export interface SurveyDrawerProps {
+  isOpen: boolean;
+  onClose(): void;
+}
+
+export default function SurveyDrawer({ isOpen, onClose }: SurveyDrawerProps) {
   const schema = energySurvey;
   const { isLoading, providers } = useSurveyChoiceOptionProviders();
   const {
@@ -38,33 +45,31 @@ export default function SurveyContainer() {
 
   const cancelSurvey = () => {
     cancelSurveyDisclosure.onClose();
-    history.push('/');
+    onClose();
   };
 
   const submitSurvey = () => {
     if (verifySubmit()) {
       alert('Form submitted!');
-      history.push('/');
+      onClose();
     }
   };
 
   if (isLoading) {
     return <>Loading...</>;
   }
-
   return (
-    <>
-      <Center w="100%" h="100%">
-        <Box w="100%" h="100%" maxH="70vh" maxW="70vw">
-          <Center p="4">
-        <Heading as="h2" size="lg" color="gray.600">
-           {energySurvey.title}
+    <Drawer size="full" placement="bottom" isOpen={isOpen} onClose={onClose}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerHeader fontSize="md" fontWeight="normal">
+          <Heading as="h2" size="lg" mb="4">
+            Illumination Survey
           </Heading>
-          </Center>
-          <Box mb="10">
-            <SurveyProgressBar schema={schema} value={value} />
-          </Box>
-          <VStack align="flex-start">
+          <SurveyProgressBar schema={schema} value={value} />
+        </DrawerHeader>
+        <DrawerBody mt="4">
+          <Box maxW="lg">
             <FormEngine
               schema={schema}
               choiceOptionProviders={providers}
@@ -74,8 +79,8 @@ export default function SurveyContainer() {
               validationErrors={validationErrors}
               onValueChanged={handleValueChanged}
             />
-          </VStack>
-          <HStack w="100%" paddingTop="4">
+          </Box>
+          <HStack w="100%" paddingTop="8">
             <Button colorScheme="red" variant="outline" onClick={cancelSurveyDisclosure.onOpen} size="sm">
               Cancel
             </Button>
@@ -97,13 +102,13 @@ export default function SurveyContainer() {
               </Button>
             )}
           </HStack>
-        </Box>
-      </Center>
-      <CancelSurveyConfirmationAlert
-        isOpen={cancelSurveyDisclosure.isOpen}
-        onCancel={cancelSurveyDisclosure.onClose}
-        onConfirm={cancelSurvey}
-      />
-    </>
+          <CancelSurveyConfirmationAlert
+            isOpen={cancelSurveyDisclosure.isOpen}
+            onCancel={cancelSurveyDisclosure.onClose}
+            onConfirm={cancelSurvey}
+          />
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 }
