@@ -21,13 +21,17 @@ export default function DashboardPage() {
         <Heading as="h3" color="darkgreen">
           Decarbonizer
         </Heading>
-        <Heading as="h5" size="md" paddingTop="4">Take actions</Heading>
+        <Heading as="h5" size="md" paddingTop="4">
+          Take actions
+        </Heading>
         <ActionsMenuComponent />
       </Flex>
       <Box w="100%" grow={1}>
         <Stack align="center">
           <Heading as="h1">Dashboard</Heading>
-          <Heading as="h2" size="lg">Dashboard title</Heading>
+          <Heading as="h2" size="lg">
+            Dashboard title
+          </Heading>
         </Stack>
       </Box>
     </Flex>
