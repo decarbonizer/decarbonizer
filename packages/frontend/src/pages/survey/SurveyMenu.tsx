@@ -1,9 +1,9 @@
 import { VStack, Button, Skeleton } from '@chakra-ui/react';
-import { generatePath, Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Survey } from '../../api/survey';
 import { useGetAllSurveysQuery } from '../../store/api';
 import range from 'lodash-es/range';
-import { routes, SurveysPageParams } from '../../constants';
+import { routes, SurveysPageParams } from '../../routes';
 
 export default function SurveyMenu() {
   const { isLoading, data = [] } = useGetAllSurveysQuery();

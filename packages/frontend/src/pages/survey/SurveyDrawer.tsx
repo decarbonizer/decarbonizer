@@ -14,6 +14,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
+import { useHistory } from 'react-router';
+import { routes } from '../../routes';
 import FormEngine from '../../form-engine/FormEngine';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
@@ -27,6 +29,7 @@ export interface SurveyDrawerProps {
 }
 
 export default function SurveyDrawer({ isOpen, onClose }: SurveyDrawerProps) {
+  const history = useHistory();
   const schema = energySurvey;
   const { isLoading, providers } = useSurveyChoiceOptionProviders();
   const {
@@ -50,7 +53,7 @@ export default function SurveyDrawer({ isOpen, onClose }: SurveyDrawerProps) {
 
   const submitSurvey = () => {
     if (verifySubmit()) {
-      alert('Form submitted!');
+      history.push(routes.realEstateDashboard());
       onClose();
     }
   };

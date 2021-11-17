@@ -20,8 +20,8 @@ import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import { useGetAllRealEstatesQuery } from '../../store/api';
-import { generatePath, useHistory } from 'react-router';
-import { routes } from '../../constants';
+import { useHistory } from 'react-router';
+import { routes } from '../../routes';
 
 export default function RealEstateBox() {
   const [tabIndex, setTabIndex] = useState(0);
