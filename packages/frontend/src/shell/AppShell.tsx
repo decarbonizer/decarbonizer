@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { Redirect, Route, Switch } from 'react-router';
-import { routes } from '../constants';
+import { routes } from '../routes';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import HomePage from '../pages/home/HomePage';
 import SurveyOverviewPage from '../pages/survey/SurveyOverviewPage';

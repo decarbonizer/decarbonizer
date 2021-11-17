@@ -1,6 +1,6 @@
 import { Heading, HStack, Spacer } from '@chakra-ui/react';
 import { AiOutlineHome } from 'react-icons/ai';
-import { routes } from '../constants';
+import { routes } from '../routes';
 import NavBarAccountItem from './NavBarAccountItem';
 import NavBarLink, { NavBarLinkProps } from './NavBarLink';
 
