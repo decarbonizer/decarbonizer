@@ -13,13 +13,13 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
     return [
       {
         _id: '00000000-0000-0000-0000-000000000000',
-        name: 'Energy Survey',
+        name: 'Illumination',
         schema: {
           pages: [
             {
               elements: [
                 {
-                  property: 'realEstateName',
+                  id: 'realEstateName',
                   required: true,
                   type: 'string',
                   label: 'Where is the illumination used?',
@@ -29,7 +29,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
             {
               elements: [
                 {
-                  property: 'lampCount',
+                  id: 'lampCount',
                   required: true,
                   type: 'number',
                   label: 'How many lamps are used?',
@@ -39,24 +39,18 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
             {
               elements: [
                 {
-                  property: 'lampCount',
+                  id: 'bulbType',
                   required: true,
-                  type: 'number-slider',
-                  label: 'How many lamps are used?',
-                  min: 0,
-                  max: 150,
+                  type: 'single-choice-select',
+                  label: 'What kind of illuminant is used?',
+                  options: 'bulbs',
                 },
               ],
             },
             {
               elements: [
-                // TODO: Q3, dynamic choice.
-              ],
-            },
-            {
-              elements: [
                 {
-                  property: 'isIlluminantExchangeable',
+                  id: 'isIlluminantExchangeable',
                   required: true,
                   type: 'boolean',
                   label: 'Can the illuminant be exchanged?',
@@ -68,11 +62,10 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
             {
               elements: [
                 {
-                  property: 'illuminationTriggerMode',
+                  id: 'illuminationTriggerMode',
                   required: true,
-                  type: 'choice',
-                  label: 'How is the illumunation triggered?',
-                  mode: 'single',
+                  type: 'single-choice',
+                  label: 'How is the illumination triggered?',
                   options: [
                     {
                       value: 'automatically',
@@ -85,11 +78,10 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
                   ],
                 },
                 {
-                  property: 'illuminationTriggerEvent',
+                  id: 'illuminationTriggerEvent',
                   required: true,
-                  type: 'choice',
+                  type: 'single-choice',
                   label: 'What is the triggering event?',
-                  mode: 'single',
                   options: [
                     {
                       value: 'brightness',
@@ -104,13 +96,29 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
                       display: 'Motion-triggered',
                     },
                   ],
+                  rules: [
+                    {
+                      effect: 'hide',
+                      satisfy: 'any',
+                      conditions: [
+                        {
+                          property: 'illuminationTriggerMode',
+                          op: 'absent',
+                        },
+                        {
+                          property: 'illuminationTriggerMode',
+                          op: 'eq',
+                          value: 'manually',
+                        },
+                      ],
+                    },
+                  ],
                 },
                 {
-                  property: 'illuminationSwitchOffMode',
+                  id: 'illuminationSwitchOffMode',
                   required: true,
-                  type: 'choice',
+                  type: 'single-choice',
                   label: 'How is it switched off?',
-                  mode: 'single',
                   options: [
                     {
                       value: 'automaticTimeout',
@@ -121,28 +129,21 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
                       display: 'Switched off manually',
                     },
                   ],
-                },
-              ],
-            },
-            {
-              elements: [
-                {
-                  property: 'illuminationTriggerEvent',
-                  required: true,
-                  type: 'choice-select',
-                  label: 'What is the triggering event?',
-                  options: [
+                  rules: [
                     {
-                      value: 'brightness',
-                      display: 'Brightness controlled',
-                    },
-                    {
-                      value: 'timeTriggered',
-                      display: 'Time-triggered',
-                    },
-                    {
-                      value: 'motionTriggered',
-                      display: 'Motion-triggered',
+                      effect: 'hide',
+                      satisfy: 'any',
+                      conditions: [
+                        {
+                          property: 'illuminationTriggerMode',
+                          op: 'absent',
+                        },
+                        {
+                          property: 'illuminationTriggerMode',
+                          op: 'eq',
+                          value: 'automatically',
+                        },
+                      ],
                     },
                   ],
                 },
@@ -151,11 +152,10 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
             {
               elements: [
                 {
-                  property: 'illuminationSwitchOnMode',
+                  id: 'illuminationSwitchOnMode',
                   required: true,
-                  type: 'choice',
+                  type: 'single-choice',
                   label: 'When is the illumination switched on?',
-                  mode: 'single',
                   options: [
                     {
                       value: 'always',
@@ -171,7 +171,17 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
             },
             {
               elements: [
-                // TODO: Q9, unit selection.
+                {
+                  id: 'avgIlluminationPerDay',
+                  required: true,
+                  type: 'number-unit',
+                  label: 'How long is the location illuminated on average per day?',
+                  units: 'time',
+                  normedUnit: 'd',
+                  defaultSelectedUnit: 'h',
+                  normedMin: 0,
+                  normedMax: 1,
+                },
               ],
             },
           ],

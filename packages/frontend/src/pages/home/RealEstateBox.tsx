@@ -18,11 +18,12 @@ import {
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
-import AddCityComponent from './AddCityComponent';
+import CreateRealEstateModal from './CreateRealEstateModal';
 import { useGetAllRealEstatesQuery } from '../../store/api';
-import { useHistory } from 'react-router';
+import { generatePath, useHistory } from 'react-router';
+import { routes } from '../../constants';
 
-export default function CityBoxComponent() {
+export default function RealEstateBox() {
   const [tabIndex, setTabIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
@@ -32,9 +33,8 @@ export default function CityBoxComponent() {
     setTabIndex(index);
   };
 
-  function startSurvey() {
-    console.log(tabIndex); //TODO: implement start survey
-    history.push('/survey');
+  function startSurvey(realEstateId: string) {
+    history.push(routes.surveys({ realEstateId }));
   }
 
   if (isLoadingRealEstates)
@@ -86,7 +86,7 @@ export default function CityBoxComponent() {
             onClick={onOpen}>
             Add new
           </Button>
-          <AddCityComponent isOpen={isOpen} onClose={onClose} />
+          <CreateRealEstateModal isOpen={isOpen} onClose={onClose} />
         </Box>
         <TabPanels height="100%">
           {realEstates.map((city, index) => (
@@ -125,7 +125,10 @@ export default function CityBoxComponent() {
                   </SimpleGrid>
                   <Flex p="3" position="absolute" bottom="0" right="0">
                     <Spacer />
-                    <Button rightIcon={<AiOutlineArrowRight />} colorScheme="green" onClick={startSurvey}>
+                    <Button
+                      rightIcon={<AiOutlineArrowRight />}
+                      colorScheme="green"
+                      onClick={() => startSurvey(city._id)}>
                       Start survey
                     </Button>
                   </Flex>
