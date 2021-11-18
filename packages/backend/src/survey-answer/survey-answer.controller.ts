@@ -10,11 +10,17 @@ export class SurveyAnswerController {
 
   @Get('realEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
   @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
-  async getAll(
+  async getAllForSurveyAndRealEstate(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
     @Param('surveyId', ParseUUIDPipe) surveyId: string,
   ) {
     return await this.surveyAnswerService.getAllForSurveyAndRealEstate(realEstateId, surveyId);
+  }
+
+  @Get('realEstates/:realEstateId/surveyAnswers')
+  @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
+  async getAllForRealEstate(@Param('realEstateId', ParseUUIDPipe) realEstateId: string) {
+    return await this.surveyAnswerService.getAllForRealEstate(realEstateId);
   }
 
   @Get('surveyAnswers/:id')

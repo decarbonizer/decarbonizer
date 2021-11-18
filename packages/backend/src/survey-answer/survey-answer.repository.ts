@@ -17,4 +17,9 @@ export class SurveyAnswerRepository extends Repository<SurveyAnswer> {
     });
     return results.map((doc) => doc.toObject() as SurveyAnswer);
   }
+
+  async getAllForRealEstate(realEstateId: string) {
+    const results = await this.model.find({ realEstateId });
+    return results.map((doc) => doc.toObject() as SurveyAnswer);
+  }
 }

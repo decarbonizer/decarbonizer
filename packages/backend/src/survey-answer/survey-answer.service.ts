@@ -18,6 +18,10 @@ export class SurveyAnswerService extends GenericCrudService<
     return await this.repository.getAllForSurveyAndRealEstate(realEstateId, surveyId);
   }
 
+  async getAllForRealEstate(realEstateId: string) {
+    return await this.repository.getAllForRealEstate(realEstateId);
+  }
+
   protected mapCreateToEntity(entity: SurveyAnswer): SurveyAnswer {
     return entity;
   }
