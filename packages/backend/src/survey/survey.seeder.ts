@@ -14,40 +14,43 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
       {
         _id: '00000000-0000-0000-0000-000000000000',
         name: 'Illumination',
+        description: 'Collect data about how the lamps in your real estate contribute to your CO2 footprint.',
         schema: {
           pages: [
             {
+              name: 'Location',
               elements: [
                 {
                   id: 'realEstateName',
                   required: true,
                   type: 'string',
                   label: 'Where is the illumination used?',
+                  helperText:
+                    'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
                 },
               ],
             },
             {
+              name: 'Lamps',
               elements: [
                 {
                   id: 'lampCount',
                   required: true,
                   type: 'number',
                   label: 'How many lamps are used?',
+                  min: 0,
                 },
-              ],
-            },
-            {
-              elements: [
                 {
                   id: 'bulbType',
                   required: true,
                   type: 'single-choice-select',
-                  label: 'What kind of illuminant is used?',
+                  label: 'What kind of lamp is used?',
                   options: 'bulbs',
                 },
               ],
             },
             {
+              name: 'Lamp Exchangability',
               elements: [
                 {
                   id: 'isIlluminantExchangeable',
@@ -60,6 +63,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Triggers',
               elements: [
                 {
                   id: 'illuminationTriggerMode',
@@ -150,6 +154,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Usage',
               elements: [
                 {
                   id: 'illuminationSwitchOnMode',
@@ -170,6 +175,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Duration',
               elements: [
                 {
                   id: 'avgIlluminationPerDay',

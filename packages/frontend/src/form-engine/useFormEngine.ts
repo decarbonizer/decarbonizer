@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormEngineProps } from './FormEngine';
 import { FormSchema } from './formSchema';
 import { evaluteFormRules } from './internals/rules';
 import { validateForm } from './internals/validation';
 import { FormEngineRuleEvaluationResults, FormEngineValidationErrors, FormEngineValue } from './types';
 
-export function useFormEngine(schema: FormSchema, initialValue: FormEngineValue = {}, initialPage = 1) {
+export function useFormEngine(schema: FormSchema = { pages: [] }, initialValue: FormEngineValue = {}, initialPage = 1) {
   const [value, setValue] = useState(initialValue);
   const [page, setPage] = useState(initialPage);
   const [ruleEvaluationResults, setRuleEvaluationResults] = useState<FormEngineRuleEvaluationResults>({});
   const [validationErrors, setValidationErrors] = useState<FormEngineValidationErrors>({});
-  const schemaElementsOnThisPage = schema.pages[page - 1].elements;
+  const schemaElementsOnThisPage = useMemo(() => schema.pages[page - 1]?.elements ?? [], [schema, page]);
   const canGoToNext = page < schema.pages.length;
   const canGoToPrevious = page > 1;
 
@@ -58,6 +58,7 @@ export function useFormEngine(schema: FormSchema, initialValue: FormEngineValue 
     validationErrors,
     canGoToNext,
     canGoToPrevious,
+    goToPage,
     goToPrevious,
     goToNext,
     verifySubmit,

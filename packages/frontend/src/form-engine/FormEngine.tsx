@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { VStack } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react';
 import FormEngineElement from './FormEngineElement';
 import { FormSchema } from './formSchema';
 import {
@@ -27,7 +27,12 @@ export default function FormEngine(props: FormEngineProps) {
 
   return (
     <FormEnginePropsContext.Provider value={props}>
-      <VStack spacing="4">
+      <VStack spacing="8">
+        {currentSchemaPage.name && (
+          <Heading as="h2" size="md" alignSelf="flex-start">
+            {currentSchemaPage.name}
+          </Heading>
+        )}
         {currentSchemaPage.elements.map((element, index) => (
           <FormEngineElement key={index} element={element} />
         ))}

@@ -4,6 +4,7 @@ import { RealEstate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { Survey } from '../api/survey';
+import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -19,7 +20,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['RealEstate'],
+  tagTypes: ['RealEstate', 'SurveyAnswer'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResult, LoginPost>({
       query: (body) => ({
@@ -45,7 +46,7 @@ export const api = createApi({
       query: (body) => ({
         url: 'api/v1/realEstates',
         method: 'POST',
-        body: body,
+        body,
       }),
       invalidatesTags: ['RealEstate'],
     }),
@@ -55,19 +56,77 @@ export const api = createApi({
         url: 'api/v1/surveys',
       }),
     }),
-    getSurvey: builder.query<Array<Survey>, { id: string }>({
+    getSurvey: builder.query<Survey, { id: string }>({
       query: ({ id }) => ({
         url: `api/v1/surveys/${id}`,
       }),
+    }),
+
+    getAllSurveyAnswersForRealEstateAndSurvey: builder.query<
+      Array<SurveyAnswer>,
+      { realEstateId: string; surveyId: string }
+    >({
+      query: ({ realEstateId, surveyId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/surveys/${surveyId}/surveyAnswers`,
+      }),
+      providesTags: ['SurveyAnswer'],
+    }),
+    getAllSurveyAnswersForRealEstate: builder.query<Array<SurveyAnswer>, { realEstateId: string }>({
+      query: ({ realEstateId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/surveyAnswers`,
+      }),
+      providesTags: ['SurveyAnswer'],
+    }),
+    getSurveyAnswer: builder.query<SurveyAnswer, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/surveyAnswers/${id}`,
+      }),
+      providesTags: ['SurveyAnswer'],
+    }),
+    createSurveyAnswer: builder.mutation<
+      SurveyAnswer,
+      { realEstateId: string; surveyId: string; body: SurveyAnswerCreate }
+    >({
+      query: ({ realEstateId, surveyId, body }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/surveys/${surveyId}/surveyAnswers`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['SurveyAnswer'],
+    }),
+    updateSurveyAnswer: builder.mutation<SurveyAnswer, { id: string; body: SurveyAnswerUpdate }>({
+      query: ({ id, body }) => ({
+        url: `/api/v1/surveyAnswers/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['SurveyAnswer'],
+    }),
+    deleteSurveyAnswer: builder.mutation<void, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/surveyAnswers/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['SurveyAnswer'],
     }),
   }),
 });
 
 export const {
   useLoginMutation,
+
   useGetAllBulbsQuery,
+
   useGetAllRealEstatesQuery,
   useCreateRealEstateMutation,
+
   useGetAllSurveysQuery,
   useGetSurveyQuery,
+
+  useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
+  useGetAllSurveyAnswersForRealEstateQuery,
+  useGetSurveyAnswerQuery,
+  useCreateSurveyAnswerMutation,
+  useUpdateSurveyAnswerMutation,
+  useDeleteSurveyAnswerMutation,
 } = api;
