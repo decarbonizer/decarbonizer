@@ -62,9 +62,18 @@ export const api = createApi({
       }),
     }),
 
-    getAllSurveyAnswers: builder.query<Array<SurveyAnswer>, { realEstateId: string; surveyId: string }>({
+    getAllSurveyAnswersForRealEstateAndSurvey: builder.query<
+      Array<SurveyAnswer>,
+      { realEstateId: string; surveyId: string }
+    >({
       query: ({ realEstateId, surveyId }) => ({
         url: `/api/v1/realEstates/${realEstateId}/surveys/${surveyId}/surveyAnswers`,
+      }),
+      providesTags: ['SurveyAnswer'],
+    }),
+    getAllSurveyAnswersForRealEstate: builder.query<Array<SurveyAnswer>, { realEstateId: string }>({
+      query: ({ realEstateId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/surveyAnswers`,
       }),
       providesTags: ['SurveyAnswer'],
     }),
@@ -114,7 +123,8 @@ export const {
   useGetAllSurveysQuery,
   useGetSurveyQuery,
 
-  useGetAllSurveyAnswersQuery,
+  useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
+  useGetAllSurveyAnswersForRealEstateQuery,
   useGetSurveyAnswerQuery,
   useCreateSurveyAnswerMutation,
   useUpdateSurveyAnswerMutation,
