@@ -58,6 +58,7 @@ export function useFormEngine(schema: FormSchema = { pages: [] }, initialValue: 
     validationErrors,
     canGoToNext,
     canGoToPrevious,
+    goToPage,
     goToPrevious,
     goToNext,
     verifySubmit,

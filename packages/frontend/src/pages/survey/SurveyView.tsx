@@ -87,7 +87,6 @@ export default function SurveyView({ surveyId, onDone }: SurveyDrawerProps) {
           {survey!.description ?? 'No description available.'}
         </Text>
         <Spacer />
-        <SurveyProgressBar schema={survey!.schema} value={value} />
         <Button colorScheme="red" variant="outline" mt="4" onClick={cancelSurveyDisclosure.onOpen}>
           Cancel
         </Button>
@@ -127,6 +126,9 @@ export default function SurveyView({ surveyId, onDone }: SurveyDrawerProps) {
           )}
         </HStack>
       </Flex>
+      <Box p="8" w="xs">
+        <SurveyProgressBar schema={survey!.schema} value={value} page={page} />
+      </Box>
       <CancelSurveyConfirmationAlert
         isOpen={cancelSurveyDisclosure.isOpen}
         onCancel={cancelSurveyDisclosure.onClose}

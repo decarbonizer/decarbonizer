@@ -18,6 +18,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
         schema: {
           pages: [
             {
+              name: 'Location',
               elements: [
                 {
                   id: 'realEstateName',
@@ -30,27 +31,26 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Lamps',
               elements: [
                 {
                   id: 'lampCount',
                   required: true,
                   type: 'number',
                   label: 'How many lamps are used?',
+                  min: 0,
                 },
-              ],
-            },
-            {
-              elements: [
                 {
                   id: 'bulbType',
                   required: true,
                   type: 'single-choice-select',
-                  label: 'What kind of illuminant is used?',
+                  label: 'What kind of lamp is used?',
                   options: 'bulbs',
                 },
               ],
             },
             {
+              name: 'Lamp Exchangability',
               elements: [
                 {
                   id: 'isIlluminantExchangeable',
@@ -63,6 +63,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Triggers',
               elements: [
                 {
                   id: 'illuminationTriggerMode',
@@ -153,6 +154,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Usage',
               elements: [
                 {
                   id: 'illuminationSwitchOnMode',
@@ -173,6 +175,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
               ],
             },
             {
+              name: 'Illumination Duration',
               elements: [
                 {
                   id: 'avgIlluminationPerDay',

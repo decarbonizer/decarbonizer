@@ -6,6 +6,7 @@ export interface FormSchema {
 }
 
 export interface FormSchemaPage {
+  name?: string;
   elements: Array<FormSchemaElement>;
 }
 
