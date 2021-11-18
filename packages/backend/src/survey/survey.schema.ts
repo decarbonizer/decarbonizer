@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsObject, IsString, Length } from 'class-validator';
+import { IsObject, IsOptional, IsString, Length } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
@@ -14,6 +14,13 @@ export class Survey extends DbObject {
   @IsString()
   @Length(1, 255)
   name: string;
+
+  @Prop()
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @Length(0, 5000)
+  description?: string;
 
   @Prop({ type: Object })
   @ApiProperty()

@@ -14,6 +14,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
       {
         _id: '00000000-0000-0000-0000-000000000000',
         name: 'Illumination',
+        description: 'Collect data about how the lamps in your real estate contribute to your CO2 footprint.',
         schema: {
           pages: [
             {
@@ -23,6 +24,8 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
                   required: true,
                   type: 'string',
                   label: 'Where is the illumination used?',
+                  helperText:
+                    'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
                 },
               ],
             },

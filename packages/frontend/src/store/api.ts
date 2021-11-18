@@ -55,7 +55,7 @@ export const api = createApi({
         url: 'api/v1/surveys',
       }),
     }),
-    getSurvey: builder.query<Array<Survey>, { id: string }>({
+    getSurvey: builder.query<Survey, { id: string }>({
       query: ({ id }) => ({
         url: `api/v1/surveys/${id}`,
       }),
