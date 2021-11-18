@@ -16,7 +16,14 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         realEstateId: '00000000-0000-0000-0000-000000000000',
         surveyId: '00000000-0000-0000-0000-000000000000',
         value: {
-          foo: 123,
+          realEstateName: 'CEO Office',
+          lampCount: 12,
+          bulbType: '00000000-0000-0000-0000-000000000001',
+          isIlluminantExchangeable: true,
+          illuminationTriggerMode: 'manually',
+          illuminationSwitchOffMode: 'manuallySwitchedOff',
+          illuminationSwitchOnMode: 'onDemand',
+          avgIlluminationPerDay: 0.5,
         },
       },
     ];

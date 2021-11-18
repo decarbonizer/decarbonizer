@@ -5,10 +5,13 @@ import { useGetAllSurveysQuery } from '../../store/api';
 import SurveyCard from './SurveyCard';
 import { useState } from 'react';
 import { Survey } from '../../api/survey';
+import { useParams } from 'react-router';
+import { SurveysPageParams } from '../../routes';
 
 export default function SurveyOverviewPage() {
   const { data, isLoading } = useGetAllSurveysQuery();
   const [activeSurvey, setActiveSurvey] = useState<Survey | undefined>(undefined);
+  const { realEstateId } = useParams<SurveysPageParams>();
 
   return (
     <DefaultPageLayout title="Surveys">
@@ -21,7 +24,13 @@ export default function SurveyOverviewPage() {
       <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
         <DrawerOverlay />
         <DrawerContent>
-          {activeSurvey && <SurveyView surveyId={activeSurvey!._id} onDone={() => setActiveSurvey(undefined)} />}
+          {activeSurvey && (
+            <SurveyView
+              realEstateId={realEstateId}
+              surveyId={activeSurvey!._id}
+              onDone={() => setActiveSurvey(undefined)}
+            />
+          )}
         </DrawerContent>
       </Drawer>
     </DefaultPageLayout>

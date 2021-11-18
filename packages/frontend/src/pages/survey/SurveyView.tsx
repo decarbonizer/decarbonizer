@@ -17,19 +17,21 @@ import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/i
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
-import { useGetSurveyQuery } from '../../store/api';
+import { useGetSurveyQuery, useCreateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
 import { surveyImageSources } from './surveyData';
 
 export interface SurveyDrawerProps {
+  realEstateId: string;
   surveyId: string;
   onDone(): void;
 }
 
-export default function SurveyView({ surveyId, onDone }: SurveyDrawerProps) {
+export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDrawerProps) {
   const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
   const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
+  const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const {
     value,
     page,
@@ -52,8 +54,7 @@ export default function SurveyView({ surveyId, onDone }: SurveyDrawerProps) {
 
   const submitSurvey = () => {
     if (verifySubmit()) {
-      // TODO: Finalize survey.
-      onDone();
+      createSurveyAnswer({ realEstateId, surveyId, body: { value } }).then(onDone);
     }
   };
 
@@ -120,7 +121,12 @@ export default function SurveyView({ surveyId, onDone }: SurveyDrawerProps) {
               Next
             </Button>
           ) : (
-            <Button minW="32" colorScheme="primary" leftIcon={<Icon as={IoIosCheckmark} />} onClick={submitSurvey}>
+            <Button
+              minW="32"
+              colorScheme="primary"
+              leftIcon={<Icon as={IoIosCheckmark} />}
+              isLoading={isCreatingSurveyAnswer}
+              onClick={submitSurvey}>
               Submit
             </Button>
           )}

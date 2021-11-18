@@ -24,7 +24,7 @@ export class SurveyAnswerController {
     return await this.surveyAnswerService.get(id);
   }
 
-  @Post('ralEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
+  @Post('realEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
   @ApiResponse({ status: HttpStatus.CREATED, type: SurveyAnswer })
   async create(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
