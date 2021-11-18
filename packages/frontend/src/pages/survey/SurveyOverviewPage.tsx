@@ -18,7 +18,12 @@ export default function SurveyOverviewPage() {
       <Flex>
         {data &&
           data.map((survey) => (
-            <SurveyCard key={survey._id} survey={survey} onNewClick={() => setActiveSurvey(survey)} />
+            <SurveyCard
+              key={survey._id}
+              realEstateId={realEstateId}
+              survey={survey}
+              onNewClick={() => setActiveSurvey(survey)}
+            />
           ))}
       </Flex>
       <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
@@ -27,7 +32,7 @@ export default function SurveyOverviewPage() {
           {activeSurvey && (
             <SurveyView
               realEstateId={realEstateId}
-              surveyId={activeSurvey!._id}
+              surveyId={activeSurvey._id}
               onDone={() => setActiveSurvey(undefined)}
             />
           )}
