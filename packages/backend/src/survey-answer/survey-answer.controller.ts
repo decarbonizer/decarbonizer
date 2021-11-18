@@ -8,7 +8,7 @@ import { SurveyAnswerService } from './survey-answer.service';
 export class SurveyAnswerController {
   constructor(private readonly surveyAnswerService: SurveyAnswerService) {}
 
-  @Get('realEstates/:realEstateId/surveys/:surveyId/answers')
+  @Get('realEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
   @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
   async getAll(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
@@ -24,7 +24,7 @@ export class SurveyAnswerController {
     return await this.surveyAnswerService.get(id);
   }
 
-  @Post('ralEstates/:realEstateId/surveys/:surveyId/answers')
+  @Post('ralEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
   @ApiResponse({ status: HttpStatus.CREATED, type: SurveyAnswer })
   async create(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
