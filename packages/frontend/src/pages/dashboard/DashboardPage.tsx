@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
 import ActionsMenuComponent from '../../components/actions-menu/ActionsMenuComponent';
+import PopUp from './pop-up/PopUp';
 
 export default function DashboardPage() {
   return (
@@ -34,6 +35,7 @@ export default function DashboardPage() {
           </Heading>
         </Stack>
       </Box>
+      <PopUp />
     </Flex>
   );
 }
