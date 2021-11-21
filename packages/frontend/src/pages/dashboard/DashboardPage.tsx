@@ -1,7 +1,18 @@
-import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
+import { Box, Flex, Grid, Heading, Stack } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
 import ActionsMenuComponent from '../../components/actions-menu/ActionsMenuComponent';
+import { DashboardParams } from '../../routes';
+import CarbonFootprintComponent from './CarbonFootpintComponent';
+import { NetZeroComponent } from './netZeroComponent';
 
 export default function DashboardPage() {
+  const { realEstateId } = useParams<DashboardParams>();
+
+  useEffect(() => {
+    console.log(realEstateId);
+  }, []);
+
   return (
     <Flex minH="100%">
       <Flex
@@ -32,6 +43,13 @@ export default function DashboardPage() {
           <Heading as="h2" size="lg">
             Dashboard title
           </Heading>
+          <Heading as="h2" size="lg" color="green">
+            Calculating your footprint...
+          </Heading>
+          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+            <CarbonFootprintComponent realEstateId={realEstateId} />
+            <NetZeroComponent />
+          </Grid>
         </Stack>
       </Box>
     </Flex>

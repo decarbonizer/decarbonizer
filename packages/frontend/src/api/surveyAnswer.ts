@@ -1,4 +1,6 @@
+import { useGetAllBulbsQuery, useGetBulbQuery } from '../store/api';
 import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
+import { Bulb } from './bulb';
 
 export interface SurveyAnswer<T = object> extends ApiObject {
   realEstateId: string;
@@ -59,3 +61,36 @@ export function isSurveyAnswerType<Type extends SurveyType>(
 ): answer is SurveyAnswer<SurveyTypesWithAnswers[Type]> {
   return answer.surveyId === surveyTypesToIdsMap[surveyType];
 }
+
+/**
+ * Evaluates carbon footprint of one real estate
+ * @param answers All survey answers.
+ * @param bulbs All bulbs.
+ * @returns overall carbon footprint.
+ */
+export function caclucateOverallFootprint(answers: Array<SurveyAnswer>, bulbs: Array<Bulb>): number {
+  return answers.reduce<number>((acc, survey) => acc + calculateFootprint(survey, bulbs), 0);
+}
+
+
+function caclucateIlluminationFootprint(answer: SurveyAnswer<IlluminationSurveyAnswer>, bulbs: Array<Bulb>): number {
+  const germanyEF = 0.624; //standard emission factor for Germany
+  const usedBulb = bulbs.find(bulb => bulb._id == answer.value.bulbType);
+
+  if(usedBulb !== null) {
+    return  answer.value.lampCount * usedBulb!.productionKwh * answer.value.avgIlluminationPerDay * germanyEF;
+  } else {
+    return 0;
+  }
+}
+
+function calculateFootprint(answer: SurveyAnswer, bulbs: Array<Bulb>): number {
+  if(isSurveyAnswerType("illumination", answer)) {
+    return caclucateIlluminationFootprint(answer, bulbs);
+  } else { //TODO define cases for other survey types
+    return 0;
+  }
+}
+
+
+
