@@ -11,9 +11,23 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
+import FormEngine from '../../../form-engine/FormEngine';
+import { FormSchema } from '../../../form-engine/formSchema';
+import { useFormEngine } from '../../../form-engine/useFormEngine';
+
+const schema: FormSchema = { pages: [{ elements: [] }] };
 
 export default function PopUp() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } =
+    useFormEngine(schema);
+
+  const submitSurvey = () => {
+    if (verifySubmit()) {
+      console.log('submit');
+    }
+  };
+
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
@@ -23,7 +37,16 @@ export default function PopUp() {
         <ModalContent>
           <ModalHeader>Add some details</ModalHeader>
           <ModalCloseButton />
-          <ModalBody></ModalBody>
+          <ModalBody>
+            <FormEngine
+              schema={schema}
+              value={value}
+              page={page}
+              ruleEvaluationResults={ruleEvaluationResults}
+              validationErrors={validationErrors}
+              onValueChanged={handleValueChanged}
+            />
+          </ModalBody>
 
           <ModalFooter>
             <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
@@ -34,7 +57,7 @@ export default function PopUp() {
               </GridItem>
               <GridItem colStart={4} colEnd={6}>
                 <Button
-                  // onClick={""}
+                  onClick={submitSurvey}
                   // isDisabled={""}
                   // isLoading={""}
                   position="absolute"
