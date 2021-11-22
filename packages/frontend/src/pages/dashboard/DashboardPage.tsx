@@ -1,17 +1,26 @@
-import { Box, Flex, Grid, Heading, Stack } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Box, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import ActionsMenuComponent from '../../components/actions-menu/ActionsMenuComponent';
 import { DashboardParams } from '../../routes';
+import {
+  useGetAllSurveyAnswersForRealEstateQuery,
+  useGetAllBulbsQuery,
+  useGetAllRealEstatesQuery,
+  useGetAllSurveyAnswersQuery,
+} from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootpintComponent';
-import { NetZeroComponent } from './netZeroComponent';
+import ComparisonComponent from './ComparisonComponent';
+import { NetZeroComponent } from './NetZeroComponent';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardParams>();
 
-  useEffect(() => {
-    console.log(realEstateId);
-  }, []);
+  const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
+    realEstateId: realEstateId,
+  });
+  const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
+  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
 
   return (
     <Flex minH="100%">
@@ -46,9 +55,28 @@ export default function DashboardPage() {
           <Heading as="h2" size="lg" color="green">
             Calculating your footprint...
           </Heading>
-          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            <CarbonFootprintComponent realEstateId={realEstateId} />
-            <NetZeroComponent />
+          <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
+            <GridItem rowSpan={2} colSpan={1}>
+              <ComparisonComponent
+                isLoadingAllSurveyAnswers={isLoadingAllSurveyAnswers}
+                allSurveyAnswers={allSurveyAnswers}
+                isLoadingBulbs={isLoadingBulbs}
+                bulbs={bulbs}
+                isLoadingRealEstates={isLoadingRealEstates}
+                realEstates={realEstates}
+              />
+            </GridItem>
+            <GridItem rowSpan={1} w="80">
+              <CarbonFootprintComponent
+                isLoadingSurveyAnswers={isLoadingSurveyAnswers}
+                surveyAnswers={surveyAnswers}
+                isLoadingBulbs={isLoadingBulbs}
+                bulbs={bulbs}
+              />
+            </GridItem>
+            <GridItem rowSpan={1} w="80">
+              <NetZeroComponent />
+            </GridItem>
           </Grid>
         </Stack>
       </Box>

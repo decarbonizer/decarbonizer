@@ -1,29 +1,30 @@
 import { Box } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
-import { useEffect} from 'react';
-import { caclucateOverallFootprint } from '../../api/surveyAnswer';
-import {
-  useGetAllBulbsQuery,
-  useGetAllSurveyAnswersForRealEstateQuery,
-} from '../../store/api';
+import { useEffect } from 'react';
+import { Bulb } from '../../api/bulb';
+import { caclucateOverallFootprintForRealEstate, SurveyAnswer } from '../../api/surveyAnswer';
 import CarbonFootprintCard from './CarbonFootprintCard';
 
 interface CarbonPootprintComponentProps {
-  realEstateId: string;
+  isLoadingSurveyAnswers: boolean;
+  surveyAnswers: SurveyAnswer<object>[] | undefined;
+  isLoadingBulbs: boolean;
+  bulbs: Bulb[] | undefined;
 }
 
-export default function CarbonFootprintComponent({ realEstateId }: CarbonPootprintComponentProps) {
-  const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
-    realEstateId: realEstateId,
-  });
-  const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
+export default function CarbonFootprintComponent({
+  isLoadingSurveyAnswers,
+  surveyAnswers,
+  isLoadingBulbs,
+  bulbs,
+}: CarbonPootprintComponentProps) {
   const [carbonFootprint, setCarbonFootprint] = React.useState('');
   const [unitSymbol, setUnitSymbol] = React.useState('kg');
 
   useEffect(() => {
     if (surveyAnswers && bulbs) {
-      const value = caclucateOverallFootprint(surveyAnswers, bulbs);
+      const value = caclucateOverallFootprintForRealEstate(surveyAnswers, bulbs);
       if (value >= 1000) {
         const valueInTonnes = value / 1000;
         setUnitSymbol('t');
@@ -55,7 +56,5 @@ export default function CarbonFootprintComponent({ realEstateId }: CarbonPootpri
       </Box>
     );
 
-  return (
-    <CarbonFootprintCard carbonFootprintValue={carbonFootprint} unitSymbol={unitSymbol} />
-  );
+  return <CarbonFootprintCard carbonFootprintValue={carbonFootprint} unitSymbol={unitSymbol} />;
 }

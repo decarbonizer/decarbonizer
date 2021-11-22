@@ -8,6 +8,12 @@ import { SurveyAnswerService } from './survey-answer.service';
 export class SurveyAnswerController {
   constructor(private readonly surveyAnswerService: SurveyAnswerService) {}
 
+  @Get('surveyAnswers')
+  @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
+  async getAll() {
+    return await this.surveyAnswerService.getAll();
+  }
+
   @Get('realEstates/:realEstateId/surveys/:surveyId/surveyAnswers')
   @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
   async getAllForSurveyAndRealEstate(
