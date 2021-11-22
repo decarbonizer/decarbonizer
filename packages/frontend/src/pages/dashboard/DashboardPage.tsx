@@ -1,8 +1,14 @@
-import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
-import ActionsMenuComponent from '../../components/actions-menu/ActionsMenuComponent';
+import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import PopUp from './pop-up/PopUp';
+import { useParams } from 'react-router';
+import { DashboardPageParams } from '../../routes';
+import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
+import ActionPanel from '../../components/actions-menu/ActionPanel';
 
 export default function DashboardPage() {
+  const { realEstateId } = useParams<DashboardPageParams>();
+  const { data, isLoading } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
+
   return (
     <Flex minH="100%">
       <Flex
@@ -11,7 +17,8 @@ export default function DashboardPage() {
         justify="flex-start"
         align="center"
         pos="sticky"
-        minW="250"
+        minW="350"
+        maxW="350"
         paddingTop="8"
         paddingBottom="8"
         bg="gray.50"
@@ -19,13 +26,13 @@ export default function DashboardPage() {
         borderColor="gray.200"
         shadow="xl"
         zIndex="100">
-        <Heading as="h3" color="darkgreen">
+        <Heading as="h3" color="darkgreen" pb={10}>
           Decarbonizer
         </Heading>
-        <Heading as="h5" size="md" paddingTop="4">
-          Take actions
-        </Heading>
-        <ActionsMenuComponent />
+        <ActionPanel surveyAnswers={data} />
+        <Box w="100%" pt="14" align="right" pr="5">
+          <Button colorScheme="primary"> Save Actions</Button>
+        </Box>
       </Flex>
       <Box w="100%" grow={1}>
         <Stack align="center">
