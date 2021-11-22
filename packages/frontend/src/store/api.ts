@@ -55,6 +55,7 @@ export const api = createApi({
       query: () => ({
         url: 'api/v1/surveys',
       }),
+      providesTags: ['SurveyAnswer'],
     }),
     getSurvey: builder.query<Survey, { id: string }>({
       query: ({ id }) => ({
@@ -80,6 +81,12 @@ export const api = createApi({
     getSurveyAnswer: builder.query<SurveyAnswer, { id: string }>({
       query: ({ id }) => ({
         url: `/api/v1/surveyAnswers/${id}`,
+      }),
+      providesTags: ['SurveyAnswer'],
+    }),
+    getAllSurveyAnswers: builder.query<Array<SurveyAnswer>, void>({
+      query: () => ({
+        url: `/api/v1/surveyAnswers`,
       }),
       providesTags: ['SurveyAnswer'],
     }),
@@ -123,6 +130,7 @@ export const {
   useGetAllSurveysQuery,
   useGetSurveyQuery,
 
+  useGetAllSurveyAnswersQuery,
   useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
   useGetSurveyAnswerQuery,

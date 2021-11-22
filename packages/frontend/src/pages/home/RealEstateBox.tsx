@@ -14,6 +14,7 @@ import {
   Center,
   useDisclosure,
   Spinner,
+  Grid,
 } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { RiAddLine } from 'react-icons/ri';
@@ -35,6 +36,10 @@ export default function RealEstateBox() {
 
   function startSurvey(realEstateId: string) {
     history.push(routes.surveys({ realEstateId }));
+  }
+
+  function goToDashboard(realEstateId: string) {
+    history.push(routes.realEstateDashboard({ realEstateId }));
   }
 
   if (isLoadingRealEstates)
@@ -124,13 +129,23 @@ export default function RealEstateBox() {
                     </Center>
                   </SimpleGrid>
                   <Flex p="3" position="absolute" bottom="0" right="0">
-                    <Spacer />
-                    <Button
-                      rightIcon={<AiOutlineArrowRight />}
-                      colorScheme="green"
-                      onClick={() => startSurvey(city._id)}>
-                      Start survey
-                    </Button>
+                    <Grid templateColumns="repeat(5, 1fr)" gap={4}>
+                      <Button
+                        rightIcon={<AiOutlineArrowRight />}
+                        colorScheme="green"
+                        onClick={() => goToDashboard(city._id)}>
+                        Go to overview
+                      </Button>
+                      <Spacer />
+                      <Spacer />
+                      <Spacer />
+                      <Button
+                        rightIcon={<AiOutlineArrowRight />}
+                        colorScheme="green"
+                        onClick={() => startSurvey(city._id)}>
+                        Start survey
+                      </Button>
+                    </Grid>
                   </Flex>
                 </SimpleGrid>
               </Box>
