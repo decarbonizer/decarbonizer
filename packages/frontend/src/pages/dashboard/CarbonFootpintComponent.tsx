@@ -6,7 +6,7 @@ import { Bulb } from '../../api/bulb';
 import { caclucateOverallFootprintForRealEstate, SurveyAnswer } from '../../api/surveyAnswer';
 import CarbonFootprintCard from './CarbonFootprintCard';
 
-interface CarbonPootprintComponentProps {
+interface CarbonFootprintComponentProps {
   isLoadingSurveyAnswers: boolean;
   surveyAnswers: SurveyAnswer<object>[] | undefined;
   isLoadingBulbs: boolean;
@@ -18,7 +18,7 @@ export default function CarbonFootprintComponent({
   surveyAnswers,
   isLoadingBulbs,
   bulbs,
-}: CarbonPootprintComponentProps) {
+}: CarbonFootprintComponentProps) {
   const [carbonFootprint, setCarbonFootprint] = React.useState('');
   const [unitSymbol, setUnitSymbol] = React.useState('kg');
 
