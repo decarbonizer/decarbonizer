@@ -2,36 +2,30 @@ import { Box } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
 import { useEffect } from 'react';
-import { Bulb } from '../../api/bulb';
-import { caclucateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
-import CarbonFootprintCard from './CarbonFootprintCard';
+import { Bulb } from '../../../api/bulb';
+import { calculateIllumnitationData, IlluminationCalculation, SurveyAnswer } from '../../../api/surveyAnswer';
+import IlluminationDataCards from './IlluminationDataCards';
 
-interface CarbonFootprintComponentProps {
+interface IlluminationOverviewComponentProps {
   isLoadingSurveyAnswers: boolean;
   surveyAnswers: SurveyAnswer<object>[] | undefined;
   isLoadingBulbs: boolean;
   bulbs: Bulb[] | undefined;
 }
 
-export default function CarbonFootprintComponent({
+export default function IlluminationOverviewComponent({
   isLoadingSurveyAnswers,
   surveyAnswers,
   isLoadingBulbs,
   bulbs,
-}: CarbonFootprintComponentProps) {
-  const [carbonFootprint, setCarbonFootprint] = React.useState('');
-  const [unitSymbol, setUnitSymbol] = React.useState('kg');
+}: IlluminationOverviewComponentProps) {
+  const [illuminationData, setIlluminationData] = React.useState<Array<IlluminationCalculation>>([]);
 
   useEffect(() => {
     if (surveyAnswers && bulbs) {
-      const value = caclucateOverallFootprint(surveyAnswers, bulbs);
-      if (value >= 1000) {
-        const valueInTonnes = value / 1000;
-        setUnitSymbol('t');
-        setCarbonFootprint(valueInTonnes.toFixed(1));
-      } else {
-        setCarbonFootprint(value.toFixed(1));
-      }
+      const data = calculateIllumnitationData(surveyAnswers, bulbs);
+      console.log(data);
+      setIlluminationData(data);
     }
   }, [surveyAnswers, bulbs]);
 
@@ -56,5 +50,5 @@ export default function CarbonFootprintComponent({
       </Box>
     );
 
-  return <CarbonFootprintCard carbonFootprintValue={carbonFootprint} unitSymbol={unitSymbol} />;
+  return <IlluminationDataCards illuminationData={illuminationData} />;
 }

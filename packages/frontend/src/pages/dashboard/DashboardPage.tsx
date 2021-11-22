@@ -11,6 +11,9 @@ import ComparisonComponent from './ComparisonComponent';
 import { NetZeroComponent } from './NetZeroComponent';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
+import { useEffect } from 'react';
+import React from 'react';
+import IlluminationOverviewComponent from './illumination/illuminationOverviewComponent';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
@@ -21,6 +24,21 @@ export default function DashboardPage() {
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
+
+  const [cityName, setCityName] = React.useState('');
+  const [openedActionsCategory, setOpenedActionsCategory] = React.useState('illumination');
+
+  useEffect(() => {
+    if (realEstates) {
+      const currentRealEstate = realEstates.find((realEstate) => realEstate._id == realEstateId);
+      if (currentRealEstate) setCityName(currentRealEstate?.cityName);
+    }
+  }, []);
+
+  const onChangeActionsCategory = (value: string) => {
+    //TODO display illumination data only when illumination is chosen
+    setOpenedActionsCategory(value);
+  };
 
   return (
     <Flex minH="100%">
@@ -51,7 +69,7 @@ export default function DashboardPage() {
         <Stack align="center">
           <Heading as="h1">Dashboard</Heading>
           <Heading as="h2" size="lg">
-            Dashboard title
+            {cityName}
           </Heading>
           <Heading as="h2" size="lg" color="green">
             Calculating your footprint...
@@ -79,6 +97,16 @@ export default function DashboardPage() {
               <NetZeroComponent />
             </GridItem>
           </Grid>
+          {openedActionsCategory === 'illumination' && (
+            <Grid>
+              <IlluminationOverviewComponent
+                isLoadingSurveyAnswers={isLoadingSurveyAnswers}
+                surveyAnswers={surveyAnswers}
+                isLoadingBulbs={isLoadingBulbs}
+                bulbs={bulbs}
+              />
+            </Grid>
+          )}
         </Stack>
       </Box>
     </Flex>
