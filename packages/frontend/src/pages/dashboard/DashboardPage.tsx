@@ -1,7 +1,5 @@
-import { Box, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
 import { useParams } from 'react-router';
-import ActionsMenuComponent from '../../components/actions-menu/ActionsMenuComponent';
-import { DashboardParams } from '../../routes';
 import {
   useGetAllSurveyAnswersForRealEstateQuery,
   useGetAllBulbsQuery,
@@ -11,9 +9,11 @@ import {
 import CarbonFootprintComponent from './CarbonFootpintComponent';
 import ComparisonComponent from './ComparisonComponent';
 import { NetZeroComponent } from './NetZeroComponent';
+import { DashboardPageParams } from '../../routes';
+import ActionPanel from '../../components/actions-menu/ActionPanel';
 
 export default function DashboardPage() {
-  const { realEstateId } = useParams<DashboardParams>();
+  const { realEstateId } = useParams<DashboardPageParams>();
 
   const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
@@ -30,7 +30,8 @@ export default function DashboardPage() {
         justify="flex-start"
         align="center"
         pos="sticky"
-        minW="250"
+        minW="350"
+        maxW="350"
         paddingTop="8"
         paddingBottom="8"
         bg="gray.50"
@@ -38,13 +39,13 @@ export default function DashboardPage() {
         borderColor="gray.200"
         shadow="xl"
         zIndex="100">
-        <Heading as="h3" color="darkgreen">
+        <Heading as="h3" color="darkgreen" pb={10}>
           Decarbonizer
         </Heading>
-        <Heading as="h5" size="md" paddingTop="4">
-          Take actions
-        </Heading>
-        <ActionsMenuComponent />
+        <ActionPanel surveyAnswers={surveyAnswers} />
+        <Box w="100%" pt="14" align="right" pr="5">
+          <Button colorScheme="primary"> Save Actions</Button>
+        </Box>
       </Flex>
       <Box w="100%" grow={1}>
         <Stack align="center">
