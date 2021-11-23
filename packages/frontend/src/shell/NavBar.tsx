@@ -6,7 +6,7 @@ import NavBarLink, { NavBarLinkProps } from './NavBarLink';
 
 const links: Array<NavBarLinkProps> = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     to: routes.home(),
     icon: AiOutlineHome,
   },
