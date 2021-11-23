@@ -37,7 +37,7 @@ export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAns
             Unanswered
           </Badge>
         )}
-        {(surveyAnswers?.length ?? 0 > 0) && (
+        {(surveyAnswers?.length ?? 0) > 0 && (
           <Badge colorScheme="green" pos="absolute" top="4" right="0" roundedRight="0" shadow="lg">
             Answered ({surveyAnswers!.length === 1 ? '1 time' : `${surveyAnswers!.length} times`})
           </Badge>
