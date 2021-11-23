@@ -15,6 +15,20 @@ import {
 } from '@chakra-ui/react';
 import { IlluminationSurveyAnswer } from '../../api/surveyAnswer';
 import { IoBulbOutline } from 'react-icons/io5';
+import { useContext } from 'react';
+import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
+import { FormSchema } from '../../form-engine/formSchema';
+
+const schemaLED: FormSchema = {
+  pages: [
+    {
+      elements: [
+        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
+        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+      ],
+    },
+  ],
+};
 
 export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswer>;
@@ -28,6 +42,7 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
         surveyAnswer.bulbType === '00000000-0000-0000-0000-000000000001') &&
       surveyAnswer.isIlluminantExchangeable,
   );
+  const popUp = useContext(PopUpContext);
 
   return (
     <AccordionItem maxW="100%">
@@ -57,7 +72,13 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
           </VStack>
         )}
         <Flex justifyContent="right" paddingTop="5">
-          <Button colorScheme="primary">Details..</Button>
+          <Button
+            colorScheme="primary"
+            onClick={() => {
+              popUp.onOpen(schemaLED);
+            }}>
+            Details..
+          </Button>
         </Flex>
       </AccordionPanel>
     </AccordionItem>

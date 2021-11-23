@@ -1,3 +1,4 @@
+import { Input } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DatesFormSchemaElement } from '../formSchema';
@@ -21,6 +22,7 @@ export default function DatesFormEngineControl({ element }: FormEngineControlPro
         selectsStart
         startDate={startDate}
         endDate={endDate}
+        customInput={<Input />}
       />
       <DatePicker
         disabled={ruleEvaluationResult.disable}
@@ -30,6 +32,7 @@ export default function DatesFormEngineControl({ element }: FormEngineControlPro
         startDate={startDate}
         endDate={endDate}
         minDate={startDate}
+        customInput={<Input />}
       />
     </DefaultFormControlLayout>
   );

@@ -68,7 +68,6 @@ export interface RealEstateFootprintCalculation {
   footprint: number;
 }
 
-
 /**
  * Evaluates carbon footprint of one real estate
  * @param answers All survey answers.
@@ -76,39 +75,40 @@ export interface RealEstateFootprintCalculation {
  * @returns overall carbon footprint.
  */
 export function caclucateOverallFootprintForRealEstate(answers: Array<SurveyAnswer>, bulbs: Array<Bulb>): number {
-
   return answers.reduce<number>((acc, survey) => acc + calculateFootprint(survey, bulbs), 0);
 }
 
-export function caclucateFootprintPerRealEstate(answers: Array<SurveyAnswer>, bulbs: Array<Bulb>, realEstates: Array<RealEstate>): Array<RealEstateFootprintCalculation>{
+export function caclucateFootprintPerRealEstate(
+  answers: Array<SurveyAnswer>,
+  bulbs: Array<Bulb>,
+  realEstates: Array<RealEstate>,
+): Array<RealEstateFootprintCalculation> {
   var result: Array<RealEstateFootprintCalculation> = [];
-  for(var i = 0; i < realEstates.length; i++) {
-    const realEstateAnswers = answers.filter(answer => answer.realEstateId == realEstates[i]._id);
+  for (var i = 0; i < realEstates.length; i++) {
+    const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstates[i]._id);
     const footprintValue = +caclucateOverallFootprintForRealEstate(realEstateAnswers, bulbs).toFixed(1);
-    result.push({"realEstateName": realEstates[i].cityName, "footprint" : footprintValue});
+    result.push({ realEstateName: realEstates[i].cityName, footprint: footprintValue });
   }
-  
+
   return result;
 }
 
 function caclucateIlluminationFootprint(answer: SurveyAnswer<IlluminationSurveyAnswer>, bulbs: Array<Bulb>): number {
   const germanyEF = 0.624; //standard emission factor for Germany
-  const usedBulb = bulbs.find(bulb => bulb._id == answer.value.bulbType);
+  const usedBulb = bulbs.find((bulb) => bulb._id == answer.value.bulbType);
 
-  if(usedBulb !== null) {
-    return  answer.value.lampCount * usedBulb!.productionKwh * answer.value.avgIlluminationPerDay * germanyEF;
+  if (usedBulb !== null) {
+    return answer.value.lampCount * usedBulb!.productionKwh * answer.value.avgIlluminationPerDay * germanyEF;
   } else {
     return 0;
   }
 }
 
 function calculateFootprint(answer: SurveyAnswer, bulbs: Array<Bulb>): number {
-  if(isSurveyAnswerType("illumination", answer)) {
+  if (isSurveyAnswerType('illumination', answer)) {
     return caclucateIlluminationFootprint(answer, bulbs);
-  } else { //TODO define cases for other survey types
+  } else {
+    //TODO define cases for other survey types
     return 0;
   }
 }
-
-
-

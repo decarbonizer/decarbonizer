@@ -1,7 +1,5 @@
-import NetZeroCard from "./NetZeroCard";
+import NetZeroCard from './NetZeroCard';
 
 export function NetZeroComponent() {
-    return (
-        <NetZeroCard />
-    )
+  return <NetZeroCard />;
 }

@@ -43,7 +43,7 @@ export default function ComparisonCard({ calculations }: ComparisonCardProps) {
                 <XAxis type="number" />
                 <YAxis dataKey="realEstateName" type="category" scale="band" />
                 <Tooltip />
-              
+
                 <Bar dataKey="footprint" barSize={15} fill="green" />
               </ComposedChart>
             </Center>
