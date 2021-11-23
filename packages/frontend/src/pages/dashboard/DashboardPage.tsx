@@ -1,26 +1,29 @@
 import { Box, Button, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
 import { useParams } from 'react-router';
-import {
-  useGetAllSurveyAnswersForRealEstateQuery,
-  useGetAllBulbsQuery,
-  useGetAllRealEstatesQuery,
-  useGetAllSurveyAnswersQuery,
-} from '../../store/api';
-import CarbonFootprintComponent from './CarbonFootpintComponent';
-import ComparisonComponent from './ComparisonComponent';
-import { NetZeroComponent } from './NetZeroComponent';
+import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllRealEstatesQuery } from '../../store/api';
+import CarbonFootprintComponent from './CarbonFootprint';
+import ComparisonComponent from './Comparison';
+import { NetZeroComponent } from './NetZero';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
+import React from 'react';
+import IlluminationOverviewComponent from './illumination/IlluminationOverview';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
-
   const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
   });
-  const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
+
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
-  const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
+
+  const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
+  const [openedActionsCategory, setOpenedActionsCategory] = React.useState('illumination');
+
+  const onChangeActionsCategory = (value: string) => {
+    //TODO display illumination data only when illumination is chosen
+    setOpenedActionsCategory(value);
+  };
 
   return (
     <Flex minH="100%">
@@ -51,34 +54,27 @@ export default function DashboardPage() {
         <Stack align="center">
           <Heading as="h1">Dashboard</Heading>
           <Heading as="h2" size="lg">
-            Dashboard title
+            {cityName}
           </Heading>
           <Heading as="h2" size="lg" color="green">
             Calculating your footprint...
           </Heading>
           <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
             <GridItem rowSpan={2} colSpan={1}>
-              <ComparisonComponent
-                isLoadingAllSurveyAnswers={isLoadingAllSurveyAnswers}
-                allSurveyAnswers={allSurveyAnswers}
-                isLoadingBulbs={isLoadingBulbs}
-                bulbs={bulbs}
-                isLoadingRealEstates={isLoadingRealEstates}
-                realEstates={realEstates}
-              />
+              <ComparisonComponent />
             </GridItem>
             <GridItem rowSpan={1} w="80">
-              <CarbonFootprintComponent
-                isLoadingSurveyAnswers={isLoadingSurveyAnswers}
-                surveyAnswers={surveyAnswers}
-                isLoadingBulbs={isLoadingBulbs}
-                bulbs={bulbs}
-              />
+              <CarbonFootprintComponent realEstateId={realEstateId} />
             </GridItem>
             <GridItem rowSpan={1} w="80">
               <NetZeroComponent />
             </GridItem>
           </Grid>
+          {openedActionsCategory === 'illumination' && (
+            <Grid>
+              <IlluminationOverviewComponent realEstateId={realEstateId} />
+            </Grid>
+          )}
         </Stack>
       </Box>
     </Flex>

@@ -3,7 +3,7 @@ import RealEstateBox from './RealEstateBox';
 
 export default function HomePage() {
   return (
-    <DefaultPageLayout title="Dashboard">
+    <DefaultPageLayout title="Home">
       <RealEstateBox />
     </DefaultPageLayout>
   );
