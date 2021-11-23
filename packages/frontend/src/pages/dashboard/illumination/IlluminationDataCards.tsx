@@ -38,7 +38,7 @@ export default function IlluminationDataCards({ illuminationData }: Illumination
                     <SimpleGrid columns={2}>
                       <Text fontWeight="semibold">Power Consumption:</Text>
                       <Center>
-                        <Text color="green">{data.amountOfIlluminants} kW </Text>
+                        <Text color="green">{data.powerConsumption} kW </Text>
                       </Center>
                     </SimpleGrid>
                     <SimpleGrid columns={2}>

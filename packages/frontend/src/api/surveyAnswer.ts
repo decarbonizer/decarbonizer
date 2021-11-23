@@ -121,7 +121,7 @@ function calculateFootprintDependingOnType(answer: SurveyAnswer, bulbs: Array<Bu
   }
 }
 
-export function calculateIllumnitationData(
+export function calculateIllumitationData(
   answers: Array<SurveyAnswer>,
   bulbs: Array<Bulb>,
 ): Array<IlluminationCalculation> {
