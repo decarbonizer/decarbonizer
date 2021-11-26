@@ -42,7 +42,7 @@ export default function RealEstateBox() {
     history.push(routes.realEstateDashboard({ realEstateId }));
   }
 
-  if (isLoadingRealEstates)
+  if (isLoadingRealEstates) {
     return (
       <Spinner
         thickness="4px"
@@ -56,12 +56,15 @@ export default function RealEstateBox() {
         transform="translate(-50%, -50%)"
       />
     );
-  if (!realEstates)
+  }
+
+  if (!realEstates) {
     return (
       <Box position="absolute" left="50%" top="30%" transform="translate(-50%, -50%)">
         Something went wrong!
       </Box>
     );
+  }
 
   return (
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">

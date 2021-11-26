@@ -19,7 +19,7 @@ export default function IlluminationOverviewComponent({ realEstateId }: Illumina
     [surveyAnswers, bulbs],
   );
 
-  if (isLoadingSurveyAnswers || isLoadingBulbs)
+  if (isLoadingSurveyAnswers || isLoadingBulbs) {
     return (
       <Spinner
         thickness="4px"
@@ -33,12 +33,15 @@ export default function IlluminationOverviewComponent({ realEstateId }: Illumina
         transform="translate(-50%, -50%)"
       />
     );
-  if (!surveyAnswers || !bulbs)
+  }
+
+  if (!surveyAnswers || !bulbs) {
     return (
       <Box position="absolute" left="50%" top="30%" transform="translate(-50%, -50%)">
         Something went wrong!
       </Box>
     );
+  }
 
   return <IlluminationDataCards illuminationData={illuminationData} />;
 }
