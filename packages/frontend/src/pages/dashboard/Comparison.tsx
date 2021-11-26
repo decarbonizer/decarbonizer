@@ -9,7 +9,13 @@ export default function ComparisonComponent() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
-  const calculations = useMemo(() => allSurveyAnswers && bulbs && realEstates? caclucateFootprintPerRealEstate(allSurveyAnswers, bulbs, realEstates) : [], [allSurveyAnswers, bulbs, realEstates]);
+  const calculations = useMemo(
+    () =>
+      allSurveyAnswers && bulbs && realEstates
+        ? caclucateFootprintPerRealEstate(allSurveyAnswers, bulbs, realEstates)
+        : [],
+    [allSurveyAnswers, bulbs, realEstates],
+  );
 
   if (isLoadingAllSurveyAnswers || isLoadingBulbs || isLoadingRealEstates)
     return (

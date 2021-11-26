@@ -21,7 +21,7 @@ export function useValidationErrorsForElement(element: FormSchemaElement) {
 
 export function useValueProperty<T>(element: FormSchemaElement) {
   const { value, onValueChanged } = useContext(FormEnginePropsContext);
-  const propertyValue = getPropertyValue(element, value);
+  const propertyValue: T = getPropertyValue(element, value);
 
   const setter = (newPropertyValue: T) => {
     const newValue = setPropertyValue(element, newPropertyValue, value);

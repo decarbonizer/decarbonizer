@@ -1,4 +1,4 @@
-import { Box, Flex, VStack, Heading, Spacer, Center, Text } from '@chakra-ui/layout';
+import { Box, Flex, VStack, Heading, Center, Text } from '@chakra-ui/layout';
 import { SimpleGrid } from '@chakra-ui/react';
 import { IlluminationCalculation } from '../../../api/surveyAnswer';
 
@@ -9,8 +9,9 @@ interface IlluminationDataCardsProps {
 export default function IlluminationDataCards({ illuminationData }: IlluminationDataCardsProps) {
   return (
     <SimpleGrid columns={illuminationData.length} gap={6}>
-      {illuminationData.map((data) => (
+      {illuminationData.map((data, index) => (
         <Box
+          key={index}
           border="1px"
           bg="white"
           borderColor="gray.100"
@@ -60,6 +61,6 @@ export default function IlluminationDataCards({ illuminationData }: Illumination
           </Flex>
         </Box>
       ))}
-      </SimpleGrid>
+    </SimpleGrid>
   );
 }

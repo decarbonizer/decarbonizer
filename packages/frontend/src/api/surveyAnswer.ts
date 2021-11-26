@@ -91,8 +91,8 @@ export function caclucateFootprintPerRealEstate(
   bulbs: Array<Bulb>,
   realEstates: Array<RealEstate>,
 ): Array<RealEstateFootprintCalculation> {
-  var result: Array<RealEstateFootprintCalculation> = [];
-  for (var i = 0; i < realEstates.length; i++) {
+  const result: Array<RealEstateFootprintCalculation> = [];
+  for (let i = 0; i < realEstates.length; i++) {
     const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstates[i]._id);
     const footprintValue = +caclucateOverallFootprint(realEstateAnswers, bulbs).toFixed(1);
     result.push({ realEstateName: realEstates[i].cityName, footprint: footprintValue });
@@ -125,10 +125,10 @@ export function calculateIllumitationData(
   answers: Array<SurveyAnswer>,
   bulbs: Array<Bulb>,
 ): Array<IlluminationCalculation> {
-  var result: Array<IlluminationCalculation> = [];
+  const result: Array<IlluminationCalculation> = [];
   const germanyEF = 0.624;
 
-  for (var i = 0; i < bulbs.length; i++) {
+  for (let i = 0; i < bulbs.length; i++) {
     const bulbName = bulbs[i].name;
     const productionKwh = bulbs[i].productionKwh;
     const costPerBulb = bulbs[i].costInEuro;

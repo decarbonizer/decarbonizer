@@ -1,8 +1,8 @@
-import { Box, Flex, VStack, Heading, Spacer, Center } from "@chakra-ui/layout";
+import { Box, Flex, VStack, Heading, Spacer, Center } from '@chakra-ui/layout';
 
 export default function NetZeroCard() {
-    return (
-        <Box
+  return (
+    <Box
       border="1px"
       bg="white"
       borderColor="gray.100"
@@ -18,16 +18,16 @@ export default function NetZeroCard() {
           <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
             Achieved goal by
           </Heading>
-          <Spacer/>
+          <Spacer />
           <Box>
-              <Center>
-          <Heading as="h1" size="3xl" fontWeight="bold" color="green">
-            38 %
-          </Heading>
-          </Center>
+            <Center>
+              <Heading as="h1" size="3xl" fontWeight="bold" color="green">
+                38 %
+              </Heading>
+            </Center>
           </Box>
         </VStack>
       </Flex>
     </Box>
-    )
+  );
 }

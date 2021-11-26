@@ -80,6 +80,10 @@ export interface SingleChoiceSelectFormSchemaElement extends FormSchemaBaseEleme
   options: ChoiceOptionSource;
 }
 
+export type DatesFormSchemaElement = FormSchemaBaseElement<'dates'>;
+
+export type DateTimeFormSchemaElement = FormSchemaBaseElement<'date-time'>;
+
 export type FormSchemaElement =
   | StringFormSchemaElement
   | NumberFormSchemaElement
@@ -87,6 +91,8 @@ export type FormSchemaElement =
   | NumberSliderFormSchemaElement
   | BooleanFormSchemaElement
   | SingleChoiceFormSchemaElement
-  | SingleChoiceSelectFormSchemaElement;
+  | SingleChoiceSelectFormSchemaElement
+  | DatesFormSchemaElement
+  | DateTimeFormSchemaElement;
 
 export type FormSchemaElementType = FormSchemaElement['type'];
