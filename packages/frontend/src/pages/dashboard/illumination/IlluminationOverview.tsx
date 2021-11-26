@@ -10,18 +10,14 @@ interface IlluminationOverviewComponentProps {
 }
 
 export default function IlluminationOverviewComponent({ realEstateId }: IlluminationOverviewComponentProps) {
-
   const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
   });
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
-  const illuminationData = useMemo(() => 
-  surveyAnswers && bulbs
-    ? calculateIllumitationData(surveyAnswers, bulbs) 
-    : [],
-  [surveyAnswers, bulbs]
-)
-
+  const illuminationData = useMemo(
+    () => (surveyAnswers && bulbs ? calculateIllumitationData(surveyAnswers, bulbs) : []),
+    [surveyAnswers, bulbs],
+  );
 
   if (isLoadingSurveyAnswers || isLoadingBulbs)
     return (

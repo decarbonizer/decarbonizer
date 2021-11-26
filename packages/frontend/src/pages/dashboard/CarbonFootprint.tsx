@@ -16,9 +16,12 @@ export default function CarbonFootprintComponent({ realEstateId }: CarbonFootpri
   });
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const [unitSymbol, setUnitSymbol] = React.useState('kg');
-  const carbonFootprint = useMemo(() => surveyAnswers && bulbs? getFootprint(surveyAnswers, bulbs) : "0.0", [surveyAnswers, bulbs]);
+  const carbonFootprint = useMemo(
+    () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : '0.0'),
+    [surveyAnswers, bulbs],
+  );
 
-  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]) : string {
+  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): string {
     const value = caclucateOverallFootprint(answers, bulbs);
     if (value >= 1000) {
       const valueInTonnes = value / 1000;

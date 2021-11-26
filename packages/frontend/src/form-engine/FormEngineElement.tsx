@@ -10,6 +10,8 @@ import NumberUnitFormEngineControl from './controls/NumberUnitFormEngineControl'
 import { ComponentType } from 'react';
 import { FormEngineControlProps } from './controls/types';
 import { useRuleEvaluationResultForElement } from './internals/hooks';
+import DatesFormEngineControl from './controls/DatesFormEngineControl';
+import DateTimeFormEngineControl from './controls/DateTimeFormEngineControl';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
@@ -19,6 +21,8 @@ const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlPro
   ['number-unit']: NumberUnitFormEngineControl,
   ['single-choice']: SingleChoiceFormEngineControl,
   ['single-choice-select']: SingleChoiceSelectFormEngineControl,
+  ['dates']: DatesFormEngineControl,
+  ['date-time']: DateTimeFormEngineControl,
 };
 
 export interface FormEngineElementProps {
