@@ -1,17 +1,17 @@
 import { Box, Button, Flex, Grid, GridItem, Heading, Stack, useDisclosure } from '@chakra-ui/react';
+import React from 'react';
 import PopUp from './pop-up/PopUp';
 import { useParams } from 'react-router';
+import IlluminationOverviewComponent from './illumination/IlluminationOverview';
 import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllRealEstatesQuery } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './Comparison';
 import { NetZeroComponent } from './NetZero';
-import IlluminationOverviewComponent from './illumination/IlluminationOverview';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
 import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { useState } from 'react';
-import React from 'react';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
@@ -22,6 +22,7 @@ export default function DashboardPage() {
   });
 
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const [schema, setSchema] = useState<FormSchema>(null!);
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const [openedActionsCategory, setOpenedActionsCategory] = React.useState('illumination');
@@ -30,8 +31,6 @@ export default function DashboardPage() {
     //TODO display illumination data only when illumination is chosen
     setOpenedActionsCategory(value);
   };
-
-  const [schema, setSchema] = useState<FormSchema>(null!);
 
   return (
     <PopUpContext.Provider
