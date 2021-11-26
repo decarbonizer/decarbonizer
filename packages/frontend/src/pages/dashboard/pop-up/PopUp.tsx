@@ -9,7 +9,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from '@chakra-ui/react';
 import FormEngine from '../../../form-engine/FormEngine';
 import { FormSchema } from '../../../form-engine/formSchema';
@@ -39,6 +38,7 @@ const schemaRunTime: FormSchema = {
     },
   ],
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaBrightnessSensor: FormSchema = {
   pages: [
     {
@@ -49,6 +49,7 @@ const schemaBrightnessSensor: FormSchema = {
     },
   ],
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaMotionSensor: FormSchema = {
   pages: [
     {
@@ -60,6 +61,7 @@ const schemaMotionSensor: FormSchema = {
     },
   ],
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaTimeSensor: FormSchema = {
   pages: [
     {
@@ -82,6 +84,7 @@ const schemaTimeSensor: FormSchema = {
     },
   ],
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaSwitches: FormSchema = {
   pages: [
     {

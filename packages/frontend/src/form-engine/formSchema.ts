@@ -80,9 +80,9 @@ export interface SingleChoiceSelectFormSchemaElement extends FormSchemaBaseEleme
   options: ChoiceOptionSource;
 }
 
-export interface DatesFormSchemaElement extends FormSchemaBaseElement<'dates'> {}
+export type DatesFormSchemaElement = FormSchemaBaseElement<'dates'>;
 
-export interface DateTimeFormSchemaElement extends FormSchemaBaseElement<'date-time'> {}
+export type DateTimeFormSchemaElement = FormSchemaBaseElement<'date-time'>;
 
 export type FormSchemaElement =
   | StringFormSchemaElement
