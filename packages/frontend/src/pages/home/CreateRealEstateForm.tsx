@@ -16,6 +16,8 @@ import { useCreateRealEstateMutation } from '../../store/api';
 
 interface CreateRealEstateFormProps {
   onClose(): void;
+
+
 }
 
 export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormProps) {
