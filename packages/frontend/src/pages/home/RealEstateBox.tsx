@@ -25,14 +25,9 @@ import { useHistory } from 'react-router';
 import { routes } from '../../routes';
 
 export default function RealEstateBox() {
-  const [tabIndex, setTabIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const history = useHistory();
-
-  const handleTabsChange = (index) => {
-    setTabIndex(index);
-  };
 
   function startSurvey(realEstateId: string) {
     history.push(routes.surveys({ realEstateId }));
@@ -68,7 +63,7 @@ export default function RealEstateBox() {
 
   return (
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">
-      <Tabs variant="enclosed" colorScheme="green" p="4" height="90%" onChange={handleTabsChange}>
+      <Tabs variant="enclosed" colorScheme="green" p="4" height="90%">
         <Box position="relative">
           <TabList
             overflowX="auto"
