@@ -36,13 +36,7 @@ export default function SurveyOverviewPage() {
       <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
         <DrawerOverlay />
         <DrawerContent>
-          {activeSurvey && (
-            <SurveyView
-              realEstateId={realEstateId}
-              surveyId={activeSurvey._id}
-              onDone={finishSurvey}
-            />
-          )}
+          {activeSurvey && <SurveyView realEstateId={realEstateId} surveyId={activeSurvey._id} onDone={finishSurvey} />}
         </DrawerContent>
       </Drawer>
     </DefaultPageLayout>

@@ -60,6 +60,6 @@ export default function IlluminationDataCards({ illuminationData }: Illumination
           </Flex>
         </Box>
       ))}
-      </SimpleGrid>
+    </SimpleGrid>
   );
 }
