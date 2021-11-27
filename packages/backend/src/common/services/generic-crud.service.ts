@@ -47,7 +47,13 @@ export abstract class GenericCrudService<
     this.logger.log(`[delete] Successfully deleted the entity with the ID ${id}.`);
   }
 
-  protected abstract mapCreateToEntity(entity: TCreate): TEntity;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected mapCreateToEntity(entity: TCreate): TEntity {
+    throw 'Not implemented.';
+  }
 
-  protected abstract mapUpdateToEntity(entity: TUpdate): Partial<TEntity>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected mapUpdateToEntity(entity: TUpdate): Partial<TEntity> {
+    throw 'Not implemented.';
+  }
 }

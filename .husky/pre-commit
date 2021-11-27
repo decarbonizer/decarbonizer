@@ -3,5 +3,4 @@
 
 set -e
 
-npm run format
-git add .
+npm run format-quick
