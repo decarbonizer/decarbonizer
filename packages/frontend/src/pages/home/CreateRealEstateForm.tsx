@@ -26,8 +26,6 @@ export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormPr
   const [error, setError] = useState('');
   const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
 
-  const foo = () => console.log('hi');
-
   const addNewRealEstate = async () => {
     try {
       await createRealEstate({
