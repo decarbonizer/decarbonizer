@@ -16,7 +16,6 @@ import { useCreateRealEstateMutation } from '../../store/api';
 
 interface CreateRealEstateFormProps {
   onClose(): void;
-
 }
 
 export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormProps) {
@@ -26,6 +25,8 @@ export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormPr
   const [area, setArea] = useState(1);
   const [error, setError] = useState('');
   const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
+
+  const foo = () => console.log('hi');
 
   const addNewRealEstate = async () => {
     try {
