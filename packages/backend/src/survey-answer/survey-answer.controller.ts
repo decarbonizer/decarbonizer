@@ -46,13 +46,13 @@ export class SurveyAnswerController {
     return await this.surveyAnswerService.create({ ...body, surveyId, realEstateId });
   }
 
-  @Patch(':id')
+  @Patch('surveyAnswers/:id')
   @ApiResponse({ status: HttpStatus.OK, type: SurveyAnswer })
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() body: SurveyAnswerUpdate) {
     return await this.surveyAnswerService.update(id, body);
   }
 
-  @Delete(':id')
+  @Delete('surveyAnswers/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @ApiResponse({ status: HttpStatus.NOT_FOUND })

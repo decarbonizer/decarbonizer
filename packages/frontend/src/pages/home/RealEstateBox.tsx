@@ -131,7 +131,7 @@ export default function RealEstateBox() {
                         rightIcon={<AiOutlineArrowRight />}
                         colorScheme="green"
                         onClick={() => goToDashboard(city._id)}>
-                        Go to overview
+                        Dashboard
                       </Button>
                       <Spacer />
                       <Spacer />
@@ -140,7 +140,7 @@ export default function RealEstateBox() {
                         rightIcon={<AiOutlineArrowRight />}
                         colorScheme="green"
                         onClick={() => startSurvey(city._id)}>
-                        Start survey
+                        Survey Overview
                       </Button>
                     </Grid>
                   </Flex>

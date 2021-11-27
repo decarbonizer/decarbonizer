@@ -17,21 +17,24 @@ import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/i
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
-import { useGetSurveyQuery, useCreateSurveyAnswerMutation } from '../../store/api';
+import { useGetSurveyQuery, useCreateSurveyAnswerMutation, useUpdateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
 import { surveyImageSources } from './surveyData';
+import { SurveyAnswer } from '../../api/surveyAnswer';
 
 export interface SurveyDrawerProps {
   realEstateId: string;
   surveyId: string;
+  initialSurveyValue?: SurveyAnswer;
   onDone(): void;
 }
 
-export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDrawerProps) {
+export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyDrawerProps) {
   const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
   const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
+  const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
   const {
     value,
     page,
@@ -43,7 +46,7 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
     goToNext,
     verifySubmit,
     handleValueChanged,
-  } = useFormEngine(survey?.schema);
+  } = useFormEngine(survey?.schema, initialSurveyValue);
   const cancelSurveyDisclosure = useDisclosure();
   const isLoading = isLoadingSurvey || isLoadingProviders;
 
@@ -54,7 +57,11 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
 
   const submitSurvey = () => {
     if (verifySubmit()) {
-      createSurveyAnswer({ realEstateId, surveyId, body: { value } }).then(onDone);
+      if (initialSurveyValue) {
+        updateSurveyAnswer({ id: surveyId, body: { value } });
+      } else {
+        createSurveyAnswer({ realEstateId, surveyId, body: { value } }).then(onDone);
+      }
     }
   };
 
