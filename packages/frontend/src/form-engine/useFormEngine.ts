@@ -63,5 +63,6 @@ export function useFormEngine(schema: FormSchema = { pages: [] }, initialValue: 
     goToNext,
     verifySubmit,
     handleValueChanged,
+    setValue,
   };
 }

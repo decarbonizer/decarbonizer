@@ -23,8 +23,21 @@ const schemaRunTime: FormSchema = {
           id: 'choosePriority',
           required: false,
           label: 'Choose priority',
-          type: 'single-choice-select',
-          options: '',
+          type: 'single-choice',
+          options: [
+            {
+              value: 'high',
+              display: 'High',
+            },
+            {
+              value: 'medium',
+              display: 'Medium',
+            },
+            {
+              value: 'low',
+              display: 'Low',
+            },
+          ],
         },
         {
           id: 'inOut',
@@ -97,7 +110,7 @@ const schemaSwitches: FormSchema = {
 };
 
 export default function PopUp(props: { isOpen: boolean; onClose: () => void; schema: FormSchema }) {
-  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } =
+  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
     useFormEngine(schemaRunTime);
 
   const submitSurvey = () => {
@@ -106,13 +119,18 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
     }
   };
 
+  const handleClose = () => {
+    setValue({});
+    props.onClose();
+  };
+
   return (
     <>
       <Modal isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add some details</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton onClick={handleClose} />
           <ModalBody>
             <FormEngine
               schema={props.schema}
@@ -127,7 +145,7 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
           <ModalFooter>
             <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
               <GridItem colSpan={2}>
-                <Button onClick={props.onClose} width="40" colorScheme="gray">
+                <Button onClick={handleClose} width="40" colorScheme="gray">
                   Cancel
                 </Button>
               </GridItem>
