@@ -6,7 +6,8 @@
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
-    "lint": "eslint \"src/**/*.{ts,tsx}\""
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.10",
