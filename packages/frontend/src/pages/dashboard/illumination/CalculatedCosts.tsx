@@ -32,7 +32,9 @@ export default function CalculatedCosts({ calculatedCosts }: CalculatedCostsProp
                       {calculatedCosts.amountOfIlluminants}
                     </Text>
                   </Center>
-                  <Text fontWeight="semibold" fontSize="13">{calculatedCosts.typeOfBulb} used</Text>
+                  <Text fontWeight="semibold" fontSize="13">
+                    {calculatedCosts.typeOfBulb} used
+                  </Text>
                 </SimpleGrid>
                 <SimpleGrid columns={2}>
                   <Center>
@@ -40,16 +42,19 @@ export default function CalculatedCosts({ calculatedCosts }: CalculatedCostsProp
                       {calculatedCosts.costs}€
                     </Text>
                   </Center>{' '}
-                  <Text fontWeight="semibold" fontSize="13">Electricity costs</Text>
+                  <Text fontWeight="semibold" fontSize="13">
+                    Electricity costs
+                  </Text>
                 </SimpleGrid>
                 <SimpleGrid columns={2}>
                   <Center>
                     <Text color="green" fontWeight="bold" fontSize="30">
-                      {(calculatedCosts.overallFootprint/1000).toFixed(2)}t{' '}
+                      {(calculatedCosts.overallFootprint / 1000).toFixed(2)}t{' '}
                     </Text>
-                   
                   </Center>
-                  <Text fontWeight="semibold" fontSize="13">Carbon emmisisons through illumination</Text>
+                  <Text fontWeight="semibold" fontSize="13">
+                    Carbon emmisisons through illumination
+                  </Text>
                 </SimpleGrid>
               </SimpleGrid>
             </Center>

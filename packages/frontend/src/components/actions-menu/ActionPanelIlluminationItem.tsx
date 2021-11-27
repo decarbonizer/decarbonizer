@@ -34,10 +34,15 @@ export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswer>;
   description?: string;
   chosenAction: string;
-  onChangeChosenAction: (value:string) => void;
+  onChangeChosenAction: (value: string) => void;
 }
 
-export default function ActionPanelIlluminationItem({ elements, description, chosenAction, onChangeChosenAction }: ActionPanelIlluminationItemProps) {
+export default function ActionPanelIlluminationItem({
+  elements,
+  description,
+  chosenAction,
+  onChangeChosenAction,
+}: ActionPanelIlluminationItemProps) {
   const shouldContainLEDAction = elements.some(
     (surveyAnswer) =>
       (surveyAnswer.bulbType === '00000000-0000-0000-0000-000000000000' ||

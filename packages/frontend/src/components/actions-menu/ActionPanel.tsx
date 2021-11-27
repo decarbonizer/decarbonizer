@@ -23,7 +23,13 @@ export default function ActionPanel({ surveyAnswers, chosenAction, onChangeChose
       </Heading>
       <Accordion minW="100%" allowToggle>
         {Object.entries(groupSurveyAnswers).map(([surveyId, surveyAnswers]) => (
-          <ActionPanelItemSelector key={surveyId} surveyId={surveyId} elements={surveyAnswers} chosenAction={chosenAction} onChangeChosenAction={onChangeChosenAction}/>
+          <ActionPanelItemSelector
+            key={surveyId}
+            surveyId={surveyId}
+            elements={surveyAnswers}
+            chosenAction={chosenAction}
+            onChangeChosenAction={onChangeChosenAction}
+          />
         ))}
         <AccordionItem>
           <h2>

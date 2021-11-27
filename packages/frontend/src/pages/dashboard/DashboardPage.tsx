@@ -1,7 +1,11 @@
 import { Box, Button, Flex, Grid, GridItem, Heading, Stack, useDisclosure } from '@chakra-ui/react';
 import PopUp from './pop-up/PopUp';
 import { useParams } from 'react-router';
-import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllRealEstatesQuery, useGetAllBulbsQuery } from '../../store/api';
+import {
+  useGetAllSurveyAnswersForRealEstateQuery,
+  useGetAllRealEstatesQuery,
+  useGetAllBulbsQuery,
+} from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './Comparison';
 import { NetZeroComponent } from './NetZero';
@@ -28,12 +32,15 @@ export default function DashboardPage() {
   const openedActionsCategory = 'illumination';
 
   const [chosenAction, setChosenAction] = React.useState('');
-  
-  const carbonFootprint = useMemo(() => surveyAnswers && bulbs? getFootprint(surveyAnswers, bulbs) : 0, [surveyAnswers, bulbs]);
 
-  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]) : number {
+  const carbonFootprint = useMemo(
+    () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
+    [surveyAnswers, bulbs],
+  );
+
+  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
     const value = calculateOverallFootprint(answers, bulbs);
-      return +value.overallFootprint.toFixed(1);
+    return +value.overallFootprint.toFixed(1);
   }
 
   function onChangeChosenAction(value: string) {
@@ -67,7 +74,11 @@ export default function DashboardPage() {
           <Heading as="h3" color="darkgreen" pb={10}>
             Decarbonizer
           </Heading>
-          <ActionPanel surveyAnswers={surveyAnswers} chosenAction={chosenAction} onChangeChosenAction={onChangeChosenAction}/>
+          <ActionPanel
+            surveyAnswers={surveyAnswers}
+            chosenAction={chosenAction}
+            onChangeChosenAction={onChangeChosenAction}
+          />
           <Box w="100%" pt="14" align="right" pr="5">
             <Button colorScheme="primary"> Save Actions</Button>
           </Box>
@@ -86,14 +97,16 @@ export default function DashboardPage() {
                 <ComparisonComponent />
               </GridItem>
               <GridItem rowSpan={1} w="80">
-              <CarbonFootprintComponent heading={"Calculated footprint"} carbonFootprint={carbonFootprint} />
+                <CarbonFootprintComponent heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
               </GridItem>
               <GridItem rowSpan={1} w="80">
                 <NetZeroComponent />
               </GridItem>
             </Grid>
           </Stack>
-          {openedActionsCategory === 'illumination' && chosenAction != '' && ( <ChangeOfIllumination realEstateId={realEstateId} bulbId={chosenAction}/>)}     
+          {openedActionsCategory === 'illumination' && chosenAction != '' && (
+            <ChangeOfIllumination realEstateId={realEstateId} bulbId={chosenAction} />
+          )}
         </Box>
         <PopUp isOpen={isOpen} onClose={onClose} schema={schema} />
       </Flex>

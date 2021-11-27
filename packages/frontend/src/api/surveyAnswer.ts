@@ -135,7 +135,7 @@ function calculateIlluminationFootprint(
 export function changeBulbs(answers: SurveyAnswer<object>[], bulbs: Bulb[], bulbId: string): IlluminationCalculation {
   const updatedAnswers = answers.map((answer) => {
     if (isSurveyAnswerType('illumination', answer)) {
-      var newObject = Object.assign({}, answer);
+      const newObject = Object.assign({}, answer);
       newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
       return newObject;
     } else {
@@ -160,7 +160,6 @@ export function calculateIllumitationData(
   bulbs: Array<Bulb>,
   bulbId: string,
 ): IlluminationCalculation {
-  var result: Array<IlluminationCalculation> = [];
   const germanyEF = 0.624;
   const usedBulb = bulbs.find((bulb) => bulb._id == bulbId);
   if (usedBulb) {

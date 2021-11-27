@@ -6,8 +6,13 @@ interface CarbonFootprintComponentProps {
 }
 
 export default function CarbonFootprintComponent({ heading, carbonFootprint }: CarbonFootprintComponentProps) {
+  const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
 
-  const unitSymbol = carbonFootprint >= 1000? "t": "kg";
-
-  return <CarbonFootprintCard heading={heading} carbonFootprintValue={carbonFootprint >= 1000? carbonFootprint/1000: carbonFootprint} unitSymbol={unitSymbol} />;
+  return (
+    <CarbonFootprintCard
+      heading={heading}
+      carbonFootprintValue={carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint}
+      unitSymbol={unitSymbol}
+    />
+  );
 }

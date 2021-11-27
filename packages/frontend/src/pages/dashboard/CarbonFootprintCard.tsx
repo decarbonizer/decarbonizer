@@ -1,14 +1,14 @@
 import { Box, Flex, VStack, Heading, Spacer, Center } from '@chakra-ui/layout';
 
 interface CarbonFootprintCardProps {
-    heading: string,
-    carbonFootprintValue: number,
-    unitSymbol: string
+  heading: string;
+  carbonFootprintValue: number;
+  unitSymbol: string;
 }
 
-export default function CarbonFootprintCard({heading, carbonFootprintValue, unitSymbol} : CarbonFootprintCardProps) {
-    return (
-        <Box
+export default function CarbonFootprintCard({ heading, carbonFootprintValue, unitSymbol }: CarbonFootprintCardProps) {
+  return (
+    <Box
       border="1px"
       bg="white"
       borderColor="gray.100"
@@ -26,11 +26,11 @@ export default function CarbonFootprintCard({heading, carbonFootprintValue, unit
           </Heading>
           <Spacer />
           <Box>
-              <Center>
-          <Heading as="h1" size="3xl" fontWeight="bold" color="green">
-            {carbonFootprintValue.toFixed(1)} {unitSymbol}
-          </Heading>
-          </Center>
+            <Center>
+              <Heading as="h1" size="3xl" fontWeight="bold" color="green">
+                {carbonFootprintValue.toFixed(1)} {unitSymbol}
+              </Heading>
+            </Center>
           </Box>
         </VStack>
       </Flex>
