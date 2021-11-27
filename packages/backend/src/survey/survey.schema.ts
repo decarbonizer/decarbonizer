@@ -13,6 +13,12 @@ export class Survey extends DbObject {
   @ApiProperty()
   @IsString()
   @Length(1, 255)
+  identifier: string;
+
+  @Prop()
+  @ApiProperty()
+  @IsString()
+  @Length(1, 255)
   name: string;
 
   @Prop()

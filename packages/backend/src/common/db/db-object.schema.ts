@@ -25,3 +25,5 @@ export class DbObject {
   @IsDate()
   updatedAt?: Date;
 }
+
+export type WithId<T extends DbObject> = T & { _id: string };

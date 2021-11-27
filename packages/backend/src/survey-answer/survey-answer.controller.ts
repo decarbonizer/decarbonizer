@@ -1,10 +1,25 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from './survey-answer.schema';
 import { SurveyAnswerService } from './survey-answer.service';
 
 @Controller('api/v1')
 @ApiTags('SurveyAnswer')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class SurveyAnswerController {
   constructor(private readonly surveyAnswerService: SurveyAnswerService) {}
 

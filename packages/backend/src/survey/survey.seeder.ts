@@ -13,6 +13,7 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
     return [
       {
         _id: '00000000-0000-0000-0000-000000000000',
+        identifier: 'illumination',
         name: 'Illumination',
         description: 'Collect data about how the lamps in your real estate contribute to your CO2 footprint.',
         schema: {

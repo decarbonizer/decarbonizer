@@ -9,17 +9,4 @@ export class SurveyAnswerRepository extends Repository<SurveyAnswer> {
   constructor(@InjectModel(SurveyAnswer.name) model: Model<SurveyAnswer>) {
     super(model);
   }
-
-  async getAllForSurveyAndRealEstate(realEstateId: string, surveyId: string) {
-    const results = await this.model.find({
-      realEstateId,
-      surveyId,
-    });
-    return results.map((doc) => doc.toObject() as SurveyAnswer);
-  }
-
-  async getAllForRealEstate(realEstateId: string) {
-    const results = await this.model.find({ realEstateId });
-    return results.map((doc) => doc.toObject() as SurveyAnswer);
-  }
 }

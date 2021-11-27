@@ -1,5 +1,6 @@
-import { Controller, Get, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Survey } from './survey.schema';
 import { SurveyService } from './survey.service';
 
