@@ -19,10 +19,9 @@ export interface SurveyCardProps {
   survey: Survey;
   realEstateId: string;
   onNewClick?(): void;
-  onViewAnswersClick?(): void;
 }
 
-export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAnswersClick }: SurveyCardProps) {
+export default function SurveyCard({ survey, realEstateId, onNewClick }: SurveyCardProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateAndSurveyQuery({
     realEstateId,

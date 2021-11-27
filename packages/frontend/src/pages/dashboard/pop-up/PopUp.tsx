@@ -14,6 +14,21 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { FormSchema } from '../../../form-engine/formSchema';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 
+export const priorityOptions = [
+  {
+    value: 'high',
+    display: 'High',
+  },
+  {
+    value: 'medium',
+    display: 'Medium',
+  },
+  {
+    value: 'low',
+    display: 'Low',
+  },
+];
+
 const schemaRunTime: FormSchema = {
   pages: [
     {
@@ -24,20 +39,7 @@ const schemaRunTime: FormSchema = {
           required: false,
           label: 'Choose priority',
           type: 'single-choice',
-          options: [
-            {
-              value: 'high',
-              display: 'High',
-            },
-            {
-              value: 'medium',
-              display: 'Medium',
-            },
-            {
-              value: 'low',
-              display: 'Low',
-            },
-          ],
+          options: priorityOptions,
         },
         {
           id: 'inOut',
@@ -57,7 +59,13 @@ const schemaBrightnessSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'choosePriority',
+          required: false,
+          label: 'Choose priority',
+          type: 'single-choice-select',
+          options: priorityOptions,
+        },
       ],
     },
   ],
@@ -68,7 +76,13 @@ const schemaMotionSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'choosePriority',
+          required: false,
+          label: 'Choose priority',
+          type: 'single-choice-select',
+          options: priorityOptions,
+        },
         { id: 'numberOfHours', required: false, label: 'How long the illuminant should be active?', type: 'number' },
       ],
     },
@@ -80,7 +94,13 @@ const schemaTimeSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'choosePriority',
+          required: false,
+          label: 'Choose priority',
+          type: 'single-choice-select',
+          options: priorityOptions,
+        },
         {
           id: 'chooseTimeOn',
           required: false,
@@ -103,7 +123,13 @@ const schemaSwitches: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'choosePriority',
+          required: false,
+          label: 'Choose priority',
+          type: 'single-choice-select',
+          options: priorityOptions,
+        },
       ],
     },
   ],
