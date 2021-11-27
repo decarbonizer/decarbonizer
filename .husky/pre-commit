@@ -2,3 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 set -e
+
+#npm run format-quick
