@@ -103,8 +103,8 @@ export function calculateFootprintPerRealEstate(
   bulbs: Array<Bulb>,
   realEstates: Array<RealEstate>,
 ): Array<RealEstateFootprintCalculation> {
-  var result: Array<RealEstateFootprintCalculation> = [];
-  for (var i = 0; i < realEstates.length; i++) {
+  const result: Array<RealEstateFootprintCalculation> = [];
+  for (let i = 0; i < realEstates.length; i++) {
     const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstates[i]._id);
     const footprintValue = calculateOverallFootprint(realEstateAnswers, bulbs);
     result.push({ realEstateName: realEstates[i].cityName, footprint: +footprintValue.overallFootprint.toFixed(1) });

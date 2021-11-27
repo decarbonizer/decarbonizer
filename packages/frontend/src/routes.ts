@@ -4,7 +4,7 @@ export const routes = {
   root: createRouteFactory('/'),
   home: createRouteFactory('/home'),
   surveys: createRouteFactory<SurveysPageParams>('/realEstates/:realEstateId/surveys/:surveyId?'),
-  realEstateDashboard: createRouteFactory<DashboardPageParams>('/realEstates/:realEstateId/dashboard')
+  realEstateDashboard: createRouteFactory<DashboardPageParams>('/realEstates/:realEstateId/dashboard'),
 };
 
 export interface SurveysPageParams {

@@ -1,4 +1,4 @@
-import { Box, Flex, VStack, Heading, Spacer, Center } from "@chakra-ui/layout";
+import { Box, Flex, VStack, Heading, Spacer, Center } from '@chakra-ui/layout';
 
 interface CarbonFootprintCardProps {
     heading: string,
@@ -24,7 +24,7 @@ export default function CarbonFootprintCard({heading, carbonFootprintValue, unit
           <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
             {heading}
           </Heading>
-          <Spacer/>
+          <Spacer />
           <Box>
               <Center>
           <Heading as="h1" size="3xl" fontWeight="bold" color="green">
@@ -35,5 +35,5 @@ export default function CarbonFootprintCard({heading, carbonFootprintValue, unit
         </VStack>
       </Flex>
     </Box>
-    )
+  );
 }

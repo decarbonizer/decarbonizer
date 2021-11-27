@@ -8,12 +8,4 @@ export class EnergyFormService extends GenericCrudService<EnergyForm, EnergyForm
   constructor(energyFormRepository: EnergyFormRepository) {
     super(energyFormRepository);
   }
-
-  protected mapCreateToEntity(entity: EnergyForm): EnergyForm {
-    throw 'Not implemented.';
-  }
-
-  protected mapUpdateToEntity(entity: EnergyForm): Partial<EnergyForm> {
-    throw 'Not implemented.';
-  }
 }
