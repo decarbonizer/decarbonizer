@@ -1,10 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RealEstate, RealEstateCreate } from './real-estate.schema';
 import { RealEstateService } from './real-estate.service';
 
 @Controller('api/v1/realEstates')
 @ApiTags('RealEstate')
+@UseGuards(JwtAuthGuard)
 export class RealEstateController {
   constructor(private readonly realEstateService: RealEstateService) {}
 

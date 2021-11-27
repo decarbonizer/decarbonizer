@@ -9,11 +9,11 @@ export class MessageService extends GenericCrudService<Message, Message, Message
     super(messageRepository);
   }
 
-  protected mapCreateToEntity(entity: Message): Message {
+  protected async mapCreateToEntity(entity: Message): Promise<Message> {
     return entity;
   }
 
-  protected mapUpdateToEntity(entity: MessageUpdate): Partial<Message> {
+  protected async mapUpdateToEntity(entity: MessageUpdate): Promise<Partial<Message>> {
     return entity;
   }
 }

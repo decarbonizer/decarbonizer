@@ -1,10 +1,25 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from './survey-answer.schema';
 import { SurveyAnswerService } from './survey-answer.service';
 
 @Controller('api/v1')
 @ApiTags('SurveyAnswer')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class SurveyAnswerController {
   constructor(private readonly surveyAnswerService: SurveyAnswerService) {}
 
@@ -18,7 +33,7 @@ export class SurveyAnswerController {
   @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
   async getAllForSurveyAndRealEstate(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
-    @Param('surveyId', ParseUUIDPipe) surveyId: string,
+    @Param('surveyId') surveyId: string,
   ) {
     return await this.surveyAnswerService.getAllForSurveyAndRealEstate(realEstateId, surveyId);
   }
@@ -40,7 +55,7 @@ export class SurveyAnswerController {
   @ApiResponse({ status: HttpStatus.CREATED, type: SurveyAnswer })
   async create(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
-    @Param('surveyId', ParseUUIDPipe) surveyId: string,
+    @Param('surveyId') surveyId: string,
     @Body() body: SurveyAnswerCreate,
   ) {
     return await this.surveyAnswerService.create({ ...body, surveyId, realEstateId });

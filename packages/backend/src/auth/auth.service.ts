@@ -6,6 +6,7 @@ import { compareSync } from 'bcrypt';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { User } from '../user/user.schema';
+import { WithId } from '../common/db/db-object.schema';
 
 /**
  * A service which provides functions in the area of user authentication and management.
@@ -22,14 +23,20 @@ export class AuthService {
    * Returns the user which is currently signed in.
    * @returns The signed-in user.
    */
-  getCurrentUser() {
+  getCurrentUser(): WithId<User> {
     const user = this.request.user as User;
+    console.log('User:', this.request);
 
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    return user;
+    return user as WithId<User>;
+  }
+
+  getCurrentUserId() {
+    const user = this.getCurrentUser();
+    return user._id;
   }
 
   /**

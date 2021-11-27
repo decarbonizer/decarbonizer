@@ -14,11 +14,11 @@ export class RealEstateService extends GenericCrudService<
     super(realEstateRepository);
   }
 
-  protected mapCreateToEntity(entity: RealEstateCreate): RealEstate {
+  protected async mapCreateToEntity(entity: RealEstateCreate): Promise<RealEstate> {
     return entity;
   }
 
-  protected mapUpdateToEntity(entity: RealEstateUpdate): Partial<RealEstate> {
+  protected async mapUpdateToEntity(entity: RealEstateUpdate): Promise<Partial<RealEstate>> {
     return entity;
   }
 }
