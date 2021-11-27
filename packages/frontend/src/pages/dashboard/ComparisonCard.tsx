@@ -1,5 +1,5 @@
-import { Box, Flex, VStack, Heading, Spacer, Center } from '@chakra-ui/react';
-import { ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { Box, Flex, VStack, Heading, Center } from '@chakra-ui/react';
+import { ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { RealEstateFootprintCalculation } from '../../api/surveyAnswer';
 
 interface ComparisonCardProps {
@@ -43,7 +43,7 @@ export default function ComparisonCard({ calculations }: ComparisonCardProps) {
                 <XAxis type="number" />
                 <YAxis dataKey="realEstateName" type="category" scale="band" />
                 <Tooltip />
-              
+
                 <Bar dataKey="footprint" barSize={15} fill="green" />
               </ComposedChart>
             </Center>

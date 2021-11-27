@@ -41,25 +41,35 @@ export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormPr
   };
 
   const onChangeName = (e) => {
-    if (error !== '') setError('');
+    if (error !== '') {
+      setError('');
+    }
+
     setCityName(e.target.value);
   };
 
   const onChangeDescription = (e) => {
-    if (error !== '') setError('');
+    if (error !== '') {
+      setError('');
+    }
+
     setDescription(e.target.value);
   };
 
   const onChangeEmployees = (value) => {
-    if (error !== '') setError('');
-    const intValue: number = +value;
-    setEmployees(intValue);
+    if (error !== '') {
+      setError('');
+    }
+
+    setEmployees(+value);
   };
 
   const onChangeArea = (value) => {
-    if (error !== '') setError('');
-    const intValue: number = +value;
-    setArea(intValue);
+    if (error !== '') {
+      setError('');
+    }
+
+    setArea(+value);
   };
 
   return (

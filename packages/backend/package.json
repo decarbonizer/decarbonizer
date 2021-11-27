@@ -9,7 +9,7 @@
     "build": "nest build",
     "test": "jest",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "lint": "eslint \"src/**.{ts,tsx}\""
+    "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

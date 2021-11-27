@@ -15,19 +15,41 @@ import {
 } from '@chakra-ui/react';
 import { IlluminationSurveyAnswer } from '../../api/surveyAnswer';
 import { IoBulbOutline } from 'react-icons/io5';
+import { useContext } from 'react';
+import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
+import { FormSchema } from '../../form-engine/formSchema';
+
+const schemaLED: FormSchema = {
+  pages: [
+    {
+      elements: [
+        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
+        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+      ],
+    },
+  ],
+};
 
 export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswer>;
   description?: string;
+  chosenAction: string;
+  onChangeChosenAction: (value: string) => void;
 }
 
-export default function ActionPanelIlluminationItem({ elements, description }: ActionPanelIlluminationItemProps) {
+export default function ActionPanelIlluminationItem({
+  elements,
+  description,
+  chosenAction,
+  onChangeChosenAction,
+}: ActionPanelIlluminationItemProps) {
   const shouldContainLEDAction = elements.some(
     (surveyAnswer) =>
       (surveyAnswer.bulbType === '00000000-0000-0000-0000-000000000000' ||
         surveyAnswer.bulbType === '00000000-0000-0000-0000-000000000001') &&
       surveyAnswer.isIlluminantExchangeable,
   );
+  const popUp = useContext(PopUpContext);
 
   return (
     <AccordionItem maxW="100%">
@@ -48,7 +70,7 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
         {shouldContainLEDAction && (
           <VStack>
             <Heading size="sm">Change to LED lamps</Heading>
-            <RadioGroup>
+            <RadioGroup onChange={onChangeChosenAction} value={chosenAction}>
               <VStack align="flex-start">
                 <Radio value="00000000-0000-0000-0000-000000000003"> LED 800 lum </Radio>
                 <Radio value="00000000-0000-0000-0000-000000000002"> LED 1300 lum </Radio>
@@ -57,7 +79,13 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
           </VStack>
         )}
         <Flex justifyContent="right" paddingTop="5">
-          <Button colorScheme="primary">Details..</Button>
+          <Button
+            colorScheme="primary"
+            onClick={() => {
+              popUp.onOpen(schemaLED);
+            }}>
+            Details..
+          </Button>
         </Flex>
       </AccordionPanel>
     </AccordionItem>
