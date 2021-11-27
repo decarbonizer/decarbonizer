@@ -1,6 +1,6 @@
 import { Box, Button, Flex, AspectRatio, Badge, VStack, Heading, HStack, Image, Text } from '@chakra-ui/react';
-import { Survey } from '../../api/survey';
 import { useGetAllSurveyAnswersForRealEstateAndSurveyQuery } from '../../store/api';
+import { Survey } from '../../data/surveys/survey';
 
 export interface SurveyCardProps {
   survey: Survey;
@@ -12,7 +12,7 @@ export interface SurveyCardProps {
 export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAnswersClick }: SurveyCardProps) {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateAndSurveyQuery({
     realEstateId,
-    surveyId: survey._id,
+    surveyId: survey.id,
   });
 
   return (

@@ -17,9 +17,10 @@ import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/i
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
-import { useGetSurveyQuery, useCreateSurveyAnswerMutation } from '../../store/api';
+import { useCreateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
+import { knownSurveys } from '../../data/surveys/survey';
 
 export interface SurveyViewProps {
   realEstateId: string;
@@ -28,8 +29,8 @@ export interface SurveyViewProps {
 }
 
 export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyViewProps) {
-  const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
-  const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
+  const survey = knownSurveys[surveyId];
+  const { providers, isLoading } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const {
     value,
@@ -44,7 +45,6 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyVie
     handleValueChanged,
   } = useFormEngine(survey?.schema);
   const cancelSurveyDisclosure = useDisclosure();
-  const isLoading = isLoadingSurvey || isLoadingProviders;
 
   const cancelSurvey = () => {
     cancelSurveyDisclosure.onClose();
