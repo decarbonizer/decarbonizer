@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsObject, IsUUID } from 'class-validator';
+import { IsObject, IsString, IsUUID } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
@@ -19,7 +19,7 @@ export class SurveyAnswer extends DbObject {
 
   @Prop({ ref: Survey.name })
   @ApiProperty()
-  @IsUUID('4')
+  @IsString()
   surveyId: string;
 
   @Prop({ ref: RealEstate.name })

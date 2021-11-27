@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
@@ -8,12 +8,13 @@ import { DbObject } from '../common/db/db-object.schema';
 export type SurveyDocument = Survey & Document;
 
 @DbObjectSchema()
-export class Survey extends DbObject {
+export class Survey extends OmitType(DbObject, ['_id']) {
   @Prop()
   @ApiProperty()
   @IsString()
   @Length(1, 255)
-  identifier: string;
+  @IsOptional()
+  _id?: string;
 
   @Prop()
   @ApiProperty()

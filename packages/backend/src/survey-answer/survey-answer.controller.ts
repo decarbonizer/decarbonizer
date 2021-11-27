@@ -33,7 +33,7 @@ export class SurveyAnswerController {
   @ApiResponse({ status: HttpStatus.OK, type: [SurveyAnswer] })
   async getAllForSurveyAndRealEstate(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
-    @Param('surveyId', ParseUUIDPipe) surveyId: string,
+    @Param('surveyId') surveyId: string,
   ) {
     return await this.surveyAnswerService.getAllForSurveyAndRealEstate(realEstateId, surveyId);
   }
@@ -55,7 +55,7 @@ export class SurveyAnswerController {
   @ApiResponse({ status: HttpStatus.CREATED, type: SurveyAnswer })
   async create(
     @Param('realEstateId', ParseUUIDPipe) realEstateId: string,
-    @Param('surveyId', ParseUUIDPipe) surveyId: string,
+    @Param('surveyId') surveyId: string,
     @Body() body: SurveyAnswerCreate,
   ) {
     return await this.surveyAnswerService.create({ ...body, surveyId, realEstateId });

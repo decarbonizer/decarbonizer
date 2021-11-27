@@ -40,10 +40,6 @@ type SurveyTypesWithAnswers = {
   illumination: IlluminationSurveyAnswer;
 };
 
-const surveyTypesToIdsMap: Record<keyof SurveyTypesWithAnswers, string> = {
-  illumination: '00000000-0000-0000-0000-000000000000',
-};
-
 /**
  * Defines the different types of known surveys.
  */
@@ -59,7 +55,7 @@ export function isSurveyAnswerType<Type extends SurveyType>(
   surveyType: SurveyType,
   answer: SurveyAnswer,
 ): answer is SurveyAnswer<SurveyTypesWithAnswers[Type]> {
-  return answer.surveyId === surveyTypesToIdsMap[surveyType];
+  return answer.surveyId === surveyType;
 }
 
 //Footprint of a real estate

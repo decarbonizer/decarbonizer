@@ -13,7 +13,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
     return [
       {
         _id: '00000000-0000-0000-0000-000000000000',
-        surveyId: '00000000-0000-0000-0000-000000000000',
+        surveyId: 'illumination',
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
