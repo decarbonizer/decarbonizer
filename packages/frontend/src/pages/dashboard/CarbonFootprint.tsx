@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import { Spinner } from '@chakra-ui/spinner';
 import React, { useMemo } from 'react';
 import { Bulb } from '../../api/bulb';
