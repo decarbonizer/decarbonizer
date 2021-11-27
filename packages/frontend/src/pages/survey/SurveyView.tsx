@@ -12,6 +12,7 @@ import {
   Flex,
   AspectRatio,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
@@ -32,6 +33,7 @@ export interface SurveyViewProps {
 
 export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyViewProps) {
   const survey = knownSurveys[surveyId];
+  const toast = useToast();
   const { providers, isLoading } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
@@ -46,7 +48,7 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
     goToNext,
     verifySubmit,
     handleValueChanged,
-  } = useFormEngine(survey?.schema, initialSurveyValue);
+  } = useFormEngine(survey?.schema, initialSurveyValue?.value);
   const cancelSurveyDisclosure = useDisclosure();
 
   const cancelSurvey = () => {
@@ -54,13 +56,23 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
     onDone();
   };
 
-  const submitSurvey = () => {
+  const submitSurvey = async () => {
     if (verifySubmit()) {
       if (initialSurveyValue) {
-        updateSurveyAnswer({ id: surveyId, body: { value } });
+        await updateSurveyAnswer({ id: initialSurveyValue._id, body: { value } });
       } else {
-        createSurveyAnswer({ realEstateId, surveyId, body: { value } }).then(onDone);
+        await createSurveyAnswer({ realEstateId, surveyId, body: { value } });
       }
+
+      toast({
+        title: 'Answer submitted.',
+        description: 'Your answer has been successfully saved.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+
+      onDone();
     }
   };
 
@@ -131,7 +143,7 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
               minW="32"
               colorScheme="primary"
               leftIcon={<Icon as={IoIosCheckmark} />}
-              isLoading={isCreatingSurveyAnswer}
+              isLoading={isCreatingSurveyAnswer || isUpdatingSurveyAnswer}
               onClick={submitSurvey}>
               Submit
             </Button>

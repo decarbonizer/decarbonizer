@@ -28,10 +28,10 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { useRef, useState } from 'react';
 import { useDeleteSurveyAnswerMutation } from '../../store/api';
-import { useParams, useHistory } from 'react-router';
-import { Survey } from '../../api/survey';
-import { SurveysPageParams, routes } from '../../routes';
+import { useParams } from 'react-router';
+import { SurveysPageParams } from '../../routes';
 import SurveyView from './SurveyView';
+import { knownSurveys, Survey } from '../../data/surveys/survey';
 
 export interface SurveyAnswerDrawer {
   isOpen: boolean;
@@ -41,18 +41,16 @@ export interface SurveyAnswerDrawer {
 
 export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAnswerDrawer) {
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
-  const [deleteSurveyAnswerMutation, { isLoading }] = useDeleteSurveyAnswerMutation();
+  const [deleteSurveyAnswerMutation] = useDeleteSurveyAnswerMutation();
   const onConfirm = (surveyAnswer) => {
     deleteSurveyAnswerMutation({ id: surveyAnswer._id });
   };
 
   const [activeSurvey, setActiveSurvey] = useState<Survey | undefined>(undefined);
   const { realEstateId } = useParams<SurveysPageParams>();
-  const history = useHistory();
 
   const finishSurvey = () => {
     setActiveSurvey(undefined);
-    history.push(routes.realEstateDashboard({ realEstateId }));
   };
 
   return (
@@ -72,7 +70,12 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
                     <Text>{(surveyAnswer.value as any).realEstateName}</Text>
                     <Spacer />
                     <Tooltip label="Edit" hasArrow>
-                      <IconButton aria-label="edit" icon={<FaEdit />} mr="1" onClick={} />
+                      <IconButton
+                        aria-label="edit"
+                        icon={<FaEdit />}
+                        mr="1"
+                        onClick={() => setActiveSurvey(knownSurveys[surveyAnswer.surveyId])}
+                      />
                     </Tooltip>
                     <Tooltip label="Delete" hasArrow>
                       <IconButton aria-label="delete" fontSize="21" icon={<MdDeleteForever />} onClick={onOpenAlert} />
@@ -83,18 +86,25 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
                       onConfirm={() => onConfirm(surveyAnswer)}
                     />
                   </Td>
+                  <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
+                    <DrawerOverlay />
+                    <DrawerContent>
+                      {activeSurvey && (
+                        <SurveyView
+                          realEstateId={realEstateId}
+                          surveyId={activeSurvey.id}
+                          onDone={finishSurvey}
+                          initialSurveyValue={surveyAnswer}
+                        />
+                      )}
+                    </DrawerContent>
+                  </Drawer>
                 </Tr>
               ))}
             </Tbody>
           </Table>
         </DrawerBody>
       </DrawerContent>
-      <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
-        <DrawerOverlay />
-        <DrawerContent>
-          {activeSurvey && <SurveyView realEstateId={realEstateId} surveyId={activeSurvey._id} onDone={finishSurvey} />}
-        </DrawerContent>
-      </Drawer>
     </Drawer>
   );
 }
