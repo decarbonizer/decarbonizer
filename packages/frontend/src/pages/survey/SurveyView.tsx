@@ -17,22 +17,22 @@ import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/i
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
-import { useGetSurveyQuery, useCreateSurveyAnswerMutation, useUpdateSurveyAnswerMutation } from '../../store/api';
+import { useCreateSurveyAnswerMutation, useUpdateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
-import { surveyImageSources } from './surveyData';
+import { knownSurveys } from '../../data/surveys/survey';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 
-export interface SurveyDrawerProps {
+export interface SurveyViewProps {
   realEstateId: string;
   surveyId: string;
   initialSurveyValue?: SurveyAnswer;
   onDone(): void;
 }
 
-export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyDrawerProps) {
-  const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
-  const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
+export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyViewProps) {
+  const survey = knownSurveys[surveyId];
+  const { providers, isLoading } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
   const {
@@ -48,7 +48,6 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
     handleValueChanged,
   } = useFormEngine(survey?.schema, initialSurveyValue);
   const cancelSurveyDisclosure = useDisclosure();
-  const isLoading = isLoadingSurvey || isLoadingProviders;
 
   const cancelSurvey = () => {
     cancelSurveyDisclosure.onClose();
@@ -89,7 +88,7 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
           {survey!.name}
         </Heading>
         <AspectRatio maxW="100%" ratio={4 / 2.5}>
-          <Image src={surveyImageSources[survey!._id]} alt="Survey Image" objectFit="cover" shadow="md" />
+          <Image src={survey!.imageUrl} alt="Survey Image" objectFit="cover" shadow="md" />
         </AspectRatio>
         <Text fontSize="sm" color="gray.500" mt="4">
           {survey!.description ?? 'No description available.'}

@@ -11,10 +11,9 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Survey } from '../../api/survey';
+import { Survey } from '../../data/surveys/survey';
 import { useGetAllSurveyAnswersForRealEstateAndSurveyQuery } from '../../store/api';
 import { SurveyAnswerDrawer } from './SurveyAnswerDrawer';
-import { surveyImageSources } from './surveyData';
 
 export interface SurveyCardProps {
   survey: Survey;
@@ -27,7 +26,7 @@ export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAns
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateAndSurveyQuery({
     realEstateId,
-    surveyId: survey._id,
+    surveyId: survey.id,
   });
 
   return (
@@ -44,7 +43,7 @@ export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAns
       }}>
       <Flex pos="relative" flexDir="column" w="80">
         <AspectRatio maxW="100%" ratio={4 / 2.5}>
-          <Image src={surveyImageSources[survey._id]} alt="Survey Image" objectFit="cover" roundedTop="md" />
+          <Image src={survey.imageUrl} alt="Survey Image" objectFit="cover" roundedTop="md" />
         </AspectRatio>
         {(surveyAnswers?.length === 0 ?? true) && (
           <Badge colorScheme="yellow" pos="absolute" top="4" right="0" roundedRight="0" shadow="lg">

@@ -9,7 +9,7 @@ export interface ActionPanelItemSelectorProps {
 
 export default function ActionPanelItemSelector({ surveyId, elements, description }: ActionPanelItemSelectorProps) {
   switch (surveyId) {
-    case '00000000-0000-0000-0000-000000000000':
+    case 'illumination':
       return <ActionPanelIlluminationItem elements={elements.map((e) => e.value) as any} description={description} />;
     default:
       throw new Error('Unkown SurveyId');
