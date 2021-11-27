@@ -4,18 +4,15 @@ import SurveyView from './SurveyView';
 import SurveyCard from './SurveyCard';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { useHistory } from 'react-router';
-import { routes, SurveysPageParams } from '../../routes';
+import { SurveysPageParams } from '../../routes';
 import { knownSurveys, Survey } from '../../data/surveys/survey';
 
 export default function SurveyOverviewPage() {
   const [activeSurvey, setActiveSurvey] = useState<Survey | undefined>(undefined);
   const { realEstateId } = useParams<SurveysPageParams>();
-  const history = useHistory();
 
   const finishSurvey = () => {
     setActiveSurvey(undefined);
-    history.push(routes.realEstateDashboard({ realEstateId }));
   };
 
   return (
