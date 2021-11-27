@@ -65,7 +65,9 @@ export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormPr
   };
 
   const onChangeArea = (value) => {
-    if (error !== '') setError('');
+    if (error !== '') {
+      setError('');
+    }
 
     setArea(+value);
   };
