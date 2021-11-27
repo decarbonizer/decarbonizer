@@ -62,6 +62,8 @@ export default function RealEstateBox() {
   }
 
   return (
+
+
     <Box backgroundColor="green.50" border="1px" borderColor="green.300" borderRadius="md" width="900px" height="500px">
       <Tabs variant="enclosed" colorScheme="green" p="4" height="90%">
         <Box position="relative">
