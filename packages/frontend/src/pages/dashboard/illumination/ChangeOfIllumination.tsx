@@ -2,7 +2,7 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { calculateOverallFootprint, changeBulbs, GeneralCalculation, IlluminationCalculation } from "../../../api/surveyAnswer";
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from "../../../store/api";
-import CalculatedCosts from "../action-specific/CalculatedCosts";
+import CalculatedCosts from "./CalculatedCosts";
 import ReducedFootprintAndCosts from "../action-specific/ReducedFootprintAndCosts";
 import CarbonFootprintComponent from "../CarbonFootprint";
 interface ChangeOfIlluminationProps {
