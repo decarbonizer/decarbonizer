@@ -11,6 +11,7 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "format": "lerna run format",
+    "format-quick": "pretty-quick --staged",
     "uninstall-packages": "npx rimraf **/node_modules && npx rimraf **/package-lock.json"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "husky": "^7.0.4",
     "lerna": "3.22.1",
     "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
   }
