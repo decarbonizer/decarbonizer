@@ -24,14 +24,13 @@ const schemaLED: FormSchema = {
   pages: [
     {
       elements: [
-        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
         {
-          id: 'choosePriority',
+          id: 'chooseTimePeriod',
           required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: priorityOptions,
+          label: 'Choose time period',
+          type: 'dates',
         },
+        priorityOptions,
       ],
     },
   ],

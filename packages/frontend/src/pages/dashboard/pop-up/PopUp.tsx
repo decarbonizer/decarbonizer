@@ -11,36 +11,37 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import FormEngine from '../../../form-engine/FormEngine';
-import { FormSchema } from '../../../form-engine/formSchema';
+import { FormSchema, SingleChoiceSelectFormSchemaElement } from '../../../form-engine/formSchema';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 
-export const priorityOptions = [
-  {
-    value: 'high',
-    display: 'High',
-  },
-  {
-    value: 'medium',
-    display: 'Medium',
-  },
-  {
-    value: 'low',
-    display: 'Low',
-  },
-];
+export const priorityOptions: SingleChoiceSelectFormSchemaElement = {
+  id: 'choosePriority',
+  required: false,
+  label: 'Choose priority',
+  type: 'single-choice-select',
+  options: [
+    {
+      value: 'high',
+      display: 'High',
+    },
+    {
+      value: 'medium',
+      display: 'Medium',
+    },
+    {
+      value: 'low',
+      display: 'Low',
+    },
+  ],
+};
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaRunTime: FormSchema = {
   pages: [
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice',
-          options: priorityOptions,
-        },
+        priorityOptions,
         {
           id: 'inOut',
           required: false,
@@ -59,13 +60,7 @@ const schemaBrightnessSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: priorityOptions,
-        },
+        priorityOptions,
       ],
     },
   ],
@@ -76,13 +71,7 @@ const schemaMotionSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: priorityOptions,
-        },
+        priorityOptions,
         { id: 'numberOfHours', required: false, label: 'How long the illuminant should be active?', type: 'number' },
       ],
     },
@@ -94,13 +83,7 @@ const schemaTimeSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: priorityOptions,
-        },
+        priorityOptions,
         {
           id: 'chooseTimeOn',
           required: false,
@@ -123,13 +106,7 @@ const schemaSwitches: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: priorityOptions,
-        },
+        priorityOptions,
       ],
     },
   ],
@@ -137,7 +114,7 @@ const schemaSwitches: FormSchema = {
 
 export default function PopUp(props: { isOpen: boolean; onClose: () => void; schema: FormSchema }) {
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
-    useFormEngine(schemaRunTime);
+    useFormEngine(props.schema);
 
   const submitSurvey = () => {
     if (verifySubmit()) {
