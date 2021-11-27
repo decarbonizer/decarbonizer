@@ -8,12 +8,4 @@ export class SurveyService extends GenericCrudService<Survey, Survey, Survey, Su
   constructor(surveyRepository: SurveyRepository) {
     super(surveyRepository);
   }
-
-  protected mapCreateToEntity(entity: Survey): Survey {
-    throw 'Not implemented.';
-  }
-
-  protected mapUpdateToEntity(entity: Survey): Partial<Survey> {
-    throw 'Not implemented.';
-  }
 }

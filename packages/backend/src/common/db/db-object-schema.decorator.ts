@@ -1,5 +1,4 @@
 import { Schema, SchemaOptions } from '@nestjs/mongoose';
-import { DbObject } from './db-object.schema';
 
 /**
  * Configures the default {@link Schema} decorator with properties used for every {@link DbObject}.

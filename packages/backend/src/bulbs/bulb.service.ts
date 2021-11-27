@@ -8,12 +8,4 @@ export class BulbService extends GenericCrudService<Bulb, Bulb, Bulb, BulbReposi
   constructor(bulbRepository: BulbRepository) {
     super(bulbRepository);
   }
-
-  protected mapCreateToEntity(entity: Bulb): Bulb {
-    throw 'Not implemented.';
-  }
-
-  protected mapUpdateToEntity(entity: Bulb): Partial<Bulb> {
-    throw 'Not implemented.';
-  }
 }
