@@ -18,6 +18,7 @@ import { IoBulbOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
+import { ActionPlanContext } from '../../pages/action-plan/ActionPlanContext';
 
 const schemaLED: FormSchema = {
   pages: [
@@ -43,6 +44,9 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
       surveyAnswer.isIlluminantExchangeable,
   );
   const popUp = useContext(PopUpContext);
+  const actionPlan = useContext(ActionPlanContext);
+
+  console.log('actionValue', actionPlan.actionValue);
 
   return (
     <AccordionItem maxW="100%">
@@ -63,7 +67,9 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
         {shouldContainLEDAction && (
           <VStack>
             <Heading size="sm">Change to LED lamps</Heading>
-            <RadioGroup>
+            <RadioGroup
+              onChange={(value) => actionPlan.setActionValue({ ...actionPlan.actionValue, illumination: value })}
+              value={actionPlan.actionValue.illumination}>
               <VStack align="flex-start">
                 <Radio value="00000000-0000-0000-0000-000000000003"> LED 800 lum </Radio>
                 <Radio value="00000000-0000-0000-0000-000000000002"> LED 1300 lum </Radio>
