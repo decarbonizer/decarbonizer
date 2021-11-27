@@ -1,5 +1,4 @@
 import { Box, Button, Flex, Grid, GridItem, Heading, Stack, useDisclosure } from '@chakra-ui/react';
-import React from 'react';
 import PopUp from './pop-up/PopUp';
 import { useParams } from 'react-router';
 import IlluminationOverviewComponent from './illumination/IlluminationOverview';
@@ -17,20 +16,12 @@ export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { isLoading: isLoadingSurveyAnswers, data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
-    realEstateId: realEstateId,
-  });
-
-  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
+  const { data: realEstates } = useGetAllRealEstatesQuery();
   const [schema, setSchema] = useState<FormSchema>(null!);
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
-  const [openedActionsCategory, setOpenedActionsCategory] = React.useState('illumination');
-
-  const onChangeActionsCategory = (value: string) => {
-    //TODO display illumination data only when illumination is chosen
-    setOpenedActionsCategory(value);
-  };
+  const openedActionsCategory = 'illumination';
 
   return (
     <PopUpContext.Provider

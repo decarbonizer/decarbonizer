@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 import { routes, SurveysPageParams } from '../../routes';
 
 export default function SurveyOverviewPage() {
-  const { data, isLoading } = useGetAllSurveysQuery();
+  const { data } = useGetAllSurveysQuery();
   const [activeSurvey, setActiveSurvey] = useState<Survey | undefined>(undefined);
   const { realEstateId } = useParams<SurveysPageParams>();
   const history = useHistory();

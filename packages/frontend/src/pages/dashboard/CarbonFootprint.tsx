@@ -32,7 +32,7 @@ export default function CarbonFootprintComponent({ realEstateId }: CarbonFootpri
     }
   }
 
-  if (isLoadingSurveyAnswers || isLoadingBulbs)
+  if (isLoadingSurveyAnswers || isLoadingBulbs) {
     return (
       <Spinner
         thickness="4px"
@@ -46,12 +46,15 @@ export default function CarbonFootprintComponent({ realEstateId }: CarbonFootpri
         transform="translate(-50%, -50%)"
       />
     );
-  if (!surveyAnswers || !bulbs)
+  }
+
+  if (!surveyAnswers || !bulbs) {
     return (
       <Box position="absolute" left="50%" top="30%" transform="translate(-50%, -50%)">
         Something went wrong!
       </Box>
     );
+  }
 
   return <CarbonFootprintCard carbonFootprintValue={carbonFootprint} unitSymbol={unitSymbol} />;
 }
