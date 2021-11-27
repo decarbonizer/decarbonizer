@@ -1,6 +1,19 @@
-import { Box, Button, Flex, AspectRatio, Badge, VStack, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  AspectRatio,
+  Badge,
+  VStack,
+  Heading,
+  HStack,
+  Image,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { Survey } from '../../api/survey';
 import { useGetAllSurveyAnswersForRealEstateAndSurveyQuery } from '../../store/api';
+import { SurveyAnswerDrawer } from './SurveyAnswerDrawer';
 import { surveyImageSources } from './surveyData';
 
 export interface SurveyCardProps {
@@ -11,6 +24,7 @@ export interface SurveyCardProps {
 }
 
 export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAnswersClick }: SurveyCardProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateAndSurveyQuery({
     realEstateId,
     surveyId: survey._id,
@@ -50,13 +64,10 @@ export default function SurveyCard({ survey, realEstateId, onNewClick, onViewAns
             {survey.description ?? 'No description available.'}
           </Text>
           <HStack spacing="4" pt="4">
-            <Button
-              variant="ghost"
-              size="sm"
-              isDisabled={surveyAnswers?.length === 0 ?? true}
-              onClick={onViewAnswersClick}>
-              View past answers
+            <Button variant="ghost" size="sm" isDisabled={surveyAnswers?.length === 0 ?? true} onClick={onOpen}>
+              Past Answers
             </Button>
+            <SurveyAnswerDrawer isOpen={isOpen} onClose={onClose} surveyAnswers={surveyAnswers} />
             <Button size="sm" colorScheme="primary" onClick={onNewClick}>
               Answer
             </Button>
