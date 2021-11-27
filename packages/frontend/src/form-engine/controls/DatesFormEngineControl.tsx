@@ -1,39 +1,17 @@
-import { Input } from '@chakra-ui/react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { range } from 'lodash';
+import DateRangePicker, { DateRange } from '../../components/DateRangePicker';
 import { DatesFormSchemaElement } from '../formSchema';
-import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
+import { useValueProperty } from '../internals/hooks';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { FormEngineControlProps } from './types';
 
 export default function DatesFormEngineControl({ element }: FormEngineControlProps<DatesFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<{ startDate: Date | null; endDate: Date | null } | undefined>(element);
-  const initialValue = { startDate: null, endDate: null };
-  const startDate = value?.startDate;
-  const endDate = value?.endDate;
-  const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
+  const [value, setValue] = useValueProperty<DateRange | undefined>(element);
+  const years = range(1990, new Date().getFullYear() + 1, 1);
 
   return (
     <DefaultFormControlLayout element={element}>
-      <DatePicker
-        disabled={ruleEvaluationResult.disable}
-        selected={startDate}
-        onChange={(date) => setValue({ ...(value ?? initialValue), startDate: date as Date | null })}
-        selectsStart
-        startDate={startDate}
-        endDate={endDate}
-        customInput={<Input />}
-      />
-      <DatePicker
-        disabled={ruleEvaluationResult.disable}
-        selected={endDate}
-        onChange={(date) => setValue({ ...(value ?? initialValue), endDate: date as Date | null })}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        customInput={<Input />}
-      />
+      <DateRangePicker value={value} onValueChanged={(e) => setValue(e)} selectableYears={years} />
     </DefaultFormControlLayout>
   );
 }
