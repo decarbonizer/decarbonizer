@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { caclucateFootprintPerRealEstate } from '../../api/surveyAnswer';
+import { calculateFootprintPerRealEstate } from '../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersQuery, useGetAllRealEstatesQuery } from '../../store/api';
 import ComparisonCard from './ComparisonCard';
 
@@ -9,7 +9,7 @@ export default function ComparisonComponent() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
-  const calculations = useMemo(() => allSurveyAnswers && bulbs && realEstates? caclucateFootprintPerRealEstate(allSurveyAnswers, bulbs, realEstates) : [], [allSurveyAnswers, bulbs, realEstates]);
+  const calculations = useMemo(() => allSurveyAnswers && bulbs && realEstates? calculateFootprintPerRealEstate(allSurveyAnswers, bulbs, realEstates) : [], [allSurveyAnswers, bulbs, realEstates]);
 
   if (isLoadingAllSurveyAnswers || isLoadingBulbs || isLoadingRealEstates)
     return (

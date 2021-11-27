@@ -10,9 +10,11 @@ import ActionPanelItemSelector from './ActionPanelItemSelector';
 
 export interface ActionPanelProps {
   surveyAnswers: Array<SurveyAnswer> | undefined;
+  chosenAction: string;
+  onChangeChosenAction: (value: string) => void;
 }
 
-export default function ActionPanel({ surveyAnswers }: ActionPanelProps) {
+export default function ActionPanel({ surveyAnswers, chosenAction, onChangeChosenAction }: ActionPanelProps) {
   const groupSurveyAnswers = groupBy(surveyAnswers, 'surveyId');
   return (
     <VStack minW="80%" maxW="80%">
@@ -21,7 +23,7 @@ export default function ActionPanel({ surveyAnswers }: ActionPanelProps) {
       </Heading>
       <Accordion minW="100%" allowToggle>
         {Object.entries(groupSurveyAnswers).map(([surveyId, surveyAnswers]) => (
-          <ActionPanelItemSelector key={surveyId} surveyId={surveyId} elements={surveyAnswers} />
+          <ActionPanelItemSelector key={surveyId} surveyId={surveyId} elements={surveyAnswers} chosenAction={chosenAction} onChangeChosenAction={onChangeChosenAction}/>
         ))}
         <AccordionItem>
           <h2>
