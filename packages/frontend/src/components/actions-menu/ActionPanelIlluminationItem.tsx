@@ -13,12 +13,12 @@ import {
   Flex,
   Heading,
 } from '@chakra-ui/react';
-import { IlluminationSurveyAnswer } from '../../api/surveyAnswer';
 import { IoBulbOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { ActionPlanContext } from '../../pages/action-plan/ActionPlanContext';
+import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
 
 const schemaLED: FormSchema = {
   pages: [
@@ -32,7 +32,7 @@ const schemaLED: FormSchema = {
 };
 
 export interface ActionPanelIlluminationItemProps {
-  elements: Array<IlluminationSurveyAnswer>;
+  elements: Array<IlluminationSurveyAnswerValue>;
   description?: string;
 }
 
