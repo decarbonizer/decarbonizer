@@ -18,7 +18,7 @@ export class SurveyController {
   @Get(':id')
   @ApiResponse({ status: HttpStatus.OK, type: Survey })
   @ApiResponse({ status: HttpStatus.NOT_FOUND })
-  async get(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.surveyService.get(id);
+  async get(@Param('id') id: string) {
+    return await this.surveyService.getByIdOrIdentifier(id);
   }
 }

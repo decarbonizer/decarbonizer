@@ -15,6 +15,8 @@ export class SurveySeeder extends DefaultDbSeeder<Survey> {
         _id: '00000000-0000-0000-0000-000000000000',
         identifier: 'illumination',
         name: 'Illumination',
+        imageUrl:
+          'https://images.unsplash.com/photo-1516715651727-95fa73e9799c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&w=640&q=426',
         description: 'Collect data about how the lamps in your real estate contribute to your CO2 footprint.',
         schema: {
           pages: [

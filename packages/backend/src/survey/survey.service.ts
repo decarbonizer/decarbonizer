@@ -8,4 +8,8 @@ export class SurveyService extends GenericCrudService<Survey, Survey, Survey, Su
   constructor(surveyRepository: SurveyRepository) {
     super(surveyRepository);
   }
+
+  async getByIdOrIdentifier(idOrIdentifier: string) {
+    return await this.repository.getByIdOrIdentifier(idOrIdentifier);
+  }
 }

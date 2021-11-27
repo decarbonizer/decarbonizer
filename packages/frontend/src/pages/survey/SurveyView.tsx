@@ -20,15 +20,14 @@ import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders
 import { useGetSurveyQuery, useCreateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
-import { surveyImageSources } from './surveyData';
 
-export interface SurveyDrawerProps {
+export interface SurveyViewProps {
   realEstateId: string;
   surveyId: string;
   onDone(): void;
 }
 
-export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDrawerProps) {
+export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyViewProps) {
   const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
   const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
@@ -82,7 +81,7 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
           {survey!.name}
         </Heading>
         <AspectRatio maxW="100%" ratio={4 / 2.5}>
-          <Image src={surveyImageSources[survey!._id]} alt="Survey Image" objectFit="cover" shadow="md" />
+          <Image src={survey!.imageUrl} alt="Survey Image" objectFit="cover" shadow="md" />
         </AspectRatio>
         <Text fontSize="sm" color="gray.500" mt="4">
           {survey!.description ?? 'No description available.'}
