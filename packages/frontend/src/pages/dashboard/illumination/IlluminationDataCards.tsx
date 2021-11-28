@@ -1,4 +1,4 @@
-import { Box, Flex, VStack, Heading, Center, Text } from '@chakra-ui/layout';
+import { Box, Flex, VStack, Heading, Center, Text } from '@chakra-ui/react';
 import { SimpleGrid } from '@chakra-ui/react';
 import { IlluminationCalculation } from '../../../api/surveyAnswer';
 

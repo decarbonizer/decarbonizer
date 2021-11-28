@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import { Spinner } from '@chakra-ui/spinner';
 import { useMemo } from 'react';
 import { calculateIllumitationData } from '../../../api/surveyAnswer';
