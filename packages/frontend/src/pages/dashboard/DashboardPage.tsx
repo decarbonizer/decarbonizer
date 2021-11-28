@@ -7,17 +7,17 @@ import {
   useGetAllBulbsQuery,
 } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
-import ComparisonComponent from './Comparison';
+import ComparisonComponent from './ComparisonOfFootprints';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
 import React, { useMemo } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
-import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { useState } from 'react';
 import NetZeroCard from './NetZeroCard';
+import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();

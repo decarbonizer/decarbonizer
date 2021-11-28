@@ -9,7 +9,7 @@ interface CarbonFootprintCardProps {
 
 export default function CarbonFootprintCard({ heading, carbonFootprintValue, unitSymbol }: CarbonFootprintCardProps) {
   return (
-    <Card w="80" h="60">
+    <Card w="100" h="60">
       <VStack p="4" spacing={7}>
         <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
           {heading}

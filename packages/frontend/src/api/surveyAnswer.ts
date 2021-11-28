@@ -101,18 +101,38 @@ function calculateIlluminationFootprint(
   }
 }
 
-export function changeBulbs(answers: SurveyAnswer<object>[], bulbs: Bulb[], bulbId: string): IlluminationCalculation {
-  const updatedAnswers = answers.map((answer) => {
+export function changeBulbs(
+  answers: SurveyAnswer<object>[],
+  bulbs: Bulb[],
+  bulbId: string,
+): { newIllumination: IlluminationCalculation; reduction: GeneralCalculation } {
+  const answersToUpdate: SurveyAnswer<object>[] = [];
+
+  const updatedAnswers = answers.filter((answer) => {
     if (isSurveyAnswerType('illumination', answer)) {
-      const newObject = Object.assign({}, answer);
-      newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
-      return newObject;
-    } else {
-      return answer;
+      if (answer.value.isIlluminantExchangeable) {
+        //update only those bulbs that can be changed
+        if (answer.value.bulbType != bulbId) {
+          //update only those bulbs that need to be changed
+          const newObject = Object.assign({}, answer);
+          newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
+          return newObject;
+        } else {
+          answersToUpdate.push(answer);
+        }
+      } else {
+        answersToUpdate.push(answer);
+      }
     }
   });
+  const costAndFootprintBeforeChange: GeneralCalculation = calculateOverallFootprint(answersToUpdate, bulbs);
+  const newIllumination: IlluminationCalculation = calculateIllumitationData(updatedAnswers, bulbs, bulbId);
+  const costAndFootprintReduction: GeneralCalculation = {
+    costs: costAndFootprintBeforeChange.costs - newIllumination.costs,
+    overallFootprint: costAndFootprintBeforeChange.overallFootprint - newIllumination.overallFootprint,
+  };
 
-  return calculateIllumitationData(updatedAnswers, bulbs, bulbId);
+  return { newIllumination: newIllumination, reduction: costAndFootprintReduction };
 }
 
 function calculateFootprintDependingOnType(answer: SurveyAnswer, bulbs: Array<Bulb>): GeneralCalculation {

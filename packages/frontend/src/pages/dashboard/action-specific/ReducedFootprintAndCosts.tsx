@@ -1,40 +1,34 @@
 import { SimpleGrid } from '@chakra-ui/layout';
-import { Box, Center, Flex, Heading, VStack } from '@chakra-ui/react';
+import { Box, Center, Heading, Icon } from '@chakra-ui/react';
 import { PieChart, Pie, Cell } from 'recharts';
-import { GeneralCalculation, IlluminationCalculation } from '../../../api/surveyAnswer';
+import { GeneralCalculation } from '../../../api/surveyAnswer';
+import Card from '../../../components/Card';
+import { FcMoneyTransfer } from 'react-icons/fc';
 
 interface ReducedFootprintAndCostsProps {
   oldCalculation: GeneralCalculation;
-  newIllumination: IlluminationCalculation;
+  reduction: GeneralCalculation;
 }
 
-export default function ReducedFootprintAndCosts({ oldCalculation, newIllumination }: ReducedFootprintAndCostsProps) {
-  const footprintDifference = oldCalculation.overallFootprint - newIllumination.overallFootprint;
-  const costsDifference = oldCalculation.costs - newIllumination.costs;
-  const data = [newIllumination, { overallFootprint: footprintDifference, costs: costsDifference }];
+export default function ReducedFootprintAndCosts({ oldCalculation, reduction }: ReducedFootprintAndCostsProps) {
+  const footprintDifference = oldCalculation.overallFootprint - reduction.overallFootprint;
+  const costsDifference = oldCalculation.costs - reduction.costs;
+  const data = [{ overallFootprint: footprintDifference, costs: costsDifference }, oldCalculation];
 
   return (
-    <Box
-      border="1px"
-      bg="white"
-      borderColor="gray.100"
-      rounded="md"
-      shadow="lg"
-      transition="all 250ms"
-      _hover={{
-        shadow: '2xl',
-        transform: 'translateY(-0.25rem)',
-      }}>
-      <Flex pos="relative" flexDir="column" w="80" h="80">
-        <VStack flexDir="column" p="4" spacing={7}>
+    <Card w="100" h="80">
+      <Box p="4">
+        <Center>
           <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
             Reduced emissions and costs
           </Heading>
-          <Box>
-            <Center>
-              <SimpleGrid columns={2} gap={2}>
-                <SimpleGrid rows={2}>
-                  <PieChart width={400} height={200}>
+        </Center>
+        <Box>
+          <Center>
+            <SimpleGrid columns={2} gap={2}>
+              <SimpleGrid rows={2}>
+                <Center paddingLeft="4">
+                  <PieChart width={150} height={200}>
                     <Pie
                       data={data}
                       cx={60}
@@ -52,44 +46,63 @@ export default function ReducedFootprintAndCosts({ oldCalculation, newIlluminati
                       CO2
                     </text>
                   </PieChart>
-                  <Heading size="sm">Reduced by </Heading>
-                  {footprintDifference.toFixed(2)} kg
-                </SimpleGrid>
+                </Center>
                 <SimpleGrid rows={2}>
-                  {costsDifference < 0 ? (
-                    <Center>
-                      <Heading size="sm">No savings</Heading>
-                    </Center>
-                  ) : (
-                    <>
-                      <PieChart width={400} height={200}>
-                        <Pie
-                          data={data}
-                          cx={60}
-                          cy={100}
-                          innerRadius={35}
-                          outerRadius={60}
-                          fill="#8884d8"
-                          paddingAngle={1}
-                          dataKey="costs">
-                          {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={index == 0 ? 'gray' : 'green'} />
-                          ))}
-                        </Pie>
-                        <text x={60} y={100} dy={11} dx={6} textAnchor="middle">
-                          €
-                        </text>
-                      </PieChart>
-                      <Heading size="sm">Savings </Heading>
-                      {costsDifference.toFixed(2)} €{' '}
-                    </>
-                  )}
+                  <Center>
+                    <Heading size="sm">Reduced by </Heading>
+                  </Center>
+                  <Center>{reduction.overallFootprint.toFixed(2)} kg</Center>
                 </SimpleGrid>
               </SimpleGrid>
-            </Center>
-          </Box>
-        </VStack>
-      </Flex>
-    </Box>
+
+              {reduction.costs < 0 ? (
+                <SimpleGrid rows={2}>
+                  <Box width={150} height={200} position="relative" paddingLeft="5">
+                    <Center>
+                      <Icon as={FcMoneyTransfer} boxSize="110" position="absolute" top="50" />
+                    </Center>
+                  </Box>
+                  <SimpleGrid rows={2}>
+                    <Center>
+                      <Heading size="sm">Additional costs</Heading>
+                    </Center>
+                    <Center>{Math.abs(reduction.costs)} €</Center>
+                  </SimpleGrid>
+                </SimpleGrid>
+              ) : (
+                <SimpleGrid rows={2}>
+                  <Center paddingLeft="4">
+                    <PieChart width={150} height={200}>
+                      <Pie
+                        data={data}
+                        cx={60}
+                        cy={100}
+                        innerRadius={35}
+                        outerRadius={60}
+                        fill="#8884d8"
+                        paddingAngle={1}
+                        dataKey="costs">
+                        {data.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={index == 0 ? 'gray' : 'green'} />
+                        ))}
+                      </Pie>
+                      <text x={60} y={100} dy={11} dx={6} textAnchor="middle">
+                        CO2
+                      </text>
+                    </PieChart>
+                  </Center>
+                  <SimpleGrid rows={2}>
+                    <Center>
+                      <Heading size="sm">Savings</Heading>
+                    </Center>
+                    <Center>{reduction.costs.toFixed(2)} €</Center>
+                  </SimpleGrid>
+                </SimpleGrid>
+              )}
+            </SimpleGrid>
+          </Center>
+        </Box>
+      </Box>
+    </Card>
   );
 }

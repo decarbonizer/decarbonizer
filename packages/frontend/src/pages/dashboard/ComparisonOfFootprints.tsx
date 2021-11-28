@@ -5,7 +5,7 @@ import { calculateFootprintPerRealEstate } from '../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersQuery, useGetAllRealEstatesQuery } from '../../store/api';
 import ComparisonCard from './ComparisonCard';
 
-export default function ComparisonComponent() {
+export default function ComparisonOfFootprints() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const { isLoading: isLoadingBulbs, data: bulbs } = useGetAllBulbsQuery();
   const { isLoading: isLoadingAllSurveyAnswers, data: allSurveyAnswers } = useGetAllSurveyAnswersQuery();
