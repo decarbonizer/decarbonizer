@@ -12,26 +12,31 @@ import {
   Flex,
   AspectRatio,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
-import { useGetSurveyQuery, useCreateSurveyAnswerMutation } from '../../store/api';
+import { useCreateSurveyAnswerMutation, useUpdateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
-import { surveyImageSources } from './surveyData';
+import { knownSurveys } from '../../data/surveys/survey';
+import { SurveyAnswer } from '../../api/surveyAnswer';
 
-export interface SurveyDrawerProps {
+export interface SurveyViewProps {
   realEstateId: string;
   surveyId: string;
+  initialSurveyValue?: SurveyAnswer;
   onDone(): void;
 }
 
-export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDrawerProps) {
-  const { data: survey, isLoading: isLoadingSurvey } = useGetSurveyQuery({ id: surveyId });
-  const { providers, isLoading: isLoadingProviders } = useSurveyChoiceOptionProviders();
+export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyViewProps) {
+  const survey = knownSurveys[surveyId];
+  const toast = useToast();
+  const { providers, isLoading } = useSurveyChoiceOptionProviders();
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
+  const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
   const {
     value,
     page,
@@ -43,18 +48,31 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
     goToNext,
     verifySubmit,
     handleValueChanged,
-  } = useFormEngine(survey?.schema);
+  } = useFormEngine(survey?.schema, initialSurveyValue?.value);
   const cancelSurveyDisclosure = useDisclosure();
-  const isLoading = isLoadingSurvey || isLoadingProviders;
 
   const cancelSurvey = () => {
     cancelSurveyDisclosure.onClose();
     onDone();
   };
 
-  const submitSurvey = () => {
+  const submitSurvey = async () => {
     if (verifySubmit()) {
-      createSurveyAnswer({ realEstateId, surveyId, body: { value } }).then(onDone);
+      if (initialSurveyValue) {
+        await updateSurveyAnswer({ id: initialSurveyValue._id, body: { value } });
+      } else {
+        await createSurveyAnswer({ realEstateId, surveyId, body: { value } });
+      }
+
+      toast({
+        title: 'Answer submitted.',
+        description: 'Your answer has been successfully saved.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+
+      onDone();
     }
   };
 
@@ -82,7 +100,7 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
           {survey!.name}
         </Heading>
         <AspectRatio maxW="100%" ratio={4 / 2.5}>
-          <Image src={surveyImageSources[survey!._id]} alt="Survey Image" objectFit="cover" shadow="md" />
+          <Image src={survey!.imageUrl} alt="Survey Image" objectFit="cover" shadow="md" />
         </AspectRatio>
         <Text fontSize="sm" color="gray.500" mt="4">
           {survey!.description ?? 'No description available.'}
@@ -125,7 +143,7 @@ export default function SurveyView({ realEstateId, surveyId, onDone }: SurveyDra
               minW="32"
               colorScheme="primary"
               leftIcon={<Icon as={IoIosCheckmark} />}
-              isLoading={isCreatingSurveyAnswer}
+              isLoading={isCreatingSurveyAnswer || isUpdatingSurveyAnswer}
               onClick={submitSurvey}>
               Submit
             </Button>

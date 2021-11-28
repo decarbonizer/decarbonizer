@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import { Spinner } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { calculateFootprintPerRealEstate } from '../../api/surveyAnswer';

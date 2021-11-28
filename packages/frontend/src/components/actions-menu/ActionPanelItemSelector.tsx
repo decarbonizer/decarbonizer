@@ -17,7 +17,7 @@ export default function ActionPanelItemSelector({
   onChangeChosenAction,
 }: ActionPanelItemSelectorProps) {
   switch (surveyId) {
-    case '00000000-0000-0000-0000-000000000000':
+    case 'illumination':
       return (
         <ActionPanelIlluminationItem
           elements={elements.map((e) => e.value) as any}

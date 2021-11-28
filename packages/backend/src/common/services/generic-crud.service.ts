@@ -31,13 +31,13 @@ export abstract class GenericCrudService<
   }
 
   async create(entity: TCreate) {
-    const result = await this.repository.add(this.mapCreateToEntity(entity));
+    const result = await this.repository.add(await this.mapCreateToEntity(entity));
     this.logger.log(`[create] Successfully created a new entity with the ID ${result._id}.`);
     return result;
   }
 
   async update(id: string, entity: TUpdate) {
-    const result = await this.repository.update(id, this.mapUpdateToEntity(entity));
+    const result = await this.repository.update(id, await this.mapUpdateToEntity(entity));
     this.logger.log(`[update] Successfully updated the entity with the ID ${result._id}.`);
     return result;
   }
@@ -48,12 +48,12 @@ export abstract class GenericCrudService<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected mapCreateToEntity(entity: TCreate): TEntity {
+  protected async mapCreateToEntity(entity: TCreate): Promise<TEntity> {
     throw 'Not implemented.';
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected mapUpdateToEntity(entity: TUpdate): Partial<TEntity> {
+  protected async mapUpdateToEntity(entity: TUpdate): Promise<Partial<TEntity>> {
     throw 'Not implemented.';
   }
 }

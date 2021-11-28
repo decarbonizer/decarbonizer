@@ -8,7 +8,6 @@ import {
 } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './Comparison';
-import { NetZeroComponent } from './NetZero';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
 import React, { useMemo } from 'react';
@@ -18,6 +17,7 @@ import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { useState } from 'react';
+import NetZeroCard from './NetZeroCard';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
@@ -100,7 +100,7 @@ export default function DashboardPage() {
                 <CarbonFootprintComponent heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
               </GridItem>
               <GridItem rowSpan={1} w="80">
-                <NetZeroComponent />
+                <NetZeroCard />
               </GridItem>
             </Grid>
           </Stack>
