@@ -2,22 +2,23 @@ import { Box, VStack, Heading, Spacer, Center } from '@chakra-ui/react';
 import Card from '../../components/Card';
 
 interface CarbonFootprintCardProps {
-  carbonFootprintValue: string;
+  heading: string;
+  carbonFootprintValue: number;
   unitSymbol: string;
 }
 
-export default function CarbonFootprintCard({ carbonFootprintValue, unitSymbol }: CarbonFootprintCardProps) {
+export default function CarbonFootprintCard({ heading, carbonFootprintValue, unitSymbol }: CarbonFootprintCardProps) {
   return (
-    <Card w="80" h="60">
+    <Card w="100" h="60">
       <VStack p="4" spacing={7}>
         <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
-          Calculated footprint
+          {heading}
         </Heading>
         <Spacer />
         <Box>
           <Center>
             <Heading as="h1" size="3xl" fontWeight="bold" color="green">
-              {carbonFootprintValue} {unitSymbol}
+              {carbonFootprintValue.toFixed(1)} {unitSymbol}
             </Heading>
           </Center>
         </Box>
