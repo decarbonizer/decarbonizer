@@ -27,7 +27,7 @@ const schemaLED: FormSchema = {
         {
           id: 'chooseTimePeriod',
           required: false,
-          label: 'Choose time period',
+          label: '📆 Choose time period',
           type: 'dates',
         },
         priorityOptions,

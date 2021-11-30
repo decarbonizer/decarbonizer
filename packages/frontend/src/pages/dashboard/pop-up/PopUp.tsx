@@ -17,7 +17,7 @@ import { useFormEngine } from '../../../form-engine/useFormEngine';
 export const priorityOptions: SingleChoiceSelectFormSchemaElement = {
   id: 'choosePriority',
   required: false,
-  label: 'Choose priority',
+  label: '📊 Choose priority',
   type: 'single-choice-select',
   options: [
     {
@@ -114,12 +114,15 @@ const schemaSwitches: FormSchema = {
 
 export default function PopUp(props: { isOpen: boolean; onClose: () => void; schema: FormSchema }) {
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
-    useFormEngine(props.schema);
+    useFormEngine(schemaRunTime);
 
   const submitSurvey = () => {
+    // TODO: recalcuation if necessary
     if (verifySubmit()) {
       console.log('submit');
     }
+
+    props.onClose();
   };
 
   const handleClose = () => {
@@ -161,7 +164,7 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
                   width="40"
                   right="6"
                   colorScheme="green">
-                  Save
+                  Apply
                 </Button>
               </GridItem>
             </Grid>
