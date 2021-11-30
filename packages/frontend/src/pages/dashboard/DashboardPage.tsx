@@ -26,7 +26,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import PopUp, { PopUpSchema } from './pop-up/PopUp';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import {
   useGetAllBulbsQuery,
   useGetAllRealEstatesQuery,
@@ -34,9 +34,9 @@ import {
 } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './ComparisonOfFootprints';
-import { DashboardPageParams } from '../../routes';
+import { DashboardPageParams, routes } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
 import { PopUpContext } from './pop-up/PopUpContext';
@@ -48,6 +48,8 @@ import FormEngine from '../../form-engine/FormEngine';
 import { IoBulbOutline } from 'react-icons/io5';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import { FormLabel } from '@chakra-ui/form-control';
+import EmptyState from '../../components/EmptyState';
+import cloud from '../../img/cloud.svg';
 
 const schemaActionPage: FormSchema = {
   pages: [
@@ -70,6 +72,7 @@ export default function DashboardPage() {
   const { data: bulbs } = useGetAllBulbsQuery();
   const [schema, setSchema] = useState<PopUpSchema>(null!);
   const [actionValue, setActionValue] = useState<Record<string, any>>({});
+  const history = useHistory();
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const openedActionsCategory = 'illumination';
@@ -79,6 +82,31 @@ export default function DashboardPage() {
     [surveyAnswers, bulbs],
   );
 
+  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
+    useFormEngine(schemaActionPage);
+
+  if (!surveyAnswers) {
+    return null;
+  }
+
+  if (surveyAnswers.length === 0) {
+    return (
+      <EmptyState
+        imgSrc={cloud}
+        title={'Not enough data'}
+        description={'Please fill out a survey to see your consumption, savings and further actions.'}
+        actions={
+          <Button
+            onClick={() => {
+              history.push(routes.surveys({ realEstateId }));
+            }}>
+            Surveys
+          </Button>
+        }
+      />
+    );
+  }
+
   function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
     const value = calculateOverallFootprint(answers, bulbs);
     return +value.overallFootprint.toFixed(1);
@@ -87,9 +115,6 @@ export default function DashboardPage() {
   function onChangeChosenAction(value: string) {
     setActionValue({ ...actionValue, illumination: value });
   }
-
-  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
-    useFormEngine(schemaActionPage);
 
   return (
     <PopUpContext.Provider
