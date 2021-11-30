@@ -13,8 +13,10 @@ import {
 import FormEngine from '../../../form-engine/FormEngine';
 import { FormSchema, SingleChoiceSelectFormSchemaElement } from '../../../form-engine/formSchema';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
+import { FormEngineValue } from '../../../form-engine/types';
+import { useEffect } from 'react';
 
-export const priorityOptions: SingleChoiceSelectFormSchemaElement = {
+const priorityOptions: SingleChoiceSelectFormSchemaElement = {
   id: 'choosePriority',
   required: false,
   label: '📊 Choose priority',
@@ -31,6 +33,22 @@ export const priorityOptions: SingleChoiceSelectFormSchemaElement = {
     {
       value: 'low',
       display: 'Low',
+    },
+  ],
+};
+
+const schemaLED: FormSchema = {
+  pages: [
+    {
+      elements: [
+        {
+          id: 'chooseTimePeriod',
+          required: false,
+          label: '📆 Choose time period',
+          type: 'dates',
+        },
+        priorityOptions,
+      ],
     },
   ],
 };
@@ -112,33 +130,53 @@ const schemaSwitches: FormSchema = {
   ],
 };
 
-export default function PopUp(props: { isOpen: boolean; onClose: () => void; schema: FormSchema }) {
+export const popUpSchemas = {
+  led: schemaLED,
+  runtime: schemaRunTime,
+  brightnessSensor: schemaBrightnessSensor,
+  motionSensor: schemaMotionSensor,
+  timeSensor: schemaTimeSensor,
+  switches: schemaSwitches,
+};
+
+export type PopUpSchema = keyof typeof popUpSchemas;
+
+export default function PopUp(props: {
+  isOpen: boolean;
+  onClose: (value?: FormEngineValue) => void;
+  schema: PopUpSchema;
+  initialValue?: FormEngineValue;
+}) {
+  const schema = popUpSchemas[props.schema];
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
-    useFormEngine(schemaRunTime);
+    useFormEngine(schema, props.initialValue);
+
+  useEffect(() => {
+    if (props.isOpen) {
+      setValue(props.initialValue ?? {});
+    }
+  }, [props.isOpen, props.initialValue, setValue]);
 
   const submitSurvey = () => {
-    // TODO: recalcuation if necessary
+    // TODO: recalculation if necessary
     if (verifySubmit()) {
-      console.log('submit');
+      props.onClose(value);
     }
-
-    props.onClose();
   };
 
   const handleClose = () => {
-    setValue({});
-    props.onClose();
+    props.onClose(props.initialValue);
   };
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose}>
+    <Modal isOpen={props.isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add some details</ModalHeader>
         <ModalCloseButton onClick={handleClose} />
         <ModalBody>
           <FormEngine
-            schema={props.schema}
+            schema={schema}
             value={value}
             page={page}
             ruleEvaluationResults={ruleEvaluationResults}

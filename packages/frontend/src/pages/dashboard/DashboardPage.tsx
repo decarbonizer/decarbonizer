@@ -4,6 +4,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Badge,
   Box,
   Button,
   Checkbox,
@@ -19,45 +20,34 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
   Stack,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import PopUp from './pop-up/PopUp';
+import PopUp, { PopUpSchema } from './pop-up/PopUp';
 import { useParams } from 'react-router';
 import {
-  useGetAllSurveyAnswersForRealEstateQuery,
-  useGetAllRealEstatesQuery,
   useGetAllBulbsQuery,
+  useGetAllRealEstatesQuery,
+  useGetAllSurveyAnswersForRealEstateQuery,
 } from '../../store/api';
-import { useHistory, useParams } from 'react-router';
-import IlluminationOverviewComponent from './illumination/IlluminationOverview';
-import { useGetAllRealEstatesQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './ComparisonOfFootprints';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
 import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
-import { useState } from 'react';
 import NetZeroCard from './NetZeroCard';
 import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { ActionPlanContext } from '../action-plan/ActionPlanContext';
 import FormEngine from '../../form-engine/FormEngine';
 import { IoBulbOutline } from 'react-icons/io5';
-import { Input } from '@chakra-ui/input';
 import { useFormEngine } from '../../form-engine/useFormEngine';
-import ActionPanelItemSelector from '../../components/actions-menu/ActionPanelItemSelector';
-import { RiCarLine, RiDatabaseLine } from 'react-icons/ri';
-import { MdOutlineAir, MdOutlineKitchen } from 'react-icons/md';
-import { GiCommercialAirplane, GiHeatHaze } from 'react-icons/gi';
-import { BiBuildingHouse } from 'react-icons/bi';
-import { HiOutlineVideoCamera } from 'react-icons/hi';
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import { VStack } from '@chakra-ui/layout';
+import { FormLabel } from '@chakra-ui/form-control';
 
 const schemaActionPage: FormSchema = {
   pages: [
@@ -78,13 +68,11 @@ export default function DashboardPage() {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: realEstates } = useGetAllRealEstatesQuery();
   const { data: bulbs } = useGetAllBulbsQuery();
-  const [schema, setSchema] = useState<FormSchema>(null!);
+  const [schema, setSchema] = useState<PopUpSchema>(null!);
   const [actionValue, setActionValue] = useState<Record<string, any>>({});
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const openedActionsCategory = 'illumination';
-
-  const [chosenAction, setChosenAction] = React.useState('');
 
   const carbonFootprint = useMemo(
     () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
@@ -97,16 +85,16 @@ export default function DashboardPage() {
   }
 
   function onChangeChosenAction(value: string) {
-    setChosenAction(value);
+    setActionValue({ ...actionValue, illumination: value });
   }
 
-  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } =
+  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
     useFormEngine(schemaActionPage);
 
   return (
     <PopUpContext.Provider
       value={{
-        onOpen: (schema: FormSchema) => {
+        onOpen: (schema: PopUpSchema) => {
           setSchema(schema);
           popUpActions.onOpen();
         },
@@ -133,7 +121,7 @@ export default function DashboardPage() {
             </Heading>
             <ActionPanel
               surveyAnswers={surveyAnswers}
-              chosenAction={chosenAction}
+              chosenAction={actionValue.illumination}
               onChangeChosenAction={onChangeChosenAction}
             />
             <Box w="100%" pt="14" align="right" pr="5">
@@ -167,13 +155,29 @@ export default function DashboardPage() {
                 </GridItem>
               </Grid>
             </Stack>
-            {openedActionsCategory === 'illumination' && chosenAction != '' && (
-              <ChangeOfIllumination realEstateId={realEstateId} bulbId={chosenAction} />
+            {openedActionsCategory === 'illumination' && actionValue.illumination && (
+              <ChangeOfIllumination realEstateId={realEstateId} bulbId={actionValue.illumination} />
             )}
           </Box>
-          <PopUp isOpen={popUpActions.isOpen} onClose={popUpActions.onClose} schema={schema} />
+          {schema ? (
+            <PopUp
+              isOpen={popUpActions.isOpen}
+              onClose={(value) => {
+                setActionValue({ ...actionValue, [schema]: value });
+                popUpActions.onClose();
+              }}
+              schema={schema}
+              initialValue={actionValue[schema]}
+            />
+          ) : null}
         </Flex>
-        <Modal isOpen={popUpActionPlan.isOpen} onClose={popUpActionPlan.onClose} size={'xl'}>
+        <Modal
+          isOpen={popUpActionPlan.isOpen}
+          onClose={() => {
+            setValue({});
+            popUpActionPlan.onClose();
+          }}
+          size={'xl'}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Action Plan ({cityName})</ModalHeader>
@@ -193,42 +197,68 @@ export default function DashboardPage() {
               </FormLabel>
 
               <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
-                <AccordionItem>
-                  <h2>
-                    <AccordionButton _expanded={{ bg: 'gray.50' }}>
-                      <Box flex="1" textAlign="left">
-                        <Icon as={IoBulbOutline} /> Illumination
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel>
-                    <Text pb="5">
-                      {actionValue.illumination !== '' ? (
-                        <>
+                {actionValue.illumination ? (
+                  <AccordionItem>
+                    <h2>
+                      <AccordionButton _expanded={{ bg: 'gray.50' }}>
+                        <Box flex="1" textAlign="left">
+                          <Icon as={IoBulbOutline} /> Illumination
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel>
+                      <Text pb="5">
+                        <Flex align="center">
                           <Checkbox defaultIsChecked>
                             {actionValue.illumination === '00000000-0000-0000-0000-000000000003'
                               ? 'LED 800 lum'
                               : 'LED 1300 lum'}
                           </Checkbox>
-                        </>
-                      ) : (
-                        ''
-                      )}
-                    </Text>
-                  </AccordionPanel>
-                </AccordionItem>
+                          <PriorityBadge priority={actionValue?.led?.choosePriority} />
+                          <Spacer />
+                          {actionValue?.led?.chooseTimePeriod?.startDate &&
+                          actionValue?.led?.chooseTimePeriod?.endDate ? (
+                            <Text color="gray.500">
+                              {actionValue?.led?.chooseTimePeriod?.startDate?.toDateString()} -{' '}
+                              {actionValue?.led?.chooseTimePeriod?.endDate?.toDateString()}
+                            </Text>
+                          ) : null}
+                        </Flex>
+                      </Text>
+                    </AccordionPanel>
+                  </AccordionItem>
+                ) : (
+                  <Text pb="5">No actions selected</Text>
+                )}
               </Accordion>
             </ModalBody>
             <ModalFooter>
               <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
                 <GridItem colSpan={2}>
-                  <Button onClick={popUpActionPlan.onClose} width="40" colorScheme="gray">
+                  <Button
+                    onClick={() => {
+                      setValue({});
+                      popUpActionPlan.onClose();
+                    }}
+                    width="40"
+                    colorScheme="gray">
                     Cancel
                   </Button>
                 </GridItem>
                 <GridItem colStart={4} colEnd={6}>
-                  <Button position="absolute" width="40" right="6" colorScheme="green">
+                  <Button
+                    onClick={() => {
+                      // TODO: create project
+                      if (verifySubmit()) {
+                        console.log('Saving actions');
+                        popUpActionPlan.onClose();
+                      }
+                    }}
+                    position="absolute"
+                    width="40"
+                    right="6"
+                    colorScheme="green">
                     Save
                   </Button>
                 </GridItem>
@@ -239,4 +269,29 @@ export default function DashboardPage() {
       </ActionPlanContext.Provider>
     </PopUpContext.Provider>
   );
+}
+
+function PriorityBadge({ priority }: { priority?: 'low' | 'medium' | 'high' }) {
+  switch (priority) {
+    case 'low':
+      return (
+        <Badge variant="outline" colorScheme="green" ml={1}>
+          Low
+        </Badge>
+      );
+    case 'medium':
+      return (
+        <Badge variant="subtle" colorScheme="green" ml={1}>
+          Medium
+        </Badge>
+      );
+    case 'high':
+      return (
+        <Badge variant="solid" colorScheme="green" ml={1}>
+          High
+        </Badge>
+      );
+    default:
+      return null;
+  }
 }
