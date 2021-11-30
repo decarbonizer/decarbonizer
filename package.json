@@ -10,6 +10,7 @@
     "start": "lerna run start --stream --scope \"@decarbonizer/{frontend,backend}\"",
     "test": "lerna run test",
     "lint": "lerna run lint",
+    "tsc": "lerna run tsc",
     "format": "lerna run format",
     "format-quick": "pretty-quick --staged",
     "uninstall-packages": "npx rimraf **/node_modules && npx rimraf **/package-lock.json"

@@ -1,40 +1,22 @@
 import {
   AccordionButton,
+  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Box,
-  RadioGroup,
-  VStack,
-  Text,
-  Icon,
-  Radio,
-  AccordionIcon,
   Button,
   Flex,
   Heading,
+  Icon,
+  Radio,
+  RadioGroup,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { IoBulbOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
-import { FormSchema } from '../../form-engine/formSchema';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
-import { priorityOptions } from '../../pages/dashboard/pop-up/PopUp';
-
-const schemaLED: FormSchema = {
-  pages: [
-    {
-      elements: [
-        {
-          id: 'chooseTimePeriod',
-          required: false,
-          label: '📆 Choose time period',
-          type: 'dates',
-        },
-        priorityOptions,
-      ],
-    },
-  ],
-};
 
 export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswerValue>;
@@ -88,7 +70,7 @@ export default function ActionPanelIlluminationItem({
           <Button
             colorScheme="primary"
             onClick={() => {
-              popUp.onOpen(schemaLED);
+              popUp.onOpen('led');
             }}>
             Details..
           </Button>
