@@ -18,13 +18,19 @@ import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
+import { priorityOptions } from '../../pages/dashboard/pop-up/PopUp';
 
 const schemaLED: FormSchema = {
   pages: [
     {
       elements: [
-        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'chooseTimePeriod',
+          required: false,
+          label: '📆 Choose time period',
+          type: 'dates',
+        },
+        priorityOptions,
       ],
     },
   ],

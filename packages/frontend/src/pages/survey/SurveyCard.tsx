@@ -8,7 +8,6 @@ export interface SurveyCardProps {
   survey: Survey;
   realEstateId: string;
   onNewClick?(): void;
-  onViewAnswersClick?(): void;
 }
 
 export default function SurveyCard({ survey, realEstateId, onNewClick }: SurveyCardProps) {
