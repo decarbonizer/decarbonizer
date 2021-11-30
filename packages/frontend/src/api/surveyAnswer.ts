@@ -40,7 +40,11 @@ export interface RealEstateFootprintCalculation {
 export interface IlluminationCalculation {
   typeOfBulb: string;
   amountOfIlluminants: number;
-  powerConsumption: number;
+  costs: number;
+  overallFootprint: number;
+}
+
+export interface GeneralCalculation {
   costs: number;
   overallFootprint: number;
 }
@@ -51,11 +55,19 @@ export interface IlluminationCalculation {
  * @param bulbs All bulbs.
  * @returns overall carbon footprint.
  */
-export function caclucateOverallFootprint(answers: Array<SurveyAnswer>, bulbs: Array<Bulb>): number {
-  return answers.reduce<number>((acc, answer) => acc + calculateFootprintDependingOnType(answer, bulbs), 0);
+export function calculateOverallFootprint(answers: Array<SurveyAnswer>, bulbs: Array<Bulb>): GeneralCalculation {
+  return answers.reduce<GeneralCalculation>(
+    (acc, answer) => {
+      const calculation = calculateFootprintDependingOnType(answer, bulbs);
+      acc.costs += calculation.costs;
+      acc.overallFootprint += calculation.overallFootprint;
+      return acc;
+    },
+    { costs: 0, overallFootprint: 0 },
+  );
 }
 
-export function caclucateFootprintPerRealEstate(
+export function calculateFootprintPerRealEstate(
   answers: Array<SurveyAnswer>,
   bulbs: Array<Bulb>,
   realEstates: Array<RealEstate>,
@@ -63,72 +75,102 @@ export function caclucateFootprintPerRealEstate(
   const result: Array<RealEstateFootprintCalculation> = [];
   for (let i = 0; i < realEstates.length; i++) {
     const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstates[i]._id);
-    const footprintValue = +caclucateOverallFootprint(realEstateAnswers, bulbs).toFixed(1);
-    result.push({ realEstateName: realEstates[i].cityName, footprint: footprintValue });
+    const footprintValue = calculateOverallFootprint(realEstateAnswers, bulbs);
+    result.push({ realEstateName: realEstates[i].cityName, footprint: +footprintValue.overallFootprint.toFixed(1) });
   }
 
   return result;
 }
 
-function caclucateIlluminationFootprint(
+function calculateIlluminationFootprint(
   answer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   bulbs: Array<Bulb>,
-): number {
+): GeneralCalculation {
   const germanyEF = 0.624; //standard emission factor for Germany
   const usedBulb = bulbs.find((bulb) => bulb._id == answer.value.bulbType);
 
   if (usedBulb !== null) {
-    return answer.value.lampCount * usedBulb!.productionKwh * answer.value.avgIlluminationPerDay * germanyEF;
+    //calculate how many times bulbs need to be changed
+    const illuminationPerYear = answer.value.avgIlluminationPerDay * 24 * 365;
+    const timesToChange = Math.ceil(illuminationPerYear / usedBulb!.lifetimeInHours); //8760 hours in a year
+    const footprint = usedBulb!.productionKwh * 24 * 365 * germanyEF + answer.value.lampCount;
+    const costs = usedBulb!.costInEuro * answer.value.lampCount * timesToChange;
+    return { costs: costs, overallFootprint: footprint };
   } else {
-    return 0;
+    return { costs: 0, overallFootprint: 0 };
   }
 }
 
-function calculateFootprintDependingOnType(answer: SurveyAnswer, bulbs: Array<Bulb>): number {
+export function changeBulbs(
+  answers: SurveyAnswer<object>[],
+  bulbs: Bulb[],
+  bulbId: string,
+): { newIllumination: IlluminationCalculation; reduction: GeneralCalculation } {
+  const answersToUpdate: SurveyAnswer<object>[] = [];
+
+  const updatedAnswers = answers.filter((answer) => {
+    if (isSurveyAnswerType('illumination', answer)) {
+      if (answer.value.isIlluminantExchangeable) {
+        //update only those bulbs that can be changed
+        if (answer.value.bulbType != bulbId) {
+          //update only those bulbs that need to be changed
+          const newObject = Object.assign({}, answer);
+          newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
+          return newObject;
+        } else {
+          answersToUpdate.push(answer);
+        }
+      } else {
+        answersToUpdate.push(answer);
+      }
+    }
+  });
+  const costAndFootprintBeforeChange: GeneralCalculation = calculateOverallFootprint(answersToUpdate, bulbs);
+  const newIllumination: IlluminationCalculation = calculateIllumitationData(updatedAnswers, bulbs, bulbId);
+  const costAndFootprintReduction: GeneralCalculation = {
+    costs: costAndFootprintBeforeChange.costs - newIllumination.costs,
+    overallFootprint: costAndFootprintBeforeChange.overallFootprint - newIllumination.overallFootprint,
+  };
+
+  return { newIllumination: newIllumination, reduction: costAndFootprintReduction };
+}
+
+function calculateFootprintDependingOnType(answer: SurveyAnswer, bulbs: Array<Bulb>): GeneralCalculation {
   if (isSurveyAnswerType('illumination', answer)) {
-    return caclucateIlluminationFootprint(answer, bulbs);
+    return calculateIlluminationFootprint(answer, bulbs);
   } else {
     //TODO define cases for other survey types
-    return 0;
+    return { costs: 0, overallFootprint: 0 };
   }
 }
 
 export function calculateIllumitationData(
   answers: Array<SurveyAnswer>,
   bulbs: Array<Bulb>,
-): Array<IlluminationCalculation> {
-  const result: Array<IlluminationCalculation> = [];
+  bulbId: string,
+): IlluminationCalculation {
   const germanyEF = 0.624;
-
-  for (let i = 0; i < bulbs.length; i++) {
-    const bulbName = bulbs[i].name;
-    const productionKwh = bulbs[i].productionKwh;
-    const costPerBulb = bulbs[i].costInEuro;
-    const answersWithSpecificBulbs = answers.filter((answer) =>
-      isSurveyAnswerType('illumination', answer) ? answer.value.bulbType == bulbs[i]._id : false,
+  const usedBulb = bulbs.find((bulb) => bulb._id == bulbId);
+  if (usedBulb) {
+    const bulbName = usedBulb.name;
+    const costPerBulb = usedBulb.costInEuro;
+    return answers.reduce<IlluminationCalculation>(
+      (acc, answer) => {
+        if (isSurveyAnswerType('illumination', answer)) {
+          const illuminationPerYear = answer.value.avgIlluminationPerDay * 24 * 365;
+          const timesToChange = Math.ceil(illuminationPerYear / usedBulb!.lifetimeInHours);
+          const footprint = usedBulb!.productionKwh * 24 * 365 * germanyEF + answer.value.lampCount;
+          const costs = costPerBulb * answer.value.lampCount * timesToChange;
+          acc.amountOfIlluminants += answer.value.lampCount;
+          acc.costs += costs;
+          acc.overallFootprint += footprint;
+          return acc;
+        }
+        return acc;
+      },
+      { typeOfBulb: bulbName, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
     );
-    if (answersWithSpecificBulbs.length > 0) {
-      const amountOfIlluminants = answersWithSpecificBulbs.reduce<number>(
-        (acc, answer) => (isSurveyAnswerType('illumination', answer) ? acc + answer.value.lampCount : acc),
-        0,
-      );
-      const costs = +(costPerBulb * amountOfIlluminants).toFixed(1);
-      const powerConsumption = answersWithSpecificBulbs.reduce<number>(
-        (acc, answer) =>
-          isSurveyAnswerType('illumination', answer)
-            ? acc + answer.value.avgIlluminationPerDay * productionKwh * answer.value.lampCount
-            : acc,
-        0,
-      );
-      const overallFootprint = +(powerConsumption * germanyEF).toFixed(1);
-      result.push({
-        typeOfBulb: bulbName,
-        amountOfIlluminants: amountOfIlluminants,
-        costs: costs,
-        powerConsumption: +powerConsumption.toFixed(1),
-        overallFootprint: overallFootprint,
-      });
-    }
+  } else {
+    return { typeOfBulb: bulbId, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 };
   }
-  return result;
 }

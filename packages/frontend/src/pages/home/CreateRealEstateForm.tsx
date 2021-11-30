@@ -1,6 +1,6 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
-import { Box, Grid, GridItem } from '@chakra-ui/layout';
+import { Box, Grid, GridItem } from '@chakra-ui/react';
 import {
   Button,
   NumberDecrementStepper,

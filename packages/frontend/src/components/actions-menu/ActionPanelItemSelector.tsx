@@ -5,12 +5,27 @@ export interface ActionPanelItemSelectorProps {
   surveyId: string;
   elements: Array<SurveyAnswer>;
   description?: string;
+  chosenAction: string;
+  onChangeChosenAction: (value: string) => void;
 }
 
-export default function ActionPanelItemSelector({ surveyId, elements, description }: ActionPanelItemSelectorProps) {
+export default function ActionPanelItemSelector({
+  surveyId,
+  elements,
+  description,
+  chosenAction,
+  onChangeChosenAction,
+}: ActionPanelItemSelectorProps) {
   switch (surveyId) {
     case 'illumination':
-      return <ActionPanelIlluminationItem elements={elements.map((e) => e.value) as any} description={description} />;
+      return (
+        <ActionPanelIlluminationItem
+          elements={elements.map((e) => e.value) as any}
+          description={description}
+          chosenAction={chosenAction}
+          onChangeChosenAction={onChangeChosenAction}
+        />
+      );
     default:
       throw new Error('Unkown SurveyId');
   }
