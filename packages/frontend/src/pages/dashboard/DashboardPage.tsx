@@ -53,7 +53,7 @@ const schemaActionPage: FormSchema = {
   pages: [
     {
       elements: [
-        { id: 'projectName', required: false, label: 'New project', type: 'string' },
+        { id: 'projectName', required: false, label: 'New project', type: 'string', placeholder: 'Project Name' },
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
       ],
     },
@@ -235,7 +235,7 @@ export default function DashboardPage() {
             </ModalBody>
             <ModalFooter>
               <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={2} colStart={2}>
                   <Button
                     onClick={() => {
                       setValue({});

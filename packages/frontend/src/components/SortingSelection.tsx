@@ -1,4 +1,4 @@
-import { HStack, Select, Text } from '@chakra-ui/react';
+import { Grid, Select, Text } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 
 export type SortDirection = 'asc' | 'desc';
@@ -8,9 +8,14 @@ export interface SortCategory {
   display: string;
 }
 
+export interface SortValueChangedArgs {
+  sortDirection: SortDirection;
+  sortCategory: string;
+}
+
 export interface SortingSelectionProps {
   sortingCategories: Array<SortCategory>;
-  onChange: (e: { sortDirection: SortDirection; sortCategory: string }) => void;
+  onChange: (e: SortValueChangedArgs) => void;
 }
 
 export default function SortingSelection({ sortingCategories, onChange }: SortingSelectionProps) {
@@ -28,20 +33,24 @@ export default function SortingSelection({ sortingCategories, onChange }: Sortin
   };
 
   return (
-    <HStack w="100%" justify="flex-start" spacing="3">
-      <Text>Sort by Category: </Text>
-      <Select onChange={(e) => handleCategoryChange(e)} maxW="xl" placeholder="Select category">
-        {sortingCategories.map((category) => (
-          <option key={category.value} value={category.value}>
-            {category.display}
-          </option>
-        ))}
-      </Select>
-      <Text minWidth="max-content">Sort by: </Text>
-      <Select maxW="48" onChange={(e) => handleDirectionChange(e)}>
-        <option value="asc">Ascending ⬆</option>
-        <option value="desc">Descending ⬇</option>
-      </Select>
-    </HStack>
+    <>
+      <Grid templateColumns="repeat(3, 1fr)" gap={1} w="100%">
+        <Text w="100%">Sort by Category:</Text>
+        <Select onChange={(e) => handleCategoryChange(e)} w="100%">
+          {sortingCategories.map((category) => (
+            <option key={category.value} value={category.value}>
+              {category.display}
+            </option>
+          ))}
+        </Select>
+      </Grid>
+      <Grid templateColumns="repeat(3, 1fr)" gap={1} w="100%">
+        <Text w="100%">Sort by:</Text>
+        <Select onChange={(e) => handleDirectionChange(e)} w="100%">
+          <option value="asc">Ascending ⬆</option>
+          <option value="desc">Descending ⬇</option>
+        </Select>
+      </Grid>
+    </>
   );
 }
