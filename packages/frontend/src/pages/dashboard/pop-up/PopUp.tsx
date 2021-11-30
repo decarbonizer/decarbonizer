@@ -107,46 +107,37 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
   };
 
   return (
-    <>
-      <Modal isOpen={props.isOpen} onClose={props.onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add some details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormEngine
-              schema={props.schema}
-              value={value}
-              page={page}
-              ruleEvaluationResults={ruleEvaluationResults}
-              validationErrors={validationErrors}
-              onValueChanged={handleValueChanged}
-            />
-          </ModalBody>
+    <Modal isOpen={props.isOpen} onClose={props.onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Add some details</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormEngine
+            schema={props.schema}
+            value={value}
+            page={page}
+            ruleEvaluationResults={ruleEvaluationResults}
+            validationErrors={validationErrors}
+            onValueChanged={handleValueChanged}
+          />
+        </ModalBody>
 
-          <ModalFooter>
-            <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
-              <GridItem colSpan={2}>
-                <Button onClick={props.onClose} width="40" colorScheme="gray">
-                  Cancel
-                </Button>
-              </GridItem>
-              <GridItem colStart={4} colEnd={6}>
-                <Button
-                  onClick={submitSurvey}
-                  // isDisabled={""}
-                  // isLoading={""}
-                  position="absolute"
-                  width="40"
-                  right="6"
-                  colorScheme="green">
-                  Save
-                </Button>
-              </GridItem>
-            </Grid>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+        <ModalFooter>
+          <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
+            <GridItem colSpan={2}>
+              <Button onClick={props.onClose} width="40" colorScheme="gray">
+                Cancel
+              </Button>
+            </GridItem>
+            <GridItem colStart={4} colEnd={6}>
+              <Button onClick={submitSurvey} position="absolute" width="40" right="6" colorScheme="green">
+                Save
+              </Button>
+            </GridItem>
+          </Grid>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
