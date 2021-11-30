@@ -24,17 +24,27 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import PopUp from './pop-up/PopUp';
+import { useParams } from 'react-router';
+import {
+  useGetAllSurveyAnswersForRealEstateQuery,
+  useGetAllRealEstatesQuery,
+  useGetAllBulbsQuery,
+} from '../../store/api';
 import { useHistory, useParams } from 'react-router';
 import IlluminationOverviewComponent from './illumination/IlluminationOverview';
 import { useGetAllRealEstatesQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import CarbonFootprintComponent from './CarbonFootprint';
-import ComparisonComponent from './Comparison';
-import { NetZeroComponent } from './NetZero';
+import ComparisonComponent from './ComparisonOfFootprints';
 import { DashboardPageParams } from '../../routes';
 import ActionPanel from '../../components/actions-menu/ActionPanel';
+import React, { useMemo } from 'react';
+import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
+import { Bulb } from '../../api/bulb';
 import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import { useState } from 'react';
+import NetZeroCard from './NetZeroCard';
+import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { ActionPlanContext } from '../action-plan/ActionPlanContext';
 import FormEngine from '../../form-engine/FormEngine';
 import { IoBulbOutline } from 'react-icons/io5';
@@ -67,11 +77,28 @@ export default function DashboardPage() {
 
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: realEstates } = useGetAllRealEstatesQuery();
+  const { data: bulbs } = useGetAllBulbsQuery();
   const [schema, setSchema] = useState<FormSchema>(null!);
   const [actionValue, setActionValue] = useState<Record<string, any>>({});
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const openedActionsCategory = 'illumination';
+
+  const [chosenAction, setChosenAction] = React.useState('');
+
+  const carbonFootprint = useMemo(
+    () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
+    [surveyAnswers, bulbs],
+  );
+
+  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
+    const value = calculateOverallFootprint(answers, bulbs);
+    return +value.overallFootprint.toFixed(1);
+  }
+
+  function onChangeChosenAction(value: string) {
+    setChosenAction(value);
+  }
 
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } =
     useFormEngine(schemaActionPage);
@@ -104,7 +131,11 @@ export default function DashboardPage() {
             <Heading as="h3" color="darkgreen" pb={10}>
               Decarbonizer
             </Heading>
-            <ActionPanel surveyAnswers={surveyAnswers} />
+            <ActionPanel
+              surveyAnswers={surveyAnswers}
+              chosenAction={chosenAction}
+              onChangeChosenAction={onChangeChosenAction}
+            />
             <Box w="100%" pt="14" align="right" pr="5">
               <Button
                 colorScheme="primary"
@@ -129,18 +160,16 @@ export default function DashboardPage() {
                   <ComparisonComponent />
                 </GridItem>
                 <GridItem rowSpan={1} w="80">
-                  <CarbonFootprintComponent realEstateId={realEstateId} />
+                  <CarbonFootprintComponent heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
                 </GridItem>
                 <GridItem rowSpan={1} w="80">
-                  <NetZeroComponent />
+                  <NetZeroCard />
                 </GridItem>
               </Grid>
-              {openedActionsCategory === 'illumination' && (
-                <Grid>
-                  <IlluminationOverviewComponent realEstateId={realEstateId} />
-                </Grid>
-              )}
             </Stack>
+            {openedActionsCategory === 'illumination' && chosenAction != '' && (
+              <ChangeOfIllumination realEstateId={realEstateId} bulbId={chosenAction} />
+            )}
           </Box>
           <PopUp isOpen={popUpActions.isOpen} onClose={popUpActions.onClose} schema={schema} />
         </Flex>

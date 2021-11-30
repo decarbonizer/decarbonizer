@@ -17,6 +17,7 @@ import { IoBulbOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
+import { priorityOptions } from '../../pages/dashboard/pop-up/PopUp';
 import { ActionPlanContext } from '../../pages/action-plan/ActionPlanContext';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
 
@@ -24,8 +25,13 @@ const schemaLED: FormSchema = {
   pages: [
     {
       elements: [
-        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        {
+          id: 'chooseTimePeriod',
+          required: false,
+          label: '📆 Choose time period',
+          type: 'dates',
+        },
+        priorityOptions,
       ],
     },
   ],
@@ -34,9 +40,16 @@ const schemaLED: FormSchema = {
 export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswerValue>;
   description?: string;
+  chosenAction: string;
+  onChangeChosenAction: (value: string) => void;
 }
 
-export default function ActionPanelIlluminationItem({ elements, description }: ActionPanelIlluminationItemProps) {
+export default function ActionPanelIlluminationItem({
+  elements,
+  description,
+  chosenAction,
+  onChangeChosenAction,
+}: ActionPanelIlluminationItemProps) {
   const shouldContainLEDAction = elements.some(
     (surveyAnswer) =>
       (surveyAnswer.bulbType === '00000000-0000-0000-0000-000000000000' ||
@@ -67,9 +80,7 @@ export default function ActionPanelIlluminationItem({ elements, description }: A
         {shouldContainLEDAction && (
           <VStack>
             <Heading size="sm">Change to LED lamps</Heading>
-            <RadioGroup
-              onChange={(value) => actionPlan.setActionValue({ ...actionPlan.actionValue, illumination: value })}
-              value={actionPlan.actionValue.illumination}>
+            <RadioGroup onChange={onChangeChosenAction} value={chosenAction}>
               <VStack align="flex-start">
                 <Radio value="00000000-0000-0000-0000-000000000003"> LED 800 lum </Radio>
                 <Radio value="00000000-0000-0000-0000-000000000002"> LED 1300 lum </Radio>

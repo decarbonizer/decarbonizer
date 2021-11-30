@@ -11,21 +11,37 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import FormEngine from '../../../form-engine/FormEngine';
-import { FormSchema } from '../../../form-engine/formSchema';
+import { FormSchema, SingleChoiceSelectFormSchemaElement } from '../../../form-engine/formSchema';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 
+export const priorityOptions: SingleChoiceSelectFormSchemaElement = {
+  id: 'choosePriority',
+  required: false,
+  label: '📊 Choose priority',
+  type: 'single-choice-select',
+  options: [
+    {
+      value: 'high',
+      display: 'High',
+    },
+    {
+      value: 'medium',
+      display: 'Medium',
+    },
+    {
+      value: 'low',
+      display: 'Low',
+    },
+  ],
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaRunTime: FormSchema = {
   pages: [
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        {
-          id: 'choosePriority',
-          required: false,
-          label: 'Choose priority',
-          type: 'single-choice-select',
-          options: '',
-        },
+        priorityOptions,
         {
           id: 'inOut',
           required: false,
@@ -44,7 +60,7 @@ const schemaBrightnessSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        priorityOptions,
       ],
     },
   ],
@@ -55,7 +71,7 @@ const schemaMotionSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        priorityOptions,
         { id: 'numberOfHours', required: false, label: 'How long the illuminant should be active?', type: 'number' },
       ],
     },
@@ -67,7 +83,7 @@ const schemaTimeSensor: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        priorityOptions,
         {
           id: 'chooseTimeOn',
           required: false,
@@ -90,20 +106,28 @@ const schemaSwitches: FormSchema = {
     {
       elements: [
         { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-        { id: 'choosePriority', required: false, label: 'Choose priority', type: 'single-choice-select', options: '' },
+        priorityOptions,
       ],
     },
   ],
 };
 
 export default function PopUp(props: { isOpen: boolean; onClose: () => void; schema: FormSchema }) {
-  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } =
+  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
     useFormEngine(schemaRunTime);
 
   const submitSurvey = () => {
+    // TODO: recalcuation if necessary
     if (verifySubmit()) {
       console.log('submit');
     }
+
+    props.onClose();
+  };
+
+  const handleClose = () => {
+    setValue({});
+    props.onClose();
   };
 
   return (
@@ -111,7 +135,7 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add some details</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton onClick={handleClose} />
         <ModalBody>
           <FormEngine
             schema={props.schema}
@@ -126,13 +150,13 @@ export default function PopUp(props: { isOpen: boolean; onClose: () => void; sch
         <ModalFooter>
           <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
             <GridItem colSpan={2}>
-              <Button onClick={props.onClose} width="40" colorScheme="gray">
+              <Button onClick={handleClose} width="40" colorScheme="gray">
                 Cancel
               </Button>
             </GridItem>
             <GridItem colStart={4} colEnd={6}>
               <Button onClick={submitSurvey} position="absolute" width="40" right="6" colorScheme="green">
-                Save
+                Apply
               </Button>
             </GridItem>
           </Grid>
