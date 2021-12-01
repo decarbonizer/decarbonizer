@@ -43,7 +43,7 @@ export default function SurveyCard({ survey, realEstateId, onNewClick }: SurveyC
           <Button variant="ghost" size="sm" isDisabled={surveyAnswers?.length === 0 ?? true} onClick={onOpen}>
             Past Answers
           </Button>
-          <SurveyAnswerDrawer isOpen={isOpen} onClose={onClose} surveyAnswers={surveyAnswers} />
+          {surveyAnswers && <SurveyAnswerDrawer isOpen={isOpen} onClose={onClose} surveyAnswers={surveyAnswers} />}
           <Button size="sm" colorScheme="primary" onClick={onNewClick}>
             Answer
           </Button>
