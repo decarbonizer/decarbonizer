@@ -3,14 +3,16 @@ import { ReactNode } from 'react';
 
 export interface CardProps extends BoxProps {
   children?: ReactNode;
+  border?: string;
+  borderColor?: string;
 }
 
-export default function Card({ children, ...rest }: CardProps) {
+export default function Card({ children, border, borderColor, ...rest }: CardProps) {
   return (
     <Box
-      border="1px"
+      border={border ?? '1px'}
       bg="white"
-      borderColor="gray.100"
+      borderColor={borderColor ?? 'gray.100'}
       rounded="md"
       shadow="lg"
       transition="all 250ms"

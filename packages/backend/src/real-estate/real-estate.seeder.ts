@@ -29,6 +29,8 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
         _id: '00000000-0000-0000-0000-000000000002',
         cityName: 'Munich',
         description: 'The entire building except for a small area in the 4th floor.',
+        imageUrl:
+          'https://images.unsplash.com/photo-1516715651727-95fa73e9799c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&w=640&q=426',
         employees: 1168,
         area: 4000,
       },
