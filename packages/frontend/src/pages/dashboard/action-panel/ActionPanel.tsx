@@ -1,16 +1,9 @@
 import { Heading, Accordion, VStack, AccordionItem, AccordionPanel, Icon } from '@chakra-ui/react';
-import { SurveyAnswer } from '../../api/surveyAnswer';
-import { knownActionCategories } from '../../data/actions/action';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
 import { ActionAccordionItem } from './ActionAccordionItem';
+import { knownActionCategories } from '../../../data/actions/action';
 
-export interface ActionPanelProps {
-  surveyAnswers: Array<SurveyAnswer> | undefined;
-  chosenAction: string;
-  onChangeChosenAction: (value: string) => void;
-}
-
-export default function ActionPanel({ surveyAnswers, chosenAction, onChangeChosenAction }: ActionPanelProps) {
+export default function ActionPanel() {
   return (
     <VStack align="flex-start" w="100%">
       <Heading as="h2" size="lg" pb="5">

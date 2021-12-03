@@ -1,6 +1,7 @@
 import { ComponentType } from 'react';
 import { FormSchema } from '../../form-engine/formSchema';
 import { KnownSurveyId } from '../surveys/survey';
+import { ChangeBulbsActionInlineAnswerValue } from './illumination/changeBulbsAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
 
 export interface ActionCategory {
@@ -36,13 +37,31 @@ export interface Action {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  inlineSchema: FormSchema;
+  schema: FormSchema;
   /**
    * If available, declares a form schema which can be used for collecting additional information
    * for the action.
    * (This form schema is typically displayed in a "Fill Details") dialog.
    */
-  optionalValuesSchema?: FormSchema;
+  detailsSchema?: FormSchema;
+}
+
+/**
+ * Groups the answers of an action inside of a single object.
+ * Basically meant as a container type which contains the different form engine results.
+ */
+export interface ActionAnswerValues<
+  TValue extends object = object,
+  TDetailsValue extends object | undefined = object | undefined,
+> {
+  value: TValue;
+  detailsValue?: TDetailsValue;
 }
 
 export const knownActionCategories = [illuminationActionsCategory];
+
+export type ActionsToActionAnswerMap = {
+  changeBulbs: ActionAnswerValues<ChangeBulbsActionInlineAnswerValue>;
+};
+
+export type KnownActionId = keyof ActionsToActionAnswerMap;

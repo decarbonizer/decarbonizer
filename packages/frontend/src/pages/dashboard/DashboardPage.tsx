@@ -32,10 +32,9 @@ import {
   useGetAllRealEstatesQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
 } from '../../store/api';
-import CarbonFootprintComponent from './CarbonFootprint';
 import ComparisonComponent from './ComparisonOfFootprints';
 import { DashboardPageParams, routes } from '../../routes';
-import ActionPanel from '../../components/actions-menu/ActionPanel';
+import ActionPanel from './action-panel/ActionPanel';
 import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
@@ -43,13 +42,14 @@ import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import NetZeroCard from './NetZeroCard';
 import ChangeOfIllumination from './illumination/ChangeOfIllumination';
-import { ActionPlanContext } from '../action-plan/ActionPlanContext';
+import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
 import FormEngine from '../../form-engine/FormEngine';
 import { IoBulbOutline } from 'react-icons/io5';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import { FormLabel } from '@chakra-ui/form-control';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
+import CarbonFootprintCard from './shared/CarbonFootprintCard';
 
 const schemaActionPage: FormSchema = {
   pages: [
@@ -71,7 +71,7 @@ export default function DashboardPage() {
   const { data: realEstates } = useGetAllRealEstatesQuery();
   const { data: bulbs } = useGetAllBulbsQuery();
   const [schema, setSchema] = useState<PopUpSchema>(null!);
-  const [actionValue, setActionValue] = useState<Record<string, any>>({});
+  const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const history = useHistory();
 
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
@@ -113,7 +113,7 @@ export default function DashboardPage() {
   }
 
   function onChangeChosenAction(value: string) {
-    setActionValue({ ...actionValue, illumination: value });
+    // setActionAnswers({ ...filledActionAnswers, illumination: value });
   }
 
   return (
@@ -124,7 +124,7 @@ export default function DashboardPage() {
           popUpActions.onOpen();
         },
       }}>
-      <ActionPlanContext.Provider value={{ actionValue: actionValue, setActionValue: setActionValue }}>
+      <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
         <Flex h="100%">
           <Flex
             as="aside"
@@ -142,11 +142,7 @@ export default function DashboardPage() {
             borderColor="gray.200"
             shadow="xl"
             zIndex="100">
-            <ActionPanel
-              surveyAnswers={surveyAnswers}
-              chosenAction={actionValue.illumination}
-              onChangeChosenAction={onChangeChosenAction}
-            />
+            <ActionPanel />
             <Box w="100%" pt="14" align="right" pr="5">
               <Button
                 colorScheme="primary"
@@ -171,26 +167,29 @@ export default function DashboardPage() {
                   <ComparisonComponent />
                 </GridItem>
                 <GridItem rowSpan={1} w="80">
-                  <CarbonFootprintComponent heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
+                  <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
                 </GridItem>
                 <GridItem rowSpan={1} w="80">
                   <NetZeroCard />
                 </GridItem>
               </Grid>
             </Stack>
-            {openedActionsCategory === 'illumination' && actionValue.illumination && (
-              <ChangeOfIllumination realEstateId={realEstateId} bulbId={actionValue.illumination} />
+            {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (
+              <ChangeOfIllumination
+                realEstateId={realEstateId}
+                bulbId={filledActionAnswers.changeBulbs.values.value.newBulb}
+              />
             )}
           </Box>
           {schema ? (
             <PopUp
               isOpen={popUpActions.isOpen}
               onClose={(value) => {
-                setActionValue({ ...actionValue, [schema]: value });
+                // setActionAnswers({ ...filledActionAnswers, [schema]: value });
                 popUpActions.onClose();
               }}
               schema={schema}
-              initialValue={actionValue[schema]}
+              initialValue={filledActionAnswers[schema]}
             />
           ) : null}
         </Flex>
@@ -219,8 +218,8 @@ export default function DashboardPage() {
                 Selected Actions
               </FormLabel>
 
-              <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
-                {actionValue.illumination ? (
+              {/* <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
+                {filledActionAnswers.illumination ? (
                   <AccordionItem>
                     <h2>
                       <AccordionButton _expanded={{ bg: 'gray.50' }}>
@@ -234,17 +233,17 @@ export default function DashboardPage() {
                       <Text pb="5">
                         <Flex align="center">
                           <Checkbox defaultIsChecked>
-                            {actionValue.illumination === '00000000-0000-0000-0000-000000000003'
+                            {filledActionAnswers.illumination === '00000000-0000-0000-0000-000000000003'
                               ? 'LED 800 lum'
                               : 'LED 1300 lum'}
                           </Checkbox>
-                          <PriorityBadge priority={actionValue?.led?.choosePriority} />
+                          <PriorityBadge priority={filledActionAnswers?.led?.choosePriority} />
                           <Spacer />
-                          {actionValue?.led?.chooseTimePeriod?.startDate &&
-                          actionValue?.led?.chooseTimePeriod?.endDate ? (
+                          {filledActionAnswers?.led?.chooseTimePeriod?.startDate &&
+                          filledActionAnswers?.led?.chooseTimePeriod?.endDate ? (
                             <Text color="gray.500">
-                              {actionValue?.led?.chooseTimePeriod?.startDate?.toDateString()} -{' '}
-                              {actionValue?.led?.chooseTimePeriod?.endDate?.toDateString()}
+                              {filledActionAnswers?.led?.chooseTimePeriod?.startDate?.toDateString()} -{' '}
+                              {filledActionAnswers?.led?.chooseTimePeriod?.endDate?.toDateString()}
                             </Text>
                           ) : null}
                         </Flex>
@@ -254,7 +253,7 @@ export default function DashboardPage() {
                 ) : (
                   <Text pb="5">No actions selected</Text>
                 )}
-              </Accordion>
+              </Accordion> */}
             </ModalBody>
             <ModalFooter>
               <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
@@ -289,7 +288,7 @@ export default function DashboardPage() {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </ActionPlanContext.Provider>
+      </ActionPanelContext.Provider>
     </PopUpContext.Provider>
   );
 }

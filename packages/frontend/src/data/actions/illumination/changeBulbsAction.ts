@@ -7,12 +7,12 @@ export const changeBulbsAction: Action = {
   icon: AiOutlineBulb,
   description: 'Upgrading the light bulbs in your office may have a positive effect on your carbon footprint.',
   forSurvey: 'illumination',
-  inlineSchema: {
+  schema: {
     pages: [
       {
         elements: [
           {
-            id: 'changeBulbsToBulb',
+            id: 'newBulb',
             type: 'single-choice',
             required: false,
             options: 'bulbs',
@@ -22,3 +22,7 @@ export const changeBulbsAction: Action = {
     ],
   },
 };
+
+export interface ChangeBulbsActionInlineAnswerValue {
+  newBulb: string;
+}

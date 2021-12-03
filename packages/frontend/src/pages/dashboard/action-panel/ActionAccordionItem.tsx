@@ -1,13 +1,15 @@
 import { AccordionItem, AccordionPanel, Icon, Text, IconButton, Tooltip, SkeletonText } from '@chakra-ui/react';
-import range from 'lodash-es/range';
 import { FaCog } from 'react-icons/fa';
 import { GrClear } from 'react-icons/gr';
-import { Action } from '../../data/actions/action';
-import FormEngine from '../../form-engine/FormEngine';
-import { useFormEngine } from '../../form-engine/useFormEngine';
-import { useFormEngineChoiceOptionProviders } from '../../form-engine/useFormEngineChoiceProviders';
+import { Action, KnownActionId } from '../../../data/actions/action';
+import FormEngine from '../../../form-engine/FormEngine';
+import { useFormEngine } from '../../../form-engine/useFormEngine';
+import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { MouseEvent } from 'react';
+import { MouseEvent, useContext, useEffect } from 'react';
+import { ActionPanelContext } from './actionPanelContext';
+import { ActionAnswerBase } from '../../../api/actionAnswer';
+import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
 
 export interface ActionAccordionItemProps {
@@ -17,9 +19,11 @@ export interface ActionAccordionItemProps {
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { isLoading, providers } = useFormEngineChoiceOptionProviders();
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
-    action.inlineSchema,
+    action.schema,
   );
   const isFilledOut = !isEmpty(value);
+
+  useFilledActionAnswerSync(action, value);
 
   const handleClearClick = (e: MouseEvent) => {
     setValue({});
@@ -28,6 +32,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
 
   const handleDetailsClick = (e: MouseEvent) => {
     alert('Todo.');
+    e.preventDefault();
   };
 
   return (
@@ -45,6 +50,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
                 aria-label="Clear"
                 icon={<Icon as={GrClear} />}
                 onClick={handleClearClick}
+                isDisabled={!isFilledOut}
               />
             </Tooltip>
             <Tooltip hasArrow label="Additional Options...">
@@ -54,6 +60,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
                 aria-label="Additional Options..."
                 icon={<Icon as={FaCog} />}
                 onClick={handleDetailsClick}
+                isDisabled={!isFilledOut}
               />
             </Tooltip>
           </>
@@ -67,7 +74,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
           range(3).map((i) => <SkeletonText key={i} mb="2" />)
         ) : (
           <FormEngine
-            schema={action.inlineSchema}
+            schema={action.schema}
             value={value}
             page={page}
             choiceOptionProviders={providers}
@@ -78,5 +85,36 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
         )}
       </AccordionPanel>
     </AccordionItem>
+  );
+}
+
+/**
+ * Whenever the user fills the action's form with valid data (i.e. data that's non-empty),
+ * synchronizes that filled data with the page-global React context which holds the currently
+ * filled out action answers.
+ * Clears the value when the user clears the accordion.
+ */
+function useFilledActionAnswerSync(action: Action, value: object) {
+  const { filledActionAnswers, setFilledActionAnswers } = useContext(ActionPanelContext);
+
+  useEffect(
+    () => {
+      const newActionAnswer: ActionAnswerBase | undefined = isEmpty(value)
+        ? undefined
+        : {
+            actionId: action.id as KnownActionId,
+            values: {
+              value,
+              detailsValue: undefined, // TODO: Populate from modal.
+            },
+          };
+
+      setFilledActionAnswers({
+        ...filledActionAnswers,
+        [action.id]: newActionAnswer,
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [action, value],
   );
 }
