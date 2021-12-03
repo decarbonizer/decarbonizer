@@ -3,8 +3,6 @@ import { ReactNode } from 'react';
 
 export interface CardProps extends BoxProps {
   children?: ReactNode;
-  border?: string;
-  borderColor?: string;
 }
 
 export default function Card({ children, ...rest }: CardProps) {
