@@ -7,12 +7,12 @@ export interface CardProps extends BoxProps {
   borderColor?: string;
 }
 
-export default function Card({ children, border, borderColor, ...rest }: CardProps) {
+export default function Card({ children, ...rest }: CardProps) {
   return (
     <Box
-      border={border ?? '1px'}
+      border="1px"
       bg="white"
-      borderColor={borderColor ?? 'gray.100'}
+      borderColor="gray.100"
       rounded="md"
       shadow="lg"
       transition="all 250ms"
