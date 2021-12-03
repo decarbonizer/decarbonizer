@@ -13,7 +13,7 @@ export default function DefaultFormControlLayout({ element, children }: DefaultF
 
   return (
     <FormControl isRequired={element.required} isInvalid={validationErrors.length > 0}>
-      <FormLabel fontWeight="semibold">{element.label}</FormLabel>
+      {element.label && <FormLabel fontWeight="semibold">{element.label}</FormLabel>}
       {children}
       {element.helperText && <FormHelperText whiteSpace="pre-line">{element.helperText}</FormHelperText>}
       {validationErrors.map((error, index) => (

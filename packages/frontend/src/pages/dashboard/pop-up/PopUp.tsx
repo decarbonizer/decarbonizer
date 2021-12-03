@@ -118,6 +118,7 @@ const schemaTimeSensor: FormSchema = {
     },
   ],
 };
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const schemaSwitches: FormSchema = {
   pages: [

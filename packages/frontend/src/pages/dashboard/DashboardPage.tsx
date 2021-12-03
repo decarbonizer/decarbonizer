@@ -132,8 +132,9 @@ export default function DashboardPage() {
             justify="flex-start"
             align="center"
             pos="sticky"
-            minW="350"
-            maxW="350"
+            minW="450"
+            maxW="450"
+            h="100%"
             paddingTop="8"
             paddingBottom="8"
             bg="gray.50"
@@ -296,27 +297,21 @@ export default function DashboardPage() {
   );
 }
 
-function PriorityBadge({ priority }: { priority?: 'low' | 'medium' | 'high' }) {
-  switch (priority) {
-    case 'low':
-      return (
-        <Badge variant="outline" colorScheme="green" ml={1}>
-          Low
-        </Badge>
-      );
-    case 'medium':
-      return (
-        <Badge variant="subtle" colorScheme="green" ml={1}>
-          Medium
-        </Badge>
-      );
-    case 'high':
-      return (
-        <Badge variant="solid" colorScheme="green" ml={1}>
-          High
-        </Badge>
-      );
-    default:
-      return null;
-  }
+function PriorityBadge({ priority = 'medium' }: { priority?: 'low' | 'medium' | 'high' }) {
+  const badgeProps = {
+    low: {
+      variant: 'outline',
+      children: 'Low',
+    },
+    medium: {
+      variant: 'subtle',
+      children: 'Medium',
+    },
+    high: {
+      variant: 'solid',
+      children: 'High',
+    },
+  };
+
+  return <Badge ml={1} colorScheme="primary" {...badgeProps[priority]} />;
 }
