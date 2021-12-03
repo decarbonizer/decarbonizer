@@ -125,7 +125,7 @@ export default function DashboardPage() {
         },
       }}>
       <ActionPlanContext.Provider value={{ actionValue: actionValue, setActionValue: setActionValue }}>
-        <Flex minH="100%">
+        <Flex h="100%">
           <Flex
             as="aside"
             direction="column"
@@ -135,16 +135,13 @@ export default function DashboardPage() {
             minW="450"
             maxW="450"
             h="100%"
-            paddingTop="8"
-            paddingBottom="8"
+            px="4"
+            py="8"
             bg="gray.50"
             border="1px"
             borderColor="gray.200"
             shadow="xl"
             zIndex="100">
-            <Heading as="h3" color="darkgreen" pb={10}>
-              Decarbonizer
-            </Heading>
             <ActionPanel
               surveyAnswers={surveyAnswers}
               chosenAction={actionValue.illumination}

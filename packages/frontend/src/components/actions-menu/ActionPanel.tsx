@@ -12,7 +12,7 @@ export interface ActionPanelProps {
 
 export default function ActionPanel({ surveyAnswers, chosenAction, onChangeChosenAction }: ActionPanelProps) {
   return (
-    <VStack minW="80%" maxW="80%" align="flex-start">
+    <VStack align="flex-start" w="100%">
       <Heading as="h2" size="lg" pb="5">
         Take Actions
       </Heading>

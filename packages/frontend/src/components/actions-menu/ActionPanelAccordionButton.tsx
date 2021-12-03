@@ -12,8 +12,8 @@ export default function ActionPanelAccordionButton({ icon, title, badge, buttons
   return (
     <AccordionButton>
       <HStack w="100%">
-        {icon}
         {badge}
+        {icon}
         <Text>{title}</Text>
         <Spacer />
         {buttons}

@@ -8,6 +8,7 @@ import { useFormEngine } from '../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
 import { MouseEvent } from 'react';
+import isEmpty from 'lodash-es/isEmpty';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -18,6 +19,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
     action.inlineSchema,
   );
+  const isFilledOut = !isEmpty(value);
 
   const handleClearClick = (e: MouseEvent) => {
     setValue({});
@@ -33,6 +35,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
       <ActionPanelAccordionButton
         title={action.name}
         icon={<Icon as={action.icon} />}
+        badge={isFilledOut ? <Text>✅</Text> : ''}
         buttons={
           <>
             <Tooltip hasArrow label="Clear">
