@@ -1,7 +1,6 @@
-import { Heading, Accordion, VStack, AccordionItem, AccordionPanel, Icon } from '@chakra-ui/react';
-import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { ActionAccordionItem } from './ActionAccordionItem';
+import { Heading, Accordion, VStack } from '@chakra-ui/react';
 import { knownActionCategories } from '../../../data/actions/action';
+import ActionGroupAccordionItem from './ActionGroupAccordionItem';
 
 export default function ActionPanel() {
   return (
@@ -11,16 +10,7 @@ export default function ActionPanel() {
       </Heading>
       <Accordion minW="100%" allowToggle>
         {knownActionCategories.map((actionCategory) => (
-          <AccordionItem key={actionCategory.forSurvey} maxW="100%">
-            <ActionPanelAccordionButton icon={<Icon as={actionCategory.icon} />} title={actionCategory.name} />
-            <AccordionPanel pr="0">
-              <Accordion allowToggle>
-                {actionCategory.actions.map((action) => (
-                  <ActionAccordionItem key={action.id} action={action} />
-                ))}
-              </Accordion>
-            </AccordionPanel>
-          </AccordionItem>
+          <ActionGroupAccordionItem key={actionCategory.forSurvey} actionCategory={actionCategory} />
         ))}
       </Accordion>
     </VStack>
