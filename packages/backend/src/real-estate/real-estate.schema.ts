@@ -24,6 +24,13 @@ export class RealEstate extends DbObject {
 
   @Prop()
   @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @MaxLength(10_000)
+  imageUrl?: string;
+
+  @Prop()
+  @ApiProperty()
   @IsNumber()
   @Min(1)
   employees: number;

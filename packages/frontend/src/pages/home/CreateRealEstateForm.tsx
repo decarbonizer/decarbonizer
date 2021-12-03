@@ -12,28 +12,39 @@ import {
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
-import { useCreateRealEstateMutation } from '../../store/api';
+import { RealEstate } from '../../api/realEstate';
+import { useCreateRealEstateMutation, useUpdateRealEstateMutation } from '../../store/api';
 
 interface CreateRealEstateFormProps {
   onClose(): void;
+  realEstate?: RealEstate;
 }
 
-export default function CreateRealEstateForm({ onClose }: CreateRealEstateFormProps) {
-  const [cityName, setCityName] = useState('');
-  const [description, setDescription] = useState('');
-  const [employees, setEmployees] = useState(1);
-  const [area, setArea] = useState(1);
+export default function CreateRealEstateForm({ onClose, realEstate }: CreateRealEstateFormProps) {
+  const [cityName, setCityName] = useState(realEstate?.cityName ?? '');
+  const [description, setDescription] = useState(realEstate?.description ?? '');
+  const [employees, setEmployees] = useState(realEstate?.employees ?? 1);
+  const [area, setArea] = useState(realEstate?.area ?? 1);
   const [error, setError] = useState('');
   const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
+  const [updateRealEstate, { isLoading: isUpdatingRealEstate }] = useUpdateRealEstateMutation();
 
   const addNewRealEstate = async () => {
     try {
-      await createRealEstate({
-        cityName: cityName,
-        description: description,
-        employees: employees,
-        area: area,
-      }).unwrap();
+      if (realEstate) {
+        await updateRealEstate({
+          id: realEstate._id,
+          body: { cityName: cityName, description: description, employees: employees, area: area },
+        });
+      } else {
+        await createRealEstate({
+          cityName: cityName,
+          description: description,
+          employees: employees,
+          area: area,
+        }).unwrap();
+      }
+
       onClose();
     } catch (e) {
       setError('An error occured while creating a new real estate. Please check all fields and try again.');

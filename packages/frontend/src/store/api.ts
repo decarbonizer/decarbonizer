@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Bulb } from '../api/bulb';
-import { RealEstate } from '../api/realEstate';
+import { RealEstate, RealEstateUpdate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
@@ -46,6 +46,21 @@ export const api = createApi({
         url: 'api/v1/realEstates',
         method: 'POST',
         body,
+      }),
+      invalidatesTags: ['RealEstate'],
+    }),
+    updateRealEstate: builder.mutation<RealEstate, { id: string; body: RealEstateUpdate }>({
+      query: ({ id, body }) => ({
+        url: `/api/v1/realEstates/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['RealEstate'],
+    }),
+    deleteRealEstate: builder.mutation<void, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/realEstates/${id}`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['RealEstate'],
     }),
@@ -113,6 +128,8 @@ export const {
 
   useGetAllRealEstatesQuery,
   useCreateRealEstateMutation,
+  useDeleteRealEstateMutation,
+  useUpdateRealEstateMutation,
 
   useGetAllSurveyAnswersQuery,
   useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
