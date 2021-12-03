@@ -22,6 +22,8 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
         _id: '00000000-0000-0000-0000-000000000001',
         cityName: 'Berlin',
         description: '4 floors of a 14-floored building.',
+        imageUrl:
+          'https://images.unsplash.com/photo-1587330979470-3595ac045ab0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
         employees: 618,
         area: 3000,
       },
@@ -30,7 +32,7 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
         cityName: 'Munich',
         description: 'The entire building except for a small area in the 4th floor.',
         imageUrl:
-          'https://images.unsplash.com/photo-1516715651727-95fa73e9799c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&w=640&q=426',
+          'https://images.unsplash.com/photo-1595867818082-083862f3d630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
         employees: 1168,
         area: 4000,
       },
@@ -38,6 +40,8 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
         _id: '00000000-0000-0000-0000-000000000003',
         cityName: 'Stuttgart',
         description: '3 floors of a 5-floored building.',
+        imageUrl:
+          'https://images.unsplash.com/photo-1587196824241-2a289b7d1693?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
         employees: 450,
         area: 2000,
       },

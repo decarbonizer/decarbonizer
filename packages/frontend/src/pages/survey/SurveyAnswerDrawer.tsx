@@ -14,24 +14,17 @@ import {
   IconButton,
   Tooltip,
   useDisclosure,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
   VStack,
   HStack,
   Badge,
   Icon,
+  useToast,
 } from '@chakra-ui/react';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { IoBulbOutline } from 'react-icons/io5';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDeleteSurveyAnswerMutation } from '../../store/api';
 import { useParams } from 'react-router';
 import { SurveysPageParams } from '../../routes';
@@ -39,6 +32,7 @@ import SurveyView from './SurveyView';
 import { knownSurveys } from '../../data/surveys/survey';
 import SortingSelection, { SortCategory, SortValueChangedArgs } from '../../components/SortingSelection';
 import orderBy from 'lodash-es/orderBy';
+import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 
 export interface SurveyAnswerDrawer {
   isOpen: boolean;
@@ -54,8 +48,16 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
     sortDirection: 'asc',
   });
   const [activeSurveyAnswer, setActiveSurveyAnswer] = useState<SurveyAnswer | undefined>(undefined);
-  const onConfirm = (surveyAnswer) => {
-    deleteSurveyAnswerMutation({ id: surveyAnswer._id });
+  const toast = useToast();
+  const onConfirm = async (surveyAnswer) => {
+    await deleteSurveyAnswerMutation({ id: surveyAnswer._id });
+    toast({
+      title: 'Survey answer deleted.',
+      description: 'Survey answer has been successfully deleted.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   const { realEstateId } = useParams<SurveysPageParams>();
@@ -115,6 +117,8 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
                       isOpen={isOpenAlert}
                       onCancel={onCloseAlert}
                       onConfirm={() => onConfirm(surveyAnswer)}
+                      deleteTextHeader="Delete survey answer?"
+                      deleteTextDialog="Are you sure you want to delete your survey answer?"
                     />
                   </Td>
                 </Tr>
@@ -137,34 +141,5 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
         </DrawerContent>
       </Drawer>
     </Drawer>
-  );
-}
-
-interface DeleteAlertDialogProps {
-  isOpen: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
-}
-
-function DeleteAlertDialog({ isOpen, onCancel, onConfirm }: DeleteAlertDialogProps) {
-  const cancelRef = useRef<any>();
-
-  return (
-    <AlertDialog motionPreset="slideInBottom" leastDestructiveRef={cancelRef} onClose={onCancel} isOpen={isOpen}>
-      <AlertDialogOverlay />
-      <AlertDialogContent>
-        <AlertDialogHeader>Delete survey answer?</AlertDialogHeader>
-        <AlertDialogCloseButton />
-        <AlertDialogBody>Are you sure you want to delete your survey answer?</AlertDialogBody>
-        <AlertDialogFooter>
-          <Button ref={cancelRef} onClick={onCancel}>
-            No, keep it.
-          </Button>
-          <Button colorScheme="red" ml={3} onClick={onConfirm}>
-            Yes, delete it.
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }

@@ -49,6 +49,13 @@ export const api = createApi({
       }),
       invalidatesTags: ['RealEstate'],
     }),
+    deleteRealEstate: builder.mutation<void, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/realEstates/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['RealEstate'],
+    }),
 
     getAllSurveyAnswersForRealEstateAndSurvey: builder.query<
       Array<SurveyAnswer>,
@@ -113,6 +120,7 @@ export const {
 
   useGetAllRealEstatesQuery,
   useCreateRealEstateMutation,
+  useDeleteRealEstateMutation,
 
   useGetAllSurveyAnswersQuery,
   useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
