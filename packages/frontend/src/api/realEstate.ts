@@ -1,4 +1,4 @@
-import { ApiObject } from './apiObject';
+import { ApiObject, ApiObjectUpdate } from './apiObject';
 
 export interface RealEstate extends ApiObject {
   cityName: string;
@@ -6,4 +6,12 @@ export interface RealEstate extends ApiObject {
   imageUrl?: string;
   employees: number;
   area: number;
+}
+
+export interface RealEstateUpdate extends ApiObjectUpdate {
+  cityName?: string;
+  description?: string;
+  imageUrl?: string;
+  employees?: number;
+  area?: number;
 }

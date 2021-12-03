@@ -25,6 +25,7 @@ import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { routes } from '../../routes';
 import { useDeleteRealEstateMutation } from '../../store/api';
+import CreateRealEstateModal from './CreateRealEstateModal';
 
 export interface CityCard {
   realEstate: RealEstate;
@@ -33,6 +34,7 @@ export interface CityCard {
 export default function CityCard({ realEstate }: CityCard) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
+  const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const toast = useToast();
 
   const onConfirm = async (city) => {
@@ -77,7 +79,7 @@ export default function CityCard({ realEstate }: CityCard) {
           </Flex>
           <Flex gridColumnStart="3" w="100%" justifyContent="flex-end" pr="2" pt="1">
             <Tooltip label="Edit City" hasArrow>
-              <IconButton aria-label="edit" icon={<FaEdit />} mr="1" />
+              <IconButton aria-label="edit" icon={<FaEdit />} mr="1" onClick={onOpenEditModal} />
             </Tooltip>
             <Tooltip label="Delete City" hasArrow>
               <IconButton aria-label="delete" fontSize="21" icon={<MdDeleteForever />} onClick={onOpenAlert} />
@@ -130,6 +132,7 @@ export default function CityCard({ realEstate }: CityCard) {
           deleteTextHeader={`Delete ${realEstate.cityName}?`}
           deleteTextDialog={`Are you sure you want to delete ${realEstate.cityName}?`}
         />
+        <CreateRealEstateModal isOpen={isOpenEditModal} onClose={onCloseEditModal} realEstate={realEstate} />
       </VStack>
     </Card>
   );

@@ -7,12 +7,13 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RealEstate, RealEstateCreate } from './real-estate.schema';
+import { RealEstate, RealEstateCreate, RealEstateUpdate } from './real-estate.schema';
 import { RealEstateService } from './real-estate.service';
 
 @Controller('api/v1/realEstates')
@@ -38,6 +39,12 @@ export class RealEstateController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND })
   async get(@Param('id', ParseUUIDPipe) id: string) {
     return await this.realEstateService.get(id);
+  }
+
+  @Patch(':id')
+  @ApiResponse({ status: HttpStatus.OK, type: RealEstate })
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() body: RealEstateUpdate) {
+    return await this.realEstateService.update(id, body);
   }
 
   @Delete(':id')
