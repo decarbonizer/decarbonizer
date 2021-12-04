@@ -1,4 +1,13 @@
-import { AccordionItem, AccordionPanel, Icon, Text, IconButton, Tooltip, SkeletonText } from '@chakra-ui/react';
+import {
+  AccordionItem,
+  AccordionPanel,
+  Icon,
+  Text,
+  IconButton,
+  Tooltip,
+  SkeletonText,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { FaCog } from 'react-icons/fa';
 import { GrClear } from 'react-icons/gr';
 import { Action, KnownActionId } from '../../../data/actions/action';
@@ -11,6 +20,7 @@ import { ActionPanelContext } from './actionPanelContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
+import ActionDetailsModal from './ActionDetailsModal';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -22,6 +32,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
     action.schema,
   );
   const isFilledOut = !isEmpty(value);
+  const detailsModalDisclosure = useDisclosure();
 
   useFilledActionAnswerSync(action, value);
 
@@ -31,60 +42,65 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   };
 
   const handleDetailsClick = (e: MouseEvent) => {
-    alert('Todo.');
+    detailsModalDisclosure.onOpen();
     e.preventDefault();
   };
 
   return (
-    <AccordionItem key={action.id}>
-      <ActionPanelAccordionButton
-        title={action.name}
-        icon={<Icon as={action.icon} />}
-        badge={isFilledOut ? <Text>✅</Text> : ''}
-        buttons={
-          <>
-            <Tooltip hasArrow label="Clear">
-              <IconButton
-                variant="ghost"
-                size="sm"
-                aria-label="Clear"
-                icon={<Icon as={GrClear} />}
-                onClick={handleClearClick}
-                isDisabled={!isFilledOut}
-              />
-            </Tooltip>
-            <Tooltip hasArrow label="Additional Options...">
-              <IconButton
-                variant="ghost"
-                size="sm"
-                aria-label="Additional Options..."
-                icon={<Icon as={FaCog} />}
-                onClick={handleDetailsClick}
-                isDisabled={!isFilledOut}
-              />
-            </Tooltip>
-          </>
-        }
-      />
-      <AccordionPanel display="flex" flexDir="column">
-        <Text layerStyle="hint" pb="4">
-          {action.description}
-        </Text>
-        {isLoading ? (
-          range(3).map((i) => <SkeletonText key={i} mb="2" />)
-        ) : (
-          <FormEngine
-            schema={action.schema}
-            value={value}
-            page={page}
-            choiceOptionProviders={providers}
-            ruleEvaluationResults={ruleEvaluationResults}
-            validationErrors={validationErrors}
-            onValueChanged={handleValueChanged}
-          />
-        )}
-      </AccordionPanel>
-    </AccordionItem>
+    <>
+      <AccordionItem key={action.id}>
+        <ActionPanelAccordionButton
+          title={action.name}
+          icon={<Icon as={action.icon} />}
+          badge={isFilledOut ? <Text>✅</Text> : ''}
+          buttons={
+            <>
+              <Tooltip hasArrow label="Clear">
+                <IconButton
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Clear"
+                  icon={<Icon as={GrClear} />}
+                  onClick={handleClearClick}
+                  isDisabled={!isFilledOut}
+                />
+              </Tooltip>
+              <Tooltip hasArrow label="Additional Options...">
+                <IconButton
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Additional Options..."
+                  icon={<Icon as={FaCog} />}
+                  onClick={handleDetailsClick}
+                  isDisabled={!isFilledOut}
+                />
+              </Tooltip>
+            </>
+          }
+        />
+        <AccordionPanel display="flex" flexDir="column">
+          <Text layerStyle="hint" pb="4">
+            {action.description}
+          </Text>
+          {isLoading ? (
+            range(3).map((i) => <SkeletonText key={i} mb="2" />)
+          ) : (
+            <FormEngine
+              schema={action.schema}
+              value={value}
+              page={page}
+              choiceOptionProviders={providers}
+              ruleEvaluationResults={ruleEvaluationResults}
+              validationErrors={validationErrors}
+              onValueChanged={handleValueChanged}
+            />
+          )}
+        </AccordionPanel>
+      </AccordionItem>
+      {detailsModalDisclosure.isOpen && (
+        <ActionDetailsModal isOpen action={action} onClose={detailsModalDisclosure.onClose} />
+      )}
+    </>
   );
 }
 

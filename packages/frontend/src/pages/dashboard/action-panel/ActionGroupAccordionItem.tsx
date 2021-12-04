@@ -16,7 +16,7 @@ export default function ActionGroupAccordionItem({ actionCategory }: ActionGroup
   ).length;
 
   return (
-    <AccordionItem key={actionCategory.forSurvey} maxW="100%">
+    <AccordionItem maxW="100%">
       <ActionPanelAccordionButton
         badge={countOfFilledAnswers > 0 ? <Tag colorScheme="primary">{countOfFilledAnswers}</Tag> : undefined}
         icon={<Icon as={actionCategory.icon} />}

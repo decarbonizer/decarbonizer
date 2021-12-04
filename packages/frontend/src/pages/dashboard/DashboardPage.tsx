@@ -25,7 +25,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import PopUp, { PopUpSchema } from './pop-up/PopUp';
 import { useHistory, useParams } from 'react-router';
 import {
   useGetAllBulbsQuery,
@@ -38,7 +37,6 @@ import ActionPanel from './action-panel/ActionPanel';
 import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
-import { PopUpContext } from './pop-up/PopUpContext';
 import { FormSchema } from '../../form-engine/formSchema';
 import NetZeroCard from './NetZeroCard';
 import ChangeOfIllumination from './illumination/ChangeOfIllumination';
@@ -70,7 +68,6 @@ export default function DashboardPage() {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: realEstates } = useGetAllRealEstatesQuery();
   const { data: bulbs } = useGetAllBulbsQuery();
-  const [schema, setSchema] = useState<PopUpSchema>(null!);
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const history = useHistory();
 
@@ -117,108 +114,90 @@ export default function DashboardPage() {
   }
 
   return (
-    <PopUpContext.Provider
-      value={{
-        onOpen: (schema: PopUpSchema) => {
-          setSchema(schema);
-          popUpActions.onOpen();
-        },
-      }}>
-      <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
-        <Flex h="100%">
-          <Flex
-            as="aside"
-            direction="column"
-            justify="flex-start"
-            align="center"
-            pos="sticky"
-            minW="450"
-            maxW="450"
-            h="100%"
-            px="4"
-            py="8"
-            bg="gray.50"
-            border="1px"
-            borderColor="gray.200"
-            shadow="xl"
-            zIndex="100">
-            <ActionPanel />
-            <Box w="100%" pt="14" align="right" pr="5">
-              <Button
-                colorScheme="primary"
-                onClick={() => {
-                  popUpActionPlan.onOpen();
-                }}>
-                Save Actions
-              </Button>
-            </Box>
-          </Flex>
-          <Box w="100%" grow={1}>
-            <Stack align="center">
-              <Heading as="h1">Dashboard</Heading>
-              <Heading as="h2" size="lg">
-                {cityName}
-              </Heading>
-              <Heading as="h2" size="lg" color="green">
-                Calculating your footprint...
-              </Heading>
-              <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
-                <GridItem rowSpan={2} colSpan={1}>
-                  <ComparisonComponent />
-                </GridItem>
-                <GridItem rowSpan={1} w="80">
-                  <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
-                </GridItem>
-                <GridItem rowSpan={1} w="80">
-                  <NetZeroCard />
-                </GridItem>
-              </Grid>
-            </Stack>
-            {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (
-              <ChangeOfIllumination
-                realEstateId={realEstateId}
-                bulbId={filledActionAnswers.changeBulbs.values.value.newBulb}
-              />
-            )}
+    <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
+      <Flex h="100%">
+        <Flex
+          as="aside"
+          direction="column"
+          justify="flex-start"
+          align="center"
+          pos="sticky"
+          minW="450"
+          maxW="450"
+          h="100%"
+          px="4"
+          py="8"
+          bg="gray.50"
+          border="1px"
+          borderColor="gray.200"
+          shadow="xl"
+          zIndex="100">
+          <ActionPanel />
+          <Box w="100%" pt="14" align="right" pr="5">
+            <Button
+              colorScheme="primary"
+              onClick={() => {
+                popUpActionPlan.onOpen();
+              }}>
+              Save Actions
+            </Button>
           </Box>
-          {schema ? (
-            <PopUp
-              isOpen={popUpActions.isOpen}
-              onClose={(value) => {
-                // setActionAnswers({ ...filledActionAnswers, [schema]: value });
-                popUpActions.onClose();
-              }}
-              schema={schema}
-              initialValue={filledActionAnswers[schema]}
-            />
-          ) : null}
         </Flex>
-        <Modal
-          isOpen={popUpActionPlan.isOpen}
-          onClose={() => {
-            setValue({});
-            popUpActionPlan.onClose();
-          }}
-          size={'xl'}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Action Plan ({cityName})</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <FormEngine
-                schema={schemaActionPage}
-                value={value}
-                page={page}
-                ruleEvaluationResults={ruleEvaluationResults}
-                validationErrors={validationErrors}
-                onValueChanged={handleValueChanged}
-              />
+        <Box w="100%" grow={1}>
+          <Stack align="center">
+            <Heading as="h1">Dashboard</Heading>
+            <Heading as="h2" size="lg">
+              {cityName}
+            </Heading>
+            <Heading as="h2" size="lg" color="green">
+              Calculating your footprint...
+            </Heading>
+            <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
+              <GridItem rowSpan={2} colSpan={1}>
+                <ComparisonComponent />
+              </GridItem>
+              <GridItem rowSpan={1} w="80">
+                <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
+              </GridItem>
+              <GridItem rowSpan={1} w="80">
+                <NetZeroCard />
+              </GridItem>
+            </Grid>
+          </Stack>
+          {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (
+            <ChangeOfIllumination
+              realEstateId={realEstateId}
+              bulbId={filledActionAnswers.changeBulbs.values.value.newBulb}
+            />
+          )}
+        </Box>
+      </Flex>
+      <Modal
+        isOpen={popUpActionPlan.isOpen}
+        onClose={() => {
+          setValue({});
+          popUpActionPlan.onClose();
+        }}
+        size={'xl'}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Action Plan ({cityName})</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormEngine
+              schema={schemaActionPage}
+              value={value}
+              page={page}
+              ruleEvaluationResults={ruleEvaluationResults}
+              validationErrors={validationErrors}
+              onValueChanged={handleValueChanged}
+            />
 
-              <FormLabel fontWeight="semibold" mt={8}>
-                Selected Actions
-              </FormLabel>
+            <FormLabel fontWeight="semibold" mt={8}>
+              Selected Actions
+            </FormLabel>
 
-              {/* <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
+            {/* <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
                 {filledActionAnswers.illumination ? (
                   <AccordionItem>
                     <h2>
@@ -254,42 +233,41 @@ export default function DashboardPage() {
                   <Text pb="5">No actions selected</Text>
                 )}
               </Accordion> */}
-            </ModalBody>
-            <ModalFooter>
-              <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
-                <GridItem colSpan={2} colStart={2}>
-                  <Button
-                    onClick={() => {
-                      setValue({});
+          </ModalBody>
+          <ModalFooter>
+            <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
+              <GridItem colSpan={2} colStart={2}>
+                <Button
+                  onClick={() => {
+                    setValue({});
+                    popUpActionPlan.onClose();
+                  }}
+                  width="40"
+                  colorScheme="gray">
+                  Cancel
+                </Button>
+              </GridItem>
+              <GridItem colStart={4} colEnd={6}>
+                <Button
+                  onClick={() => {
+                    // TODO: create project
+                    if (verifySubmit()) {
+                      console.log('Saving actions');
                       popUpActionPlan.onClose();
-                    }}
-                    width="40"
-                    colorScheme="gray">
-                    Cancel
-                  </Button>
-                </GridItem>
-                <GridItem colStart={4} colEnd={6}>
-                  <Button
-                    onClick={() => {
-                      // TODO: create project
-                      if (verifySubmit()) {
-                        console.log('Saving actions');
-                        popUpActionPlan.onClose();
-                      }
-                    }}
-                    position="absolute"
-                    width="40"
-                    right="6"
-                    colorScheme="green">
-                    Save
-                  </Button>
-                </GridItem>
-              </Grid>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </ActionPanelContext.Provider>
-    </PopUpContext.Provider>
+                    }
+                  }}
+                  position="absolute"
+                  width="40"
+                  right="6"
+                  colorScheme="green">
+                  Save
+                </Button>
+              </GridItem>
+            </Grid>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </ActionPanelContext.Provider>
   );
 }
 

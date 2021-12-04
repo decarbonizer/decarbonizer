@@ -1,16 +1,37 @@
 import { ComponentType } from 'react';
 import { FormSchema } from '../../form-engine/formSchema';
 import { KnownSurveyId } from '../surveys/survey';
-import { ChangeBulbsActionInlineAnswerValue } from './illumination/changeBulbsAction';
+import { ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue } from './illumination/changeBulbsAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
 
+/**
+ * An action category essentially is a group of various actions, enhanced with additional
+ * properties which are used by the UI to render components.
+ */
 export interface ActionCategory {
+  /**
+   * The name of he category.
+   */
   name: string;
+  /**
+   * An optional icon.
+   */
   icon?: ComponentType;
-  forSurvey: KnownSurveyId;
+  /**
+   * The encapsulated actions.
+   */
   actions: Array<Action>;
 }
 
+/**
+ * Defines an action as it is rendered by the frontend.
+ * Actions generally are used to render two forms:
+ * 1) A short inline form for quickly changing between dashboard views (e.g. switching between bulbs).
+ * 2) An optional longer form which can, for example, be rendered in a popup.
+ *
+ * The two forms produce answers (-> an "action answer") which can be processed by the frontend
+ * and sent to the backend.
+ */
 export interface Action {
   /**
    * A unique identifier of the action.
@@ -61,7 +82,7 @@ export interface ActionAnswerValues<
 export const knownActionCategories = [illuminationActionsCategory];
 
 export type ActionsToActionAnswerMap = {
-  changeBulbs: ActionAnswerValues<ChangeBulbsActionInlineAnswerValue>;
+  changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

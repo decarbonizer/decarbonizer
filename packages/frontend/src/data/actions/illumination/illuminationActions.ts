@@ -5,6 +5,5 @@ import { changeBulbsAction } from './changeBulbsAction';
 export const illuminationActionsCategory: ActionCategory = {
   name: 'Illumination',
   icon: GiCeilingLight,
-  forSurvey: 'illumination',
   actions: [changeBulbsAction],
 };

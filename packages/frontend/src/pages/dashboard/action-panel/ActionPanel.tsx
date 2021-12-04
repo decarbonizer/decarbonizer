@@ -9,8 +9,8 @@ export default function ActionPanel() {
         Take Actions
       </Heading>
       <Accordion minW="100%" allowToggle>
-        {knownActionCategories.map((actionCategory) => (
-          <ActionGroupAccordionItem key={actionCategory.forSurvey} actionCategory={actionCategory} />
+        {knownActionCategories.map((actionCategory, i) => (
+          <ActionGroupAccordionItem key={i} actionCategory={actionCategory} />
         ))}
       </Accordion>
     </VStack>
