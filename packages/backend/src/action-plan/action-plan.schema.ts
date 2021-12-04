@@ -1,7 +1,17 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsObject, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDate,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+  ValidateNested,
+} from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';
@@ -24,7 +34,7 @@ export class ActionAnswerValues {
 export class ActionAnswer {
   @ApiProperty()
   @IsString()
-  id: string;
+  actionId: string;
 
   @ApiProperty({ type: ActionAnswerValues })
   @IsObject()
@@ -35,6 +45,22 @@ export class ActionAnswer {
 
 @DbObjectSchema()
 export class ActionPlan extends DbObject {
+  @Prop()
+  @ApiProperty()
+  @IsString()
+  @Length(1, 255)
+  name: string;
+
+  @Prop()
+  @ApiProperty()
+  @IsDate()
+  startDate: Date;
+
+  @Prop()
+  @ApiProperty()
+  @IsDate()
+  endDate: Date;
+
   @Prop({ ref: User.name })
   @ApiProperty()
   @IsUUID('4')

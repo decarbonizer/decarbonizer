@@ -50,7 +50,7 @@ export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDe
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={null!}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Refine your action</ModalHeader>
