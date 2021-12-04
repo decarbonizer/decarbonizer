@@ -4,9 +4,9 @@ import { calculateOverallFootprint, changeBulbs, GeneralCalculation } from '../.
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCosts from './CalculatedCosts';
 import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCosts';
-import CarbonFootprintComponent from '../CarbonFootprint';
 import ComparisonOfCosts from './ComparisonOfCosts';
 import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
+import CarbonFootprintCard from '../shared/CarbonFootprintCard';
 interface ChangeOfIlluminationProps {
   realEstateId: string;
   bulbId: string;
@@ -37,7 +37,7 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
     <SimpleGrid rows={2} gap={6} p="10">
       <SimpleGrid columns={3} gap={6}>
         <ReducedFootprintAndCosts oldCalculation={oldCalculation} reduction={newData.reduction} />
-        <CarbonFootprintComponent
+        <CarbonFootprintCard
           heading={'Reduced footprint'}
           carbonFootprint={oldCalculation.overallFootprint - newData.reduction.overallFootprint}
         />

@@ -13,7 +13,7 @@ export default function SingleChoiceFormEngineControl({
 
   return (
     <DefaultFormControlLayout element={element}>
-      <RadioGroup isDisabled={ruleEvaluationResult.disable} defaultValue={value} onChange={(e) => setValue(e)}>
+      <RadioGroup isDisabled={ruleEvaluationResult.disable} value={value ?? ''} onChange={(e) => setValue(e)}>
         <VStack spacing={2} align="flex-start" ml="4">
           {options.map((option) => (
             <Radio key={option.value} value={option.value}>

@@ -15,14 +15,14 @@ export default function StringFormEngineControl({ element }: FormEngineControlPr
         <Textarea
           isDisabled={ruleEvaluationResult.disable}
           placeholder={element.placeholder}
-          defaultValue={value}
+          value={value}
           onChange={(e) => setValue(e.target.value)}
         />
       ) : (
         <Input
           isDisabled={ruleEvaluationResult.disable}
           placeholder={element.placeholder}
-          defaultValue={value}
+          value={value}
           onChange={(e) => setValue(e.target.value)}
         />
       )}

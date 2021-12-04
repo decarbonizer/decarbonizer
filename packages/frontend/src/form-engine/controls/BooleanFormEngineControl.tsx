@@ -13,7 +13,7 @@ export default function BooleanFormEngineControl({ element }: FormEngineControlP
     <DefaultFormControlLayout element={element}>
       <RadioGroup
         isDisabled={ruleEvaluationResult.disable}
-        defaultValue={defaultValue}
+        value={defaultValue}
         onChange={(e) => setValue(e === true.toString())}>
         <HStack align="flex-start" spacing={5} ml="4">
           <Radio value={true.toString()} defaultChecked={value === true}>

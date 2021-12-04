@@ -13,8 +13,8 @@ export interface FormSchemaPage {
 export interface FormSchemaBaseElement<TType extends string> {
   id: string;
   required: boolean;
-  label: string;
   type: TType;
+  label?: string;
   helperText?: string;
   rules?: Array<FormSchemaElementRule>;
 }
