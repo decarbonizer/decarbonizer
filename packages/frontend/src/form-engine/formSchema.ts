@@ -75,6 +75,10 @@ export interface SingleChoiceFormSchemaElement extends FormSchemaBaseElement<'si
   options: ChoiceOptionSource;
 }
 
+export interface MultiChoiceFormSchemaElement extends FormSchemaBaseElement<'multi-choice'> {
+  options: ChoiceOptionSource;
+}
+
 export interface SingleChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'single-choice-select'> {
   placeholder?: string;
   options: ChoiceOptionSource;
@@ -92,6 +96,7 @@ export type FormSchemaElement =
   | BooleanFormSchemaElement
   | SingleChoiceFormSchemaElement
   | SingleChoiceSelectFormSchemaElement
+  | MultiChoiceFormSchemaElement
   | DatesFormSchemaElement
   | DateTimeFormSchemaElement;
 

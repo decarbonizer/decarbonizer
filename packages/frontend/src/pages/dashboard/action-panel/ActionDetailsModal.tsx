@@ -11,10 +11,13 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useContext } from 'react';
+import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { Action } from '../../../data/actions/action';
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
+import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
+import { DashboardPageParams } from '../../../routes';
 import { ActionPanelContext } from './actionPanelContext';
 
 export interface ActionDetailsModalProps {
@@ -24,6 +27,8 @@ export interface ActionDetailsModalProps {
 }
 
 export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDetailsModalProps) {
+  const { realEstateId } = useParams<DashboardPageParams>();
+  const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const { filledActionAnswers, setFilledActionAnswers } = useContext(ActionPanelContext);
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } = useFormEngine(
     action.detailsSchema!,
@@ -60,6 +65,7 @@ export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDe
             schema={action.detailsSchema!}
             value={value}
             page={page}
+            choiceOptionProviders={providers}
             ruleEvaluationResults={ruleEvaluationResults}
             validationErrors={validationErrors}
             onValueChanged={handleValueChanged}

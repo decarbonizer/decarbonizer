@@ -2,6 +2,10 @@ import { ComponentType } from 'react';
 import { FormSchema } from '../../form-engine/formSchema';
 import { KnownSurveyId } from '../surveys/survey';
 import { ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue } from './illumination/changeBulbsAction';
+import {
+  ChangeRuntimeActionAnswerValue,
+  ChangeRuntimeActionDetailsAnswerValue,
+} from './illumination/changeRuntimeAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
 
 /**
@@ -83,6 +87,7 @@ export const knownActionCategories = [illuminationActionsCategory];
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
+  changeRuntime: ActionAnswerValues<ChangeRuntimeActionAnswerValue, ChangeRuntimeActionDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

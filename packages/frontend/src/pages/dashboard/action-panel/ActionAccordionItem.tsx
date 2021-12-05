@@ -21,13 +21,16 @@ import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
 import ActionDetailsModal from './ActionDetailsModal';
+import { useParams } from 'react-router';
+import { DashboardPageParams } from '../../../routes';
 
 export interface ActionAccordionItemProps {
   action: Action;
 }
 
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
-  const { isLoading, providers } = useFormEngineChoiceOptionProviders();
+  const { realEstateId } = useParams<DashboardPageParams>();
+  const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
     action.schema,
   );
