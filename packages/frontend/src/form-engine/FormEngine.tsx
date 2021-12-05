@@ -18,6 +18,7 @@ export interface FormEngineProps {
   page: number;
   ruleEvaluationResults: FormEngineRuleEvaluationResults;
   validationErrors: FormEngineValidationErrors;
+  isViewOnly: boolean;
   onValueChanged(e: { value: FormEngineValue });
 }
 

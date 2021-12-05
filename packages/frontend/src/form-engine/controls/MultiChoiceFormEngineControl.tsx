@@ -1,8 +1,11 @@
 import { MultiChoiceFormSchemaElement } from '../formSchema';
-import { Checkbox, CheckboxGroup, VStack } from '@chakra-ui/react';
+import { Checkbox, CheckboxGroup, List, ListIcon, ListItem, VStack } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useChoiceOptions, useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
+import { useContext } from 'react';
+import { FormEnginePropsContext } from '../FormEngine';
+import { MdCheckCircle } from 'react-icons/md';
 
 export default function MultiChoiceFormEngineControl({
   element,
@@ -10,10 +13,22 @@ export default function MultiChoiceFormEngineControl({
   const [value, setValue] = useValueProperty<Array<string> | undefined>(element);
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const options = useChoiceOptions(element.options);
-  console.log(element.options);
-  console.log(options);
-  console.log(value);
-  console.log(ruleEvaluationResult);
+  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+
+  if (isViewOnly) {
+    return (
+      <DefaultFormControlLayout element={element}>
+        <List spacing={1}>
+          {value?.map((surveyAnswer, index) => (
+            <ListItem key={index}>
+              <ListIcon as={MdCheckCircle} color="primary" />
+              {value}
+            </ListItem>
+          ))}
+        </List>
+      </DefaultFormControlLayout>
+    );
+  }
   return (
     <DefaultFormControlLayout element={element}>
       <CheckboxGroup
