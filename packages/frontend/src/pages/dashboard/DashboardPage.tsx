@@ -1,30 +1,4 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Badge,
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Icon,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spacer,
-  Stack,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import {
   useGetAllBulbsQuery,
@@ -37,50 +11,26 @@ import ActionPanel from './action-panel/ActionPanel';
 import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
-import { FormSchema } from '../../form-engine/formSchema';
 import NetZeroCard from './NetZeroCard';
 import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
-import FormEngine from '../../form-engine/FormEngine';
-import { IoBulbOutline } from 'react-icons/io5';
-import { useFormEngine } from '../../form-engine/useFormEngine';
-import { FormLabel } from '@chakra-ui/form-control';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
 import CarbonFootprintCard from './shared/CarbonFootprintCard';
 
-const schemaActionPage: FormSchema = {
-  pages: [
-    {
-      elements: [
-        { id: 'projectName', required: false, label: 'New project', type: 'string', placeholder: 'Project Name' },
-        { id: 'chooseTimePeriod', required: false, label: 'Choose time period', type: 'dates' },
-      ],
-    },
-  ],
-};
-
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
-  const popUpActions = useDisclosure();
-  const popUpActionPlan = useDisclosure();
-
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: realEstates } = useGetAllRealEstatesQuery();
   const { data: bulbs } = useGetAllBulbsQuery();
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const history = useHistory();
-
   const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const openedActionsCategory = 'illumination';
-
   const carbonFootprint = useMemo(
     () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
     [surveyAnswers, bulbs],
   );
-
-  const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged, setValue } =
-    useFormEngine(schemaActionPage);
 
   if (!surveyAnswers) {
     return null;
@@ -109,10 +59,6 @@ export default function DashboardPage() {
     return +value.overallFootprint.toFixed(1);
   }
 
-  function onChangeChosenAction(value: string) {
-    // setActionAnswers({ ...filledActionAnswers, illumination: value });
-  }
-
   return (
     <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
       <Flex h="100%">
@@ -133,15 +79,6 @@ export default function DashboardPage() {
           shadow="xl"
           zIndex="100">
           <ActionPanel />
-          <Box w="100%" pt="14" align="right" pr="5">
-            <Button
-              colorScheme="primary"
-              onClick={() => {
-                popUpActionPlan.onOpen();
-              }}>
-              Save Actions
-            </Button>
-          </Box>
         </Flex>
         <Box w="100%" grow={1}>
           <Stack align="center">
@@ -172,120 +109,6 @@ export default function DashboardPage() {
           )}
         </Box>
       </Flex>
-      <Modal
-        isOpen={popUpActionPlan.isOpen}
-        onClose={() => {
-          setValue({});
-          popUpActionPlan.onClose();
-        }}
-        size={'xl'}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Action Plan ({cityName})</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormEngine
-              schema={schemaActionPage}
-              value={value}
-              page={page}
-              ruleEvaluationResults={ruleEvaluationResults}
-              validationErrors={validationErrors}
-              onValueChanged={handleValueChanged}
-            />
-
-            <FormLabel fontWeight="semibold" mt={8}>
-              Selected Actions
-            </FormLabel>
-
-            {/* <Accordion minW="100%" allowToggle allowMultiple defaultIndex={[0]}>
-                {filledActionAnswers.illumination ? (
-                  <AccordionItem>
-                    <h2>
-                      <AccordionButton _expanded={{ bg: 'gray.50' }}>
-                        <Box flex="1" textAlign="left">
-                          <Icon as={IoBulbOutline} /> Illumination
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel>
-                      <Text pb="5">
-                        <Flex align="center">
-                          <Checkbox defaultIsChecked>
-                            {filledActionAnswers.illumination === '00000000-0000-0000-0000-000000000003'
-                              ? 'LED 800 lum'
-                              : 'LED 1300 lum'}
-                          </Checkbox>
-                          <PriorityBadge priority={filledActionAnswers?.led?.choosePriority} />
-                          <Spacer />
-                          {filledActionAnswers?.led?.chooseTimePeriod?.startDate &&
-                          filledActionAnswers?.led?.chooseTimePeriod?.endDate ? (
-                            <Text color="gray.500">
-                              {filledActionAnswers?.led?.chooseTimePeriod?.startDate?.toDateString()} -{' '}
-                              {filledActionAnswers?.led?.chooseTimePeriod?.endDate?.toDateString()}
-                            </Text>
-                          ) : null}
-                        </Flex>
-                      </Text>
-                    </AccordionPanel>
-                  </AccordionItem>
-                ) : (
-                  <Text pb="5">No actions selected</Text>
-                )}
-              </Accordion> */}
-          </ModalBody>
-          <ModalFooter>
-            <Grid templateColumns="repeat(5, 1fr)" gap={4} paddingTop={4}>
-              <GridItem colSpan={2} colStart={2}>
-                <Button
-                  onClick={() => {
-                    setValue({});
-                    popUpActionPlan.onClose();
-                  }}
-                  width="40"
-                  colorScheme="gray">
-                  Cancel
-                </Button>
-              </GridItem>
-              <GridItem colStart={4} colEnd={6}>
-                <Button
-                  onClick={() => {
-                    // TODO: create project
-                    if (verifySubmit()) {
-                      console.log('Saving actions');
-                      popUpActionPlan.onClose();
-                    }
-                  }}
-                  position="absolute"
-                  width="40"
-                  right="6"
-                  colorScheme="green">
-                  Save
-                </Button>
-              </GridItem>
-            </Grid>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </ActionPanelContext.Provider>
   );
-}
-
-function PriorityBadge({ priority = 'medium' }: { priority?: 'low' | 'medium' | 'high' }) {
-  const badgeProps = {
-    low: {
-      variant: 'outline',
-      children: 'Low',
-    },
-    medium: {
-      variant: 'subtle',
-      children: 'Medium',
-    },
-    high: {
-      variant: 'solid',
-      children: 'High',
-    },
-  };
-
-  return <Badge ml={1} colorScheme="primary" {...badgeProps[priority]} />;
 }

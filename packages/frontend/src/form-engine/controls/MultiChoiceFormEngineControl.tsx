@@ -10,10 +10,7 @@ export default function MultiChoiceFormEngineControl({
   const [value, setValue] = useValueProperty<Array<string> | undefined>(element);
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const options = useChoiceOptions(element.options);
-  console.log(element.options);
-  console.log(options);
-  console.log(value);
-  console.log(ruleEvaluationResult);
+
   return (
     <DefaultFormControlLayout element={element}>
       <CheckboxGroup

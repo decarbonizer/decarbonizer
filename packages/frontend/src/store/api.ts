@@ -4,6 +4,7 @@ import { RealEstate, RealEstateUpdate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
+import { ActionPlan, ActionPlanCreate } from '../api/actionPlan';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -19,7 +20,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['RealEstate', 'SurveyAnswer'],
+  tagTypes: ['ActionPlans', 'RealEstate', 'SurveyAnswer'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResult, LoginPost>({
       query: (body) => ({
@@ -118,6 +119,15 @@ export const api = createApi({
       }),
       invalidatesTags: ['SurveyAnswer'],
     }),
+
+    createActionPlan: builder.mutation<ActionPlan, { realEstateId: string; body: ActionPlanCreate }>({
+      query: ({ realEstateId, body }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['ActionPlans'],
+    }),
   }),
 });
 
@@ -138,4 +148,6 @@ export const {
   useCreateSurveyAnswerMutation,
   useUpdateSurveyAnswerMutation,
   useDeleteSurveyAnswerMutation,
+
+  useCreateActionPlanMutation,
 } = api;
