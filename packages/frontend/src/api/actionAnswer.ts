@@ -6,9 +6,13 @@ export interface ActionAnswerBase<T extends ActionAnswerValues = ActionAnswerVal
   values: T;
 }
 
-export interface ActionAnswer<T extends ActionAnswerValues> extends ApiObject, ActionAnswerBase<T> {}
+export interface ActionAnswer<T extends ActionAnswerValues = ActionAnswerValues>
+  extends ApiObject,
+    ActionAnswerBase<T> {}
 
-export interface ActionAnswerCreate<T extends ActionAnswerValues> extends ApiObjectCreate, ActionAnswerBase<T> {}
+export interface ActionAnswerCreate<T extends ActionAnswerValues = ActionAnswerValues>
+  extends ApiObjectCreate,
+    ActionAnswerBase<T> {}
 
 /**
  * Evaluates whether the given survey answer relates to a known survey.

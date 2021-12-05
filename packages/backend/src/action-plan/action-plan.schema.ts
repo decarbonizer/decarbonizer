@@ -54,11 +54,13 @@ export class ActionPlan extends DbObject {
   @Prop()
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   startDate: Date;
 
   @Prop()
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   endDate: Date;
 
   @Prop({ ref: User.name })
