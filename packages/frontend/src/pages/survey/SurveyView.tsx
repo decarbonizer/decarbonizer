@@ -34,7 +34,7 @@ export interface SurveyViewProps {
 export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyViewProps) {
   const survey = knownSurveys[surveyId];
   const toast = useToast();
-  const { providers, isLoading } = useFormEngineChoiceOptionProviders();
+  const { providers, isLoading } = useFormEngineChoiceOptionProviders(realEstateId);
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
   const {

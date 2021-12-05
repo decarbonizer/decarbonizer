@@ -12,6 +12,7 @@ import { FormEngineControlProps } from './controls/types';
 import { useRuleEvaluationResultForElement } from './internals/hooks';
 import DatesFormEngineControl from './controls/DatesFormEngineControl';
 import DateTimeFormEngineControl from './controls/DateTimeFormEngineControl';
+import MultiChoiceFormEngineControl from './controls/MultiChoiceFormEngineControl';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
@@ -21,6 +22,7 @@ const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlPro
   ['number-unit']: NumberUnitFormEngineControl,
   ['single-choice']: SingleChoiceFormEngineControl,
   ['single-choice-select']: SingleChoiceSelectFormEngineControl,
+  ['multi-choice']: MultiChoiceFormEngineControl,
   ['dates']: DatesFormEngineControl,
   ['date-time']: DateTimeFormEngineControl,
 };
