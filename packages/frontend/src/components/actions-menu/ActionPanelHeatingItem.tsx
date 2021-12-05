@@ -17,8 +17,6 @@ import { IoBulbOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { PopUpContext } from '../../pages/dashboard/pop-up/PopUpContext';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
-import { ActionPanelFormEngineContext } from '../../pages/dashboard/ActionPanelFormEngineContext';
-import FormEngine from '../../form-engine/FormEngine';
 
 export interface ActionPanelIlluminationItemProps {
   elements: Array<IlluminationSurveyAnswerValue>;
@@ -40,7 +38,6 @@ export default function ActionPanelIlluminationItem({
       surveyAnswer.isIlluminantExchangeable,
   );
   const popUp = useContext(PopUpContext);
-  const actionPanelFormEngine = useContext(ActionPanelFormEngineContext);
 
   return (
     <AccordionItem maxW="100%">
@@ -60,21 +57,13 @@ export default function ActionPanelIlluminationItem({
         </Text>
         {shouldContainLEDAction && (
           <VStack>
-            <Heading size="sm">Change to LED lamps</Heading>
+            <Heading size="sm">Switch to heat pump (with green electricity)</Heading>
             <RadioGroup onChange={onChangeChosenAction} value={chosenAction}>
               <VStack align="flex-start">
-                <Radio value="00000000-0000-0000-0000-000000000003"> LED 800 lum </Radio>
-                <Radio value="00000000-0000-0000-0000-000000000002"> LED 1300 lum </Radio>
+                <Radio value="00000000-0000-0000-0000-000000000004"> LED 800 lum </Radio>
+                <Radio value="00000000-0000-0000-0000-000000000005"> LED 1300 lum </Radio>
               </VStack>
             </RadioGroup>
-            <FormEngine
-              schema={actionPanelFormEngine.actionPanelFormEngine.schema}
-              value={actionPanelFormEngine.actionPanelFormEngine.value}
-              page={1}
-              ruleEvaluationResults={actionPanelFormEngine.actionPanelFormEngine.ruleEvaluationResults}
-              validationErrors={actionPanelFormEngine.actionPanelFormEngine.validationErrors}
-              onValueChanged={actionPanelFormEngine.actionPanelFormEngine.handleValueChanged}
-            />
           </VStack>
         )}
         <Flex justifyContent="right" paddingTop="5">

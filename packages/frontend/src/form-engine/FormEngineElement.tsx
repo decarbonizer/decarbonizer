@@ -12,6 +12,7 @@ import { FormEngineControlProps } from './controls/types';
 import { useRuleEvaluationResultForElement } from './internals/hooks';
 import DatesFormEngineControl from './controls/DatesFormEngineControl';
 import DateTimeFormEngineControl from './controls/DateTimeFormEngineControl';
+import CheckboxFormEngineControl from './controls/CheckboxFormEngineControl';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
   ['string']: StringFormEngineControl,
@@ -23,6 +24,7 @@ const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlPro
   ['single-choice-select']: SingleChoiceSelectFormEngineControl,
   ['dates']: DatesFormEngineControl,
   ['date-time']: DateTimeFormEngineControl,
+  ['check']: CheckboxFormEngineControl,
 };
 
 export interface FormEngineElementProps {
