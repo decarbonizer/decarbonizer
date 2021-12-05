@@ -8,7 +8,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from '@chakra-ui/react';
+import { isEmpty } from 'lodash';
+import { useContext } from 'react';
+import { useParams } from 'react-router';
+import { ActionPlanCreate } from '../../../api/actionPlan';
+import { DashboardPageParams } from '../../../routes';
+import { useCreateActionPlanMutation } from '../../../store/api';
+import { ActionPanelContext } from './actionPanelContext';
 
 export interface SaveActionPlanModalProps {
   isOpen: boolean;
@@ -16,8 +24,36 @@ export interface SaveActionPlanModalProps {
 }
 
 export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanModalProps) {
+  const { realEstateId } = useParams<DashboardPageParams>();
+  const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
+  const { filledActionAnswers } = useContext(ActionPanelContext);
+  const toast = useToast();
+
   const handleSaveClick = () => {
-    onClose();
+    const body: ActionPlanCreate = {
+      name: 'TODO',
+      startDate: new Date(),
+      endDate: new Date(),
+      actionAnswers: Object.values(filledActionAnswers).filter((actionAnswer) => !isEmpty(actionAnswer)),
+    };
+
+    createActionPlan({ realEstateId, body })
+      .then(() =>
+        toast({
+          title: 'Action Plan Created',
+          description: 'The action plan was successfully created.',
+          status: 'success',
+          duration: 5000,
+        }),
+      )
+      .catch(() =>
+        toast({
+          title: 'Action Plan Creation Failed',
+          description: 'Unfortunately the action plan could not be created. Please try again.',
+          status: 'error',
+        }),
+      )
+      .finally(onClose);
   };
 
   return (
@@ -38,7 +74,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
           <Button onClick={onClose} mr="3">
             Cancel
           </Button>
-          <Button colorScheme="primary" onClick={handleSaveClick}>
+          <Button colorScheme="primary" isLoading={isLoading} onClick={handleSaveClick}>
             Save
           </Button>
         </ModalFooter>
