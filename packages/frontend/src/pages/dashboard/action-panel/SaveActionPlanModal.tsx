@@ -1,6 +1,10 @@
 import {
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
   FormLabel,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { isEmpty } from 'lodash';
 import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { ActionPlanCreate } from '../../../api/actionPlan';
 import { DashboardPageParams } from '../../../routes';
@@ -23,26 +28,37 @@ export interface SaveActionPlanModalProps {
   onClose(): void;
 }
 
+interface FormValues {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+}
+
 export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanModalProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
   const { realEstateId } = useParams<DashboardPageParams>();
   const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const toast = useToast();
 
-  const handleSaveClick = () => {
+  const onSubmit = (data: FormValues) => {
     const body: ActionPlanCreate = {
-      name: 'TODO',
-      startDate: new Date(),
-      endDate: new Date(),
+      ...data,
       actionAnswers: Object.values(filledActionAnswers).filter((actionAnswer) => !isEmpty(actionAnswer)),
     };
 
     createActionPlan({ realEstateId, body })
+      .unwrap()
       .then(() =>
         toast({
           title: 'Action Plan Created',
           description: 'The action plan was successfully created.',
           status: 'success',
+          isClosable: true,
           duration: 5000,
         }),
       )
@@ -51,6 +67,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
           title: 'Action Plan Creation Failed',
           description: 'Unfortunately the action plan could not be created. Please try again.',
           status: 'error',
+          isClosable: true,
         }),
       )
       .finally(onClose);
@@ -60,24 +77,41 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
     <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>New Action Plan</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          {/* TODO: Add name and time range form. */}
-          <FormLabel fontWeight="semibold" mt={8}>
-            Selected Actions
-          </FormLabel>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ModalHeader>New Action Plan</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl isRequired isInvalid={!!errors.name}>
+              <FormLabel htmlFor="name">Plan name</FormLabel>
+              <Input
+                type="text"
+                min={1}
+                max={255}
+                {...register('name', {
+                  required: { value: true, message: 'This field is required.' },
+                  minLength: { value: 1, message: 'The name must be at least 1 character long.' },
+                  maxLength: { value: 255, message: 'The name must be at most 255 characters long.' },
+                })}
+              />
+              <FormHelperText>The name helps you identify the plan later on.</FormHelperText>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+            </FormControl>
 
-          {/* TODO: Add selected actions view. */}
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={onClose} mr="3">
-            Cancel
-          </Button>
-          <Button colorScheme="primary" isLoading={isLoading} onClick={handleSaveClick}>
-            Save
-          </Button>
-        </ModalFooter>
+            <FormLabel fontWeight="semibold" mt={8}>
+              Selected Actions
+            </FormLabel>
+
+            {/* TODO: Add selected actions view. */}
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose} mr="3">
+              Cancel
+            </Button>
+            <Button type="submit" colorScheme="primary" isLoading={isLoading}>
+              Save
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );
