@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ActionPlanSeeder } from '../action-plan/action-plan.seeder';
 import { BulbSeeder } from '../bulbs/bulb.seeder';
 import { EnergyFormSeeder } from '../energy-form/energy-form.seeder';
 import { MessageSeeder } from '../message/message.seeder';
@@ -16,6 +17,7 @@ export class DbSeedingService {
     private readonly energyFormSeeder: EnergyFormSeeder,
     private readonly bulbSeeder: BulbSeeder,
     private readonly surveyAnswerSeeder: SurveyAnswerSeeder,
+    private readonly actionPlanSeeder: ActionPlanSeeder,
   ) {}
 
   async seedDb() {
@@ -26,6 +28,7 @@ export class DbSeedingService {
       this.energyFormSeeder,
       this.bulbSeeder,
       this.surveyAnswerSeeder,
+      this.actionPlanSeeder,
     ];
 
     for (const seeder of seeders) {
