@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { ActionPlanSummary } from './ActionPlanSummary';
 
 export interface SaveActionPlanModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'3xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New Action Plan</ModalHeader>
@@ -31,8 +32,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
           <FormLabel fontWeight="semibold" mt={8}>
             Selected Actions
           </FormLabel>
-
-          {/* TODO: Add selected actions view. */}
+          <ActionPlanSummary />
         </ModalBody>
         <ModalFooter>
           <Button onClick={onClose} mr="3">

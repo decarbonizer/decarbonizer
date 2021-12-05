@@ -84,6 +84,7 @@ export interface ActionAnswerValues<
 }
 
 export const knownActionCategories = [illuminationActionsCategory];
+export const knownActions = knownActionCategories.flatMap((category) => category.actions);
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;

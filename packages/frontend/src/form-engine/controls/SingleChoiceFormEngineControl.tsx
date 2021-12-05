@@ -15,7 +15,11 @@ export default function SingleChoiceFormEngineControl({
   const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
 
   if (isViewOnly) {
-    return <DefaultFormControlLayout element={element}>{value}</DefaultFormControlLayout>;
+    return (
+      <DefaultFormControlLayout element={element}>
+        {options.find((option) => option.value === value)?.display ?? value}
+      </DefaultFormControlLayout>
+    );
   }
 
   return (

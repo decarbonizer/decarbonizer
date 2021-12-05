@@ -19,16 +19,17 @@ export default function MultiChoiceFormEngineControl({
     return (
       <DefaultFormControlLayout element={element}>
         <List spacing={1}>
-          {value?.map((surveyAnswer, index) => (
-            <ListItem key={index}>
+          {(value ?? options.map((option) => option.value)).map((value) => (
+            <ListItem key={value}>
               <ListIcon as={MdCheckCircle} color="primary" />
-              {value}
+              {options.find((option) => option.value === value)?.display ?? value}
             </ListItem>
           ))}
         </List>
       </DefaultFormControlLayout>
     );
   }
+
   return (
     <DefaultFormControlLayout element={element}>
       <CheckboxGroup
