@@ -12,7 +12,7 @@ export function useFormEngineChoiceOptionProviders(realEstateId: string) {
         display: (surveyAnswer.value as any).realEstateName,
       })) ?? [],
   };
-  console.log(providers);
+
   return {
     isLoading: bulbsQuery.isLoading,
     providers,

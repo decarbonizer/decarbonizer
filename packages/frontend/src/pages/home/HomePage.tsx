@@ -1,4 +1,4 @@
-import { Grid, Icon, Text, useDisclosure } from '@chakra-ui/react';
+import { Grid, Icon, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import { GoPlus } from 'react-icons/go';
 import Card from '../../components/Card';
@@ -13,9 +13,7 @@ export default function HomePage() {
   return (
     <DefaultPageLayout title="Home">
       <Grid templateColumns="repeat(3,1fr)" gap={2} rowGap={20}>
-        {isLoadingRealEstates
-          ? console.log('Lädt')
-          : realEstates!.map((city) => <CityCard key={city._id} realEstate={city} />)}
+        {isLoadingRealEstates ? <Spinner /> : realEstates!.map((city) => <CityCard key={city._id} realEstate={city} />)}
         <Card as="button" border="2px" w="xl" h="xl" borderColor="gray.400" borderStyle="dashed" onClick={onOpen}>
           <Icon as={GoPlus} w="14" h="14" color="gray.600" />
           <Text color="gray.600" pt="3">
