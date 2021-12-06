@@ -13,8 +13,8 @@ export interface FormSchemaPage {
 export interface FormSchemaBaseElement<TType extends string> {
   id: string;
   required: boolean;
-  label: string;
   type: TType;
+  label?: string;
   helperText?: string;
   rules?: Array<FormSchemaElementRule>;
 }
@@ -75,6 +75,10 @@ export interface SingleChoiceFormSchemaElement extends FormSchemaBaseElement<'si
   options: ChoiceOptionSource;
 }
 
+export interface MultiChoiceFormSchemaElement extends FormSchemaBaseElement<'multi-choice'> {
+  options: ChoiceOptionSource;
+}
+
 export interface SingleChoiceSelectFormSchemaElement extends FormSchemaBaseElement<'single-choice-select'> {
   placeholder?: string;
   options: ChoiceOptionSource;
@@ -94,6 +98,7 @@ export type FormSchemaElement =
   | BooleanFormSchemaElement
   | SingleChoiceFormSchemaElement
   | SingleChoiceSelectFormSchemaElement
+  | MultiChoiceFormSchemaElement
   | DatesFormSchemaElement
   | DateTimeFormSchemaElement
   | CheckboxFormSchemaElement;

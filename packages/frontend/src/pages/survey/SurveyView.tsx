@@ -17,7 +17,7 @@ import {
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
 import SurveyProgressBar from './SurveyProgressBar';
-import { useSurveyChoiceOptionProviders } from './useSurveyChoiceOptionProviders';
+import { useFormEngineChoiceOptionProviders } from '../../form-engine/useFormEngineChoiceProviders';
 import { useCreateSurveyAnswerMutation, useUpdateSurveyAnswerMutation } from '../../store/api';
 import { useFormEngine } from '../../form-engine/useFormEngine';
 import FormEngine from '../../form-engine/FormEngine';
@@ -34,7 +34,7 @@ export interface SurveyViewProps {
 export default function SurveyView({ realEstateId, surveyId, initialSurveyValue, onDone }: SurveyViewProps) {
   const survey = knownSurveys[surveyId];
   const toast = useToast();
-  const { providers, isLoading } = useSurveyChoiceOptionProviders();
+  const { providers, isLoading } = useFormEngineChoiceOptionProviders(realEstateId);
   const [createSurveyAnswer, { isLoading: isCreatingSurveyAnswer }] = useCreateSurveyAnswerMutation();
   const [updateSurveyAnswer, { isLoading: isUpdatingSurveyAnswer }] = useUpdateSurveyAnswerMutation();
   const {

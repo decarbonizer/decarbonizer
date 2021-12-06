@@ -1,6 +1,6 @@
 import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsOptional, IsUUID } from 'class-validator';
+import { IsDate, IsOptional } from 'class-validator';
 import { v4 } from 'uuid';
 import { DbObjectSchema } from './db-object-schema.decorator';
 
@@ -11,7 +11,6 @@ export class DbObject {
     default: () => v4(),
   })
   @ApiProperty()
-  @IsUUID('4')
   @IsOptional()
   _id?: string;
 

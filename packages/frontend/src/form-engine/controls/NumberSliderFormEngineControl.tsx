@@ -20,7 +20,7 @@ export default function NumberSliderFormEngineControl({
         step={1}
         min={element.min}
         max={element.max}
-        defaultValue={value ?? 0}
+        value={value ?? 0}
         onChangeEnd={setValue}>
         <SliderTrack>
           <SliderFilledTrack />

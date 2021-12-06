@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Bulb } from '../api/bulb';
-import { RealEstate } from '../api/realEstate';
+import { RealEstate, RealEstateUpdate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
+import { ActionPlan, ActionPlanCreate } from '../api/actionPlan';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -19,7 +20,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['RealEstate', 'SurveyAnswer'],
+  tagTypes: ['ActionPlans', 'RealEstate', 'SurveyAnswer'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResult, LoginPost>({
       query: (body) => ({
@@ -46,6 +47,21 @@ export const api = createApi({
         url: 'api/v1/realEstates',
         method: 'POST',
         body,
+      }),
+      invalidatesTags: ['RealEstate'],
+    }),
+    updateRealEstate: builder.mutation<RealEstate, { id: string; body: RealEstateUpdate }>({
+      query: ({ id, body }) => ({
+        url: `/api/v1/realEstates/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['RealEstate'],
+    }),
+    deleteRealEstate: builder.mutation<void, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/realEstates/${id}`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['RealEstate'],
     }),
@@ -103,6 +119,15 @@ export const api = createApi({
       }),
       invalidatesTags: ['SurveyAnswer'],
     }),
+
+    createActionPlan: builder.mutation<ActionPlan, { realEstateId: string; body: ActionPlanCreate }>({
+      query: ({ realEstateId, body }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['ActionPlans'],
+    }),
   }),
 });
 
@@ -113,6 +138,8 @@ export const {
 
   useGetAllRealEstatesQuery,
   useCreateRealEstateMutation,
+  useDeleteRealEstateMutation,
+  useUpdateRealEstateMutation,
 
   useGetAllSurveyAnswersQuery,
   useGetAllSurveyAnswersForRealEstateAndSurveyQuery,
@@ -121,4 +148,6 @@ export const {
   useCreateSurveyAnswerMutation,
   useUpdateSurveyAnswerMutation,
   useDeleteSurveyAnswerMutation,
+
+  useCreateActionPlanMutation,
 } = api;
