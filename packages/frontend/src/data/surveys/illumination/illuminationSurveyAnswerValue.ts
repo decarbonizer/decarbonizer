@@ -8,4 +8,5 @@ export interface IlluminationSurveyAnswerValue {
   illuminationSwitchOffMode?: 'automaticTimeout' | 'manuallySwitchedOff';
   illuminationSwitchOnMode: 'always' | 'onDemand';
   avgIlluminationPerDay: number;
+  avgIlluminationPerYear: number;
 }

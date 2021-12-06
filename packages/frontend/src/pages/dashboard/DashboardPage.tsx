@@ -105,8 +105,9 @@ export default function DashboardPage() {
   }
 
   function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-    const value = calculateOverallFootprint(answers, bulbs);
-    return +value.overallFootprint.toFixed(1);
+    const value = calculateOverallFootprint(answers, bulbs, 1);
+    console.log(value);
+    return +value[0].footprint.toFixed(1);
   }
 
   function onChangeChosenAction(value: string) {
