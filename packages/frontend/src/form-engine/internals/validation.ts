@@ -56,7 +56,7 @@ function isEffectivelyEmpty(value: any) {
 function evaluateValidationRule(rule: FormSchemaElementValidationRule, value: object): null | string {
   const rules = rule.conditions ?? [];
   const satisfy = rule.satisfy?.toUpperCase() ?? 'ALL';
-  const config: CheckConditionsConfig = { rules, satisfy: satisfy as any, log: console.log };
+  const config: CheckConditionsConfig = { rules, satisfy: satisfy as any };
 
   try {
     return checkConditions(config, value) ? null : rule.message;
