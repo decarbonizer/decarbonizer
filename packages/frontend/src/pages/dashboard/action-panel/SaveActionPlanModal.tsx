@@ -16,12 +16,14 @@ import {
 } from '@chakra-ui/react';
 import { isEmpty } from 'lodash';
 import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { ActionPlanCreate } from '../../../api/actionPlan';
+import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
 import { DashboardPageParams } from '../../../routes';
 import { useCreateActionPlanMutation } from '../../../store/api';
 import { ActionPanelContext } from './actionPanelContext';
+import range from 'lodash-es/range';
 
 export interface SaveActionPlanModalProps {
   isOpen: boolean;
@@ -30,14 +32,14 @@ export interface SaveActionPlanModalProps {
 
 interface FormValues {
   name: string;
-  startDate: Date;
-  endDate: Date;
+  duration: DateRange;
 }
 
 export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanModalProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormValues>();
   const { realEstateId } = useParams<DashboardPageParams>();
@@ -47,7 +49,9 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
 
   const onSubmit = (data: FormValues) => {
     const body: ActionPlanCreate = {
-      ...data,
+      name: data.name,
+      startDate: data.duration.startDate!,
+      endDate: data.duration.endDate!,
       actionAnswers: Object.values(filledActionAnswers).filter((actionAnswer) => !isEmpty(actionAnswer)),
     };
 
@@ -95,6 +99,27 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
               />
               <FormHelperText>The name helps you identify the plan later on.</FormHelperText>
               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl mt="8" isRequired isInvalid={!!errors.duration}>
+              <FormLabel>Planned duration</FormLabel>
+              <Controller
+                name="duration"
+                control={control}
+                rules={{ required: { value: true, message: 'This field is required.' } }}
+                render={({ field }) => (
+                  <DateRangePicker
+                    selectableYears={range(new Date().getFullYear(), 2051)}
+                    value={field.value}
+                    onValueChanged={(e) => field.onChange(e)}
+                  />
+                )}
+              />
+
+              <FormHelperText>
+                Specify the planned duration during which you would like to implement the actions.
+              </FormHelperText>
+              <FormErrorMessage></FormErrorMessage>
             </FormControl>
 
             <FormLabel fontWeight="semibold" mt={8}>
