@@ -163,11 +163,6 @@ export const illuminationSurvey: Survey = {
               },
             ],
           },
-        ],
-      },
-      {
-        name: 'Illumination Duration',
-        elements: [
           {
             id: 'avgIlluminationPerDay',
             required: true,
@@ -178,6 +173,36 @@ export const illuminationSurvey: Survey = {
             defaultSelectedUnit: 'h',
             normedMin: 0,
             normedMax: 1,
+            rules: [
+              {
+                effect: 'hide',
+                satisfy: 'any',
+                conditions: [
+                  {
+                    property: 'illuminationSwitchOnMode',
+                    op: 'absent',
+                  },
+                  {
+                    property: 'illuminationSwitchOnMode',
+                    op: 'eq',
+                    value: 'always',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Total Illumination',
+        elements: [
+          {
+            id: 'avgIlluminationPerYear',
+            required: true,
+            type: 'number',
+            label: 'How many days in a year is the location illuminated on average?',
+            min: 0,
+            max: 366,
           },
         ],
       },
