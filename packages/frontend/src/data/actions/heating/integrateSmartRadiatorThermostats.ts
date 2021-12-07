@@ -17,7 +17,7 @@ export const integrateSmartRadiatorThermostats: Action = {
         elements: [
           {
             id: 'newSmartTemperature',
-            type: 'check',
+            type: 'boolean-checkbox',
             label: 'Integrate smart radiator thermostats',
             required: false,
           },
