@@ -95,6 +95,8 @@ export const knownActionCategories = [
   businessTravelActions,
 ];
 
+export const knownActions = knownActionCategories.flatMap((category) => category.actions);
+
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
   changeRuntime: ActionAnswerValues<ChangeRuntimeActionAnswerValue, ChangeRuntimeActionDetailsAnswerValue>;

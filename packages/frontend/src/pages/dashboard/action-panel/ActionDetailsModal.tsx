@@ -40,7 +40,7 @@ export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDe
       const newActionAnswer: ActionAnswerBase = {
         ...filledActionAnswers[action.id],
         values: {
-          value: filledActionAnswers[action.id],
+          value: filledActionAnswers[action.id].values.value,
           detailsValue: value,
         },
       };

@@ -3,6 +3,8 @@ import { Radio, RadioGroup, VStack } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useChoiceOptions, useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import { FormEngineControlProps } from './types';
+import { useContext } from 'react';
+import { FormEnginePropsContext } from '../FormEngine';
 
 export default function SingleChoiceFormEngineControl({
   element,
@@ -10,6 +12,15 @@ export default function SingleChoiceFormEngineControl({
   const [value, setValue] = useValueProperty<string | undefined>(element);
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const options = useChoiceOptions(element.options);
+  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+
+  if (isViewOnly) {
+    return (
+      <DefaultFormControlLayout element={element}>
+        {options.find((option) => option.value === value)?.display ?? value}
+      </DefaultFormControlLayout>
+    );
+  }
 
   return (
     <DefaultFormControlLayout element={element}>
