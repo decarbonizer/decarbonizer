@@ -7,10 +7,12 @@ import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCost
 import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
 import CarbonFootprintCard from '../shared/CarbonFootprintCard';
 import ComparisonOfCostsAndFootprints from './ComparisonOfCostsAndFootprints';
+
 interface ChangeOfIlluminationProps {
   realEstateId: string;
   bulbId: string;
 }
+
 export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfIlluminationProps) {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
@@ -51,10 +53,6 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
     }
   }
 
-  useEffect(() => {
-    console.log(newData);
-    console.log(dataForComparison);
-  }, []);
   return (
     <SimpleGrid rows={2} gap={6} p="10">
       <SimpleGrid columns={3} gap={6}>

@@ -17,10 +17,6 @@ export default function ReducedFootprintAndCosts({ oldCalculation, newCalculatio
   const costsDifference = oldCalculation.costs - newCalculation.costs;
   const data = [oldCalculation, { footprint: footprintDifference, costs: costsDifference }];
 
-  useEffect(() => {
-    console.log(data);
-  });
-
   return (
     <Card w="100" h="80">
       <Box p="4">
