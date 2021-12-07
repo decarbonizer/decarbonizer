@@ -25,7 +25,6 @@ export class AuthService {
    */
   getCurrentUser(): WithId<User> {
     const user = this.request.user as User;
-    console.log('User:', this.request);
 
     if (!user) {
       throw new UnauthorizedException();
