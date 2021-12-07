@@ -24,7 +24,8 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
           illuminationTriggerMode: 'manually',
           illuminationSwitchOffMode: 'manuallySwitchedOff',
           illuminationSwitchOnMode: 'onDemand',
-          avgIlluminationPerDay: 0.5,
+          avgIlluminationPerDay: 12,
+          avgIlluminationPerYear: 280,
         },
       },
     ];

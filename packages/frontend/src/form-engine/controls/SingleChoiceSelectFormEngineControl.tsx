@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react';
 import { SingleChoiceSelectFormSchemaElement } from '../formSchema';
 import { Select } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
@@ -15,6 +16,15 @@ export default function SingleChoiceSelectFormEngineControl({
   const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
 
   if (isViewOnly) {
+    if (!value) {
+      return (
+        <DefaultFormControlLayout element={element}>
+          <Text fontStyle="italic" color="gray.500">
+            No value selected.
+          </Text>
+        </DefaultFormControlLayout>
+      );
+    }
     return (
       <DefaultFormControlLayout element={element}>
         {options.find((option) => option.value === value)?.display ?? value}
