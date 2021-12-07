@@ -17,6 +17,7 @@ export interface FormSchemaBaseElement<TType extends string> {
   label?: string;
   helperText?: string;
   rules?: Array<FormSchemaElementRule>;
+  validation?: Array<FormSchemaElementValidationRule>;
 }
 
 export interface FormSchemaElementRule {
@@ -26,6 +27,12 @@ export interface FormSchemaElementRule {
 }
 
 export type FormSchemaElementRuleEffect = 'hide' | 'disable';
+
+export interface FormSchemaElementValidationRule {
+  message: string;
+  conditions: Array<JsonConditionsRule>;
+  satisfy: 'all' | 'any';
+}
 
 export interface StringFormSchemaElement extends FormSchemaBaseElement<'string'> {
   placeholder?: string;

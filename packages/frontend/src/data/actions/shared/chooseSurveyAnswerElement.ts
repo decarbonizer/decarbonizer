@@ -6,6 +6,19 @@ export const chooseSurveyAnswerElement: MultiChoiceFormSchemaElement = {
   label: '📩 Apply action to these surveys',
   type: 'multi-choice',
   options: 'currentRealEstateSurveyAnswers',
+  validation: [
+    {
+      message: 'You must select at least one option.',
+      satisfy: 'all',
+      conditions: [
+        {
+          property: 'surveyAnswers.length',
+          op: 'gt',
+          value: 0,
+        },
+      ],
+    },
+  ],
 };
 
 export interface ChooseSurveyAnswerElementAnswerValue {
