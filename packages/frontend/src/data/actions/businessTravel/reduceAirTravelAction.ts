@@ -16,8 +16,15 @@ export const reduceAirTravelAction: Action = {
       {
         elements: [
           {
-            id: 'newTraveling',
-            type: 'check',
+            id: 'lessLongTraveling',
+            type: 'number',
+            label: 'How many long-distance flights (>4000 km) can you save next year?',
+            required: false,
+          },
+          {
+            id: 'lessShortTraveling',
+            type: 'number',
+            label: 'How many short- and medium-haul flights (<4000 km) can you save next year?',
             required: false,
           },
         ],

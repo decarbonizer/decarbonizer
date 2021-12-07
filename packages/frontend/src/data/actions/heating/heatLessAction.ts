@@ -18,6 +18,7 @@ export const heatLessAction: Action = {
         elements: [
           {
             id: 'newRoomTemperature',
+            label: 'Which temperature do you want to have in your office? (in C°)',
             type: 'number',
             required: false,
           },

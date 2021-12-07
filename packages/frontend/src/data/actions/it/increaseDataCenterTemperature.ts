@@ -17,7 +17,7 @@ export const increaseDataCenterTemperature: Action = {
         elements: [
           {
             id: 'newDataCenterTemperature',
-            label: 'Test',
+            label: 'Which temperature do you want to reach in your data center?',
             type: 'number',
             required: false,
           },
