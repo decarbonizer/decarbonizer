@@ -3,11 +3,22 @@ import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useRuleEvaluationResultForElement, useValueProperty } from '../internals/hooks';
 import UnitInput from '../../components/UnitInput';
 import { FormEngineControlProps } from './types';
+import { useContext } from 'react';
+import { FormEnginePropsContext } from '../FormEngine';
 
 export default function NumberUnitFormEngineControl({ element }: FormEngineControlProps<NumberUnitFormSchemaElement>) {
   const [value, setValue] = useValueProperty<number | undefined>(element);
   const units = typeof element.units === 'string' ? knownUnitInputTemplates[element.units] : element.units;
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
+  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+
+  if (isViewOnly) {
+    return (
+      <DefaultFormControlLayout element={element}>
+        {value} {element.normedUnit}
+      </DefaultFormControlLayout>
+    );
+  }
 
   return (
     <DefaultFormControlLayout element={element}>

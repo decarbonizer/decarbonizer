@@ -14,7 +14,7 @@ export function useFormEngineChoiceOptionProviders(realEstateId: string) {
   };
 
   return {
-    isLoading: bulbsQuery.isLoading,
+    isLoading: bulbsQuery.isLoading || surveyAnswersQuery.isLoading,
     providers,
   };
 }
