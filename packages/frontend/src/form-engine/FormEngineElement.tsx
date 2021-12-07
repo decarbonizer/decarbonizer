@@ -12,7 +12,7 @@ import { FormEngineControlProps } from './controls/types';
 import { useRuleEvaluationResultForElement } from './internals/hooks';
 import DatesFormEngineControl from './controls/DatesFormEngineControl';
 import DateTimeFormEngineControl from './controls/DateTimeFormEngineControl';
-import CheckboxFormEngineControl from './controls/CheckboxFormEngineControl';
+import BooleanCheckBoxFormEngineControl from './controls/BooleanCheckBoxFormEngineControl';
 import MultiChoiceFormEngineControl from './controls/MultiChoiceFormEngineControl';
 
 const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlProps<any>>> = {
@@ -26,7 +26,7 @@ const controls: Record<FormSchemaElementType, ComponentType<FormEngineControlPro
   ['multi-choice']: MultiChoiceFormEngineControl,
   ['dates']: DatesFormEngineControl,
   ['date-time']: DateTimeFormEngineControl,
-  ['check']: CheckboxFormEngineControl,
+  ['boolean-checkbox']: BooleanCheckBoxFormEngineControl,
 };
 
 export interface FormEngineElementProps {
