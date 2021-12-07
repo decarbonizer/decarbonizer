@@ -70,7 +70,7 @@ export function calculateOverallFootprint(
   years: number,
 ): Array<Calculation> {
   const calculations: Array<Calculation> = [];
-  for (var i = 1; i < years + 1; i++) {
+  for (let i = 1; i < years + 1; i++) {
     const calculationForSpecificYear = answers.reduce<Calculation>(
       (acc, answer) => {
         const calculation = calculateFootprintDependingOnType(answer, bulbs, i);
