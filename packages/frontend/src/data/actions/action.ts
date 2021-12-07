@@ -7,6 +7,10 @@ import {
   ChangeRuntimeActionDetailsAnswerValue,
 } from './illumination/changeRuntimeAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
+import { heatingActionsCategory } from './heating/heatingActions';
+import { electricityActionsCategory } from './electricity/electricityActions';
+import { itActions } from './it/itActions';
+import { businessTravelActions } from './businessTravel/businessTravelActions';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -83,7 +87,13 @@ export interface ActionAnswerValues<
   detailsValue?: TDetailsValue;
 }
 
-export const knownActionCategories = [illuminationActionsCategory];
+export const knownActionCategories = [
+  illuminationActionsCategory,
+  heatingActionsCategory,
+  electricityActionsCategory,
+  itActions,
+  businessTravelActions,
+];
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
