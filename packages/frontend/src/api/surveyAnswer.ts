@@ -59,6 +59,23 @@ export interface ComparisonOfCalculations {
 }
 
 /**
+ * Prevents using wrong value for average illumination per day in further calculations.
+ * @param answer illumination survey answer.
+ * @returns formatted illumination survey answer.
+ */
+function formatIlluminationSurveyAnswer(
+  answer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+): SurveyAnswer<IlluminationSurveyAnswerValue> {
+  if (answer.value.illuminationSwitchOnMode == 'always') {
+    const newObject = Object.assign({}, answer);
+    newObject.value = { ...answer.value, avgIlluminationPerDay: 24 };
+    return newObject;
+  } else {
+    return answer;
+  }
+}
+
+/**
  * Evaluates carbon footprint of one real estate
  * @param answers All survey answers.
  * @param bulbs All bulbs.
@@ -108,14 +125,17 @@ function calculateIlluminationFootprint(
 ): Calculation {
   const germanyEF = 0.624; //standard emission factor for Germany
   const usedBulb = bulbs.find((bulb) => bulb._id == answer.value.bulbType);
+  const formattedAnswer = formatIlluminationSurveyAnswer(answer);
 
   if (usedBulb !== null) {
     //calculate how many times bulbs need to be changed
-    const illuminationPerYear = answer.value.avgIlluminationPerDay * 24 * answer.value.avgIlluminationPerYear;
-    const footprint = usedBulb!.productionKwh * illuminationPerYear * germanyEF + answer.value.lampCount * year;
+    const illuminationPerYear =
+      formattedAnswer.value.avgIlluminationPerDay * 24 * formattedAnswer.value.avgIlluminationPerYear;
+    const footprint =
+      usedBulb!.productionKwh * illuminationPerYear * germanyEF + formattedAnswer.value.lampCount * year;
     const costs = usedBulb!.name.includes('LED')
-      ? calculateCostsForLED(usedBulb!.costInEuro, answer.value.lampCount, year)
-      : calculateCostsForBulb(usedBulb!.costInEuro, answer.value.lampCount, year);
+      ? calculateCostsForLED(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year)
+      : calculateCostsForBulb(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year);
     return { costs: costs, footprint: footprint, year: year };
   } else {
     return { costs: 0, footprint: 0, year: year };
