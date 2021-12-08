@@ -4,6 +4,7 @@ import { routes } from '../routes';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import HomePage from '../pages/home/HomePage';
 import SurveyOverviewPage from '../pages/survey/SurveyOverviewPage';
+import ActionPlanOverviewPage from '../pages/plan/ActionPlanOverviewPage';
 import NavBar from './NavBar';
 
 export default function AppShell() {
@@ -14,6 +15,7 @@ export default function AppShell() {
         <Route exact path={routes.home()} component={HomePage} />
         <Route exact path={routes.surveys.route} component={SurveyOverviewPage} />
         <Route exact path={routes.realEstateDashboard.route} component={DashboardPage} />
+        <Route exact path={routes.actionPlans.route} component={ActionPlanOverviewPage} />
         <Route render={() => <Redirect to={routes.home.route} />} />
       </Switch>
     </Box>
