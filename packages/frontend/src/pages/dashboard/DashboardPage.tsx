@@ -1,10 +1,6 @@
-import { Box, Button, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, GridItem, Stack } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
-import {
-  useGetAllBulbsQuery,
-  useGetAllRealEstatesQuery,
-  useGetAllSurveyAnswersForRealEstateQuery,
-} from '../../store/api';
+import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import ComparisonComponent from './ComparisonOfFootprints';
 import { DashboardPageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
@@ -17,15 +13,15 @@ import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPa
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
 import CarbonFootprintCard from './shared/CarbonFootprintCard';
+import DefaultPageLayout from '../../components/DefaultPageLayout';
+import Card from '../../components/Card';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
-  const { data: realEstates } = useGetAllRealEstatesQuery();
   const { data: bulbs } = useGetAllBulbsQuery();
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const history = useHistory();
-  const cityName = realEstates?.find((realEstate) => realEstate._id === realEstateId)?.cityName ?? '';
   const openedActionsCategory = 'illumination';
   const carbonFootprint = useMemo(
     () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
@@ -61,34 +57,25 @@ export default function DashboardPage() {
 
   return (
     <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
-      <Flex h="100%">
-        <Flex
-          as="aside"
-          direction="column"
-          justify="flex-start"
-          align="center"
-          pos="sticky"
-          minW="450"
-          maxW="450"
-          h="100%"
-          px="4"
-          py="8"
-          bg="gray.50"
-          border="1px"
-          borderColor="gray.200"
-          shadow="xl"
-          zIndex="100">
-          <ActionPanel />
-        </Flex>
+      <DefaultPageLayout
+        title="Dashboard"
+        leftArea={
+          <Card
+            as="aside"
+            isStatic
+            flexGrow={1}
+            w="md"
+            borderBottomRadius={0}
+            borderLeftRadius={0}
+            h="100%"
+            px="8"
+            py="4"
+            size="lg">
+            <ActionPanel />
+          </Card>
+        }>
         <Box w="100%" grow={1}>
           <Stack align="center">
-            <Heading as="h1">Dashboard</Heading>
-            <Heading as="h2" size="lg">
-              {cityName}
-            </Heading>
-            <Heading as="h2" size="lg" color="green">
-              Calculating your footprint...
-            </Heading>
             <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
               <GridItem rowSpan={2} colSpan={1}>
                 <ComparisonComponent />
@@ -108,7 +95,7 @@ export default function DashboardPage() {
             />
           )}
         </Box>
-      </Flex>
+      </DefaultPageLayout>
     </ActionPanelContext.Provider>
   );
 }
