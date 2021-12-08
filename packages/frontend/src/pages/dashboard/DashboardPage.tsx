@@ -74,20 +74,18 @@ export default function DashboardPage() {
             <ActionPanel />
           </Card>
         }>
-        <Box w="100%" grow={1}>
-          <Stack align="center">
-            <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
-              <GridItem rowSpan={2} colSpan={1}>
-                <ComparisonComponent />
-              </GridItem>
-              <GridItem rowSpan={1} w="80">
-                <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
-              </GridItem>
-              <GridItem rowSpan={1} w="80">
-                <NetZeroCard />
-              </GridItem>
-            </Grid>
-          </Stack>
+        <Box w="100%">
+          <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
+            <GridItem rowSpan={2} colSpan={1}>
+              <ComparisonComponent />
+            </GridItem>
+            <GridItem rowSpan={1} w="80">
+              <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
+            </GridItem>
+            <GridItem rowSpan={1} w="80">
+              <NetZeroCard />
+            </GridItem>
+          </Grid>
           {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (
             <ChangeOfIllumination
               realEstateId={realEstateId}
