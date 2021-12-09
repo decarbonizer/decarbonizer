@@ -27,14 +27,10 @@ export default function DefaultPageLayout({ title, children, actions, leftArea, 
   );
 
   return (
-    <Flex h="100%" px="8" py="4">
-      <Box as="aside" h="100%">
-        {leftArea}
-      </Box>
+    <Flex as="article" grow={1} h="100%">
+      {leftArea && <Box as="aside">{leftArea}</Box>}
       {mainContent}
-      <Box as="aside" h="100%">
-        {rightArea}
-      </Box>
+      {rightArea && <Box as="aside">{rightArea}</Box>}
     </Flex>
   );
 }

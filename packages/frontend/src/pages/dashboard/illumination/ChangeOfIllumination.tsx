@@ -54,7 +54,7 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
   }
 
   return (
-    <SimpleGrid rows={2} gap={6} p="10">
+    <SimpleGrid rows={2} gap={6} p="4">
       <SimpleGrid columns={3} gap={6}>
         <ReducedFootprintAndCosts
           oldCalculation={newData.oldCalculation[0]}

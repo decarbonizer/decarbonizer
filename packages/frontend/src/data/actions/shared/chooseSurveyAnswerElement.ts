@@ -9,8 +9,12 @@ export const chooseSurveyAnswerElement: MultiChoiceFormSchemaElement = {
   validation: [
     {
       message: 'You must select at least one option.',
-      satisfy: 'all',
+      satisfy: 'any',
       conditions: [
+        {
+          property: 'surveyAnswers',
+          op: 'absent',
+        },
         {
           property: 'surveyAnswers.length',
           op: 'gt',

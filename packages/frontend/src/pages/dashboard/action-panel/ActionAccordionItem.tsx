@@ -51,7 +51,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
 
   return (
     <>
-      <AccordionItem key={action.id}>
+      <AccordionItem key={action.id} borderWidth="0 !important">
         <ActionPanelAccordionButton
           title={action.name}
           icon={<Icon as={action.icon} />}

@@ -1,4 +1,5 @@
 import { theme, extendTheme, ThemeConfig } from '@chakra-ui/react';
+import { CardTheme } from './components/Card';
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
@@ -10,6 +11,10 @@ export const appTheme = extendTheme({
   colors: {
     primary: theme.colors.green,
   },
+  fonts: {
+    heading: 'Open Sans',
+    body: 'Open Sans',
+  },
   layerStyles: {
     hint: {
       color: 'gray.500',
@@ -20,8 +25,11 @@ export const appTheme = extendTheme({
     global: {
       'html, body, #root': {
         height: '100vh',
-        backgroundColor: '#fcfcfc',
+        backgroundColor: '#fafafa',
       },
     },
+  },
+  components: {
+    Card: CardTheme,
   },
 });
