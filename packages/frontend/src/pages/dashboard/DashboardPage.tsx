@@ -58,7 +58,6 @@ export default function DashboardPage() {
   return (
     <ActionPanelContext.Provider value={{ filledActionAnswers, setFilledActionAnswers }}>
       <DefaultPageLayout
-        title="Dashboard"
         leftArea={
           <Card
             as="aside"
@@ -75,7 +74,7 @@ export default function DashboardPage() {
           </Card>
         }>
         <Box w="100%">
-          <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6} p="4">
+          <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6}>
             <GridItem rowSpan={2} colSpan={1}>
               <ComparisonComponent />
             </GridItem>

@@ -2,7 +2,7 @@ import { Flex, Box, Heading, HStack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 export interface DefaultPageLayoutProps {
-  title: string;
+  title?: string;
   children?: ReactNode;
   actions?: ReactNode;
   leftArea?: ReactNode;
@@ -15,9 +15,11 @@ export default function DefaultPageLayout({ title, children, actions, leftArea, 
       {(title || actions) && (
         <Flex justify="space-between" mb="8">
           <Box as="header">
-            <Heading as="h1" isTruncated>
-              {title}
-            </Heading>
+            {title && (
+              <Heading as="h1" isTruncated>
+                {title}
+              </Heading>
+            )}
           </Box>
           <HStack spacing="4">{actions}</HStack>
         </Flex>
