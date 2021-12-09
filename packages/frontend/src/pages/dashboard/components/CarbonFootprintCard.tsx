@@ -1,5 +1,5 @@
 import { GiFootprint } from 'react-icons/gi';
-import IconDashboardCard, { IconDashboardCardProps } from '../components/IconDashboardCard';
+import IconDashboardCard, { IconDashboardCardProps } from './IconDashboardCard';
 
 interface CarbonFootprintCardProps extends Partial<IconDashboardCardProps> {
   carbonFootprint: number;

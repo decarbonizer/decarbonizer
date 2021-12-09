@@ -5,7 +5,7 @@ import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '.
 import CalculatedCosts from './CalculatedCosts';
 import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCosts';
 import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
-import CarbonFootprintCard from './CarbonFootprintCard';
+import CarbonFootprintCard from '../components/CarbonFootprintCard';
 import ComparisonOfCostsAndFootprints from './ComparisonOfCostsAndFootprints';
 import { ActionPanelContext } from '../action-panel/actionPanelContext';
 import { useParams } from 'react-router';

@@ -5,7 +5,7 @@ import { calculateOverallFootprint, SurveyAnswer } from '../../../api/surveyAnsw
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllBulbsQuery } from '../../../store/api';
 import { IconDashboardCardProps } from '../components/IconDashboardCard';
-import CarbonFootprintCard from '../illumination/CarbonFootprintCard';
+import CarbonFootprintCard from '../components/CarbonFootprintCard';
 
 export default function GlobalFootprintCard(props: Partial<IconDashboardCardProps>) {
   const { realEstateId } = useParams<RealEstatePageParams>();
