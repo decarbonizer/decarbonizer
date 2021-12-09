@@ -7,13 +7,13 @@ import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
 import { useGetRealEstateQuery } from '../../../store/api';
 import { useParams } from 'react-router';
-import { DashboardPageParams } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
-  const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<DashboardPageParams>().realEstateId });
+  const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 
   return (
     <VStack align="flex-start" w="100%">

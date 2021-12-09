@@ -2,7 +2,7 @@ import { Box, Button, Flex, Grid, GridItem, Stack } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import ComparisonComponent from './ComparisonOfFootprints';
-import { DashboardPageParams, routes } from '../../routes';
+import { RealEstatePageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
 import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
@@ -17,7 +17,7 @@ import DefaultPageLayout from '../../components/DefaultPageLayout';
 import Card from '../../components/Card';
 
 export default function DashboardPage() {
-  const { realEstateId } = useParams<DashboardPageParams>();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: bulbs } = useGetAllBulbsQuery();
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});

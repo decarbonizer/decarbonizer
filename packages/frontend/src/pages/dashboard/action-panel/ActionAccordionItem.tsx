@@ -22,14 +22,14 @@ import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
 import ActionDetailsModal from './ActionDetailsModal';
 import { useParams } from 'react-router';
-import { DashboardPageParams } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 
 export interface ActionAccordionItemProps {
   action: Action;
 }
 
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
-  const { realEstateId } = useParams<DashboardPageParams>();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
     action.schema,
