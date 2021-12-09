@@ -10,7 +10,9 @@ export default function ChartSectionHeader({ header, description, ...rest }: Cha
   return (
     <HStack {...rest}>
       <p>
-        <Heading as="h2">{header}</Heading>
+        <Heading as="h2" size="lg">
+          {header}
+        </Heading>
         {description && <Text layerStyle="hint">{description}</Text>}
       </p>
     </HStack>

@@ -14,6 +14,11 @@ import { illuminationActionsCategory } from './illumination/illuminationActions'
  */
 export interface ActionCategory {
   /**
+   * A unique identifier of the action category.
+   * Should be human readable.
+   */
+  id: string;
+  /**
    * The name of he category.
    */
   name: string;

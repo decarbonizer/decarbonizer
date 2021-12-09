@@ -30,7 +30,15 @@ export default function ComparisonCard(props: DashboardCardProps) {
           <XAxis type="number" domain={['dataMin', 'dataMax']} hide />
           <YAxis type="category" domain={['dataMin', 'dataMax']} hide />
           {Object.entries(calculations).map(([realEstateName], i) => (
-            <Bar key={realEstateName} dataKey={realEstateName} stackId="co2" fill={palette[i]} opacity={0.6} />
+            <Bar
+              key={realEstateName}
+              label="Test"
+              dataKey={realEstateName}
+              stackId="co2"
+              fill={palette[i]}
+              opacity={0.6}
+              unit="kg"
+            />
           ))}
         </BarChart>
       </ResponsiveContainer>

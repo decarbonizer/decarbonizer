@@ -1,5 +1,5 @@
 import { SimpleGrid } from '@chakra-ui/react';
-import { useEffect, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCosts from './CalculatedCosts';
@@ -7,13 +7,15 @@ import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCost
 import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
 import CarbonFootprintCard from './CarbonFootprintCard';
 import ComparisonOfCostsAndFootprints from './ComparisonOfCostsAndFootprints';
+import { ActionPanelContext } from '../action-panel/actionPanelContext';
+import { useParams } from 'react-router';
+import { RealEstatePageParams } from '../../../routes';
 
-interface ChangeOfIlluminationProps {
-  realEstateId: string;
-  bulbId: string;
-}
+export default function IlluminationChartsSection() {
+  const { realEstateId } = useParams<RealEstatePageParams>();
+  const { filledActionAnswers } = useContext(ActionPanelContext);
+  const bulbId = filledActionAnswers.changeBulbs?.values.value.newBulb;
 
-export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfIlluminationProps) {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
   });
@@ -21,10 +23,10 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
 
   const newData = useMemo(
     () =>
-      surveyAnswers && bulbs
+      bulbId && surveyAnswers && bulbs
         ? changeBulbs(surveyAnswers, bulbs, bulbId)
         : {
-            newIllumination: { typeOfBulb: bulbId, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
+            newIllumination: { typeOfBulb: bulbId!, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
             oldCalculation: [{ costs: 0, footprint: 0, year: 0 }],
             newCalculation: [{ costs: 0, footprint: 0, year: 0 }],
           },
@@ -54,7 +56,7 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
   }
 
   return (
-    <SimpleGrid rows={2} gap={6} p="4">
+    <SimpleGrid rows={2} gap={6}>
       <SimpleGrid columns={3} gap={6}>
         <ReducedFootprintAndCosts
           oldCalculation={newData.oldCalculation[0]}
