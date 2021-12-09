@@ -1,20 +1,21 @@
-import { Box, Button, Flex, Grid, GridItem, Stack } from '@chakra-ui/react';
+import { Box, Button, Grid } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
-import ComparisonComponent from './ComparisonOfFootprints';
 import { RealEstatePageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
 import { useMemo, useState } from 'react';
 import { calculateOverallFootprint, SurveyAnswer } from '../../api/surveyAnswer';
 import { Bulb } from '../../api/bulb';
-import NetZeroCard from './NetZeroCard';
+import NetZeroCard from './global/NetZeroCard';
 import ChangeOfIllumination from './illumination/ChangeOfIllumination';
 import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
-import CarbonFootprintCard from './shared/CarbonFootprintCard';
+import CarbonFootprintCard from './illumination/CarbonFootprintCard';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import Card from '../../components/Card';
+import ChartSectionHeader from './components/ChartSectionHeader';
+import ComparisonCard from './global/ComparisonCard';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -74,16 +75,11 @@ export default function DashboardPage() {
           </Card>
         }>
         <Box w="100%">
-          <Grid templateColumns="repeat(2, 2fr)" templateRows="repeat(2, 2fr)" gap={6}>
-            <GridItem rowSpan={2} colSpan={1}>
-              <ComparisonComponent />
-            </GridItem>
-            <GridItem rowSpan={1} w="80">
-              <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
-            </GridItem>
-            <GridItem rowSpan={1} w="80">
-              <NetZeroCard />
-            </GridItem>
+          <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
+          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+            <CarbonFootprintCard carbonFootprint={carbonFootprint} />
+            <NetZeroCard />
+            <ComparisonCard gridColumn="3 / span 2" />
           </Grid>
           {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (
             <ChangeOfIllumination

@@ -25,7 +25,8 @@ export const appTheme = extendTheme({
     global: {
       'html, body, #root': {
         height: '100vh',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#f7f8fa',
+        color: '#2a3256',
       },
     },
   },
