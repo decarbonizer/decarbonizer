@@ -120,6 +120,12 @@ export const api = createApi({
       invalidatesTags: ['SurveyAnswer'],
     }),
 
+    getAllActionPlansForRealEstate: builder.query<Array<ActionPlan>, { realEstateId: string }>({
+      query: ({ realEstateId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
+      }),
+      providesTags: ['ActionPlans'],
+    }),
     createActionPlan: builder.mutation<ActionPlan, { realEstateId: string; body: ActionPlanCreate }>({
       query: ({ realEstateId, body }) => ({
         url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
@@ -149,5 +155,6 @@ export const {
   useUpdateSurveyAnswerMutation,
   useDeleteSurveyAnswerMutation,
 
+  useGetAllActionPlansForRealEstateQuery,
   useCreateActionPlanMutation,
 } = api;

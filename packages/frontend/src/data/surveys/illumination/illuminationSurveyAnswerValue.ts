@@ -1,5 +1,6 @@
 export interface IlluminationSurveyAnswerValue {
   realEstateName: string;
+  initialSurvey: boolean;
   lampCount: number;
   bulbType: string;
   isIlluminantExchangeable: boolean;

@@ -18,10 +18,10 @@ import { ActionPlanSummary } from './ActionPlanSummary';
 import { isEmpty } from 'lodash';
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { ActionPlanCreate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
-import { DashboardPageParams } from '../../../routes';
+import { DashboardPageParams, routes } from '../../../routes';
 import { useCreateActionPlanMutation } from '../../../store/api';
 import { ActionPanelContext } from './actionPanelContext';
 import range from 'lodash-es/range';
@@ -47,6 +47,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
   const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const toast = useToast();
+  const history = useHistory();
 
   const onSubmit = (data: FormValues) => {
     const body: ActionPlanCreate = {
@@ -76,6 +77,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
         }),
       )
       .finally(onClose);
+    history.push(routes.actionPlans({ realEstateId }));
   };
 
   return (

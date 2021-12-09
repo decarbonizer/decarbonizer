@@ -19,6 +19,15 @@ export const illuminationSurvey: Survey = {
             helperText:
               'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
           },
+          {
+            id: 'initialSurvey',
+            required: true,
+            type: 'boolean',
+            label: 'Is this your first survey for this location/room?',
+            trueText: 'Yes',
+            falseText: 'No',
+            helperText: 'All initial surveys will be considered for the start of your net-zero calculation.',
+          },
         ],
       },
       {
