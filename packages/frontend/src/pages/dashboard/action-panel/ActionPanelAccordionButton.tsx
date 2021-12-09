@@ -10,14 +10,14 @@ export interface ActionPanelAccordionButtonProps {
 
 export default function ActionPanelAccordionButton({ icon, title, badge, buttons }: ActionPanelAccordionButtonProps) {
   return (
-    <AccordionButton>
+    <AccordionButton px="2">
       <HStack w="100%">
+        <AccordionIcon />
         {badge}
         {icon}
-        <Text>{title}</Text>
+        <Text fontWeight="semibold">{title}</Text>
         <Spacer />
         {buttons}
-        <AccordionIcon />
       </HStack>
     </AccordionButton>
   );

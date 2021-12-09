@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Redirect, Route, Switch } from 'react-router';
 import { routes } from '../routes';
 import DashboardPage from '../pages/dashboard/DashboardPage';
@@ -9,15 +9,17 @@ import NavBar from './NavBar';
 
 export default function AppShell() {
   return (
-    <Box minH="100%">
+    <Flex minH="100%" flexDir="column">
       <NavBar />
-      <Switch>
-        <Route exact path={routes.home()} component={HomePage} />
-        <Route exact path={routes.surveys.route} component={SurveyOverviewPage} />
-        <Route exact path={routes.realEstateDashboard.route} component={DashboardPage} />
-        <Route exact path={routes.actionPlans.route} component={ActionPlanOverviewPage} />
-        <Route render={() => <Redirect to={routes.home.route} />} />
-      </Switch>
-    </Box>
+      <Flex flexGrow="1" flexDir="column">
+        <Switch>
+          <Route exact path={routes.home()} component={HomePage} />
+          <Route exact path={routes.surveys.route} component={SurveyOverviewPage} />
+          <Route exact path={routes.realEstateDashboard.route} component={DashboardPage} />
+          <Route exact path={routes.actionPlans.route} component={ActionPlanOverviewPage} />
+          <Route render={() => <Redirect to={routes.home.route} />} />
+        </Switch>
+      </Flex>
+    </Flex>
   );
 }

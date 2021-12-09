@@ -16,14 +16,14 @@ export default function ActionGroupAccordionItem({ actionCategory }: ActionGroup
   ).length;
 
   return (
-    <AccordionItem maxW="100%">
+    <AccordionItem maxW="100%" borderWidth="0 !important">
       <ActionPanelAccordionButton
         badge={countOfFilledAnswers > 0 ? <Tag colorScheme="primary">{countOfFilledAnswers}</Tag> : undefined}
         icon={<Icon as={actionCategory.icon} />}
         title={actionCategory.name}
       />
       <AccordionPanel pr="0">
-        <Accordion allowToggle>
+        <Accordion pl="4" allowToggle>
           {actionCategory.actions.map((action) => (
             <ActionAccordionItem key={action.id} action={action} />
           ))}

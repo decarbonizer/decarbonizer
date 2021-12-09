@@ -42,6 +42,12 @@ export const api = createApi({
       }),
       providesTags: ['RealEstate'],
     }),
+    getRealEstate: builder.query<RealEstate, { id: string }>({
+      query: ({ id }) => ({
+        url: `api/v1/realEstates/${id}`,
+      }),
+      providesTags: ['RealEstate'],
+    }),
     createRealEstate: builder.mutation({
       query: (body) => ({
         url: 'api/v1/realEstates',
@@ -143,6 +149,7 @@ export const {
   useGetAllBulbsQuery,
 
   useGetAllRealEstatesQuery,
+  useGetRealEstateQuery,
   useCreateRealEstateMutation,
   useDeleteRealEstateMutation,
   useUpdateRealEstateMutation,
