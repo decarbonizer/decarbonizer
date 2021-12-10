@@ -56,18 +56,20 @@ export default function IlluminationChartsSection() {
   }
 
   return (
-    <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto, 1fr" gap="6">
+    <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto 1fr" gap="6">
       <FootprintCostReductionCard
+        gridRow="1"
         gridColumn="1 / span 2"
         oldCalculation={newData.oldCalculation[0]}
         newCalculation={newData.newCalculation[0]}
       />
       <CarbonFootprintCard
+        gridRow="1"
         gridColumn="3 / span 2"
         header={footprintReduction > 0 ? 'Reduced footprint' : 'Increased footprint'}
         carbonFootprint={Math.abs(footprintReduction)}
       />
-      <CalculatedCostsCard gridColumn="5 / span 2" calculatedCosts={newData.newIllumination} />
+      <CalculatedCostsCard gridRow="1" gridColumn="5 / span 2" calculatedCosts={newData.newIllumination} />
       <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="1 / span 3" data={dataForComparison} />
       <OverallCostComparisonCard gridRow="2" gridColumn="4 / span 3" />
     </Grid>

@@ -1,4 +1,4 @@
-import { Box, Grid, Heading } from '@chakra-ui/react';
+import { Box, VStack, Heading } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import Card, { CardProps } from '../../../components/Card';
 
@@ -9,14 +9,12 @@ export interface DashboardCardProps extends CardProps {
 export default function DashboardCard({ header, children, ...rest }: DashboardCardProps) {
   return (
     <Card p="6" {...rest}>
-      <Grid templateRows="auto, 1fr" templateColumns="1fr, auto" gap="4" h="100%">
-        <Heading as="h3" size="sm" color="gray.600" isTruncated gridRow={1}>
+      <VStack alignItems="stretch" spacing="4" h="100%">
+        <Heading as="h3" size="sm" color="gray.600" isTruncated>
           {header}
         </Heading>
-        <Box gridRow={2} gridColumnSpan={2}>
-          {children}
-        </Box>
-      </Grid>
+        <Box flexGrow={1}>{children}</Box>
+      </VStack>
     </Card>
   );
 }
