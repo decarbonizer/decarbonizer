@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, Stack } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import ComparisonComponent from './ComparisonOfFootprints';
@@ -50,7 +50,7 @@ export default function DashboardPage() {
     );
   }
 
-  function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
+  function getFootprint(answers: SurveyAnswer[], bulbs: Bulb[]): number {
     const value = calculateOverallFootprint(answers, bulbs, 1);
     return +value[0].footprint.toFixed(1);
   }

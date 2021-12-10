@@ -1,8 +1,7 @@
-import { Box } from '@chakra-ui/react';
-import { Spinner } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { calculateFootprintPerRealEstate } from '../../api/surveyAnswer';
-import { useGetAllBulbsQuery, useGetAllSurveyAnswersQuery, useGetAllRealEstatesQuery } from '../../store/api';
+import { useGetAllBulbsQuery, useGetAllRealEstatesQuery, useGetAllSurveyAnswersQuery } from '../../store/api';
 import ComparisonCard from './ComparisonCard';
 
 export default function ComparisonOfFootprints() {

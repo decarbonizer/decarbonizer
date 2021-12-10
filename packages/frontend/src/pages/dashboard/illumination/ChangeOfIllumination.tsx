@@ -1,12 +1,13 @@
 import { SimpleGrid } from '@chakra-ui/react';
-import { useEffect, useMemo } from 'react';
-import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
+import { useMemo } from 'react';
+import { changeBulbs, ComparisonOfCalculations, SurveyAnswer } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCosts from './CalculatedCosts';
 import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCosts';
 import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
 import CarbonFootprintCard from '../shared/CarbonFootprintCard';
 import ComparisonOfCostsAndFootprints from './ComparisonOfCostsAndFootprints';
+import { IlluminationSurveyAnswerValue } from '../../../data/surveys/illumination/illuminationSurveyAnswerValue';
 
 interface ChangeOfIlluminationProps {
   realEstateId: string;
@@ -22,7 +23,7 @@ export default function ChangeOfIllumination({ realEstateId, bulbId }: ChangeOfI
   const newData = useMemo(
     () =>
       surveyAnswers && bulbs
-        ? changeBulbs(surveyAnswers, bulbs, bulbId)
+        ? changeBulbs(surveyAnswers as SurveyAnswer<IlluminationSurveyAnswerValue>[], bulbs, bulbId)
         : {
             newIllumination: { typeOfBulb: bulbId, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
             oldCalculation: [{ costs: 0, footprint: 0, year: 0 }],
