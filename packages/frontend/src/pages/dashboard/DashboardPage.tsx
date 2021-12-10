@@ -72,7 +72,7 @@ export default function DashboardPage() {
                 mt="8"
                 mb="4"
               />
-              <Box h="100%" flexGrow={1} mb="8">
+              <Box flexGrow={1} mb="8" display="flex" alignItems="stretch">
                 <ActionChartsSection />
               </Box>
             </>

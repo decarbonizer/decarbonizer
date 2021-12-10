@@ -1,12 +1,12 @@
-import { SimpleGrid } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { useContext, useMemo } from 'react';
 import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
-import CalculatedCosts from './CalculatedCosts';
-import ReducedFootprintAndCosts from '../action-specific/ReducedFootprintAndCosts';
-import ComparisonOfOverallCosts from '../action-specific/ComparisonOfOverallCosts';
+import CalculatedCostsCard from './CalculatedCostsCard';
+import FootprintCostReductionCard from './FootprintCostReductionCard';
+import OverallCostComparisonCard from './OverallCostComparisonCard';
 import CarbonFootprintCard from '../components/CarbonFootprintCard';
-import ComparisonOfCostsAndFootprints from './ComparisonOfCostsAndFootprints';
+import ComparisonOfCostsAndFootprints from './CostFootprintComparisonCard';
 import { ActionPanelContext } from '../action-panel/actionPanelContext';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
@@ -56,22 +56,20 @@ export default function IlluminationChartsSection() {
   }
 
   return (
-    <SimpleGrid rows={2} gap={6}>
-      <SimpleGrid columns={3} gap={6}>
-        <ReducedFootprintAndCosts
-          oldCalculation={newData.oldCalculation[0]}
-          newCalculation={newData.newCalculation[0]}
-        />
-        <CarbonFootprintCard
-          header={footprintReduction > 0 ? 'Reduced footprint' : 'Increased footprint'}
-          carbonFootprint={Math.abs(footprintReduction)}
-        />
-        <CalculatedCosts calculatedCosts={newData.newIllumination} />
-      </SimpleGrid>
-      <SimpleGrid columns={2} gap={6}>
-        <ComparisonOfCostsAndFootprints data={dataForComparison} />
-        <ComparisonOfOverallCosts />
-      </SimpleGrid>
-    </SimpleGrid>
+    <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto, 1fr" gap="6">
+      <FootprintCostReductionCard
+        gridColumn="1 / span 2"
+        oldCalculation={newData.oldCalculation[0]}
+        newCalculation={newData.newCalculation[0]}
+      />
+      <CarbonFootprintCard
+        gridColumn="3 / span 2"
+        header={footprintReduction > 0 ? 'Reduced footprint' : 'Increased footprint'}
+        carbonFootprint={Math.abs(footprintReduction)}
+      />
+      <CalculatedCostsCard gridColumn="5 / span 2" calculatedCosts={newData.newIllumination} />
+      <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="1 / span 3" data={dataForComparison} />
+      <OverallCostComparisonCard gridRow="2" gridColumn="4 / span 3" />
+    </Grid>
   );
 }

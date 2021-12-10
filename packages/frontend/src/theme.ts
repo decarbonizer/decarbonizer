@@ -29,6 +29,10 @@ export const appTheme = extendTheme({
         backgroundColor: '#f7f8fa',
         color: '#2a3256',
       },
+      '.recharts-wrapper': {
+        // Hack to make charts resize correctly. See https://stackoverflow.com/a/69200646
+        position: 'absolute !important',
+      },
     },
   },
   components: {
