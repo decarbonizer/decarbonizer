@@ -4,10 +4,10 @@ import { Bulb } from '../../../api/bulb';
 import { calculateOverallFootprint, SurveyAnswer } from '../../../api/surveyAnswer';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllBulbsQuery } from '../../../store/api';
-import { IconDashboardCardProps } from '../components/IconDashboardCard';
 import CarbonFootprintCard from '../components/CarbonFootprintCard';
+import { DashboardCardProps } from '../components/DashboardCard';
 
-export default function GlobalFootprintCard(props: Partial<IconDashboardCardProps>) {
+export default function GlobalFootprintCard(props: DashboardCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { data: bulbs } = useGetAllBulbsQuery();
