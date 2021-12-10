@@ -3,13 +3,12 @@ import { useContext, useMemo } from 'react';
 import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCostsCard from './CalculatedCostsCard';
-import FootprintCostReductionCard from './FootprintCostReductionCard';
-import OverallCostComparisonCard from './OverallCostComparisonCard';
-import CarbonFootprintCard from '../components/CarbonFootprintCard';
+import FootprintDeltaCard from './FootprintDeltaCard';
 import ComparisonOfCostsAndFootprints from './CostFootprintComparisonCard';
 import { ActionPanelContext } from '../action-panel/actionPanelContext';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
+import CostDeltaCard from './CostDeltaCard';
 
 export default function IlluminationChartsSection() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -57,21 +56,20 @@ export default function IlluminationChartsSection() {
 
   return (
     <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto 1fr" gap="6">
-      <FootprintCostReductionCard
+      <FootprintDeltaCard
         gridRow="1"
         gridColumn="1 / span 2"
         oldCalculation={newData.oldCalculation[0]}
         newCalculation={newData.newCalculation[0]}
       />
-      <CarbonFootprintCard
+      <CostDeltaCard
         gridRow="1"
         gridColumn="3 / span 2"
-        header={footprintReduction > 0 ? 'Reduced footprint' : 'Increased footprint'}
-        carbonFootprint={Math.abs(footprintReduction)}
+        oldCalculation={newData.oldCalculation[0]}
+        newCalculation={newData.newCalculation[0]}
       />
-      <CalculatedCostsCard gridRow="1" gridColumn="5 / span 2" calculatedCosts={newData.newIllumination} />
-      <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="1 / span 3" data={dataForComparison} />
-      <OverallCostComparisonCard gridRow="2" gridColumn="4 / span 3" />
+      <CalculatedCostsCard gridRow="2" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
+      <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="3 / span 4" data={dataForComparison} />
     </Grid>
   );
 }

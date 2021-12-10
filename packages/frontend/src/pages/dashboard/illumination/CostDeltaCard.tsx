@@ -1,28 +1,36 @@
 import { SimpleGrid } from '@chakra-ui/layout';
-import { Box, Center, Heading, Icon } from '@chakra-ui/react';
+import { Box, Center, Heading, HStack, Icon } from '@chakra-ui/react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { Calculation } from '../../../api/surveyAnswer';
 import { FcMoneyTransfer } from 'react-icons/fc';
 import { IoWarning } from 'react-icons/io5';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
+import QuickInfo from '../components/QuickInfo';
+import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
+import { getDeltaType, mapDeltaType } from '../../../utils/deltaType';
+import HaloIcon from '../../../components/HaloIcon';
+import { BiEuro } from 'react-icons/bi';
 
-export interface FootprintCostReductionCardProps extends DashboardCardProps {
+export interface CostDeltaCardProps extends DashboardCardProps {
   oldCalculation: Calculation;
   newCalculation: Calculation;
 }
 
-export default function FootprintCostReductionCard({
-  oldCalculation,
-  newCalculation,
-  ...rest
-}: FootprintCostReductionCardProps) {
-  const footprintDifference = oldCalculation.footprint - newCalculation.footprint;
-  const costsDifference = oldCalculation.costs - newCalculation.costs;
-  const data = [oldCalculation, { footprint: footprintDifference, costs: costsDifference }];
+export default function CostDeltaCard({ oldCalculation, newCalculation, ...rest }: CostDeltaCardProps) {
+  const costDelta = newCalculation.costs - oldCalculation.costs;
+  const deltaType = getDeltaType(costDelta);
 
   return (
-    <DashboardCard header="Reduced emissions and costs" {...rest}>
-      <SimpleGrid columns={2} gap={2}>
+    <DashboardCard header="Cost delta" {...rest}>
+      <HStack>
+        <QuickInfo icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(deltaType, 'red', 'green', 'gray')} />}>
+          <QuickInfoLabelDescription
+            label={`${Math.abs(costDelta).toFixed(2)}€`}
+            description={<>{deltaType === 'decrease' ? 'less' : 'more'}</>}
+          />
+        </QuickInfo>
+      </HStack>
+      {/* <SimpleGrid columns={2} gap={2}>
         {footprintDifference < 0 ? (
           <SimpleGrid rows={2}>
             <Box width={150} height={200} position="relative" paddingLeft="5">
@@ -112,7 +120,7 @@ export default function FootprintCostReductionCard({
             </SimpleGrid>
           </SimpleGrid>
         )}
-      </SimpleGrid>
+      </SimpleGrid> */}
     </DashboardCard>
   );
 }

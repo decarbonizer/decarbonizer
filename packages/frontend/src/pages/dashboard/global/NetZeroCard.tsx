@@ -1,12 +1,15 @@
 import { GrTarget } from 'react-icons/gr';
 import HaloIcon from '../../../components/HaloIcon';
 import DashboardCard from '../components/DashboardCard';
-import IconQuickInfo from '../components/HaloIconQuickInfo';
+import QuickInfo from '../components/QuickInfo';
+import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 
 export default function NetZeroCard() {
   return (
     <DashboardCard header="Goal achieved by">
-      <IconQuickInfo icon={<HaloIcon icon={GrTarget} />}>38%</IconQuickInfo>
+      <QuickInfo icon={<HaloIcon icon={GrTarget} />}>
+        <QuickInfoLabelDescription label="38%" />
+      </QuickInfo>
     </DashboardCard>
   );
 }
