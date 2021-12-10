@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { BsThermometerHigh } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
 export const increaseDataCenterTemperature: Action = {
@@ -33,3 +33,12 @@ export const increaseDataCenterTemperature: Action = {
     ],
   },
 };
+
+export interface IncreaseDataCenterTemperatureActionAnswerValue {
+  newDataCenterTemperature: number;
+}
+
+export interface IncreaseDataCenterTemperatureActionDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}

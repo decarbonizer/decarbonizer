@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { BsThermometerSnow } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'heating' + create heating survey, options: 'heating'
 export const heatLessAction: Action = {
@@ -34,3 +34,12 @@ export const heatLessAction: Action = {
     ],
   },
 };
+
+export interface HeatLessActionAnswerValue {
+  newRoomTemperature: number;
+}
+
+export interface HeatLessActionDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}

@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { BsThermometerSun } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'heating' + create heating survey, options: 'heating'
 export const integrateSmartRadiatorThermostats: Action = {
@@ -33,3 +33,11 @@ export const integrateSmartRadiatorThermostats: Action = {
     ],
   },
 };
+export interface IntegrateSmartRadiatorThermostatsActionAnswerValue {
+  newSmartTemperature: boolean;
+}
+
+export interface IntegrateSmartRadiatorThermostatsActionDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}

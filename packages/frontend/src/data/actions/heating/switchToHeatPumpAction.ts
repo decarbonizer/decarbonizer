@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { AiOutlineBoxPlot } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'heating' + create heating survey, options: 'heating'
 export const switchToHeatPumpAction: Action = {
@@ -37,3 +37,12 @@ export const switchToHeatPumpAction: Action = {
     ],
   },
 };
+
+export interface SwitchToHeatPumpActionAnswerValue {
+  newHeatPump: 'groundSourceHeatPump' | 'airSourceHeatPump' | 'solarThermal';
+}
+
+export interface SwitchToHeatPumpActionDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}

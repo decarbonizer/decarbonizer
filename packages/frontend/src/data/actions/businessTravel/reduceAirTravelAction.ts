@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { RiComputerLine } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
 export const reduceAirTravelAction: Action = {
@@ -39,3 +39,12 @@ export const reduceAirTravelAction: Action = {
     ],
   },
 };
+export interface ReduceAirTravelActionAnswerValue {
+  lessLongTraveling: number;
+  lessShortTraveling: number;
+}
+
+export interface ReduceAirTravelActionDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}

@@ -1,8 +1,8 @@
 import { Action } from '../action';
 import { GiGreenPower } from 'react-icons/all';
-import { chooseTimePeriodElement } from '../shared/chooseTimePeriodElement';
-import { choosePriorityElement } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
+import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'electricity' + create heating survey, options: 'electricity'
 export const switchToGreenEnergy: Action = {
@@ -39,3 +39,12 @@ export const switchToGreenEnergy: Action = {
     ],
   },
 };
+
+export interface SwitchToGreenEnergyActionAnswerValue {
+  newEnergySource: 'windPower' | 'hydroPower' | 'conSolarPower' | 'roofSolarPower' | 'geothermal';
+}
+
+export interface SwitchToGreenEnergyDetailsAnswerValue
+  extends ChoosePriorityElementAnswerValue,
+    ChooseTimePeriodElementAnswerValue,
+    ChooseSurveyAnswerElementAnswerValue {}
