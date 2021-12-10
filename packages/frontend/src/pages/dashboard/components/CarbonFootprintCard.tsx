@@ -1,7 +1,9 @@
 import { GiFootprint } from 'react-icons/gi';
-import IconDashboardCard, { IconDashboardCardProps } from './IconDashboardCard';
+import HaloIcon from '../../../components/HaloIcon';
+import DashboardCard, { DashboardCardProps } from './DashboardCard';
+import IconQuickInfo from './HaloIconQuickInfo';
 
-interface CarbonFootprintCardProps extends Partial<IconDashboardCardProps> {
+interface CarbonFootprintCardProps extends DashboardCardProps {
   carbonFootprint: number;
 }
 
@@ -10,16 +12,17 @@ export default function CarbonFootprintCard({ carbonFootprint, ...rest }: Carbon
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
   return (
-    <IconDashboardCard
-      icon={GiFootprint}
+    <DashboardCard
       header={
         <>
           CO<sub>2</sub> footprint
         </>
       }
       {...rest}>
-      {adjustedFootprint.toFixed(1)}
-      {unitSymbol}
-    </IconDashboardCard>
+      <IconQuickInfo icon={<HaloIcon icon={GiFootprint} />}>
+        {adjustedFootprint.toFixed(1)}
+        {unitSymbol}
+      </IconQuickInfo>
+    </DashboardCard>
   );
 }

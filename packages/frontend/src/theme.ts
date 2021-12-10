@@ -1,5 +1,6 @@
 import { theme, extendTheme, ThemeConfig } from '@chakra-ui/react';
 import { CardTheme } from './components/Card';
+import { HaloIconTheme } from './components/HaloIcon';
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
@@ -32,5 +33,6 @@ export const appTheme = extendTheme({
   },
   components: {
     Card: CardTheme,
+    HaloIcon: HaloIconTheme,
   },
 });
