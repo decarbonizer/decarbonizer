@@ -20,11 +20,17 @@ import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
+import { Bulb } from '../../api/bulb';
 import { RealEstate } from '../../api/realEstate';
+import { SurveyAnswer, calculateOverallFootprint } from '../../api/surveyAnswer';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { routes } from '../../routes';
-import { useDeleteRealEstateMutation } from '../../store/api';
+import {
+  useDeleteRealEstateMutation,
+  useGetAllBulbsQuery,
+  useGetAllSurveyAnswersForRealEstateQuery,
+} from '../../store/api';
 import CarbonTreeCard from '../dashboard/shared/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
@@ -34,6 +40,8 @@ export interface CityCard {
 
 export default function CityCard({ realEstate }: CityCard) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
+  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
+  const { data: bulbs } = useGetAllBulbsQuery();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const toast = useToast();
@@ -100,7 +108,7 @@ export default function CityCard({ realEstate }: CityCard) {
               {realEstate.employees}
             </p>
           </Box>
-          <CarbonTreeCard carbonFootprint={200} />
+          <CarbonTreeCard carbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0} />
         </Grid>
 
         <Flex position="absolute" bottom="5" right="4">
@@ -133,4 +141,9 @@ export default function CityCard({ realEstate }: CityCard) {
       </VStack>
     </Card>
   );
+}
+
+function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
+  const value = calculateOverallFootprint(answers, bulbs, 1);
+  return +value[0].footprint.toFixed(1);
 }

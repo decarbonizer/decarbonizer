@@ -19,7 +19,6 @@ import {
   Badge,
   Icon,
   useToast,
-  Checkbox,
 } from '@chakra-ui/react';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { FaEdit } from 'react-icons/fa';
@@ -95,13 +94,13 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
               {sortedSurveyAnswers?.map((surveyAnswer) => (
                 <Tr key={surveyAnswer._id}>
                   <Td display="flex">
-                    <Checkbox isChecked={(surveyAnswer.value as any).initialSurvey} colorScheme="primary" mr="4" />
                     <VStack align="flex-start">
                       <Text>{(surveyAnswer.value as any).realEstateName}</Text>
                       <HStack>
                         <Badge>Created: {new Date(surveyAnswer.createdAt).toLocaleDateString()}</Badge>
                         <Badge>Modified: {new Date(surveyAnswer.updatedAt).toLocaleDateString()}</Badge>
                       </HStack>
+                      {(surveyAnswer.value as any).isInitialSurvey && <Badge colorScheme="primary">Baseline</Badge>}
                     </VStack>
                     <Spacer />
                     <Tooltip label="Edit" hasArrow>

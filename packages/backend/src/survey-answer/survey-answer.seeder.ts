@@ -18,7 +18,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
           realEstateName: 'CEO Office',
-          initialSurvey: true,
+          isInitialSurvey: true,
           lampCount: 12,
           bulbType: '00000000-0000-0000-0000-000000000001',
           isIlluminantExchangeable: true,
@@ -36,7 +36,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
           realEstateName: 'Kitchen',
-          initialSurvey: true,
+          isInitialSurvey: true,
           lampCount: 5,
           bulbType: '00000000-0000-0000-0000-000000000001',
           isIlluminantExchangeable: true,
@@ -54,7 +54,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
           realEstateName: 'Hallway',
-          initialSurvey: true,
+          isInitialSurvey: false,
           lampCount: 20,
           bulbType: '00000000-0000-0000-0000-000000000001',
           isIlluminantExchangeable: true,

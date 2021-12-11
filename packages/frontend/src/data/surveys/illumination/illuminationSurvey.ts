@@ -20,7 +20,7 @@ export const illuminationSurvey: Survey = {
               'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
           },
           {
-            id: 'initialSurvey',
+            id: 'isinitialSurvey',
             required: true,
             type: 'boolean',
             label: 'Is this your first survey for this location/room?',
