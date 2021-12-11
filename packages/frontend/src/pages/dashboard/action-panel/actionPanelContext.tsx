@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
-import { ActionsToActionAnswerMap } from '../../../data/actions/action';
+import { ActionCategory, ActionsToActionAnswerMap } from '../../../data/actions/action';
 
 export const ActionPanelContext = createContext<ActionPanelContextValue>(null!);
 
@@ -11,4 +11,6 @@ export type FilledActionAnswers = {
 export interface ActionPanelContextValue {
   filledActionAnswers: FilledActionAnswers;
   setFilledActionAnswers: Dispatch<SetStateAction<FilledActionAnswers>>;
+  selectedActionCategory?: ActionCategory;
+  setSelectedActionCategory: Dispatch<SetStateAction<ActionCategory | undefined>>;
 }

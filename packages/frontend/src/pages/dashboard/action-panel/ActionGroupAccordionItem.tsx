@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem, AccordionPanel, Tag, Icon } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ActionCategory } from '../../../data/actions/action';
 import { ActionAccordionItem } from './ActionAccordionItem';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
@@ -10,13 +10,34 @@ export interface ActionGroupAccordionItemProps {
 }
 
 export default function ActionGroupAccordionItem({ actionCategory }: ActionGroupAccordionItemProps) {
-  const { filledActionAnswers } = useContext(ActionPanelContext);
+  return (
+    <AccordionItem maxW="100%" borderWidth="0 !important">
+      {({ isExpanded }) => <ActionGroupAccordionContent isExpanded={isExpanded} actionCategory={actionCategory} />}
+    </AccordionItem>
+  );
+}
+
+interface ActionGroupAccordionContentProps {
+  isExpanded: boolean;
+  actionCategory: ActionCategory;
+}
+
+function ActionGroupAccordionContent({ isExpanded, actionCategory }: ActionGroupAccordionContentProps) {
+  const { filledActionAnswers, setSelectedActionCategory } = useContext(ActionPanelContext);
   const countOfFilledAnswers = Object.values(filledActionAnswers).filter((filledAction) =>
     actionCategory.actions.some((action) => action.id === filledAction?.actionId),
   ).length;
 
+  useEffect(() => {
+    if (isExpanded) {
+      setSelectedActionCategory(actionCategory);
+    } else {
+      setSelectedActionCategory(undefined);
+    }
+  }, [actionCategory, isExpanded, setSelectedActionCategory]);
+
   return (
-    <AccordionItem maxW="100%" borderWidth="0 !important">
+    <>
       <ActionPanelAccordionButton
         badge={countOfFilledAnswers > 0 ? <Tag colorScheme="primary">{countOfFilledAnswers}</Tag> : undefined}
         icon={<Icon as={actionCategory.icon} />}
@@ -29,6 +50,6 @@ export default function ActionGroupAccordionItem({ actionCategory }: ActionGroup
           ))}
         </Accordion>
       </AccordionPanel>
-    </AccordionItem>
+    </>
   );
 }
