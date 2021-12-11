@@ -7,7 +7,7 @@ import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from 
 //TODO: forSurvey 'heating' + create heating survey, options: 'heating'
 export const integrateSmartRadiatorThermostats: Action = {
   id: 'integrateSmartRadiatorThermostats',
-  name: 'Integrate smart thermostats',
+  name: 'Smart thermostats',
   icon: BsThermometerSun,
   description: 'Smart radiator thermostats heat your office efficiently and climate-friendly.',
   forSurvey: 'illumination',
