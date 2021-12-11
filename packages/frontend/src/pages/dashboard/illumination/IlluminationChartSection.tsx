@@ -26,21 +26,23 @@ export default function IlluminationChartsSection() {
         ? changeBulbs(surveyAnswers, bulbs, bulbId)
         : {
             newIllumination: { typeOfBulb: bulbId!, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
-            oldCalculation: [{ costs: 0, footprint: 0, year: 0 }],
-            newCalculation: [{ costs: 0, footprint: 0, year: 0 }],
+            oldCalculation: {
+              calculations: [{ costs: 0, footprint: 0, year: 0 }],
+              maintenance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
+            },
+            newCalculation: {
+              calculations: [{ costs: 0, footprint: 0, year: 0 }],
+              maintainance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
+            },
           },
     [surveyAnswers, bulbs, bulbId],
   );
 
   const dataForComparison: ComparisonOfCalculations[] = prepareDataForComparison();
-  const footprintReduction: number = newData
-    ? newData.oldCalculation[0].footprint - newData.newCalculation[0].footprint
-    : 0;
-
   function prepareDataForComparison(): ComparisonOfCalculations[] {
     if (newData) {
-      return newData.oldCalculation.map((item) => {
-        const item2 = newData.newCalculation.find((calc) => calc.year == item.year);
+      return newData.oldCalculation.calculations.map((item) => {
+        const item2 = newData.newCalculation.calculations.find((calc) => calc.year == item.year);
         return {
           year: item.year,
           oldCosts: item.costs,
@@ -59,14 +61,14 @@ export default function IlluminationChartsSection() {
       <FootprintDeltaCard
         gridRow="1"
         gridColumn="1 / span 2"
-        oldCalculation={newData.oldCalculation[0]}
-        newCalculation={newData.newCalculation[0]}
+        oldCalculation={newData.oldCalculation.calculations[0]}
+        newCalculation={newData.newCalculation.calculations[0]}
       />
       <CostDeltaCard
         gridRow="1"
         gridColumn="3 / span 2"
-        oldCalculation={newData.oldCalculation[0]}
-        newCalculation={newData.newCalculation[0]}
+        oldCalculation={newData.oldCalculation.calculations[0]}
+        newCalculation={newData.newCalculation.calculations[0]}
       />
       <CalculatedCostsCard gridRow="2" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
       <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="3 / span 4" data={dataForComparison} />
