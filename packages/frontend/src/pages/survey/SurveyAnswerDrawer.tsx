@@ -93,13 +93,14 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
             <Tbody>
               {sortedSurveyAnswers?.map((surveyAnswer) => (
                 <Tr key={surveyAnswer._id}>
-                  <Td display="flex" alignItems="center">
+                  <Td display="flex">
                     <VStack align="flex-start">
                       <Text>{(surveyAnswer.value as any).realEstateName}</Text>
                       <HStack>
                         <Badge>Created: {new Date(surveyAnswer.createdAt).toLocaleDateString()}</Badge>
                         <Badge>Modified: {new Date(surveyAnswer.updatedAt).toLocaleDateString()}</Badge>
                       </HStack>
+                      {(surveyAnswer.value as any).isInitialSurvey && <Badge colorScheme="primary">Baseline</Badge>}
                     </VStack>
                     <Spacer />
                     <Tooltip label="Edit" hasArrow>

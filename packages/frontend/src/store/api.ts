@@ -4,7 +4,7 @@ import { RealEstate, RealEstateUpdate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
-import { ActionPlan, ActionPlanCreate } from '../api/actionPlan';
+import { ActionPlan, ActionPlanCreate, ActionPlanUpdate } from '../api/actionPlan';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -126,10 +126,31 @@ export const api = createApi({
       invalidatesTags: ['SurveyAnswer'],
     }),
 
+    getAllActionPlansForRealEstate: builder.query<Array<ActionPlan>, { realEstateId: string }>({
+      query: ({ realEstateId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
+      }),
+      providesTags: ['ActionPlans'],
+    }),
     createActionPlan: builder.mutation<ActionPlan, { realEstateId: string; body: ActionPlanCreate }>({
       query: ({ realEstateId, body }) => ({
         url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
         method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['ActionPlans'],
+    }),
+    deleteActionPlan: builder.mutation<void, { id: string }>({
+      query: ({ id }) => ({
+        url: `/api/v1/actionPlans/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['ActionPlans'],
+    }),
+    updateActionPlan: builder.mutation<ActionPlan, { id: string; body: ActionPlanUpdate }>({
+      query: ({ id, body }) => ({
+        url: `/api/v1/actionPlans/${id}`,
+        method: 'PATCH',
         body,
       }),
       invalidatesTags: ['ActionPlans'],
@@ -156,5 +177,8 @@ export const {
   useUpdateSurveyAnswerMutation,
   useDeleteSurveyAnswerMutation,
 
+  useGetAllActionPlansForRealEstateQuery,
   useCreateActionPlanMutation,
+  useDeleteActionPlanMutation,
+  useUpdateActionPlanMutation,
 } = api;
