@@ -108,7 +108,7 @@ function calculateIlluminationFootprint(
 
   if (usedBulb !== null) {
     //calculate how many times bulbs need to be changed
-    const illuminationPerYear = answer.value.avgIlluminationPerDay * 24 * answer.value.avgIlluminationPerYear;
+    const illuminationPerYear = answer.value.avgIlluminationPerDay * answer.value.avgIlluminationPerYear;
     const footprint = usedBulb!.productionKwh * illuminationPerYear * germanyEF + answer.value.lampCount * year;
     const costs = usedBulb!.name.includes('LED')
       ? calculateCostsForLED(usedBulb!.costInEuro, answer.value.lampCount, year)
@@ -199,6 +199,7 @@ export function calculateIllumitationData(
 function calculateCostsForLED(costPerBulb: number, lampCount: number, year: number) {
   return costPerBulb * lampCount * (Math.floor(year / 4) + 1);
 }
+
 function calculateCostsForBulb(costPerBulb: number, lampCount: number, year: number) {
   return costPerBulb * lampCount * 4 * year;
 }

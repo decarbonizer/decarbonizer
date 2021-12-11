@@ -26,5 +26,5 @@ export const chooseSurveyAnswerElement: MultiChoiceFormSchemaElement = {
 };
 
 export interface ChooseSurveyAnswerElementAnswerValue {
-  surveyAnswers: Array<string>;
+  surveyAnswers?: Array<string>;
 }
