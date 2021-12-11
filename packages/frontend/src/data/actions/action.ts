@@ -7,12 +7,21 @@ import {
   ChangeRuntimeActionDetailsAnswerValue,
 } from './illumination/changeRuntimeAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
+import { heatingActionsCategory } from './heating/heatingActions';
+import { electricityActionsCategory } from './electricity/electricityActions';
+import { itActions } from './it/itActions';
+import { businessTravelActions } from './businessTravel/businessTravelActions';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
  * properties which are used by the UI to render components.
  */
 export interface ActionCategory {
+  /**
+   * A unique identifier of the action category.
+   * Should be human readable.
+   */
+  id: string;
   /**
    * The name of he category.
    */
@@ -83,7 +92,14 @@ export interface ActionAnswerValues<
   detailsValue?: TDetailsValue;
 }
 
-export const knownActionCategories = [illuminationActionsCategory];
+export const knownActionCategories = [
+  illuminationActionsCategory,
+  heatingActionsCategory,
+  electricityActionsCategory,
+  itActions,
+  businessTravelActions,
+];
+
 export const knownActions = knownActionCategories.flatMap((category) => category.actions);
 
 export type ActionsToActionAnswerMap = {

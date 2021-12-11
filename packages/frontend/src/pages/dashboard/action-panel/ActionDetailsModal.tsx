@@ -17,7 +17,7 @@ import { Action } from '../../../data/actions/action';
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
-import { DashboardPageParams } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 import { ActionPanelContext } from './actionPanelContext';
 
 export interface ActionDetailsModalProps {
@@ -27,7 +27,7 @@ export interface ActionDetailsModalProps {
 }
 
 export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDetailsModalProps) {
-  const { realEstateId } = useParams<DashboardPageParams>();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const { filledActionAnswers, setFilledActionAnswers } = useContext(ActionPanelContext);
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } = useFormEngine(

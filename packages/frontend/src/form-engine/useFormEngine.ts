@@ -52,6 +52,7 @@ export function useFormEngine(schema: FormSchema = { pages: [] }, initialValue: 
   }, []);
 
   return {
+    schema,
     value,
     page,
     ruleEvaluationResults,
@@ -66,3 +67,5 @@ export function useFormEngine(schema: FormSchema = { pages: [] }, initialValue: 
     setValue,
   };
 }
+
+export type FormEngineHelpers = ReturnType<typeof useFormEngine>;
