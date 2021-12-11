@@ -33,7 +33,7 @@ export function isSurveyAnswerType<SurveyId extends KnownSurveyId>(
 
 //Footprint of a real estate
 export interface RealEstateFootprintCalculation {
-  realEstateName: string;
+  name: string;
   footprint: number;
 }
 
@@ -108,14 +108,11 @@ export function calculateFootprintPerRealEstate(
   bulbs: Array<Bulb>,
   realEstates: Array<RealEstate>,
 ): Array<RealEstateFootprintCalculation> {
-  const result: Array<RealEstateFootprintCalculation> = [];
-  for (let i = 0; i < realEstates.length; i++) {
-    const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstates[i]._id);
+  return realEstates.map((realEstate) => {
+    const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstate._id);
     const footprintValue = calculateOverallFootprint(realEstateAnswers, bulbs, 1); //footprint for one year
-    result.push({ realEstateName: realEstates[i].cityName, footprint: +footprintValue[0].footprint.toFixed(1) });
-  }
-
-  return result;
+    return { name: realEstate.cityName, footprint: +footprintValue[0].footprint.toFixed(1) };
+  });
 }
 
 function calculateIlluminationFootprint(

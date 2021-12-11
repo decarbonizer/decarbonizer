@@ -21,7 +21,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { ActionPlanCreate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
-import { DashboardPageParams } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 import { useCreateActionPlanMutation } from '../../../store/api';
 import { ActionPanelContext } from './actionPanelContext';
 import range from 'lodash-es/range';
@@ -43,7 +43,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
     control,
     formState: { errors },
   } = useForm<FormValues>();
-  const { realEstateId } = useParams<DashboardPageParams>();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const toast = useToast();

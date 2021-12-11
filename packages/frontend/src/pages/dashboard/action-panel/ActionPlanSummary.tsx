@@ -6,7 +6,7 @@ import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { knownActionCategories, knownActions } from '../../../data/actions/action';
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
-import { DashboardPageParams } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
 import { ActionPanelContext } from './actionPanelContext';
 
@@ -29,7 +29,7 @@ interface ActionAnswerAccordionItemProps {
 }
 
 function ActionAnswerAccordionItem({ actionId, actionAnswer }: ActionAnswerAccordionItemProps) {
-  const { realEstateId } = useParams<DashboardPageParams>();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const currentAction = knownActions.find((action) => actionId === action.id);
   const actionCategory = knownActionCategories.find((category) =>

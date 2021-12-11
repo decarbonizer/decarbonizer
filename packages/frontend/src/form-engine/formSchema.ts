@@ -95,6 +95,8 @@ export type DatesFormSchemaElement = FormSchemaBaseElement<'dates'>;
 
 export type DateTimeFormSchemaElement = FormSchemaBaseElement<'date-time'>;
 
+export type CheckboxFormSchemaElement = FormSchemaBaseElement<'boolean-checkbox'>;
+
 export type FormSchemaElement =
   | StringFormSchemaElement
   | NumberFormSchemaElement
@@ -105,6 +107,7 @@ export type FormSchemaElement =
   | SingleChoiceSelectFormSchemaElement
   | MultiChoiceFormSchemaElement
   | DatesFormSchemaElement
-  | DateTimeFormSchemaElement;
+  | DateTimeFormSchemaElement
+  | CheckboxFormSchemaElement;
 
 export type FormSchemaElementType = FormSchemaElement['type'];
