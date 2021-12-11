@@ -9,15 +9,14 @@ interface ComparisonCardProps {
 
 export default function ComparisonCard({ calculations }: ComparisonCardProps) {
   return (
-    <Card w="100%" h="100%">
+    <Card>
       <VStack flexDir="column" p="4" spacing={7}>
         <Heading as="h4" size="sm" fontWeight="semibold" color="gray">
           Compared to other real estates
         </Heading>
         <Center>
           <ComposedChart
-            layout="vertical"
-            width={500}
+            width={400}
             height={400}
             data={calculations}
             margin={{
@@ -27,8 +26,8 @@ export default function ComparisonCard({ calculations }: ComparisonCardProps) {
               left: 20,
             }}>
             <CartesianGrid stroke="#f5f5f5" />
-            <XAxis type="number" />
-            <YAxis dataKey="realEstateName" type="category" scale="band" />
+            <YAxis type="number" />
+            <XAxis dataKey="realEstateName" type="category" scale="band" />
             <Tooltip />
             <Bar dataKey="footprint" barSize={15} fill="green" />
           </ComposedChart>

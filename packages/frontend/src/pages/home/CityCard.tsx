@@ -25,6 +25,7 @@ import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { routes } from '../../routes';
 import { useDeleteRealEstateMutation } from '../../store/api';
+import CarbonTreeCard from '../dashboard/shared/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
 export interface CityCard {
@@ -86,7 +87,6 @@ export default function CityCard({ realEstate }: CityCard) {
             </Tooltip>
           </Flex>
         </Grid>
-
         <Text fontSize="sm" color="gray.500" textAlign="center">
           {realEstate.description ?? 'No description available.'}
         </Text>
@@ -100,10 +100,7 @@ export default function CityCard({ realEstate }: CityCard) {
               {realEstate.employees}
             </p>
           </Box>
-
-          <Box h="40" pt="8" pr="2">
-            {/* <Text>TODO: Display something</Text> */}
-          </Box>
+          <CarbonTreeCard carbonFootprint={200} />
         </Grid>
 
         <Flex position="absolute" bottom="5" right="4">

@@ -29,6 +29,42 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
           avgIlluminationPerYear: 280,
         },
       },
+      {
+        _id: '00000000-0000-0000-0000-000000000001',
+        surveyId: 'illumination',
+        userId: '00000000-0000-0000-0000-000000000000',
+        realEstateId: '00000000-0000-0000-0000-000000000000',
+        value: {
+          realEstateName: 'Kitchen',
+          initialSurvey: true,
+          lampCount: 5,
+          bulbType: '00000000-0000-0000-0000-000000000001',
+          isIlluminantExchangeable: true,
+          illuminationTriggerMode: 'manually',
+          illuminationSwitchOffMode: 'manuallySwitchedOff',
+          illuminationSwitchOnMode: 'onDemand',
+          avgIlluminationPerDay: 6,
+          avgIlluminationPerYear: 280,
+        },
+      },
+      {
+        _id: '00000000-0000-0000-0000-000000000002',
+        surveyId: 'illumination',
+        userId: '00000000-0000-0000-0000-000000000000',
+        realEstateId: '00000000-0000-0000-0000-000000000000',
+        value: {
+          realEstateName: 'Hallway',
+          initialSurvey: true,
+          lampCount: 20,
+          bulbType: '00000000-0000-0000-0000-000000000001',
+          isIlluminantExchangeable: true,
+          illuminationTriggerMode: 'manually',
+          illuminationSwitchOffMode: 'manuallySwitchedOff',
+          illuminationSwitchOnMode: 'onDemand',
+          avgIlluminationPerDay: 6,
+          avgIlluminationPerYear: 280,
+        },
+      },
     ];
   }
 }

@@ -15,6 +15,7 @@ import cloud from '../../img/cloud.svg';
 import CarbonFootprintCard from './shared/CarbonFootprintCard';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import Card from '../../components/Card';
+import CarbonTreeCard from './shared/CarbonTreeCard';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<DashboardPageParams>();
@@ -79,11 +80,14 @@ export default function DashboardPage() {
             <GridItem rowSpan={2} colSpan={1}>
               <ComparisonComponent />
             </GridItem>
-            <GridItem rowSpan={1} w="80">
+            <GridItem rowSpan={1}>
               <CarbonFootprintCard heading={'Calculated footprint'} carbonFootprint={carbonFootprint} />
             </GridItem>
             <GridItem rowSpan={1} w="80">
-              <NetZeroCard />
+              <NetZeroCard startCarbonFootprint={carbonFootprint} reducedValue={0} />
+            </GridItem>
+            <GridItem rowSpan={1} w="80">
+              <CarbonTreeCard carbonFootprint={carbonFootprint} />
             </GridItem>
           </Grid>
           {openedActionsCategory === 'illumination' && filledActionAnswers.changeBulbs && (

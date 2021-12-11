@@ -5,6 +5,7 @@ import Card from '../../components/Card';
 import { useGetAllRealEstatesQuery } from '../../store/api';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import CityCard from './CityCard';
+import CarbonTreeCard from '../dashboard/shared/CarbonTreeCard';
 
 export default function HomePage() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
@@ -17,7 +18,7 @@ export default function HomePage() {
           <Card as="button" border="2px" w="xl" h="xl" borderColor="gray.400" borderStyle="dashed" onClick={onOpen}>
             <Icon as={GoPlus} w="14" h="14" color="gray.600" />
             <Text color="gray.600" pt="3">
-              Add new City
+              Add new real estate
             </Text>
           </Card>
         </WrapItem>
@@ -31,7 +32,6 @@ export default function HomePage() {
           ))
         )}
       </Wrap>
-
       <CreateRealEstateModal isOpen={isOpen} onClose={onClose} />
     </DefaultPageLayout>
   );
