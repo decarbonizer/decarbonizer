@@ -1,16 +1,6 @@
 import { Heading, HStack, Spacer } from '@chakra-ui/react';
-import { AiOutlineHome } from 'react-icons/ai';
-import { routes } from '../routes';
 import NavBarAccountItem from './NavBarAccountItem';
-import NavBarLink, { NavBarLinkProps } from './NavBarLink';
-
-const links: Array<NavBarLinkProps> = [
-  {
-    name: 'Home',
-    to: routes.home(),
-    icon: AiOutlineHome,
-  },
-];
+import NavBarBreadcrumbs from './NavBarBreadcrumbs';
 
 export default function NavBar() {
   return (
@@ -18,9 +8,7 @@ export default function NavBar() {
       <Heading as="h1" role="figure" fontSize="lg" color="primary.500" mr="8">
         Decarbonizer
       </Heading>
-      {links.map((navBarLink) => (
-        <NavBarLink key={navBarLink.to} {...navBarLink} />
-      ))}
+      <NavBarBreadcrumbs />
       <Spacer />
       <NavBarAccountItem />
     </HStack>
