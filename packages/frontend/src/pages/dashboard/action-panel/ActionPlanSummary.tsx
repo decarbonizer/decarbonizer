@@ -12,7 +12,6 @@ export interface ActionPlanSummaryProps {
 }
 
 export function ActionPlanSummary({ actionAnswers }: ActionPlanSummaryProps) {
-  console.log(actionAnswers);
   return (
     <Accordion allowToggle>
       {actionAnswers.map((actionAnswer) => (

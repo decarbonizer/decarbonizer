@@ -14,7 +14,6 @@ export default function ActionPanel() {
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
   const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
-  console.log(Object.values(filledActionAnswers));
 
   return (
     <VStack align="flex-start" w="100%">

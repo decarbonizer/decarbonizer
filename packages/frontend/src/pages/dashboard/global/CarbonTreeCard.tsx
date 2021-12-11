@@ -14,7 +14,8 @@ export default function CarbonTreeCard({ carbonFootprint }: CarbonTreeCardProps)
     <VStack>
       <Image
         boxSize="100px"
-        src="https://cdn-icons.flaticon.com/png/512/2220/premium/2220091.png?token=exp=1639216914~hmac=46f2d1cdb58e07c7c2133e8ddb477f8d"
+        src="https://cdn-icons.flaticon.com/png/512/2220/premium/2220091.png?token=exp=1639247675~hmac=1504967a1dea5681fdf29c64f3ec5ecc"
+        fallbackSrc="https://cdn-icons.flaticon.com/png/512/2713/premium/2713505.png?token=exp=1639247672~hmac=675f058329f564ca37d898ace8e065dd"
         alt="Tree Image"
         objectFit="cover"
         roundedTop="md"

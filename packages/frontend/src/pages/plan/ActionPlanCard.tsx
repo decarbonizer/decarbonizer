@@ -62,7 +62,7 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
             <Heading size="md" fontWeight="semibold" pt="3" justifyContent="center">
               {actionPlan.name}
             </Heading>
-            {BadgeStatus(actionPlan.status)}
+            {<BadgeStatus status={actionPlan.status} />}
           </HStack>
           <Text>
             {new Date(actionPlan.startDate).toLocaleDateString()} - {new Date(actionPlan.endDate).toLocaleDateString()}
@@ -116,10 +116,10 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
   );
 }
 
-function BadgeStatus(status: ActionPlanStatus) {
-  if (status == 'open') {
+function BadgeStatus(props: { status: ActionPlanStatus }) {
+  if (props.status == 'open') {
     return <Badge>Open</Badge>;
-  } else if (status == 'inProgress') {
+  } else if (props.status == 'inProgress') {
     return <Badge colorScheme="orange">In Progress</Badge>;
   } else {
     return <Badge colorScheme="primary">Finished</Badge>;

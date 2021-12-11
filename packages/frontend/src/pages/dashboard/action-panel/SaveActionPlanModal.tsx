@@ -39,7 +39,6 @@ interface FormValues {
 }
 
 export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, actionPlan }: SaveActionPlanModalProps) {
-  console.log(actionAnswers);
   const defaultValues: FormValues | undefined = actionPlan
     ? {
         name: actionPlan.name,
@@ -82,6 +81,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             isClosable: true,
             duration: 5000,
           });
+          onClose;
         })
         .catch(() =>
           toast({
@@ -90,8 +90,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             status: 'error',
             isClosable: true,
           }),
-        )
-        .finally(onClose);
+        );
     } else {
       const body: ActionPlanCreate = {
         name: data.name,
@@ -112,6 +111,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
           });
 
           history.push(routes.actionPlans({ realEstateId }));
+          onClose;
         })
         .catch(() =>
           toast({
@@ -120,8 +120,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             status: 'error',
             isClosable: true,
           }),
-        )
-        .finally(onClose);
+        );
     }
   };
 
