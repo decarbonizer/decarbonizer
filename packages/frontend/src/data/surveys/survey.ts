@@ -2,6 +2,7 @@ import { FormSchema } from '../../form-engine/formSchema';
 import { illuminationSurvey } from './illumination/illuminationSurvey';
 import { IlluminationSurveyAnswerValue } from './illumination/illuminationSurveyAnswerValue';
 import { heatingSurvey } from './heating/heatingSurvey';
+import { HeatingSurveyAnswerValue } from './heating/heatingSurveyAnswerValue';
 
 export interface Survey {
   id: string;
@@ -18,7 +19,7 @@ export const knownSurveys = {
 
 export type SurveyToSurveyAnswerMap = {
   illumination: IlluminationSurveyAnswerValue;
-  heating: any;
+  heating: HeatingSurveyAnswerValue;
 };
 
 export type KnownSurveyId = keyof SurveyToSurveyAnswerMap;
