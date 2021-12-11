@@ -9,19 +9,20 @@ import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { FormEngineControlProps } from './types';
 
 export default function DateTimeFormEngineControl({ element }: FormEngineControlProps<DateTimeFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<Date | null | undefined>(element);
+  const [value, setValue] = useValueProperty<Date | string | null | undefined>(element);
+  const parsedValue = value ? new Date(value) : undefined;
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
 
   if (isViewOnly) {
-    return <DefaultFormControlLayout element={element}>{value?.toLocaleDateString}</DefaultFormControlLayout>;
+    return <DefaultFormControlLayout element={element}>{parsedValue?.toLocaleDateString()}</DefaultFormControlLayout>;
   }
 
   return (
     <DefaultFormControlLayout element={element}>
       <DatePicker
         disabled={ruleEvaluationResult.disable}
-        selected={value}
+        selected={parsedValue}
         onChange={(date) => setValue(date as Date | null)}
         showTimeSelect
         timeIntervals={15}

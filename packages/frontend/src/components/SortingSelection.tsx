@@ -1,4 +1,4 @@
-import { Grid, Select, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Select, Text } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 
 export type SortDirection = 'asc' | 'desc';
@@ -34,22 +34,30 @@ export default function SortingSelection({ sortingCategories, onChange }: Sortin
 
   return (
     <>
-      <Grid templateColumns="repeat(3, 1fr)" gap={1} w="100%">
-        <Text w="100%">Sort by Category:</Text>
-        <Select onChange={(e) => handleCategoryChange(e)} w="100%">
-          {sortingCategories.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.display}
-            </option>
-          ))}
-        </Select>
+      <Grid templateColumns="repeat(6, 1fr)" gap={1} w="100%">
+        <GridItem colStart={1} colSpan={2}>
+          <Text w="100%">Sort by Category:</Text>
+        </GridItem>
+        <GridItem colStart={3} colSpan={3}>
+          <Select onChange={(e) => handleCategoryChange(e)} w="100%">
+            {sortingCategories.map((category) => (
+              <option key={category.value} value={category.value}>
+                {category.display}
+              </option>
+            ))}
+          </Select>
+        </GridItem>
       </Grid>
-      <Grid templateColumns="repeat(3, 1fr)" gap={1} w="100%">
-        <Text w="100%">Sort by:</Text>
-        <Select onChange={(e) => handleDirectionChange(e)} w="100%">
-          <option value="asc">Ascending ⬆</option>
-          <option value="desc">Descending ⬇</option>
-        </Select>
+      <Grid templateColumns="repeat(6, 1fr)" gap={1} w="100%">
+        <GridItem colStart={1} colSpan={2}>
+          <Text w="100%">Sort by:</Text>
+        </GridItem>
+        <GridItem colStart={3} colSpan={3}>
+          <Select onChange={(e) => handleDirectionChange(e)} w="100%">
+            <option value="asc">Ascending ⬆</option>
+            <option value="desc">Descending ⬇</option>
+          </Select>
+        </GridItem>
       </Grid>
     </>
   );

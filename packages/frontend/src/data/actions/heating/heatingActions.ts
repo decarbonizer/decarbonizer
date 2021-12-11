@@ -5,6 +5,7 @@ import { heatLessAction } from './heatLessAction';
 import { integrateSmartRadiatorThermostats } from './integrateSmartRadiatorThermostats';
 
 export const heatingActionsCategory: ActionCategory = {
+  id: 'heating',
   name: 'Heating',
   icon: GiHeatHaze,
   actions: [switchToHeatPumpAction, integrateSmartRadiatorThermostats, heatLessAction],

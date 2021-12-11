@@ -42,6 +42,13 @@ export default function NavBarBreadcrumbs() {
           <SurveyItem isCurrentPage />
         </Breadcrumb>
       </Route>
+      <Route exact path={routes.actionPlans.route}>
+        <Breadcrumb {...breadcrumbProps}>
+          <HomeItem />
+          <RealEstateItem />
+          <ActionPlanItem isCurrentPage />
+        </Breadcrumb>
+      </Route>
     </Switch>
   );
 }
@@ -76,6 +83,18 @@ function SurveyItem(props: BreadcrumbItemProps) {
     <BreadcrumbItem {...props}>
       <BreadcrumbLink as={Link} to={routes.surveys({ realEstateId })} isCurrentPage>
         Surveys
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+  );
+}
+
+function ActionPlanItem(props: BreadcrumbItemProps) {
+  const { realEstateId } = useParams<RealEstatePageParams>();
+
+  return (
+    <BreadcrumbItem {...props}>
+      <BreadcrumbLink as={Link} to={routes.actionPlans({ realEstateId })} isCurrentPage>
+        Action Plans
       </BreadcrumbLink>
     </BreadcrumbItem>
   );

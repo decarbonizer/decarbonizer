@@ -9,7 +9,9 @@ import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { FormEngineControlProps } from './types';
 
 export default function DatesFormEngineControl({ element }: FormEngineControlProps<DatesFormSchemaElement>) {
-  const [value, setValue] = useValueProperty<DateRange | undefined>(element);
+  const [value, setValue] = useValueProperty<DateRange | { startDate: string; endDate: string } | undefined>(element);
+  const startDate = value?.startDate ? new Date(value.startDate) : undefined;
+  const endDate = value?.endDate ? new Date(value.endDate) : undefined;
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const years = range(1990, new Date().getFullYear() + 1, 1);
   const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
@@ -24,9 +26,10 @@ export default function DatesFormEngineControl({ element }: FormEngineControlPro
         </DefaultFormControlLayout>
       );
     }
+
     return (
       <DefaultFormControlLayout element={element}>
-        {value?.startDate?.toLocaleDateString()} - {value?.endDate?.toLocaleDateString()}
+        {startDate?.toLocaleDateString()} - {endDate?.toLocaleDateString()}
       </DefaultFormControlLayout>
     );
   }
@@ -35,7 +38,7 @@ export default function DatesFormEngineControl({ element }: FormEngineControlPro
     <DefaultFormControlLayout element={element}>
       <DateRangePicker
         disabled={ruleEvaluationResult.disable}
-        value={value}
+        value={{ startDate, endDate }}
         onValueChanged={(e) => setValue(e)}
         selectableYears={years}
       />

@@ -63,6 +63,12 @@ export class ActionPlan extends DbObject {
   @Type(() => Date)
   endDate: Date;
 
+  @Prop()
+  @ApiProperty()
+  @IsString()
+  @Length(1, 255)
+  status: string;
+
   @Prop({ ref: User.name })
   @ApiProperty()
   @IsUUID('4')
