@@ -1,6 +1,4 @@
 import { Accordion, AccordionItem, AccordionPanel, Icon, Grid } from '@chakra-ui/react';
-import { isEmpty } from 'lodash';
-import { useContext } from 'react';
 import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { knownActionCategories, knownActions } from '../../../data/actions/action';
@@ -14,6 +12,7 @@ export interface ActionPlanSummaryProps {
 }
 
 export function ActionPlanSummary({ actionAnswers }: ActionPlanSummaryProps) {
+  console.log(actionAnswers);
   return (
     <Accordion allowToggle>
       {actionAnswers.map((actionAnswer) => (

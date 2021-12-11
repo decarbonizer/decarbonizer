@@ -33,7 +33,7 @@ export default function ActionPanel() {
         <SaveActionPlanModal
           isOpen
           onClose={saveActionPlanDisclosure.onClose}
-          actionAnswers={Object.values(filledActionAnswers)}
+          actionAnswers={Object.values(filledActionAnswers).filter(Boolean)}
         />
       )}
     </VStack>

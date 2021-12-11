@@ -71,10 +71,28 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
         </VStack>
         <Spacer />
         <Tooltip label="Edit" hasArrow>
-          <IconButton aria-label="edit" icon={<FaEdit />} mr="1" onClick={onOpenEditModal} />
+          <IconButton
+            aria-label="edit"
+            icon={<FaEdit />}
+            mr="1"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenEditModal();
+            }}
+          />
         </Tooltip>
         <Tooltip label="Delete" hasArrow>
-          <IconButton aria-label="delete" fontSize="21" icon={<MdDeleteForever />} onClick={onOpenAlert} />
+          <IconButton
+            aria-label="delete"
+            fontSize="21"
+            icon={<MdDeleteForever />}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenAlert();
+            }}
+          />
         </Tooltip>
       </Flex>
       <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
