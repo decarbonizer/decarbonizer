@@ -32,14 +32,14 @@ export default function SurveyCard({ survey, realEstateId, onNewClick }: SurveyC
           Answered ({surveyAnswers!.length === 1 ? '1 time' : `${surveyAnswers!.length} times`})
         </Badge>
       )}
-      <VStack flexDir="column" p="4">
+      <VStack flexDir="column" p="4" h="100%">
         <Heading as="h4" size="sm" fontWeight="semibold">
           {survey.name}
         </Heading>
         <Text fontSize="sm" color="gray.500" textAlign="center">
           {survey.description ?? 'No description available.'}
         </Text>
-        <HStack spacing="4" pt="4">
+        <HStack spacing="4" h="100%" alignItems="flex-end">
           <Button variant="ghost" size="sm" isDisabled={surveyAnswers?.length === 0 ?? true} onClick={onOpen}>
             Past Answers
           </Button>

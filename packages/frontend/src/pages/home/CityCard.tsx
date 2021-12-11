@@ -18,6 +18,7 @@ import {
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
+import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { Bulb } from '../../api/bulb';
@@ -25,12 +26,16 @@ import { RealEstate } from '../../api/realEstate';
 import { SurveyAnswer, calculateOverallFootprint } from '../../api/surveyAnswer';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
+import HaloIcon from '../../components/HaloIcon';
 import { routes } from '../../routes';
 import {
   useDeleteRealEstateMutation,
+  useGetAllActionPlansForRealEstateQuery,
   useGetAllBulbsQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
 } from '../../store/api';
+import QuickInfo from '../dashboard/components/QuickInfo';
+import QuickInfoLabelDescription from '../dashboard/components/QuickInfoLabelDescription';
 import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
@@ -41,6 +46,7 @@ export interface CityCardProps {
 export default function CityCard({ realEstate }: CityCardProps) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
+  const { data: actionPlans } = useGetAllActionPlansForRealEstateQuery({ realEstateId: realEstate._id });
   const { data: bulbs } = useGetAllBulbsQuery();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
@@ -107,7 +113,21 @@ export default function CityCard({ realEstate }: CityCardProps) {
               <b>Number of employees: </b>
               {realEstate.employees}
             </p>
+            <Box pt="5">
+              <p>
+                <b>Number of surveys: </b>
+                {surveyAnswers ? surveyAnswers.length : 0}
+              </p>
+              <p>
+                <b>Number of action plans: </b>
+                {actionPlans ? actionPlans.length : 0}
+              </p>
+              <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />} pt="5">
+                <QuickInfoLabelDescription label={<>{'6.1 t'}</>} />
+              </QuickInfo>
+            </Box>
           </Box>
+
           <CarbonTreeCard carbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0} />
         </Grid>
 

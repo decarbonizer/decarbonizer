@@ -1,4 +1,4 @@
-import { Drawer, DrawerContent, DrawerOverlay, Flex } from '@chakra-ui/react';
+import { Drawer, DrawerContent, DrawerOverlay, Wrap, WrapItem } from '@chakra-ui/react';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import SurveyView from './SurveyView';
 import SurveyCard from './SurveyCard';
@@ -17,16 +17,18 @@ export default function SurveyOverviewPage() {
 
   return (
     <DefaultPageLayout title="Surveys">
-      <Flex>
+      <Wrap spacing="4">
         {Object.values(knownSurveys).map((survey) => (
-          <SurveyCard
-            key={survey.id}
-            realEstateId={realEstateId}
-            survey={survey}
-            onNewClick={() => setActiveSurvey(survey)}
-          />
+          <WrapItem key={survey.id} alignItems="stretch">
+            <SurveyCard
+              key={survey.id}
+              realEstateId={realEstateId}
+              survey={survey}
+              onNewClick={() => setActiveSurvey(survey)}
+            />
+          </WrapItem>
         ))}
-      </Flex>
+      </Wrap>
       <Drawer placement="bottom" size="full" isOpen={!!activeSurvey} onClose={null!}>
         <DrawerOverlay />
         <DrawerContent>
