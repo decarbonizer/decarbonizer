@@ -267,8 +267,9 @@ function calculateCostsForLED(
   const avgElectritianWagePerHour = 12.4; //average electrician wage per hour
   const avgElectritianWagePerBulb = avgElectritianWagePerHour / 6; // assume that it takes 10 min to change a bulb
 
-  const costForNewBulbs = costInEuro * lampCount;
-  const costForBulbReplacement = avgElectritianWagePerBulb * lampCount;
+  //calculate maintenance costs only when LED need to be changed
+  const costForNewBulbs = year % 4 == 0 || year == 1 ? costInEuro * lampCount : 0;
+  const costForBulbReplacement = year % 4 == 0 || year == 1 ? avgElectritianWagePerBulb * lampCount : 0;
   const maintenance: MaintenanceCosts = {
     costsForBulbsReplacement: costForBulbReplacement,
     costsForBulbs: costForNewBulbs,
