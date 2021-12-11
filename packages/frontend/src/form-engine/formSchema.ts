@@ -14,6 +14,7 @@ export interface FormSchemaBaseElement<TType extends string> {
   id: string;
   required: boolean;
   type: TType;
+  defaultValue?: any;
   label?: string;
   helperText?: string;
   rules?: Array<FormSchemaElementRule>;

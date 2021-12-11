@@ -2,10 +2,10 @@ import {
   AccordionItem,
   AccordionPanel,
   Icon,
-  Text,
   IconButton,
-  Tooltip,
   SkeletonText,
+  Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { FaCog } from 'react-icons/fa';
@@ -15,7 +15,7 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { MouseEvent, useContext, useEffect } from 'react';
+import { MouseEvent, useContext, useEffect, useMemo } from 'react';
 import { ActionPanelContext } from './actionPanelContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
@@ -31,9 +31,21 @@ export interface ActionAccordionItemProps {
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
-  const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
-    action.schema,
-  );
+  const { surveyAnswers } = useContext(ActionPanelContext);
+  const schema = useMemo(() => {
+    if (typeof action.getSchema === 'function') {
+      const latestSurvey = surveyAnswers
+        .slice()
+        .reverse()
+        .find((survey) => {
+          return survey.surveyId === action.forSurvey;
+        });
+      return action.getSchema(latestSurvey);
+    } else {
+      return action.schema;
+    }
+  }, [action, surveyAnswers]);
+  const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
 
@@ -89,7 +101,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
             range(3).map((i) => <SkeletonText key={i} mb="2" />)
           ) : (
             <FormEngine
-              schema={action.schema}
+              schema={schema}
               value={value}
               page={page}
               choiceOptionProviders={providers}

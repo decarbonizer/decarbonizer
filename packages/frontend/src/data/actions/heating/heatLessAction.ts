@@ -4,14 +4,13 @@ import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 
-//TODO: forSurvey 'heating' + create heating survey, options: 'heating'
 export const heatLessAction: Action = {
   id: 'heatLess',
   name: 'Heat less',
   icon: BsThermometerSnow,
   description:
     'As a rule of thumb, for every less degree of room temperature, approx. 6% of your heating energy is saved.',
-  forSurvey: 'illumination',
+  forSurvey: 'heating',
   schema: {
     pages: [
       {

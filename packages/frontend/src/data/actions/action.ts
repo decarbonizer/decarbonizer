@@ -11,12 +11,13 @@ import { heatingActionsCategory } from './heating/heatingActions';
 import { electricityActionsCategory } from './electricity/electricityActions';
 import { itActions } from './it/itActions';
 import { businessTravelActions } from './businessTravel/businessTravelActions';
+import { SurveyAnswer } from '../../api/surveyAnswer';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
  * properties which are used by the UI to render components.
  */
-export interface ActionCategory {
+export interface ActionCategory<T extends object = any> {
   /**
    * A unique identifier of the action category.
    * Should be human readable.
@@ -33,7 +34,7 @@ export interface ActionCategory {
   /**
    * The encapsulated actions.
    */
-  actions: Array<Action>;
+  actions: Array<Action<T>>;
 }
 
 /**
@@ -45,7 +46,7 @@ export interface ActionCategory {
  * The two forms produce answers (-> an "action answer") which can be processed by the frontend
  * and sent to the backend.
  */
-export interface Action {
+export interface Action<T extends object = object> {
   /**
    * A unique identifier of the action.
    * Should be human readable.
@@ -72,6 +73,9 @@ export interface Action {
    * Typically displayed inline.
    */
   schema: FormSchema;
+
+  getSchema?: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
+
   /**
    * If available, declares a form schema which can be used for collecting additional information
    * for the action.

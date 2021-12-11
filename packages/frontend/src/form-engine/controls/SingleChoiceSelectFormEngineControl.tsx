@@ -40,7 +40,7 @@ export default function SingleChoiceSelectFormEngineControl({
         value={value}
         variant="filled"
         onChange={(e) => setValue(e.target.value ? e.target.value : undefined)}>
-        {!element.placeholder && <option></option>}
+        {!element.placeholder && <option />}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.display ?? option.value}

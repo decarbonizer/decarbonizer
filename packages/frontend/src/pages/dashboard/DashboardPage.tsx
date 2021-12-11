@@ -40,7 +40,13 @@ export default function DashboardPage() {
 
   return (
     <ActionPanelContext.Provider
-      value={{ filledActionAnswers, setFilledActionAnswers, selectedActionCategory, setSelectedActionCategory }}>
+      value={{
+        surveyAnswers,
+        filledActionAnswers,
+        setFilledActionAnswers,
+        selectedActionCategory,
+        setSelectedActionCategory,
+      }}>
       <DefaultPageLayout
         leftArea={
           <Card
