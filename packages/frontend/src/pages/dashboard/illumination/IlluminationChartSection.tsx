@@ -1,6 +1,6 @@
 import { Grid } from '@chakra-ui/react';
 import { useContext, useMemo } from 'react';
-import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
+import { changeBulbs, ComparisonOfCalculations, SurveyAnswer } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCostsCard from './CalculatedCostsCard';
 import FootprintDeltaCard from './FootprintDeltaCard';
@@ -9,6 +9,7 @@ import { ActionPanelContext } from '../action-panel/actionPanelContext';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import CostDeltaCard from './CostDeltaCard';
+import { IlluminationSurveyAnswerValue } from '../../../data/surveys/illumination/illuminationSurveyAnswerValue';
 
 export default function IlluminationChartsSection() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -23,7 +24,7 @@ export default function IlluminationChartsSection() {
   const newData = useMemo(
     () =>
       bulbId && surveyAnswers && bulbs
-        ? changeBulbs(surveyAnswers, bulbs, bulbId)
+        ? changeBulbs(surveyAnswers as SurveyAnswer<IlluminationSurveyAnswerValue>[], bulbs, bulbId)
         : {
             newIllumination: { typeOfBulb: bulbId!, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
             oldCalculation: [{ costs: 0, footprint: 0, year: 0 }],
