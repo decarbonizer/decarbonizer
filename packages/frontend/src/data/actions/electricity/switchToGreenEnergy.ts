@@ -23,7 +23,7 @@ export const switchToGreenEnergy: Action = {
               { display: 'Wind power', value: 'windPower' },
               { display: 'Hydropower', value: 'hydroPower' },
               { display: 'Solar power (concentrated)', value: 'conSolarPower' },
-              { display: 'Solar power (rooftop)', value: 'roofSolarPower' },
+              { display: 'Solar photovoltaic', value: 'solarPV' },
               { display: 'Geothermal', value: 'geothermal' },
             ],
           },
