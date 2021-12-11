@@ -21,7 +21,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
 import { ActionPlanCreate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
-import { RealEstatePageParams } from '../../../routes';
+import { RealEstatePageParams, routes } from '../../../routes';
 import { useCreateActionPlanMutation } from '../../../store/api';
 import { ActionPanelContext } from './actionPanelContext';
 import range from 'lodash-es/range';
@@ -59,15 +59,17 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
 
     createActionPlan({ realEstateId, body })
       .unwrap()
-      .then(() =>
+      .then(() => {
         toast({
           title: 'Action Plan Created',
           description: 'The action plan was successfully created.',
           status: 'success',
           isClosable: true,
           duration: 5000,
-        }),
-      )
+        });
+
+        history.push(routes.actionPlans({ realEstateId }));
+      })
       .catch(() =>
         toast({
           title: 'Action Plan Creation Failed',
@@ -77,7 +79,6 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
         }),
       )
       .finally(onClose);
-    history.push(routes.actionPlans({ realEstateId }));
   };
 
   return (
