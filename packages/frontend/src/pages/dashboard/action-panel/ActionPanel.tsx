@@ -14,6 +14,7 @@ export default function ActionPanel() {
   const { filledActionAnswers } = useContext(ActionPanelContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
   const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
+  console.log(Object.values(filledActionAnswers));
 
   return (
     <VStack align="flex-start" w="100%">
@@ -28,7 +29,13 @@ export default function ActionPanel() {
       <Button colorScheme="primary" isDisabled={!canSaveActionPlan} onClick={saveActionPlanDisclosure.onOpen}>
         Save Actions
       </Button>
-      {saveActionPlanDisclosure.isOpen && <SaveActionPlanModal isOpen onClose={saveActionPlanDisclosure.onClose} />}
+      {saveActionPlanDisclosure.isOpen && (
+        <SaveActionPlanModal
+          isOpen
+          onClose={saveActionPlanDisclosure.onClose}
+          actionAnswers={Object.values(filledActionAnswers)}
+        />
+      )}
     </VStack>
   );
 }

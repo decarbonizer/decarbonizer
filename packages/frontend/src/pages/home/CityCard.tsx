@@ -31,14 +31,14 @@ import {
   useGetAllBulbsQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
 } from '../../store/api';
-import CarbonTreeCard from '../dashboard/shared/CarbonTreeCard';
+import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
-export interface CityCard {
+export interface CityCardProps {
   realEstate: RealEstate;
 }
 
-export default function CityCard({ realEstate }: CityCard) {
+export default function CityCard({ realEstate }: CityCardProps) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
   const { data: bulbs } = useGetAllBulbsQuery();

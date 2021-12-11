@@ -5,7 +5,6 @@ import Card from '../../components/Card';
 import { useGetAllRealEstatesQuery } from '../../store/api';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import CityCard from './CityCard';
-import CarbonTreeCard from '../dashboard/shared/CarbonTreeCard';
 
 export default function HomePage() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();

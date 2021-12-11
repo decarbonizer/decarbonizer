@@ -1,9 +1,9 @@
-import { Spinner } from '@chakra-ui/react';
+import { Spinner, Wrap, WrapItem } from '@chakra-ui/react';
 import { useParams } from 'react-router';
-import Card from '../../components/Card';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import { ActionPlansPageParams } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
+import ActionPlanCard from './ActionPlanCard';
 
 export default function ActionPlanOverviewPage() {
   const { realEstateId } = useParams<ActionPlansPageParams>();
@@ -12,11 +12,17 @@ export default function ActionPlanOverviewPage() {
   });
   return (
     <DefaultPageLayout title="Action Plans">
-      {isLoadingActionPlans ? (
-        <Spinner />
-      ) : (
-        actionPlans!.map((actionPlan, index) => <Card key={index}>{actionPlan.name} </Card>)
-      )}
+      <Wrap spacing="4">
+        {isLoadingActionPlans ? (
+          <Spinner />
+        ) : (
+          actionPlans!.map((actionPlan) => (
+            <WrapItem key={actionPlan._id}>
+              <ActionPlanCard key={actionPlan._id} actionPlan={actionPlan} />
+            </WrapItem>
+          ))
+        )}
+      </Wrap>
     </DefaultPageLayout>
   );
 }

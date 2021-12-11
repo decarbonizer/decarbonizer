@@ -12,73 +12,117 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   useToast,
 } from '@chakra-ui/react';
 import { ActionPlanSummary } from './ActionPlanSummary';
-import { isEmpty } from 'lodash';
-import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
-import { ActionPlanCreate } from '../../../api/actionPlan';
+import { ActionPlan, ActionPlanCreate, ActionPlanStatus, ActionPlanUpdate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
 import { RealEstatePageParams, routes } from '../../../routes';
-import { useCreateActionPlanMutation } from '../../../store/api';
-import { ActionPanelContext } from './actionPanelContext';
+import { useCreateActionPlanMutation, useUpdateActionPlanMutation } from '../../../store/api';
 import range from 'lodash-es/range';
+import { ActionAnswerBase } from '../../../api/actionAnswer';
 
 export interface SaveActionPlanModalProps {
   isOpen: boolean;
   onClose(): void;
+  actionPlan?: ActionPlan;
+  actionAnswers?: Array<ActionAnswerBase>;
 }
 
 interface FormValues {
   name: string;
   duration: DateRange;
+  status: ActionPlanStatus;
 }
 
-export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanModalProps) {
+export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, actionPlan }: SaveActionPlanModalProps) {
+  console.log(actionAnswers);
+  const defaultValues: FormValues | undefined = actionPlan
+    ? {
+        name: actionPlan.name,
+        status: actionPlan.status,
+        duration: {
+          startDate: actionPlan.startDate ? new Date(actionPlan.startDate) : undefined,
+          endDate: actionPlan.endDate ? new Date(actionPlan.endDate) : undefined,
+        },
+      }
+    : undefined;
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ defaultValues });
   const { realEstateId } = useParams<RealEstatePageParams>();
   const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
-  const { filledActionAnswers } = useContext(ActionPanelContext);
+  const [updateActionPlan] = useUpdateActionPlanMutation();
   const toast = useToast();
   const history = useHistory();
 
   const onSubmit = (data: FormValues) => {
-    const body: ActionPlanCreate = {
-      name: data.name,
-      startDate: data.duration.startDate!,
-      endDate: data.duration.endDate!,
-      actionAnswers: Object.values(filledActionAnswers).filter((actionAnswer) => !isEmpty(actionAnswer)),
-    };
+    if (actionPlan) {
+      const body: ActionPlanUpdate = {
+        name: data.name,
+        startDate: data.duration.startDate!,
+        endDate: data.duration.endDate!,
+        status: data.status,
+        actionAnswers: actionPlan.actionAnswers,
+      };
 
-    createActionPlan({ realEstateId, body })
-      .unwrap()
-      .then(() => {
-        toast({
-          title: 'Action Plan Created',
-          description: 'The action plan was successfully created.',
-          status: 'success',
-          isClosable: true,
-          duration: 5000,
-        });
+      updateActionPlan({ id: actionPlan._id, body })
+        .unwrap()
+        .then(() => {
+          toast({
+            title: 'Action Plan Updated',
+            description: 'The action plan was successfully updated.',
+            status: 'success',
+            isClosable: true,
+            duration: 5000,
+          });
+        })
+        .catch(() =>
+          toast({
+            title: 'Action Plan Update Failed',
+            description: 'Unfortunately the action plan could not be updated. Please try again.',
+            status: 'error',
+            isClosable: true,
+          }),
+        )
+        .finally(onClose);
+    } else {
+      const body: ActionPlanCreate = {
+        name: data.name,
+        startDate: data.duration.startDate!,
+        endDate: data.duration.endDate!,
+        status: data.status,
+        actionAnswers: actionAnswers ?? [],
+      };
+      createActionPlan({ realEstateId, body })
+        .unwrap()
+        .then(() => {
+          toast({
+            title: 'Action Plan Created',
+            description: 'The action plan was successfully created.',
+            status: 'success',
+            isClosable: true,
+            duration: 5000,
+          });
 
-        history.push(routes.actionPlans({ realEstateId }));
-      })
-      .catch(() =>
-        toast({
-          title: 'Action Plan Creation Failed',
-          description: 'Unfortunately the action plan could not be created. Please try again.',
-          status: 'error',
-          isClosable: true,
-        }),
-      )
-      .finally(onClose);
+          history.push(routes.actionPlans({ realEstateId }));
+        })
+        .catch(() =>
+          toast({
+            title: 'Action Plan Creation Failed',
+            description: 'Unfortunately the action plan could not be created. Please try again.',
+            status: 'error',
+            isClosable: true,
+          }),
+        )
+        .finally(onClose);
+    }
   };
 
   return (
@@ -86,7 +130,7 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>New Action Plan</ModalHeader>
+          <ModalHeader>{actionPlan ? 'Update Action Plan' : 'New Action Plan'}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired isInvalid={!!errors.name}>
@@ -126,10 +170,19 @@ export default function SaveActionPlanModal({ isOpen, onClose }: SaveActionPlanM
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
 
+            <FormControl mt="8">
+              <FormLabel>Status:</FormLabel>
+              <Select defaultValue={'open'} {...register('status')}>
+                <option value="open">Open</option>
+                <option value="inProgress">In Progress</option>
+                <option value="finished">Finished</option>
+              </Select>
+            </FormControl>
+
             <FormLabel fontWeight="semibold" mt={8}>
               Selected Actions
             </FormLabel>
-            <ActionPlanSummary />
+            <ActionPlanSummary actionAnswers={actionAnswers ?? actionPlan?.actionAnswers ?? []} />
           </ModalBody>
           <ModalFooter>
             <Button onClick={onClose} mr="3">
