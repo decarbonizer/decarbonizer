@@ -94,7 +94,7 @@ function applyActions(answers: Array<SurveyAnswer>, actions: FilledActionAnswers
   return answers.map((answer) => {
     if (isSurveyAnswerType('illumination', answer)) {
       if (actions.changeBulbs || actions.changeRuntime) {
-        return changeIllumination(answer, actions);
+        return changeIllumination(answer as SurveyAnswer<IlluminationSurveyAnswerValue>, actions);
       } else {
         return answer;
       }
@@ -248,9 +248,14 @@ export function recalculateFootprintAndMaintenance(
 
   const costAndFootprintBeforeChange: { calculations: Calculation[]; maintenance: MaintenanceCosts[] } =
     calculateOverallFootprintAndMaintenance(answers, bulbs, 10);
+
+  const illuminationAnswers = updatedAnswers.filter((answer, index, array) => {
+    return isSurveyAnswerType('illumination', answer);
+  }) as SurveyAnswer<IlluminationSurveyAnswerValue>[];
+
   const newIllumination: IlluminationCalculation | undefined = actions.changeBulbs
-    ? calculateIllumitationData(updatedAnswers, bulbs, actions.changeBulbs.values.value.newBulb)
-    : undefined;
+    ? calculateIlluminationData(illuminationAnswers, bulbs, actions.changeBulbs.values.value.newBulb)
+    : undefined; //calculate information about bulbs that served as replacement
   const costAndFootprintAfterChange: { calculations: Calculation[]; maintenance: MaintenanceCosts[] } =
     calculateOverallFootprintAndMaintenance(updatedAnswers, bulbs, 10);
   const comparisonOfFootprintAndCosts: ComparisonOfCalculations[] = costAndFootprintBeforeChange.calculations.map(
@@ -279,9 +284,6 @@ export function recalculateFootprintAndMaintenance(
     };
   });
 
-  console.log(comparisonOfFootprintAndCosts);
-  console.log(comparisonOfMaintenance);
-
   return {
     newIllumination: newIllumination,
     comparisonOfFootprintAndCosts: comparisonOfFootprintAndCosts,
@@ -295,7 +297,7 @@ function calculateFootprintDependingOnType(
   year: number,
 ): { calculation: Calculation; maintenance: MaintenanceCosts } {
   if (isSurveyAnswerType('illumination', answer)) {
-    return calculateIlluminationFootprint(answer, bulbs, year);
+    return calculateIlluminationFootprint(answer as SurveyAnswer<IlluminationSurveyAnswerValue>, bulbs, year);
   } else {
     //TODO define cases for other survey types
     return {
@@ -305,8 +307,8 @@ function calculateFootprintDependingOnType(
   }
 }
 
-export function calculateIllumitationData(
-  answers: Array<SurveyAnswer>,
+export function calculateIlluminationData(
+  answers: Array<SurveyAnswer<IlluminationSurveyAnswerValue>>,
   bulbs: Array<Bulb>,
   bulbId: string,
 ): IlluminationCalculation {

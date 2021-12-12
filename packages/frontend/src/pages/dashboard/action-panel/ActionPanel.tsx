@@ -28,7 +28,13 @@ export default function ActionPanel() {
       <Button colorScheme="primary" isDisabled={!canSaveActionPlan} onClick={saveActionPlanDisclosure.onOpen}>
         Save Actions
       </Button>
-      {saveActionPlanDisclosure.isOpen && <SaveActionPlanModal isOpen onClose={saveActionPlanDisclosure.onClose} />}
+      {saveActionPlanDisclosure.isOpen && (
+        <SaveActionPlanModal
+          isOpen
+          onClose={saveActionPlanDisclosure.onClose}
+          actionAnswers={Object.values(filledActionAnswers).filter(Boolean)}
+        />
+      )}
     </VStack>
   );
 }
