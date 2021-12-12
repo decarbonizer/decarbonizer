@@ -12,6 +12,7 @@ export default function CostFootprintComparisonCard({ data, ...rest }: CostFootp
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}
+          syncId="compareData"
           margin={{
             top: 10,
             right: 30,

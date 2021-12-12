@@ -45,5 +45,5 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
 
 function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
   const value = calculateOverallFootprintAndMaintenance(answers, bulbs, 1).calculations;
-  return +value[0].footprint.toFixed(1);
+  return +value[1].footprint.toFixed(1);
 }

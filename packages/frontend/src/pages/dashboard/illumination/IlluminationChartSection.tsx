@@ -1,10 +1,6 @@
 import { Grid } from '@chakra-ui/react';
-import { useContext, useEffect, useMemo } from 'react';
-import {
-  changeIllumination,
-  ComparisonOfCalculations,
-  recalculateFootprintAndMaintenance,
-} from '../../../api/surveyAnswer';
+import { useContext, useMemo } from 'react';
+import { Calculation, recalculateFootprintAndMaintenance } from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCostsCard from './CalculatedCostsCard';
 import FootprintDeltaCard from './FootprintDeltaCard';
@@ -13,6 +9,7 @@ import { ActionPanelContext } from '../action-panel/actionPanelContext';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import CostDeltaCard from './CostDeltaCard';
+import MaintenanceComparisonCard from './MaintenanceComparisonCard';
 
 export default function IlluminationChartsSection() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -29,56 +26,73 @@ export default function IlluminationChartsSection() {
         ? recalculateFootprintAndMaintenance(surveyAnswers, filledActionAnswers, bulbs)
         : {
             newIllumination: undefined,
-            oldCalculation: {
-              calculations: [{ costs: 0, footprint: 0, year: 0 }],
-              maintenance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
-            },
-            newCalculation: {
-              calculations: [{ costs: 0, footprint: 0, year: 0 }],
-              maintainance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
-            },
+            comparisonOfFootprintAndCosts: undefined,
+            comparisonOfMaintenance: undefined,
           },
     [surveyAnswers, bulbs, filledActionAnswers],
   );
 
-  const dataForComparison: ComparisonOfCalculations[] = useMemo(() => prepareDataForComparison(), [newData]);
-  function prepareDataForComparison(): ComparisonOfCalculations[] {
-    if (newData) {
-      return newData.oldCalculation.calculations.map((item) => {
-        const item2 = newData.newCalculation.calculations.find((calc) => calc.year == item.year);
-        return {
-          year: item.year,
-          oldCosts: item.costs,
-          oldFootprint: item.footprint,
-          newCosts: item2!.costs,
-          newFootprint: item2!.footprint,
-        };
-      });
-    } else {
-      return [{ year: 0, oldCosts: 0, oldFootprint: 0, newCosts: 0, newFootprint: 0 }];
-    }
-  }
+  const oldCalculation: Calculation = useMemo(
+    () =>
+      newData.comparisonOfFootprintAndCosts
+        ? {
+            costs: newData.comparisonOfFootprintAndCosts[1].oldCosts,
+            footprint: newData.comparisonOfFootprintAndCosts[1].oldFootprint,
+            year: newData.comparisonOfFootprintAndCosts[0].year,
+          }
+        : { costs: 0, footprint: 0, year: 0 },
+    [newData],
+  );
+
+  const newCalculation: Calculation = useMemo(
+    () =>
+      newData.comparisonOfFootprintAndCosts
+        ? {
+            costs: newData.comparisonOfFootprintAndCosts[1].newCosts,
+            footprint: newData.comparisonOfFootprintAndCosts[1].newFootprint,
+            year: newData.comparisonOfFootprintAndCosts[0].year,
+          }
+        : { costs: 0, footprint: 0, year: 0 },
+    [newData],
+  );
 
   return (
     <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto 1fr" gap="6">
       <FootprintDeltaCard
         gridRow="1"
         gridColumn="1 / span 2"
-        oldCalculation={newData.oldCalculation.calculations[0]}
-        newCalculation={newData.newCalculation.calculations[0]}
+        oldCalculation={oldCalculation}
+        newCalculation={newCalculation}
       />
       <CostDeltaCard
         gridRow="1"
         gridColumn="3 / span 2"
-        oldCalculation={newData.oldCalculation.calculations[0]}
-        newCalculation={newData.newCalculation.calculations[0]}
-      />
-      {newData.newIllumination ? (
-        <CalculatedCostsCard gridRow="2" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
+        oldCalculation={oldCalculation}
+        newCalculation={newCalculation}
+      />{' '}
+      {newData.comparisonOfFootprintAndCosts != undefined ? (
+        <ComparisonOfCostsAndFootprints
+          gridRow="2 / span 13"
+          gridColumn="1 / span 3"
+          data={newData.comparisonOfFootprintAndCosts}
+        />
       ) : (
         <></>
       )}
-      <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="3 / span 4" data={dataForComparison} />
+      {newData.comparisonOfMaintenance != undefined ? (
+        <MaintenanceComparisonCard
+          gridRow="2 / span 13"
+          gridColumn="4 / span 6"
+          data={newData.comparisonOfMaintenance}
+        />
+      ) : (
+        <></>
+      )}
+      {newData.newIllumination ? (
+        <CalculatedCostsCard gridRow="15" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
+      ) : (
+        <></>
+      )}
     </Grid>
   );
 }

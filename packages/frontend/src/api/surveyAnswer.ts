@@ -57,6 +57,14 @@ export interface MaintenanceCosts {
   year: number;
 }
 
+export interface ComparisonOfMaintenance {
+  year: number;
+  oldCostsForBulbsReplacement: number;
+  oldCostsForBulbs: number;
+  newCostsForBulbsReplacement: number;
+  newCostsForBulbs: number;
+}
+
 export interface ComparisonOfCalculations {
   year: number;
   oldCosts: number;
@@ -110,7 +118,7 @@ export function calculateOverallFootprintAndMaintenance(
 ): { calculations: Array<Calculation>; maintenance: Array<MaintenanceCosts> } {
   const calculations: Array<Calculation> = [];
   const maintenance: Array<MaintenanceCosts> = [];
-  for (let i = 1; i < years + 1; i++) {
+  for (let i = 0; i < years + 1; i++) {
     const calculationForSpecificYear = answers.reduce<{ calculation: Calculation; maintenance: MaintenanceCosts }>(
       (acc, answer) => {
         const result = calculateFootprintDependingOnType(answer, bulbs, i);
@@ -140,7 +148,7 @@ export function calculateFootprintPerRealEstate(
   return realEstates.map((realEstate) => {
     const realEstateAnswers = answers.filter((answer) => answer.realEstateId == realEstate._id);
     const calculation = calculateOverallFootprintAndMaintenance(realEstateAnswers, bulbs, 1).calculations; //footprint for one year
-    return { name: realEstate.cityName, footprint: +calculation[0].footprint.toFixed(1) };
+    return { name: realEstate.cityName, footprint: +calculation[1].footprint.toFixed(1) };
   });
 }
 
@@ -161,9 +169,13 @@ function calculateIlluminationFootprint(
     const footprint =
       usedBulb!.productionKwh * illuminationPerYear * germanyEF * formattedAnswer.value.lampCount * year;
 
-    const costs = usedBulb!.name.includes('LED')
-      ? calculateCostsForLED(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year)
-      : calculateCostsForBulb(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year);
+    const costs = calculateCostsForBulb(
+      usedBulb!.costInEuro,
+      formattedAnswer.value.lampCount,
+      illuminationPerYear,
+      usedBulb!.lifetimeInHours,
+      year,
+    );
     const totalElectricityCosts = usedBulb!.productionKwh * illuminationPerYear * electricityCostPerKWH;
     return {
       calculation: { costs: costs.costs + totalElectricityCosts, footprint: footprint, year: year },
@@ -229,8 +241,8 @@ export function recalculateFootprintAndMaintenance(
   bulbs: Bulb[],
 ): {
   newIllumination: IlluminationCalculation | undefined;
-  oldCalculation: { calculations: Calculation[]; maintenance: MaintenanceCosts[] };
-  newCalculation: { calculations: Calculation[]; maintenance: MaintenanceCosts[] };
+  comparisonOfFootprintAndCosts: ComparisonOfCalculations[];
+  comparisonOfMaintenance: ComparisonOfMaintenance[];
 } {
   const updatedAnswers: Array<SurveyAnswer> = applyActions(answers, actions); //update answers if there are any selected actions
 
@@ -241,11 +253,39 @@ export function recalculateFootprintAndMaintenance(
     : undefined;
   const costAndFootprintAfterChange: { calculations: Calculation[]; maintenance: MaintenanceCosts[] } =
     calculateOverallFootprintAndMaintenance(updatedAnswers, bulbs, 10);
+  const comparisonOfFootprintAndCosts: ComparisonOfCalculations[] = costAndFootprintBeforeChange.calculations.map(
+    (item) => {
+      const item2 = costAndFootprintAfterChange.calculations.find((calc) => calc.year == item.year);
+      return {
+        year: item.year,
+        oldCosts: +item.costs.toFixed(2),
+        oldFootprint: +item.footprint.toFixed(2),
+        newCosts: +item2!.costs.toFixed(2),
+        newFootprint: +item2!.footprint.toFixed(2),
+      };
+    },
+  );
+  console.log(costAndFootprintBeforeChange.calculations);
+  console.log(costAndFootprintAfterChange.maintenance);
+
+  const comparisonOfMaintenance: ComparisonOfMaintenance[] = costAndFootprintBeforeChange.maintenance.map((item) => {
+    const item2 = costAndFootprintAfterChange.maintenance!.find((calc) => calc.year == item.year);
+    return {
+      year: item.year,
+      oldCostsForBulbsReplacement: +item.costsForBulbsReplacement.toFixed(2),
+      oldCostsForBulbs: +item.costsForBulbs.toFixed(2),
+      newCostsForBulbsReplacement: +item2!.costsForBulbsReplacement.toFixed(2),
+      newCostsForBulbs: +item2!.costsForBulbs.toFixed(2),
+    };
+  });
+
+  console.log(comparisonOfFootprintAndCosts);
+  console.log(comparisonOfMaintenance);
 
   return {
     newIllumination: newIllumination,
-    oldCalculation: costAndFootprintBeforeChange,
-    newCalculation: costAndFootprintAfterChange,
+    comparisonOfFootprintAndCosts: comparisonOfFootprintAndCosts,
+    comparisonOfMaintenance: comparisonOfMaintenance,
   };
 }
 
@@ -291,36 +331,31 @@ export function calculateIllumitationData(
   }
 }
 
-function calculateCostsForLED(
+function calculateCostsForBulb(
   costInEuro: number,
   lampCount: number,
+  illuminationPerYear: number,
+  lifetimeInHours: number,
   year: number,
 ): { costs: number; maintenance: MaintenanceCosts } {
   const avgElectritianWagePerHour = 12.4; //average electrician wage per hour
   const avgElectritianWagePerBulb = avgElectritianWagePerHour / 6; // assume that it takes 10 min to change a bulb
-
-  //calculate maintenance costs only when LED need to be changed
-  const costForNewBulbs = year % 4 == 0 || year == 1 ? costInEuro * lampCount : 0;
-  const costForBulbReplacement = year % 4 == 0 || year == 1 ? avgElectritianWagePerBulb * lampCount : 0;
+  let costForNewBulbs = 0;
+  let costForBulbReplacement = 0;
+  for (let i = 0; i < year + 1; i++) {
+    //add all costs from previous years to the year i
+    const timesToChange = Math.ceil((illuminationPerYear * i) / lifetimeInHours); //how many times a bulb must be changed during x years
+    costForNewBulbs += timesToChange * costInEuro * lampCount;
+    costForBulbReplacement = timesToChange * avgElectritianWagePerBulb;
+  }
   const maintenance: MaintenanceCosts = {
     costsForBulbsReplacement: costForBulbReplacement,
     costsForBulbs: costForNewBulbs,
     year: year,
   };
+  //calculate maintenance costs only when LED need to be changed
 
-  const overallCosts = (costInEuro * lampCount + maintenance.costsForBulbsReplacement) * (Math.floor(year / 4) + 1);
-
-  return { costs: overallCosts, maintenance: maintenance };
-}
-function calculateCostsForBulb(costInEuro: number, lampCount: number, year: number) {
-  const avgElectritianWagePerHour = 12.4; //average electrician wage per hour
-  const avgElectritianWagePerBulb = avgElectritianWagePerHour / 6; // assume that it takes 10 min to change a bulb
-  const maintenance: MaintenanceCosts = {
-    costsForBulbsReplacement: avgElectritianWagePerBulb * lampCount * 4,
-    costsForBulbs: costInEuro * lampCount * 4 * year,
-    year: year,
-  };
-  const overallCosts = maintenance.costsForBulbs + maintenance.costsForBulbsReplacement;
+  const overallCosts = costForNewBulbs + costForBulbReplacement;
 
   return { costs: overallCosts, maintenance: maintenance };
 }
