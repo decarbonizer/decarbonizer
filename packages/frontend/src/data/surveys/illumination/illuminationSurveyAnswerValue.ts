@@ -4,10 +4,9 @@ export interface IlluminationSurveyAnswerValue {
   lampCount: number;
   bulbType: string;
   isIlluminantExchangeable: boolean;
-  illuminationTriggerMode: 'automatically' | 'manually';
-  illuminationTriggerEvent?: 'brightness' | 'timeTriggered' | 'motionTriggered';
-  illuminationSwitchOffMode?: 'automaticTimeout' | 'manuallySwitchedOff';
-  illuminationSwitchOnMode: 'always' | 'onDemand';
-  avgIlluminationPerDay: number;
-  avgIlluminationPerYear: number;
+  switchOnMode: 'always' | 'manually' | 'motionTriggered' | 'timeTriggered' | 'brightnessTriggered';
+  motionTriggerTimeout?: number;
+  motionTriggerAvgTriggersPerDay?: number;
+  avgRuntimePerDay?: number;
+  avgRuntimePerYear?: number;
 }

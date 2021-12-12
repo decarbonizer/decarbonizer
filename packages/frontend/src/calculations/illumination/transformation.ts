@@ -6,6 +6,10 @@ import {
   ChangeBulbsActionAnswerValue,
   ChangeBulbsActionDetailsAnswerValue,
 } from '../../data/actions/illumination/changeBulbsAction';
+import {
+  ReduceRuntimeActionAnswerValue,
+  ReduceRuntimeActionDetailsAnswerValue,
+} from '../../data/actions/illumination/reduceRuntimeAction';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
 import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
@@ -30,20 +34,69 @@ export function transformIlluminationSurveyAnswer(
   surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ): IlluminationSurveyAnswerValue {
-  const changeBulbsAction = getActionAnswerForAction(actionAnswers, 'changeBulbs');
-  return changeBulbsAction ? applyChangeBulbsActionAnswer(surveyAnswer, changeBulbsAction.values) : surveyAnswer.value;
+  let result = surveyAnswer.value;
+
+  const changeBulbsActionAnswer = getActionAnswerForAction(actionAnswers, 'changeBulbs');
+  if (changeBulbsActionAnswer) {
+    result = applyChangeBulbsActionAnswer(surveyAnswer._id, result, changeBulbsActionAnswer.values);
+  }
+
+  const reduceRuntimeActionAnswer = getActionAnswerForAction(actionAnswers, 'reduceRuntime');
+  if (reduceRuntimeActionAnswer) {
+    result = applyReduceRuntimeActionAnswer(surveyAnswer._id, result, reduceRuntimeActionAnswer.values);
+  }
+
+  return result;
 }
 
 function applyChangeBulbsActionAnswer(
-  surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  surveyAnswerId: string,
+  surveyAnswer: IlluminationSurveyAnswerValue,
   actionAnswer: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>,
 ): IlluminationSurveyAnswerValue {
-  if (actionAnswer.detailsValue?.surveyAnswers && !actionAnswer.detailsValue.surveyAnswers.includes(surveyAnswer._id)) {
-    return surveyAnswer.value;
+  const {
+    value: { newBulb },
+    detailsValue,
+  } = actionAnswer;
+
+  if (detailsValue?.surveyAnswers && !detailsValue.surveyAnswers.includes(surveyAnswerId)) {
+    return surveyAnswer;
   }
 
   return {
-    ...surveyAnswer.value,
-    bulbType: actionAnswer.value.newBulb,
+    ...surveyAnswer,
+    bulbType: newBulb,
+  };
+}
+
+function applyReduceRuntimeActionAnswer(
+  surveyAnswerId: string,
+  surveyAnswer: IlluminationSurveyAnswerValue,
+  actionAnswer: ActionAnswerValues<ReduceRuntimeActionAnswerValue, ReduceRuntimeActionDetailsAnswerValue>,
+): IlluminationSurveyAnswerValue {
+  const {
+    value: { dailyRuntimeReductionInDays, yearlyRuntimeReductionInDays },
+    detailsValue,
+  } = actionAnswer;
+
+  if (detailsValue?.surveyAnswers && !detailsValue.surveyAnswers.includes(surveyAnswerId)) {
+    return surveyAnswer;
+  }
+
+  const overrides: Partial<IlluminationSurveyAnswerValue> = {};
+
+  if (dailyRuntimeReductionInDays && (surveyAnswer.avgRuntimePerDay || surveyAnswer.switchOnMode === 'always')) {
+    const initialAvgRuntimePerDay = surveyAnswer.avgRuntimePerDay ?? 1;
+    overrides.avgRuntimePerDay = Math.max(0, initialAvgRuntimePerDay - dailyRuntimeReductionInDays);
+  }
+
+  if (yearlyRuntimeReductionInDays) {
+    const initialAvgRuntimePerYear = surveyAnswer.avgRuntimePerYear ?? 365;
+    overrides.avgRuntimePerYear = Math.max(0, initialAvgRuntimePerYear - yearlyRuntimeReductionInDays);
+  }
+
+  return {
+    ...surveyAnswer,
+    ...overrides,
   };
 }

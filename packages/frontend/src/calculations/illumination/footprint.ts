@@ -6,6 +6,7 @@ import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../externalData';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { transformIlluminationSurveyAnswers } from './transformation';
+import { getIlluminationRuntimePerYear } from './utils';
 
 /**
  * Returns the CO2 footprint delta of a set of illumination survey answers before and after applying the given actions.
@@ -70,7 +71,7 @@ function getIlluminationFootprintPerYearForSingleSurveyAnswer(
 ) {
   const germanyEF = 0.624;
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
-  const runtimeInHoursPerYear = answer.avgIlluminationPerDay * answer.avgIlluminationPerYear;
+  const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
   const footprint = bulb.productionKwh * runtimeInHoursPerYear * germanyEF + answer.lampCount;
   return footprint;
 }

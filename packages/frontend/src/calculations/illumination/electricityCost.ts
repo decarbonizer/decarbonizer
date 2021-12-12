@@ -6,6 +6,7 @@ import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../externalData';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { transformIlluminationSurveyAnswers } from './transformation';
+import { getIlluminationRuntimePerYear } from './utils';
 
 /**
  * Returns the cost delta of a set of illumination survey answers before and after applying the given actions.
@@ -70,6 +71,6 @@ function getIlluminationElectricityCostPerYearForSingleSurveyAnswer(
 ) {
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
   const energyForm = { euroPerKwh: 0.25 }; // TODO: Extract from data.
-  const runtimeInHoursPerYear = answer.avgIlluminationPerDay * answer.avgIlluminationPerYear;
+  const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
   return answer.lampCount * (bulb.productionKwh * energyForm.euroPerKwh * runtimeInHoursPerYear);
 }
