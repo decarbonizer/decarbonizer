@@ -62,6 +62,7 @@ export interface ComparisonOfCalculations {
  * Evaluates carbon footprint of one real estate
  * @param answers All survey answers.
  * @param bulbs All bulbs.
+ * @param years
  * @returns overall carbon footprint.
  */
 export function calculateOverallFootprint(
@@ -120,11 +121,11 @@ function calculateIlluminationFootprint(
 }
 
 export function changeBulbs(
-  answers: SurveyAnswer<object>[],
+  answers: SurveyAnswer<IlluminationSurveyAnswerValue>[],
   bulbs: Bulb[],
   bulbId: string,
 ): { newIllumination: IlluminationCalculation; oldCalculation: Calculation[]; newCalculation: Calculation[] } {
-  const allAnswers: SurveyAnswer<object>[] = [];
+  const allAnswers: SurveyAnswer<IlluminationSurveyAnswerValue>[] = [];
 
   const updatedAnswers = answers.filter((answer) => {
     if (isSurveyAnswerType('illumination', answer)) {
@@ -145,7 +146,7 @@ export function changeBulbs(
     }
   });
   const costAndFootprintBeforeChange: Calculation[] = calculateOverallFootprint(answers, bulbs, 10);
-  const newIllumination: IlluminationCalculation = calculateIllumitationData(updatedAnswers, bulbs, bulbId);
+  const newIllumination: IlluminationCalculation = calculateIlluminationData(updatedAnswers, bulbs, bulbId);
   const costAndFootprintAfterChange: Calculation[] = calculateOverallFootprint(allAnswers, bulbs, 10);
 
   return {
@@ -157,15 +158,15 @@ export function changeBulbs(
 
 function calculateFootprintDependingOnType(answer: SurveyAnswer, bulbs: Array<Bulb>, year: number): Calculation {
   if (isSurveyAnswerType('illumination', answer)) {
-    return calculateIlluminationFootprint(answer, bulbs, year);
+    return calculateIlluminationFootprint(answer as SurveyAnswer<IlluminationSurveyAnswerValue>, bulbs, year);
   } else {
     //TODO define cases for other survey types
     return { costs: 0, footprint: 0, year: year };
   }
 }
 
-export function calculateIllumitationData(
-  answers: Array<SurveyAnswer>,
+export function calculateIlluminationData(
+  answers: Array<SurveyAnswer<IlluminationSurveyAnswerValue>>,
   bulbs: Array<Bulb>,
   bulbId: string,
 ): IlluminationCalculation {

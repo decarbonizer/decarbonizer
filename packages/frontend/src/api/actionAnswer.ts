@@ -1,4 +1,4 @@
-import { ApiObject, ApiObjectCreate } from './apiObject';
+import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
 import { KnownActionId, ActionsToActionAnswerMap, ActionAnswerValues } from '../data/actions/action';
 
 export interface ActionAnswerBase<T extends ActionAnswerValues = ActionAnswerValues> {
@@ -12,6 +12,10 @@ export interface ActionAnswer<T extends ActionAnswerValues = ActionAnswerValues>
 
 export interface ActionAnswerCreate<T extends ActionAnswerValues = ActionAnswerValues>
   extends ApiObjectCreate,
+    ActionAnswerBase<T> {}
+
+export interface ActionAnswerUpdate<T extends ActionAnswerValues = ActionAnswerValues>
+  extends ApiObjectUpdate,
     ActionAnswerBase<T> {}
 
 /**

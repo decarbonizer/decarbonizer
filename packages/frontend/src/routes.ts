@@ -5,6 +5,7 @@ export const routes = {
   home: createRouteFactory('/home'),
   surveys: createRouteFactory<SurveysPageParams>('/realEstates/:realEstateId/surveys/:surveyId?'),
   realEstateDashboard: createRouteFactory<RealEstatePageParams>('/realEstates/:realEstateId'),
+  actionPlans: createRouteFactory<ActionPlansPageParams>('/realEstates/:realEstateId/actionPlans'),
 };
 
 export interface RealEstatePageParams {
@@ -13,6 +14,10 @@ export interface RealEstatePageParams {
 
 export interface SurveysPageParams extends RealEstatePageParams {
   surveyId?: string;
+}
+
+export interface ActionPlansPageParams {
+  realEstateId: string;
 }
 
 function createRouteFactory<T = void>(route: string) {
