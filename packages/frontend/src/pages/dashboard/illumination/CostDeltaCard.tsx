@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react';
+import { HStack, SkeletonText } from '@chakra-ui/react';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
@@ -26,7 +26,7 @@ export default function CostDeltaCard(props: DashboardCardProps) {
     <DashboardCard header="Electricity cost delta" {...props}>
       <InlineErrorDisplay error={error}>
         <HStack>
-          {isLoading && <>Loading...</>}
+          {isLoading && <SkeletonText />}
           {data && (
             <QuickInfo
               icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>

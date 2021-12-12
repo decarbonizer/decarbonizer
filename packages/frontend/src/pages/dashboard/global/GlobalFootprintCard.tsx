@@ -1,23 +1,26 @@
-import { useMemo } from 'react';
+import { SkeletonText } from '@chakra-ui/skeleton';
 import { GiFootprint } from 'react-icons/gi';
-import { useParams } from 'react-router';
-import { Bulb } from '../../../api/bulb';
-import { calculateOverallFootprint, SurveyAnswer } from '../../../api/surveyAnswer';
+import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
+import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
-import { RealEstatePageParams } from '../../../routes';
-import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllBulbsQuery } from '../../../store/api';
+import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
+import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 
 export default function GlobalFootprintCard(props: DashboardCardProps) {
-  const { realEstateId } = useParams<RealEstatePageParams>();
-  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
-  const { data: bulbs } = useGetAllBulbsQuery();
-  const carbonFootprint = useMemo(
-    () => (surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0),
-    [surveyAnswers, bulbs],
+  const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const { isLoading, data, error } = useCalculation(
+    (externalCalculationData) =>
+      getTransformedFootprintPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
+    [filledActionAnswersDf],
   );
+  const carbonFootprint = data?.globalFootprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
@@ -29,21 +32,21 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
         </>
       }
       {...props}>
-      <QuickInfo icon={<HaloIcon icon={GiFootprint} />}>
-        <QuickInfoLabelDescription
-          label={
-            <>
-              {adjustedFootprint.toFixed(1)}
-              {unitSymbol}
-            </>
-          }
-        />
-      </QuickInfo>
+      <InlineErrorDisplay error={error}>
+        {isLoading && <SkeletonText />}
+        {data && (
+          <QuickInfo icon={<HaloIcon icon={GiFootprint} />}>
+            <QuickInfoLabelDescription
+              label={
+                <>
+                  {adjustedFootprint.toFixed(1)}
+                  {unitSymbol}
+                </>
+              }
+            />
+          </QuickInfo>
+        )}
+      </InlineErrorDisplay>
     </DashboardCard>
   );
-}
-
-function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-  const value = calculateOverallFootprint(answers, bulbs, 1);
-  return +value[0].footprint.toFixed(1);
 }

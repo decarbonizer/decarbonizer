@@ -35,6 +35,7 @@ export function getIlluminationFootprintDelta(
     deltaType,
   };
 }
+
 /**
  * Transforms **all given** illumination survey answers so that they integrate the given action answers
  * and then calculates their resulting CO2 footprint.

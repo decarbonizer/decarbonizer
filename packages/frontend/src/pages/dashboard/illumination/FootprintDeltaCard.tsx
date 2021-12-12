@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react';
+import { SkeletonText } from '@chakra-ui/react';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
@@ -31,24 +31,20 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
       }
       {...props}>
       <InlineErrorDisplay error={error}>
-        <HStack>
-          {isLoading && <>Loading...</>}
-          {data && (
-            <QuickInfo
-              icon={
-                <HaloIcon icon={GiFootprint} colorScheme={mapDeltaType(data!.deltaType, 'red', 'green', 'gray')} />
-              }>
-              <QuickInfoLabelDescription
-                label={`${Math.abs(data.delta).toFixed(2)}kg`}
-                description={
-                  <>
-                    {data!.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
-                  </>
-                }
-              />
-            </QuickInfo>
-          )}
-        </HStack>
+        {isLoading && <SkeletonText />}
+        {data && (
+          <QuickInfo
+            icon={<HaloIcon icon={GiFootprint} colorScheme={mapDeltaType(data!.deltaType, 'red', 'green', 'gray')} />}>
+            <QuickInfoLabelDescription
+              label={`${Math.abs(data.delta).toFixed(2)}kg`}
+              description={
+                <>
+                  {data!.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
+                </>
+              }
+            />
+          </QuickInfo>
+        )}
       </InlineErrorDisplay>
     </DashboardCard>
   );
