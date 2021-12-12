@@ -1,5 +1,6 @@
 import { IlluminationSurveyAnswerValue } from '../data/surveys/illumination/illuminationSurveyAnswerValue';
 import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../data/surveys/survey';
+import { FilledActionAnswers } from '../pages/dashboard/action-panel/actionPanelContext';
 import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
 import { Bulb } from './bulb';
 import { RealEstate } from './realEstate';
@@ -74,11 +75,25 @@ function formatIlluminationSurveyAnswer(
 ): SurveyAnswer<IlluminationSurveyAnswerValue> {
   if (answer.value.illuminationSwitchOnMode == 'always') {
     const newObject = Object.assign({}, answer);
-    newObject.value = { ...answer.value, avgIlluminationPerDay: 24 };
+    newObject.value = { ...answer.value, avgIlluminationPerDay: 1 };
     return newObject;
   } else {
     return answer;
   }
+}
+
+function applyActions(answers: Array<SurveyAnswer>, actions: FilledActionAnswers): Array<SurveyAnswer> {
+  return answers.map((answer) => {
+    if (isSurveyAnswerType('illumination', answer)) {
+      if (actions.changeBulbs || actions.changeRuntime) {
+        return changeIllumination(answer, actions);
+      } else {
+        return answer;
+      }
+    } else {
+      return answer;
+    }
+  });
 }
 
 /**
@@ -145,13 +160,11 @@ function calculateIlluminationFootprint(
       formattedAnswer.value.avgIlluminationPerDay * 24 * formattedAnswer.value.avgIlluminationPerYear;
     const footprint =
       usedBulb!.productionKwh * illuminationPerYear * germanyEF * formattedAnswer.value.lampCount * year;
-    console.log(year);
+
     const costs = usedBulb!.name.includes('LED')
       ? calculateCostsForLED(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year)
       : calculateCostsForBulb(usedBulb!.costInEuro, formattedAnswer.value.lampCount, year);
     const totalElectricityCosts = usedBulb!.productionKwh * illuminationPerYear * electricityCostPerKWH;
-    console.log(answer);
-    console.log(footprint);
     return {
       calculation: { costs: costs.costs + totalElectricityCosts, footprint: footprint, year: year },
       maintenance: costs.maintenance,
@@ -163,6 +176,44 @@ function calculateIlluminationFootprint(
     };
   }
 }
+export function changeIllumination(
+  answer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  actions: FilledActionAnswers,
+): SurveyAnswer<IlluminationSurveyAnswerValue> {
+  let updatedSurvey = answer;
+  if (actions.changeBulbs) {
+    const newBulb = actions.changeBulbs!.values.value.newBulb;
+    updatedSurvey = changeBulb(updatedSurvey, newBulb);
+  }
+  if (actions.changeRuntime && actions.changeRuntime.values.value.newRuntime != undefined) {
+    const newRuntime = actions.changeRuntime!.values.value.newRuntime;
+    updatedSurvey = changeRuntime(updatedSurvey, newRuntime);
+  }
+  return updatedSurvey;
+}
+
+function changeBulb(
+  answer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  bulbId: string,
+): SurveyAnswer<IlluminationSurveyAnswerValue> {
+  if (answer.value.isIlluminantExchangeable && answer.value.bulbType != bulbId) {
+    const newObject = Object.assign({}, answer);
+    //update only those bulbs that can be changed & need to be changed
+    newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
+    return newObject;
+  } else {
+    return answer;
+  }
+}
+
+function changeRuntime(
+  answer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  newRuntime: number,
+): SurveyAnswer<IlluminationSurveyAnswerValue> {
+  const newObject = Object.assign({}, answer);
+  newObject.value = { ...answer.value, avgIlluminationPerDay: newRuntime, illuminationSwitchOnMode: 'onDemand' };
+  return newObject;
+}
 
 /**
  * Change bulbs for illumination surveys where illumination is exchangable and bulb is not already of a needed type
@@ -172,43 +223,24 @@ function calculateIlluminationFootprint(
  * @returns overall carbon footprint.
  */
 
-export function changeBulbs(
+export function recalculateFootprintAndMaintenance(
   answers: SurveyAnswer<object>[],
+  actions: FilledActionAnswers,
   bulbs: Bulb[],
-  bulbId: string,
 ): {
-  newIllumination: IlluminationCalculation;
+  newIllumination: IlluminationCalculation | undefined;
   oldCalculation: { calculations: Calculation[]; maintenance: MaintenanceCosts[] };
   newCalculation: { calculations: Calculation[]; maintenance: MaintenanceCosts[] };
 } {
-  const allAnswers: SurveyAnswer<object>[] = [];
+  const updatedAnswers: Array<SurveyAnswer> = applyActions(answers, actions); //update answers if there are any selected actions
 
-  const updatedAnswers = answers.filter((answer) => {
-    if (isSurveyAnswerType('illumination', answer)) {
-      if (answer.value.isIlluminantExchangeable) {
-        //update only those bulbs that can be changed
-        if (answer.value.bulbType != bulbId) {
-          //update only those bulbs that need to be changed
-          const newObject = Object.assign({}, answer);
-          newObject.value = { ...answer.value, bulbType: bulbId }; //change bulbId
-          allAnswers.push(newObject);
-          return newObject;
-        } else {
-          allAnswers.push(answer);
-        }
-      } else {
-        allAnswers.push(answer);
-      }
-    }
-  });
   const costAndFootprintBeforeChange: { calculations: Calculation[]; maintenance: MaintenanceCosts[] } =
     calculateOverallFootprintAndMaintenance(answers, bulbs, 10);
-  const newIllumination: IlluminationCalculation = calculateIllumitationData(updatedAnswers, bulbs, bulbId);
+  const newIllumination: IlluminationCalculation | undefined = actions.changeBulbs
+    ? calculateIllumitationData(updatedAnswers, bulbs, actions.changeBulbs.values.value.newBulb)
+    : undefined;
   const costAndFootprintAfterChange: { calculations: Calculation[]; maintenance: MaintenanceCosts[] } =
-    calculateOverallFootprintAndMaintenance(allAnswers, bulbs, 10);
-
-  console.log(costAndFootprintBeforeChange);
-  console.log(costAndFootprintAfterChange);
+    calculateOverallFootprintAndMaintenance(updatedAnswers, bulbs, 10);
 
   return {
     newIllumination: newIllumination,

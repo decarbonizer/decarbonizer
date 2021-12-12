@@ -1,6 +1,10 @@
 import { Grid } from '@chakra-ui/react';
-import { useContext, useMemo } from 'react';
-import { changeBulbs, ComparisonOfCalculations } from '../../../api/surveyAnswer';
+import { useContext, useEffect, useMemo } from 'react';
+import {
+  changeIllumination,
+  ComparisonOfCalculations,
+  recalculateFootprintAndMaintenance,
+} from '../../../api/surveyAnswer';
 import { useGetAllBulbsQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import CalculatedCostsCard from './CalculatedCostsCard';
 import FootprintDeltaCard from './FootprintDeltaCard';
@@ -13,7 +17,6 @@ import CostDeltaCard from './CostDeltaCard';
 export default function IlluminationChartsSection() {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { filledActionAnswers } = useContext(ActionPanelContext);
-  const bulbId = filledActionAnswers.changeBulbs?.values.value.newBulb;
 
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({
     realEstateId: realEstateId,
@@ -22,10 +25,10 @@ export default function IlluminationChartsSection() {
 
   const newData = useMemo(
     () =>
-      bulbId && surveyAnswers && bulbs
-        ? changeBulbs(surveyAnswers, bulbs, bulbId)
+      surveyAnswers && bulbs && (filledActionAnswers.changeRuntime || filledActionAnswers.changeBulbs)
+        ? recalculateFootprintAndMaintenance(surveyAnswers, filledActionAnswers, bulbs)
         : {
-            newIllumination: { typeOfBulb: bulbId!, amountOfIlluminants: 0, costs: 0, overallFootprint: 0 },
+            newIllumination: undefined,
             oldCalculation: {
               calculations: [{ costs: 0, footprint: 0, year: 0 }],
               maintenance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
@@ -35,10 +38,10 @@ export default function IlluminationChartsSection() {
               maintainance: [{ costsForBulbsReplacement: 0, costsForBulbs: 0, year: 0 }],
             },
           },
-    [surveyAnswers, bulbs, bulbId],
+    [surveyAnswers, bulbs, filledActionAnswers],
   );
 
-  const dataForComparison: ComparisonOfCalculations[] = prepareDataForComparison();
+  const dataForComparison: ComparisonOfCalculations[] = useMemo(() => prepareDataForComparison(), [newData]);
   function prepareDataForComparison(): ComparisonOfCalculations[] {
     if (newData) {
       return newData.oldCalculation.calculations.map((item) => {
@@ -70,7 +73,11 @@ export default function IlluminationChartsSection() {
         oldCalculation={newData.oldCalculation.calculations[0]}
         newCalculation={newData.newCalculation.calculations[0]}
       />
-      <CalculatedCostsCard gridRow="2" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
+      {newData.newIllumination ? (
+        <CalculatedCostsCard gridRow="2" gridColumn="1 / span 2" calculatedCosts={newData.newIllumination} />
+      ) : (
+        <></>
+      )}
       <ComparisonOfCostsAndFootprints gridRow="2" gridColumn="3 / span 4" data={dataForComparison} />
     </Grid>
   );
