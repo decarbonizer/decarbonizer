@@ -57,12 +57,7 @@ export default function IlluminationChartsSection() {
 
   return (
     <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto 1fr" gap="6">
-      <FootprintDeltaCard
-        gridRow="1"
-        gridColumn="1 / span 2"
-        oldCalculation={newData.oldCalculation[0]}
-        newCalculation={newData.newCalculation[0]}
-      />
+      <FootprintDeltaCard gridRow="1" gridColumn="1 / span 2" />
       <CostDeltaCard
         gridRow="1"
         gridColumn="3 / span 2"
