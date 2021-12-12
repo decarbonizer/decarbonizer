@@ -1,7 +1,6 @@
 import { Table, Tbody, Tr, Td } from '@chakra-ui/react';
 import { IlluminationCalculation } from '../../../api/surveyAnswer';
-import { getIlluminationFootprintPerYear } from '../../../calculations/illumination/getIlluminationSurveyAnswerFootprintPerYear';
-import { getTransformedIlluminationSurveyAnswers } from '../../../calculations/illumination/getTransformedIlluminationSurveyAnswers';
+import { getTransformedIlluminationFootprintPerYear } from '../../../calculations/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
@@ -12,14 +11,15 @@ export interface CalculatedCostsCardProps extends DashboardCardProps {
 
 export default function CalculatedCostsCard({ calculatedCosts, ...rest }: CalculatedCostsCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
-  const { data, isLoading, error } = useCalculation((externalCalculationData) => {
-    const newAnswers = getTransformedIlluminationSurveyAnswers(
-      externalCalculationData.surveyAnswers,
-      filledActionAnswersDf,
-    );
-
-    return getIlluminationFootprintPerYear(externalCalculationData, newAnswers);
-  });
+  const { data, isLoading, error } = useCalculation(
+    (externalCalculationData) =>
+      getTransformedIlluminationFootprintPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
+    [filledActionAnswersDf],
+  );
 
   if (isLoading || error) {
     return ':(';

@@ -10,7 +10,10 @@ import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/i
 import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
-export function getTransformedIlluminationSurveyAnswers(
+/**
+ * Transforms **all given** illumination survey answers so that they integrate the given action answers.
+ */
+export function transformIlluminationSurveyAnswers(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
@@ -20,7 +23,10 @@ export function getTransformedIlluminationSurveyAnswers(
   );
 }
 
-function transformIlluminationSurveyAnswer(
+/**
+ * Transforms **one** illumination survey answer so that it integrates the given action answers.
+ */
+export function transformIlluminationSurveyAnswer(
   surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ): IlluminationSurveyAnswerValue {

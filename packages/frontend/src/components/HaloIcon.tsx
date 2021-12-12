@@ -6,12 +6,12 @@ export interface HaloIconProps extends BoxProps, ThemingProps {
 
 export const HaloIconTheme: ComponentSingleStyleConfig = {
   baseStyle: {
-    p: '5%',
     opacity: 0.8,
     rounded: 'full',
   },
   sizes: {
     md: {
+      p: '3',
       w: '16',
       h: '16',
     },
