@@ -8,7 +8,7 @@ export interface CostFootprintComparisonCardProps extends DashboardCardProps {
 
 export default function CostFootprintComparisonCard({ data, ...rest }: CostFootprintComparisonCardProps) {
   return (
-    <DashboardCard header="Compared bulb costs and footprints over years" {...rest}>
+    <DashboardCard header="Compared costs and footprints over years" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}

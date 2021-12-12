@@ -8,7 +8,7 @@ export interface MaintenanceComparisonCardProps extends DashboardCardProps {
 
 export default function MaintenanceComparisonCard({ data, ...rest }: MaintenanceComparisonCardProps) {
   return (
-    <DashboardCard header="Compared bulb costs and footprints over years" {...rest}>
+    <DashboardCard header="Compared maintenance costs over years" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}

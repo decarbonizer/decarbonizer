@@ -21,7 +21,7 @@ export default function CalculatedCostsCard({ calculatedCosts, ...rest }: Calcul
           </Tr>
           <Tr>
             <Td fontWeight="bold" fontSize="lg" pl="0">
-              {calculatedCosts.costs}€
+              {calculatedCosts.costs.toFixed(2)}€
             </Td>
             <Td>Electricity costs</Td>
           </Tr>
