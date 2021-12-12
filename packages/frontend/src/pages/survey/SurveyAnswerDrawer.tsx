@@ -87,7 +87,7 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
         </DrawerHeader>
         <DrawerBody>
           <VStack align="flex-start" pb="5">
-            <SortingSelection sortingCategories={sortCategory} onChange={setCurrentSortValue} />
+            <SortingSelection sortingCategories={sortCategory} onChange={setCurrentSortValue} alignment="vertical" />
           </VStack>
           <Table>
             <Tbody>
