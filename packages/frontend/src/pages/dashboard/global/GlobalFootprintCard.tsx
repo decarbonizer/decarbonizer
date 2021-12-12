@@ -28,7 +28,7 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
     <DashboardCard
       header={
         <>
-          CO<sub>2</sub> footprint
+          This real estate&apos;s CO<sub>2</sub> footprint
         </>
       }
       {...props}>
