@@ -22,7 +22,7 @@ export default function CalculatedCostsCard({ calculatedCosts, ...rest }: Calcul
   );
 
   if (isLoading || error) {
-    return <>':('</>; // TODO: Remove this pls
+    return <>:(</>; // TODO: Remove this pls
   }
 
   return (
