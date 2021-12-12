@@ -7,14 +7,18 @@ import { GiFootprint } from 'react-icons/gi';
 import HaloIcon from '../../../components/HaloIcon';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
-import { getFootprintDelta } from '../../../calculations/illumination/footprint';
+import { getIlluminationFootprintDelta } from '../../../calculations/illumination/footprint';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 
 export default function FootprintDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getFootprintDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
+      getIlluminationFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
     [filledActionAnswersDf],
   );
 
