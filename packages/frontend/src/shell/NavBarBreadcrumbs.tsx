@@ -12,7 +12,7 @@ import { Route, Switch, useParams } from 'react-router';
 import { RealEstatePageParams, routes } from '../routes';
 import { useGetRealEstateQuery } from '../store/api';
 import { Link } from 'react-router-dom';
-import MenuNavigation, { PageDisplayTypes } from '../components/MenuNavigation';
+import NavigationMenu, { PageDisplayTypes } from '../components/NavigationMenu';
 
 export default function NavBarBreadcrumbs() {
   const breadcrumbProps: BreadcrumbProps = {
@@ -106,5 +106,5 @@ function ActionPlanItem(props: BreadcrumbItemProps) {
 
 function RealEstateLocationPicker(props: { currentPage: PageDisplayTypes }) {
   const { realEstateId } = useParams<RealEstatePageParams>();
-  return <MenuNavigation currentPage={props.currentPage} realEstateId={realEstateId} />;
+  return <NavigationMenu currentPage={props.currentPage} realEstateId={realEstateId} />;
 }

@@ -8,7 +8,6 @@ import { ActionPlansPageParams } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
 import ActionPlanCard from './ActionPlanCard';
 import cloud from '../../img/cloud.svg';
-import MenuNavigation from '../../components/MenuNavigation';
 
 export default function ActionPlanOverviewPage() {
   const { realEstateId } = useParams<ActionPlansPageParams>();
@@ -21,18 +20,14 @@ export default function ActionPlanOverviewPage() {
   });
 
   return (
-    <DefaultPageLayout title="Action Plans">
-      <Searchbar placeholder="Search for action plan.." onChange={setSearchValue} />
-
+    <DefaultPageLayout
+      title="Action Plans"
+      actions={<Searchbar placeholder="Search for action plan.." onChange={setSearchValue} />}>
       <Wrap spacing="4" pt="3">
         {isLoadingActionPlans ? (
           <Spinner />
         ) : filteredActionPlans?.length === 0 ? (
-          <EmptyState
-            imgSrc={cloud}
-            title="No Result"
-            description={`Could not find a action plan matching with your search ${searchValue}`}
-          />
+          <EmptyState imgSrc={cloud} title="No Result" description={`Could not find an action plan`} />
         ) : (
           filteredActionPlans!.map((actionPlan) => (
             <WrapItem key={actionPlan._id}>

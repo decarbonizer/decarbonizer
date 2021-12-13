@@ -14,9 +14,14 @@ export default function Searchbar({ placeholder, onChange }: SearchbarProps) {
   return (
     <InputGroup>
       <InputLeftElement>
-        <FiSearch color="gray.300" />
+        <FiSearch color="gray.200" />
       </InputLeftElement>
-      <Input placeholder={placeholder} bg="white" onChange={(e) => handleFilter(e)} />
+      <Input
+        focusBorderColor="gray.300"
+        placeholder={placeholder}
+        onChange={(e) => handleFilter(e)}
+        variant="flushed"
+      />
     </InputGroup>
   );
 }

@@ -14,12 +14,12 @@ export interface PageNavigation {
 
 export type PageDisplayTypes = 'Survey Overview' | 'Dashboard' | 'Action Plan Overview';
 
-export interface MenuNavigationProps {
+export interface NavigationMenuProps {
   currentPage: PageDisplayTypes;
   realEstateId: string;
 }
 
-export default function MenuNavigation({ currentPage, realEstateId }: MenuNavigationProps) {
+export default function NavigationMenu({ currentPage, realEstateId }: NavigationMenuProps) {
   const history = useHistory();
   const pages: PageNavigation[] = [
     { value: routes.surveys({ realEstateId }), display: 'Survey Overview', icon: <Icon as={FcSurvey} /> },

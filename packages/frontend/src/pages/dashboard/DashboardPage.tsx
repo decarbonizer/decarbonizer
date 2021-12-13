@@ -17,7 +17,6 @@ import Card from '../../components/Card';
 import ActionChartsSection from './ActionChartsSection';
 import { Bulb } from '../../api/bulb';
 import { SurveyAnswer, calculateOverallFootprint } from '../../api/surveyAnswer';
-import MenuNavigation from '../../components/MenuNavigation';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<RealEstatePageParams>();

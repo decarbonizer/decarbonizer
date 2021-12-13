@@ -39,8 +39,9 @@ export default function HomePage() {
   ];
 
   return (
-    <DefaultPageLayout title="Home">
-      <Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />
+    <DefaultPageLayout
+      title="Home"
+      actions={<Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />}>
       <SortingSelection sortingCategories={sortCategory} onChange={setCurrentSortValue} alignment="horizontal" />
       <Wrap justify="space-evenly">
         {!searchValue && (
@@ -56,11 +57,7 @@ export default function HomePage() {
         {isLoadingRealEstates ? (
           <Spinner />
         ) : sortedRealEstates.length === 0 ? (
-          <EmptyState
-            imgSrc={cloud}
-            title="No Result"
-            description={`Could not find a real estate matching with your search ${searchValue}`}
-          />
+          <EmptyState imgSrc={cloud} title="No Result" description={`Could not find a real estate`} />
         ) : (
           sortedRealEstates!.map((city) => (
             <WrapItem key={city._id}>
