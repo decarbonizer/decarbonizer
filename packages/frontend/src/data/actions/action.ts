@@ -76,7 +76,6 @@ export interface Action<T extends object = any> {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  // schema: FormSchema;
   getSchema: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
 
   /**
