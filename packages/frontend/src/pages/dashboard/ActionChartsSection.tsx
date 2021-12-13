@@ -12,9 +12,6 @@ export default function ActionChartsSection() {
   const { selectedActionCategory } = useContext(ActionPanelContext);
   const ChartSection = chartSections[selectedActionCategory?.id ?? ''];
 
-  // TODO: This doesn't work correctly
-  console.log('selectedActionCategory', selectedActionCategory);
-
   if (!ChartSection) {
     return null;
   }
