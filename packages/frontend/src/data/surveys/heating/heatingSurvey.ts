@@ -77,6 +77,19 @@ export const heatingSurvey: Survey = {
           },
         ],
       },
+      {
+        name: 'Total heating',
+        elements: [
+          {
+            id: 'avgHeatingPerYear',
+            required: true,
+            type: 'number',
+            label: 'How many days per year is the location heated on average?',
+            min: 0,
+            max: 366,
+          },
+        ],
+      },
     ],
   },
 };

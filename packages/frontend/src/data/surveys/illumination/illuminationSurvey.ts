@@ -209,7 +209,7 @@ export const illuminationSurvey: Survey = {
             id: 'avgIlluminationPerYear',
             required: true,
             type: 'number',
-            label: 'How many days in a year is the location illuminated on average?',
+            label: 'How many days per year is the location illuminated on average?',
             min: 0,
             max: 366,
           },
