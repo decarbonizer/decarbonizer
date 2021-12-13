@@ -13,6 +13,7 @@ import {
   AspectRatio,
   Text,
   useToast,
+  IconButton,
 } from '@chakra-ui/react';
 import { IoIosArrowBack, IoIosArrowForward, IoIosCheckmark } from 'react-icons/io';
 import CancelSurveyConfirmationAlert from './CancelSurveyConfirmationAlert';
@@ -121,6 +122,24 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
               ruleEvaluationResults={ruleEvaluationResults}
               validationErrors={validationErrors}
               onValueChanged={handleValueChanged}
+              buttonPrevious={
+                <IconButton
+                  isDisabled={!canGoToPrevious}
+                  aria-label="back"
+                  icon={<IoIosArrowBack />}
+                  variant="ghost"
+                  onClick={goToPrevious}
+                />
+              }
+              buttonNext={
+                <IconButton
+                  isDisabled={!canGoToNext}
+                  aria-label="next"
+                  icon={<IoIosArrowForward />}
+                  variant="ghost"
+                  onClick={goToNext}
+                />
+              }
             />
           </Box>
         </Box>
@@ -139,6 +158,17 @@ export default function SurveyView({ realEstateId, surveyId, initialSurveyValue,
               Next
             </Button>
           ) : (
+            <Button
+              minW="32"
+              colorScheme="primary"
+              leftIcon={<Icon as={IoIosCheckmark} />}
+              isLoading={isCreatingSurveyAnswer || isUpdatingSurveyAnswer}
+              onClick={submitSurvey}>
+              Submit
+            </Button>
+          )}
+          <Spacer />
+          {initialSurveyValue && canGoToNext && (
             <Button
               minW="32"
               colorScheme="primary"

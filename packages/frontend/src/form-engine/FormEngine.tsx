@@ -1,5 +1,5 @@
-import { createContext } from 'react';
-import { Heading, VStack } from '@chakra-ui/react';
+import { createContext, ReactNode } from 'react';
+import { Heading, HStack, VStack, Text, Spacer, Box } from '@chakra-ui/react';
 import FormEngineElement from './FormEngineElement';
 import { FormSchema } from './formSchema';
 import {
@@ -20,20 +20,38 @@ export interface FormEngineProps {
   validationErrors: FormEngineValidationErrors;
   isViewOnly?: boolean;
   onValueChanged(e: { value: FormEngineValue });
+  buttonPrevious?: ReactNode;
+  buttonNext?: ReactNode;
 }
 
 export default function FormEngine(props: FormEngineProps) {
   const { schema, page } = props;
   const currentSchemaPage = schema.pages[page - 1];
+  console.log(page);
 
   return (
     <FormEnginePropsContext.Provider value={props}>
-      <VStack spacing="8">
-        {currentSchemaPage.name && (
-          <Heading as="h2" size="md" alignSelf="flex-start">
-            {currentSchemaPage.name}
-          </Heading>
-        )}
+      <VStack spacing="8" align="flex-start">
+        <HStack w="100%" align="center">
+          {currentSchemaPage.name && (
+            <Box>
+              <Heading as="h2" size="md" alignSelf="flex-start">
+                {currentSchemaPage.name}
+              </Heading>
+            </Box>
+          )}
+          <Spacer />
+          {props.buttonPrevious && props.buttonNext && (
+            <HStack>
+              {props.buttonPrevious}
+              <Text pl="2" pr="2">
+                {page}
+              </Text>
+              {props.buttonNext}
+            </HStack>
+          )}
+        </HStack>
+
         {currentSchemaPage.elements.map((element, index) => (
           <FormEngineElement key={index} element={element} />
         ))}
