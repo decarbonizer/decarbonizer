@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { GiFootprint } from 'react-icons/gi';
 import { useParams } from 'react-router';
 import { Bulb } from '../../../api/bulb';
-import { calculateOverallFootprint, SurveyAnswer } from '../../../api/surveyAnswer';
+import { calculateOverallFootprintAndMaintenance, SurveyAnswer } from '../../../api/surveyAnswer';
 import HaloIcon from '../../../components/HaloIcon';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery, useGetAllBulbsQuery } from '../../../store/api';
@@ -44,6 +44,6 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
 }
 
 function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-  const value = calculateOverallFootprint(answers, bulbs, 1);
-  return +value[0].footprint.toFixed(1);
+  const value = calculateOverallFootprintAndMaintenance(answers, bulbs, 1).calculations;
+  return +value[1].footprint.toFixed(1);
 }
