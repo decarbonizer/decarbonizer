@@ -99,7 +99,6 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
         <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />}>
           <QuickInfoLabelDescription label={<>{'⬇ 1.73t'}</>} description={'Before: 6.1t, After: 4.73t'} />
         </QuickInfo>
-
         <QuickInfo h="50%" icon={<HaloIcon icon={BiTargetLock} />}>
           <QuickInfoLabelDescription label={<>{'⬆ 40%'}</>} description={'Before: 38%, After: 40%'} />
         </QuickInfo>

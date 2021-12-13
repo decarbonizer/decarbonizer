@@ -4,7 +4,6 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import { RealEstatePageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
 import { useState } from 'react';
-import NetZeroCard from './global/NetZeroCard';
 import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
@@ -66,7 +65,10 @@ export default function DashboardPage() {
           <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
           <Grid templateColumns="repeat(4, 1fr)" gap={6}>
             <GlobalFootprintCard />
-            <NetZeroCard />
+            {/* <NetZeroCard
+              startCarbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0}
+              reducedValue={1000}
+            /> */}
             <ComparisonCard gridColumn="3 / span 2" />
           </Grid>
           {selectedActionCategory && (
@@ -87,3 +89,8 @@ export default function DashboardPage() {
     </ActionPanelContext.Provider>
   );
 }
+
+// function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
+//   const value = calculateOverallFootprint(answers, bulbs, 1);
+//   return +value[0].footprint.toFixed(1);
+// }

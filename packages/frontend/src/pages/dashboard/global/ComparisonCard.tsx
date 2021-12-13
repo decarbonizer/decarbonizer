@@ -46,7 +46,6 @@ export default function ComparisonCard(props: DashboardCardProps) {
     [filledActionAnswersDf, realEstateId],
   );
 
-  console.log(data);
   return (
     <DashboardCard header="Compared to other real estates" {...props}>
       <InlineErrorDisplay error={error}>

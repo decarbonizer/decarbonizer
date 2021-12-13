@@ -12,6 +12,7 @@ import { Route, Switch, useParams } from 'react-router';
 import { RealEstatePageParams, routes } from '../routes';
 import { useGetRealEstateQuery } from '../store/api';
 import { Link } from 'react-router-dom';
+import NavigationMenu, { PageDisplayTypes } from '../components/NavigationMenu';
 
 export default function NavBarBreadcrumbs() {
   const breadcrumbProps: BreadcrumbProps = {
@@ -32,22 +33,25 @@ export default function NavBarBreadcrumbs() {
       <Route exact path={routes.realEstateDashboard.route}>
         <Breadcrumb {...breadcrumbProps}>
           <HomeItem />
-          <RealEstateItem isCurrentPage />
+          <RealEstateItem isCurrentPage marginRight="-3" />
         </Breadcrumb>
+        <RealEstateLocationPicker currentPage="Dashboard" />
       </Route>
       <Route exact path={routes.surveys.route}>
         <Breadcrumb {...breadcrumbProps}>
           <HomeItem />
           <RealEstateItem />
-          <SurveyItem isCurrentPage />
+          <SurveyItem isCurrentPage marginRight="-3" />
         </Breadcrumb>
+        <RealEstateLocationPicker currentPage="Survey Overview" />
       </Route>
       <Route exact path={routes.actionPlans.route}>
         <Breadcrumb {...breadcrumbProps}>
           <HomeItem />
           <RealEstateItem />
-          <ActionPlanItem isCurrentPage />
+          <ActionPlanItem isCurrentPage marginRight="-3" />
         </Breadcrumb>
+        <RealEstateLocationPicker currentPage="Action Plan Overview" />
       </Route>
     </Switch>
   );
@@ -81,7 +85,7 @@ function SurveyItem(props: BreadcrumbItemProps) {
 
   return (
     <BreadcrumbItem {...props}>
-      <BreadcrumbLink as={Link} to={routes.surveys({ realEstateId })} isCurrentPage>
+      <BreadcrumbLink as={Link} to={routes.surveys({ realEstateId })}>
         Surveys
       </BreadcrumbLink>
     </BreadcrumbItem>
@@ -98,4 +102,9 @@ function ActionPlanItem(props: BreadcrumbItemProps) {
       </BreadcrumbLink>
     </BreadcrumbItem>
   );
+}
+
+function RealEstateLocationPicker(props: { currentPage: PageDisplayTypes }) {
+  const { realEstateId } = useParams<RealEstatePageParams>();
+  return <NavigationMenu currentPage={props.currentPage} realEstateId={realEstateId} />;
 }

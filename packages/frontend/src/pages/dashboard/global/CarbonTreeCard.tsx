@@ -1,4 +1,5 @@
 import { Heading, Image, Text, VStack } from '@chakra-ui/react';
+import tree from './tree.png';
 import { DataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
@@ -14,8 +15,6 @@ export default function CarbonTreeCard({ realEstateId }: CarbonTreeCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
-
-      console.log(externalCalculationData.surveyAnswers.toArray());
 
       const carbonFootprint =
         surveyAnswers.count() > 0
@@ -45,14 +44,7 @@ export default function CarbonTreeCard({ realEstateId }: CarbonTreeCardProps) {
     <VStack>
       {data && (
         <>
-          <Image
-            boxSize="100px"
-            src="https://cdn-icons.flaticon.com/png/512/2220/premium/2220091.png?token=exp=1639247675~hmac=1504967a1dea5681fdf29c64f3ec5ecc"
-            fallbackSrc="https://cdn-icons.flaticon.com/png/512/2713/premium/2713505.png?token=exp=1639247672~hmac=675f058329f564ca37d898ace8e065dd"
-            alt="Tree Image"
-            objectFit="cover"
-            roundedTop="md"
-          />
+          <Image boxSize="100px" src={tree} alt="Tree Image" objectFit="cover" roundedTop="md" />
           <Heading size="sm">
             {data.calculatedTreeSequestrationPerYear === 0
               ? data.displayTreeSequestrationMonth

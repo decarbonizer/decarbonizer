@@ -70,8 +70,6 @@ function getIlluminationMaintenanceCostForSingleSurveyAnswer(
   const requiredReplacementsPerYear = runtimeInHoursPerYearPerBulb / bulb.lifetimeInHours;
   const costOnReplace = answer.lampCount * bulb.costInEuro + answer.lampCount * avgElectritianWagePerBulb;
 
-  console.log(bulb.name, costOnReplace);
-
   return {
     requiredReplacementsPerYear,
     costOnReplace,
