@@ -3,30 +3,33 @@ import { AiOutlineBoxPlot } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 
-export const switchToHeatPumpAction: Action = {
+export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
   id: 'switchToHeatPump',
   name: 'Switch to heat pump',
   icon: AiOutlineBoxPlot,
   description: 'A heat pump does not use fossil fuels, it actively contributes to the reduction of your CO₂ emissions',
   forSurvey: 'heating',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newHeatPump',
-            type: 'single-choice',
-            required: false,
-            options: [
-              { display: 'Ground source heat pump', value: 'groundSourceHeatPump' },
-              { display: 'Air source heat pump', value: 'airSourceHeatPump' },
-              { display: 'Solar thermal', value: 'solarThermal' },
-            ],
-          },
-        ],
-      },
-    ],
+  getSchema: () => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newHeatPump',
+              type: 'single-choice',
+              required: false,
+              options: [
+                { display: 'Ground source heat pump', value: 'groundSourceHeatPump' },
+                { display: 'Air source heat pump', value: 'airSourceHeatPump' },
+                { display: 'Solar thermal', value: 'solarThermal' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [

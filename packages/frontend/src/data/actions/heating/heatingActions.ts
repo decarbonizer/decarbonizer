@@ -3,8 +3,9 @@ import { GiHeatHaze } from 'react-icons/gi';
 import { switchToHeatPumpAction } from './switchToHeatPumpAction';
 import { heatLessAction } from './heatLessAction';
 import { integrateSmartRadiatorThermostats } from './integrateSmartRadiatorThermostats';
+import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 
-export const heatingActionsCategory: ActionCategory = {
+export const heatingActionsCategory: ActionCategory<HeatingSurveyAnswerValue> = {
   id: 'heating',
   name: 'Heating',
   icon: GiHeatHaze,

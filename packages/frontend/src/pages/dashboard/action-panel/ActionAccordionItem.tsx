@@ -15,7 +15,7 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { MouseEvent, useContext, useEffect, useMemo } from 'react';
+import { MouseEvent, useContext, useEffect } from 'react';
 import { ActionPanelContext } from './actionPanelContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
@@ -24,6 +24,7 @@ import ActionDetailsModal from './ActionDetailsModal';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
+import { useActionSchema } from '../../../data/actions/useActionSchema';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -33,19 +34,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
-  const schema = useMemo(() => {
-    if (typeof action.getSchema === 'function') {
-      const latestSurvey = surveyAnswers
-        ?.slice()
-        .reverse()
-        .find((survey) => {
-          return survey.surveyId === action.forSurvey;
-        });
-      return action.getSchema(latestSurvey);
-    } else {
-      return action.schema;
-    }
-  }, [action, surveyAnswers]);
+  const schema = useActionSchema(action, surveyAnswers);
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();

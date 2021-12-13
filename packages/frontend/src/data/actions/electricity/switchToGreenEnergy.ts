@@ -28,20 +28,6 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
       ],
     };
   },
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newEnergyForm',
-            type: 'single-choice',
-            required: false,
-            options: 'energyForms',
-          },
-        ],
-      },
-    ],
-  },
   detailsSchema: {
     pages: [
       {

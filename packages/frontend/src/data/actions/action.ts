@@ -46,7 +46,7 @@ export interface ActionCategory<T extends object = any> {
  * The two forms produce answers (-> an "action answer") which can be processed by the frontend
  * and sent to the backend.
  */
-export interface Action<T extends object = object> {
+export interface Action<T extends object = any> {
   /**
    * A unique identifier of the action.
    * Should be human readable.
@@ -72,9 +72,8 @@ export interface Action<T extends object = object> {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  schema: FormSchema;
-
-  getSchema?: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
+  // schema: FormSchema;
+  getSchema: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
 
   /**
    * If available, declares a form schema which can be used for collecting additional information
