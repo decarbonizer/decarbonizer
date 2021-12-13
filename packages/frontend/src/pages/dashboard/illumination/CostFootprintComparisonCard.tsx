@@ -23,35 +23,31 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
         externalCalculationData.surveyAnswers,
         'illumination',
       );
+      const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
+        externalCalculationData,
+        illuminationSurveyAnswers.map((answer) => answer.value),
+      );
+      const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      );
+      const oldFootprintPerYear = getIlluminationFootprintPerYear(
+        externalCalculationData,
+        illuminationSurveyAnswers.map((answer) => answer.value),
+      );
+      const newFootprintPerYear = getTransformedIlluminationFootprintPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      );
 
       return range(1, 11).map((year) => ({
         Year: year,
-        'Old costs':
-          year *
-          getIlluminationElectricityCostPerYear(
-            externalCalculationData,
-            illuminationSurveyAnswers.map((answer) => answer.value),
-          ),
-        'New costs':
-          year *
-          getTransformedIlluminationElectricityCostPerYear(
-            externalCalculationData,
-            externalCalculationData.surveyAnswers,
-            filledActionAnswersDf,
-          ),
-        'Old footprint':
-          year *
-          getIlluminationFootprintPerYear(
-            externalCalculationData,
-            illuminationSurveyAnswers.map((answer) => answer.value),
-          ),
-        'New footprint':
-          year *
-          getTransformedIlluminationFootprintPerYear(
-            externalCalculationData,
-            externalCalculationData.surveyAnswers,
-            filledActionAnswersDf,
-          ),
+        'Old costs': year * oldElectricityCostsPerYear,
+        'New costs': year * newElectricityCostsPerYear,
+        'Old footprint': year * oldFootprintPerYear,
+        'New footprint': year * newFootprintPerYear,
       }));
     },
     [filledActionAnswersDf],
