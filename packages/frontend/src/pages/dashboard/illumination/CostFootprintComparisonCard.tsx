@@ -1,32 +1,90 @@
+import { SkeletonText } from '@chakra-ui/react';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
+import {
+  getIlluminationElectricityCostPerYear,
+  getTransformedIlluminationElectricityCostPerYear,
+} from '../../../calculations/illumination/electricityCost';
+import {
+  getIlluminationFootprintPerYear,
+  getTransformedIlluminationFootprintPerYear,
+} from '../../../calculations/illumination/footprint';
+import { useCalculation } from '../../../calculations/useCalculation';
+import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
+import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
+import range from 'lodash-es/range';
+import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 
 export default function CostFootprintComparisonCard(props: DashboardCardProps) {
-  const data = [];
+  const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const { data, isLoading, error } = useCalculation(
+    (externalCalculationData) => {
+      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
+        externalCalculationData.surveyAnswers,
+        'illumination',
+      );
+
+      return range(1, 11).map((year) => ({
+        Year: year,
+        'Old costs':
+          year *
+          getIlluminationElectricityCostPerYear(
+            externalCalculationData,
+            illuminationSurveyAnswers.map((answer) => answer.value),
+          ),
+        'New costs':
+          year *
+          getTransformedIlluminationElectricityCostPerYear(
+            externalCalculationData,
+            externalCalculationData.surveyAnswers,
+            filledActionAnswersDf,
+          ),
+        'Old footprint':
+          year *
+          getIlluminationFootprintPerYear(
+            externalCalculationData,
+            illuminationSurveyAnswers.map((answer) => answer.value),
+          ),
+        'New footprint':
+          year *
+          getTransformedIlluminationFootprintPerYear(
+            externalCalculationData,
+            externalCalculationData.surveyAnswers,
+            filledActionAnswersDf,
+          ),
+      }));
+    },
+    [filledActionAnswersDf],
+  );
 
   return (
     <DashboardCard header="Compared costs and footprints over years" {...props}>
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={data}
-          syncId="compareData"
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 15,
-          }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" label={{ value: 'Years', position: 'insideBottomRight' }} />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Area type="monotone" dataKey="oldCosts" stackId="1" stroke="#8884d8" fill="#8884d8" label="old costs" />
-          <Area type="monotone" dataKey="newCosts" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-          <Area type="monotone" dataKey="newFootprint" stackId="1" stroke="#ffc658" fill="#ffc658" />
-          <Area type="monotone" dataKey="oldFootprint" stackId="1" stroke="#7ab356" fill="#7ab356" />
-        </AreaChart>
-      </ResponsiveContainer>
+      <InlineErrorDisplay error={error}>
+        {isLoading && <SkeletonText />}
+        {data && (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={data}
+              syncId="compareData"
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 15,
+              }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Area type="monotone" dataKey="New footprint" stroke="#2F855A" strokeWidth={3} fill="transparent" />
+              <Area type="monotone" dataKey="Old footprint" stroke="#68D391" strokeWidth={3} fill="transparent" />
+              <Area type="monotone" dataKey="New costs" stroke="#B83280" strokeWidth={3} fill="transparent" />
+              <Area type="monotone" dataKey="Old costs" stroke="#702459" strokeWidth={3} fill="transparent" />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
+      </InlineErrorDisplay>
     </DashboardCard>
   );
 }
