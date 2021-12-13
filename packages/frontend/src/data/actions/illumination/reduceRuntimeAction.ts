@@ -3,14 +3,15 @@ import { Action } from '../action';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { IlluminationSurveyAnswerValue } from '../../surveys/illumination/illuminationSurveyAnswerValue';
 
-export const reduceRuntimeAction: Action = {
+export const reduceRuntimeAction: Action<IlluminationSurveyAnswerValue> = {
   id: 'reduceRuntime',
   name: 'Reduce Runtime',
   icon: AiOutlineFieldTime,
   description: 'You can reduce your CO2 footprint and costs by reducing the runtime of your lights.',
   forSurvey: 'illumination',
-  schema: {
+  getSchema: () => ({
     pages: [
       {
         elements: [
@@ -36,7 +37,7 @@ export const reduceRuntimeAction: Action = {
         ],
       },
     ],
-  },
+  }),
   detailsSchema: {
     pages: [
       {

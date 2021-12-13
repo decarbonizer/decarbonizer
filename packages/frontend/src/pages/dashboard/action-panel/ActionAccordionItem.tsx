@@ -2,10 +2,10 @@ import {
   AccordionItem,
   AccordionPanel,
   Icon,
-  Text,
   IconButton,
-  Tooltip,
   SkeletonText,
+  Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { FaCog } from 'react-icons/fa';
@@ -23,6 +23,8 @@ import isEmpty from 'lodash-es/isEmpty';
 import ActionDetailsModal from './ActionDetailsModal';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
+import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
+import { useActionSchema } from '../../../data/actions/useActionSchema';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -30,10 +32,10 @@ export interface ActionAccordionItemProps {
 
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
+  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
-  const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(
-    action.schema,
-  );
+  const schema = useActionSchema(action, surveyAnswers);
+  const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
 
@@ -89,7 +91,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
             range(3).map((i) => <SkeletonText key={i} mb="2" />)
           ) : (
             <FormEngine
-              schema={action.schema}
+              schema={schema}
               value={value}
               page={page}
               choiceOptionProviders={providers}

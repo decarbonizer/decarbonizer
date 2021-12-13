@@ -3,28 +3,30 @@ import { BsThermometerSnow } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 
-//TODO: forSurvey 'heating' + create heating survey, options: 'heating'
-export const heatLessAction: Action = {
+export const heatLessAction: Action<HeatingSurveyAnswerValue> = {
   id: 'heatLess',
   name: 'Heat less',
   icon: BsThermometerSnow,
   description:
     'As a rule of thumb, for every less degree of room temperature, approx. 6% of your heating energy is saved.',
-  forSurvey: 'illumination',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newRoomTemperature',
-            label: 'Which temperature do you want to have in your office? (in C°)',
-            type: 'number',
-            required: false,
-          },
-        ],
-      },
-    ],
+  forSurvey: 'heating',
+  getSchema: () => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newRoomTemperature',
+              label: 'Which temperature do you want to have in your office? (in C°)',
+              type: 'number',
+              required: false,
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [

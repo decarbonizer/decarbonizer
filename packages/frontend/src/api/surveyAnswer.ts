@@ -1,7 +1,7 @@
 import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../data/surveys/survey';
 import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
 
-export interface SurveyAnswer<T = object> extends ApiObject {
+export interface SurveyAnswer<T extends object = any> extends ApiObject {
   realEstateId: string;
   surveyId: KnownSurveyId;
   value: T;
