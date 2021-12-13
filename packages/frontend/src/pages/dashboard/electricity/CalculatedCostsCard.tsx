@@ -1,21 +1,21 @@
-import { Table, Tbody, Tr, Td, SkeletonText } from '@chakra-ui/react';
-import { getTransformedIlluminationElectricityCostPerYear } from '../../../calculations/illumination/electricityCost';
-import { getTransformedIlluminationFootprintPerYear } from '../../../calculations/illumination/footprint';
+import { SkeletonText, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
+import { getTransformedElectricityCostPerYear } from '../../../calculations/electricity/cost';
+import { getTransformedElectricityFootprintPerYear } from '../../../calculations/electricity/footprint';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => ({
-      electricityCosts: getTransformedIlluminationElectricityCostPerYear(
+      electricityCosts: getTransformedElectricityCostPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),
-      footprint: getTransformedIlluminationFootprintPerYear(
+      footprint: getTransformedElectricityFootprintPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
@@ -32,10 +32,8 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
           <Table variant="">
             <Tbody>
               <Tr>
-                <Td fontWeight="bold" fontSize="lg" pl="0">
-                  {/* {calculatedCosts.amountOfIlluminants} */}
-                </Td>
-                <Td>{/* <i>{calculatedCosts.typeOfBulb}</i> used */}</Td>
+                <Td fontWeight="bold" fontSize="lg" pl="0" />
+                <Td />
               </Tr>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">
@@ -47,7 +45,7 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
                 <Td fontWeight="bold" fontSize="lg" pl="0">
                   {data.footprint.toFixed(2)}t
                 </Td>
-                <Td>Carbon emissions through illumination</Td>
+                <Td>Carbon emissions through electricity</Td>
               </Tr>
             </Tbody>
           </Table>
