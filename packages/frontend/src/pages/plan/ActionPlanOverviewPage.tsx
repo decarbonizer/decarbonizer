@@ -8,6 +8,7 @@ import { ActionPlansPageParams } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
 import ActionPlanCard from './ActionPlanCard';
 import cloud from '../../img/cloud.svg';
+import MenuNavigation from '../../components/MenuNavigation';
 
 export default function ActionPlanOverviewPage() {
   const { realEstateId } = useParams<ActionPlansPageParams>();

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { SurveysPageParams } from '../../routes';
 import { knownSurveys, Survey } from '../../data/surveys/survey';
+import MenuNavigation from '../../components/MenuNavigation';
 
 export default function SurveyOverviewPage() {
   const [activeSurvey, setActiveSurvey] = useState<Survey | undefined>(undefined);
