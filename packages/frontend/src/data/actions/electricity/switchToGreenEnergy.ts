@@ -9,7 +9,7 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
   id: 'switchToGreenEnergy',
   name: 'Switch to green energy',
   icon: GiGreenPower,
-  description: 'Switching to another energy source may have a positive effect on your carbon footprint.',
+  description: 'Switching to another energy form may have a positive effect on your carbon footprint.',
   forSurvey: 'electricity',
   getSchema: (survey) => {
     return {
@@ -17,17 +17,11 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
         {
           elements: [
             {
-              id: 'newEnergySource',
+              id: 'newEnergyForm',
               type: 'single-choice',
               required: false,
-              defaultValue: survey?.value.electricityKind,
-              options: [
-                { display: 'Wind power', value: 'windPower' },
-                { display: 'Hydropower', value: 'hydroPower' },
-                { display: 'Solar power (concentrated)', value: 'conSolarPower' },
-                { display: 'Solar photovoltaic', value: 'solarPV' },
-                { display: 'Geothermal', value: 'geothermal' },
-              ],
+              defaultValue: survey?.value.energyForm,
+              options: 'energyForms',
             },
           ],
         },
@@ -39,16 +33,10 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
       {
         elements: [
           {
-            id: 'newEnergySource',
+            id: 'newEnergyForm',
             type: 'single-choice',
             required: false,
-            options: [
-              { display: 'Wind power', value: 'windPower' },
-              { display: 'Hydropower', value: 'hydroPower' },
-              { display: 'Solar power (concentrated)', value: 'conSolarPower' },
-              { display: 'Solar photovoltaic', value: 'solarPV' },
-              { display: 'Geothermal', value: 'geothermal' },
-            ],
+            options: 'energyForms',
           },
         ],
       },
@@ -64,7 +52,7 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
 };
 
 export interface SwitchToGreenEnergyActionAnswerValue {
-  newEnergySource: 'windPower' | 'hydroPower' | 'conSolarPower' | 'roofSolarPower' | 'geothermal';
+  newEnergyForm: string;
 }
 
 export interface SwitchToGreenEnergyDetailsAnswerValue

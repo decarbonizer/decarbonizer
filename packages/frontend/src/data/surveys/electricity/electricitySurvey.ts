@@ -25,20 +25,11 @@ export const electricitySurvey: Survey = {
         name: 'Electricity supply',
         elements: [
           {
-            id: 'electricityKind',
+            id: 'energyForm',
             required: true,
             type: 'single-choice',
-            label: 'What energy supplier do you have?',
-            options: [
-              { display: 'Wind power', value: 'windPower' },
-              { display: 'Hydropower', value: 'hydroPower' },
-              { display: 'Solar power (concentrated)', value: 'conSolarPower' },
-              { display: 'Solar photovoltaic', value: 'solarPV' },
-              { display: 'Geothermal', value: 'geothermal' },
-              { display: 'Biomass', value: 'biomass' },
-              { display: 'Gas', value: 'gas' },
-              { display: 'Coal', value: 'coal' },
-            ],
+            label: 'Which energy form do you use?',
+            options: 'energyForms',
           },
         ],
       },
