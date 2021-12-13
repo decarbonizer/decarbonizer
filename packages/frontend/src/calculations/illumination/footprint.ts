@@ -72,6 +72,6 @@ function getIlluminationFootprintPerYearForSingleSurveyAnswer(
   const germanyEF = 0.624;
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
   const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
-  const footprint = bulb.productionKwh * runtimeInHoursPerYear * germanyEF + answer.lampCount;
+  const footprint = bulb.productionKwh * runtimeInHoursPerYear * germanyEF * answer.lampCount;
   return footprint;
 }
