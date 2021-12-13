@@ -3,33 +3,30 @@ import { GiGreenPower } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import { ElectricitySurveyAnswerValue } from '../../surveys/electricity/electricitySurveyAnswerValue';
 
-//TODO: forSurvey 'electricity' + create heating survey, options: 'electricity'
-export const switchToGreenEnergy: Action = {
+export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
   id: 'switchToGreenEnergy',
   name: 'Switch to green energy',
   icon: GiGreenPower,
-  description: 'Switching to another energy source may have a positive effect on your carbon footprint.',
-  forSurvey: 'illumination',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newEnergySource',
-            type: 'single-choice',
-            required: false,
-            options: [
-              { display: 'Wind power', value: 'windPower' },
-              { display: 'Hydropower', value: 'hydroPower' },
-              { display: 'Solar power (concentrated)', value: 'conSolarPower' },
-              { display: 'Solar power (rooftop)', value: 'roofSolarPower' },
-              { display: 'Geothermal', value: 'geothermal' },
-            ],
-          },
-        ],
-      },
-    ],
+  description: 'Switching to another energy form may have a positive effect on your carbon footprint.',
+  forSurvey: 'electricity',
+  getSchema: (survey) => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newEnergyForm',
+              type: 'single-choice',
+              required: false,
+              defaultValue: survey?.value.energyForm,
+              options: 'energyForms',
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [
@@ -41,7 +38,7 @@ export const switchToGreenEnergy: Action = {
 };
 
 export interface SwitchToGreenEnergyActionAnswerValue {
-  newEnergySource: 'windPower' | 'hydroPower' | 'conSolarPower' | 'roofSolarPower' | 'geothermal';
+  newEnergyForm: string;
 }
 
 export interface SwitchToGreenEnergyDetailsAnswerValue

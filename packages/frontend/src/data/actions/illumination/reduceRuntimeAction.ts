@@ -3,32 +3,41 @@ import { Action } from '../action';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { IlluminationSurveyAnswerValue } from '../../surveys/illumination/illuminationSurveyAnswerValue';
 
-export const changeRuntimeAction: Action = {
-  id: 'changeRuntime',
-  name: 'Change Runtime',
+export const reduceRuntimeAction: Action<IlluminationSurveyAnswerValue> = {
+  id: 'reduceRuntime',
+  name: 'Reduce Runtime',
   icon: AiOutlineFieldTime,
-  description: 'Reduce the runtime of the light in your office may have a positive effect on your carbon footprint.',
+  description: 'You can reduce your CO2 footprint and costs by reducing the runtime of your lights.',
   forSurvey: 'illumination',
-  schema: {
+  getSchema: () => ({
     pages: [
       {
         elements: [
           {
-            id: 'newRuntime',
+            id: 'dailyRuntimeReductionInDays',
             type: 'number-unit',
             required: false,
             units: 'time',
             normedUnit: 'd',
-            placeholder: 'New runtime',
-            defaultSelectedUnit: 'h',
+            label: 'Reduce daily runtime by:',
+            defaultSelectedUnit: 'min',
             normedMin: 0,
             normedMax: 1,
+          },
+          {
+            id: 'yearlyRuntimeReductionInDays',
+            type: 'number',
+            required: false,
+            label: 'Reduce yearly runtime by days:',
+            min: 0,
+            max: 365,
           },
         ],
       },
     ],
-  },
+  }),
   detailsSchema: {
     pages: [
       {
@@ -38,11 +47,12 @@ export const changeRuntimeAction: Action = {
   },
 };
 
-export interface ChangeRuntimeActionAnswerValue {
-  newRuntime: number;
+export interface ReduceRuntimeActionAnswerValue {
+  dailyRuntimeReductionInDays?: number;
+  yearlyRuntimeReductionInDays?: number;
 }
 
-export interface ChangeRuntimeActionDetailsAnswerValue
+export interface ReduceRuntimeActionDetailsAnswerValue
   extends ChoosePriorityElementAnswerValue,
     ChooseTimePeriodElementAnswerValue,
     ChooseSurveyAnswerElementAnswerValue {}

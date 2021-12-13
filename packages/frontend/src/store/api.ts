@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Bulb } from '../api/bulb';
+import { EnergyForm } from '../api/energyForm';
 import { RealEstate, RealEstateUpdate } from '../api/realEstate';
 import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
@@ -33,6 +34,11 @@ export const api = createApi({
     getAllBulbs: builder.query<Array<Bulb>, void>({
       query: () => ({
         url: 'api/v1/bulbs',
+      }),
+    }),
+    getAllEnergyForms: builder.query<Array<EnergyForm>, void>({
+      query: () => ({
+        url: 'api/v1/energyForms',
       }),
     }),
 
@@ -126,6 +132,11 @@ export const api = createApi({
       invalidatesTags: ['SurveyAnswer'],
     }),
 
+    getAllActionPlans: builder.query<Array<ActionPlan>, void>({
+      query: () => ({
+        url: 'api/v1/actionPlans',
+      }),
+    }),
     getAllActionPlansForRealEstate: builder.query<Array<ActionPlan>, { realEstateId: string }>({
       query: ({ realEstateId }) => ({
         url: `/api/v1/realEstates/${realEstateId}/actionPlans`,
@@ -162,6 +173,7 @@ export const {
   useLoginMutation,
 
   useGetAllBulbsQuery,
+  useGetAllEnergyFormsQuery,
 
   useGetAllRealEstatesQuery,
   useGetRealEstateQuery,
@@ -177,6 +189,7 @@ export const {
   useUpdateSurveyAnswerMutation,
   useDeleteSurveyAnswerMutation,
 
+  useGetAllActionPlansQuery,
   useGetAllActionPlansForRealEstateQuery,
   useCreateActionPlanMutation,
   useDeleteActionPlanMutation,

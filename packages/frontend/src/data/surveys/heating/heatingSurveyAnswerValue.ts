@@ -9,4 +9,5 @@ export interface HeatingSurveyAnswerValue {
     | 'oilBoiler';
   roomTemperature: number;
   smartThermostats: boolean;
+  avgHeatingPerYear: number;
 }

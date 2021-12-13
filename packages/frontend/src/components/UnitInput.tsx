@@ -6,7 +6,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
-  Text,
 } from '@chakra-ui/react';
 import { AllMeasuresUnits } from 'convert-units';
 import { ChangeEvent, useState } from 'react';
@@ -99,12 +98,6 @@ export default function UnitInput({
           ))}
         </Select>
       </Flex>
-      <Text isDisabled={isDisabled} color="gray" fontSize="xs" ml="1">
-        <>
-          = {normedValue?.toFixed(2) ?? '?'} {normedUnit}
-        </>
-        &nbsp;
-      </Text>
     </Flex>
   );
 }

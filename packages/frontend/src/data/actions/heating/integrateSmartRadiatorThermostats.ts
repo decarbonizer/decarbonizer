@@ -3,27 +3,29 @@ import { BsThermometerSun } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 
-//TODO: forSurvey 'heating' + create heating survey, options: 'heating'
-export const integrateSmartRadiatorThermostats: Action = {
+export const integrateSmartRadiatorThermostats: Action<HeatingSurveyAnswerValue> = {
   id: 'integrateSmartRadiatorThermostats',
   name: 'Smart thermostats',
   icon: BsThermometerSun,
   description: 'Smart radiator thermostats heat your office efficiently and climate-friendly.',
-  forSurvey: 'illumination',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newSmartTemperature',
-            type: 'boolean-checkbox',
-            label: 'Integrate smart radiator thermostats',
-            required: false,
-          },
-        ],
-      },
-    ],
+  forSurvey: 'heating',
+  getSchema: () => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newSmartTemperature',
+              type: 'boolean-checkbox',
+              label: 'Integrate smart radiator thermostats',
+              required: false,
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [

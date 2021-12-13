@@ -2,6 +2,7 @@ import { ActionAnswer, ActionAnswerCreate, ActionAnswerUpdate } from './actionAn
 import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
 
 export type ActionPlanStatus = 'open' | 'inProgress' | 'finished';
+
 export interface ActionPlan extends ApiObject {
   name: string;
   startDate: string;
@@ -19,6 +20,7 @@ export interface ActionPlanCreate extends ApiObjectCreate {
   status: ActionPlanStatus;
   actionAnswers: Array<ActionAnswerCreate>;
 }
+
 export interface ActionPlanUpdate extends ApiObjectUpdate {
   name?: string;
   startDate?: Date;

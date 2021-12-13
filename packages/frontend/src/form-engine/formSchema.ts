@@ -14,6 +14,7 @@ export interface FormSchemaBaseElement<TType extends string> {
   id: string;
   required: boolean;
   type: TType;
+  defaultValue?: any;
   label?: string;
   helperText?: string;
   rules?: Array<FormSchemaElementRule>;
@@ -48,6 +49,7 @@ export interface NumberFormSchemaElement extends FormSchemaBaseElement<'number'>
 export const knownUnitInputTemplates: Record<string, Array<AllMeasuresUnits>> = {
   energy: ['Wh', 'kWh', 'GWh'],
   time: ['d', 'h', 'min', 's'],
+  timeMinutes: ['min', 's'],
 };
 
 export type KnownUnitInputTemplate = keyof typeof knownUnitInputTemplates;

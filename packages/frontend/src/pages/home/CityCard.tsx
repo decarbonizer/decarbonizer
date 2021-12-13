@@ -21,9 +21,7 @@ import { FaEdit } from 'react-icons/fa';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { Bulb } from '../../api/bulb';
 import { RealEstate } from '../../api/realEstate';
-import { SurveyAnswer, calculateOverallFootprintAndMaintenance } from '../../api/surveyAnswer';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import HaloIcon from '../../components/HaloIcon';
@@ -127,8 +125,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
               </QuickInfo>
             </Box>
           </Box>
-
-          <CarbonTreeCard carbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0} />
+          <CarbonTreeCard realEstateId={realEstate._id} />
         </Grid>
 
         <Flex position="absolute" bottom="5" right="4">
@@ -161,9 +158,4 @@ export default function CityCard({ realEstate }: CityCardProps) {
       </VStack>
     </Card>
   );
-}
-
-function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-  const value = calculateOverallFootprintAndMaintenance(answers, bulbs, 1).calculations;
-  return +value[1].footprint.toFixed(1);
 }

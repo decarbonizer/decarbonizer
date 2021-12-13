@@ -1,6 +1,8 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { DataFrame } from 'data-forge';
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../../data/actions/action';
+import { SurveyAnswer } from '../../../api/surveyAnswer';
 
 export const ActionPanelContext = createContext<ActionPanelContextValue>(null!);
 
@@ -13,4 +15,9 @@ export interface ActionPanelContextValue {
   setFilledActionAnswers: Dispatch<SetStateAction<FilledActionAnswers>>;
   selectedActionCategory?: ActionCategory;
   setSelectedActionCategory: Dispatch<SetStateAction<ActionCategory | undefined>>;
+}
+
+export function useFilledActionAnswersDataFrame() {
+  const { filledActionAnswers } = useContext(ActionPanelContext);
+  return new DataFrame(Object.values(filledActionAnswers).filter(Boolean));
 }
