@@ -20,11 +20,11 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 export interface ActionCategory<T extends object = any> {
   /**
    * A unique identifier of the action category.
-   * Should be human readable.
+   * Should be human-readable.
    */
   id: string;
   /**
-   * The name of he category.
+   * The name of the category.
    */
   name: string;
   /**
@@ -103,7 +103,7 @@ export const knownActionCategories = [
   businessTravelActions,
 ];
 
-export const knownActions = knownActionCategories.flatMap((category) => category.actions);
+export const knownActions = knownActionCategories.flatMap<Action>((category) => category.actions);
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
