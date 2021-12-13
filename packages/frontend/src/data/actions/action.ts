@@ -3,9 +3,9 @@ import { FormSchema } from '../../form-engine/formSchema';
 import { KnownSurveyId } from '../surveys/survey';
 import { ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue } from './illumination/changeBulbsAction';
 import {
-  ChangeRuntimeActionAnswerValue,
-  ChangeRuntimeActionDetailsAnswerValue,
-} from './illumination/changeRuntimeAction';
+  ReduceRuntimeActionAnswerValue,
+  ReduceRuntimeActionDetailsAnswerValue,
+} from './illumination/reduceRuntimeAction';
 import { illuminationActionsCategory } from './illumination/illuminationActions';
 import { heatingActionsCategory } from './heating/heatingActions';
 import { electricityActionsCategory } from './electricity/electricityActions';
@@ -107,7 +107,7 @@ export const knownActions = knownActionCategories.flatMap<Action>((category) => 
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
-  changeRuntime: ActionAnswerValues<ChangeRuntimeActionAnswerValue, ChangeRuntimeActionDetailsAnswerValue>;
+  reduceRuntime: ActionAnswerValues<ReduceRuntimeActionAnswerValue, ReduceRuntimeActionDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

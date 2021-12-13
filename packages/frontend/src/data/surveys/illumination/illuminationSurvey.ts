@@ -66,98 +66,7 @@ export const illuminationSurvey: Survey = {
         name: 'Illumination Triggers',
         elements: [
           {
-            id: 'illuminationTriggerMode',
-            required: true,
-            type: 'single-choice',
-            label: 'How is the illumination triggered?',
-            options: [
-              {
-                value: 'automatically',
-                display: 'Automatically',
-              },
-              {
-                value: 'manually',
-                display: 'Manually',
-              },
-            ],
-          },
-          {
-            id: 'illuminationTriggerEvent',
-            required: true,
-            type: 'single-choice',
-            label: 'What is the triggering event?',
-            options: [
-              {
-                value: 'brightness',
-                display: 'Brightness controlled',
-              },
-              {
-                value: 'timeTriggered',
-                display: 'Time-triggered',
-              },
-              {
-                value: 'motionTriggered',
-                display: 'Motion-triggered',
-              },
-            ],
-            rules: [
-              {
-                effect: 'hide',
-                satisfy: 'any',
-                conditions: [
-                  {
-                    property: 'illuminationTriggerMode',
-                    op: 'absent',
-                  },
-                  {
-                    property: 'illuminationTriggerMode',
-                    op: 'eq',
-                    value: 'manually',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 'illuminationSwitchOffMode',
-            required: true,
-            type: 'single-choice',
-            label: 'How is it switched off?',
-            options: [
-              {
-                value: 'automaticTimeout',
-                display: 'Timed out automatically',
-              },
-              {
-                value: 'manuallySwitchedOff',
-                display: 'Switched off manually',
-              },
-            ],
-            rules: [
-              {
-                effect: 'hide',
-                satisfy: 'any',
-                conditions: [
-                  {
-                    property: 'illuminationTriggerMode',
-                    op: 'absent',
-                  },
-                  {
-                    property: 'illuminationTriggerMode',
-                    op: 'eq',
-                    value: 'automatically',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'Illumination Usage',
-        elements: [
-          {
-            id: 'illuminationSwitchOnMode',
+            id: 'switchOnMode',
             required: true,
             type: 'single-choice',
             label: 'When is the illumination switched on?',
@@ -167,13 +76,79 @@ export const illuminationSurvey: Survey = {
                 display: 'Always',
               },
               {
-                value: 'onDemand',
-                display: 'On demand',
+                value: 'manually',
+                display: 'Manually',
+              },
+              {
+                value: 'motionTriggered',
+                display: 'Motion Triggered',
+              },
+              {
+                value: 'timeTriggered',
+                display: 'Time Triggered',
+              },
+              {
+                value: 'brightnessTriggered',
+                display: 'Brightness Triggered',
+              },
+            ],
+          },
+
+          // switchOnMode === 'motionTriggered':
+          {
+            id: 'motionTriggerTimeout',
+            required: true,
+            type: 'number-unit',
+            label: 'How long until the motion trigger times out?',
+            normedUnit: 'min',
+            units: 'timeMinutes',
+            normedMax: 60,
+            normedMin: 0,
+            rules: [
+              {
+                effect: 'hide',
+                satisfy: 'any',
+                conditions: [
+                  {
+                    property: 'switchOnMode',
+                    op: 'absent',
+                  },
+                  {
+                    property: 'switchOnMode',
+                    op: 'neq',
+                    value: 'motionTriggered',
+                  },
+                ],
               },
             ],
           },
           {
-            id: 'avgIlluminationPerDay',
+            id: 'motionTriggerAvgTriggersPerDay',
+            required: true,
+            type: 'number',
+            label: 'How often is the motion sensor triggered per day (on average)?',
+            min: 0,
+            rules: [
+              {
+                effect: 'hide',
+                satisfy: 'any',
+                conditions: [
+                  {
+                    property: 'switchOnMode',
+                    op: 'absent',
+                  },
+                  {
+                    property: 'switchOnMode',
+                    op: 'neq',
+                    value: 'motionTriggered',
+                  },
+                ],
+              },
+            ],
+          },
+
+          {
+            id: 'avgRuntimePerDay',
             required: true,
             type: 'number-unit',
             label: 'How long is the location illuminated on average per day?',
@@ -188,30 +163,43 @@ export const illuminationSurvey: Survey = {
                 satisfy: 'any',
                 conditions: [
                   {
-                    property: 'illuminationSwitchOnMode',
+                    property: 'switchOnMode',
                     op: 'absent',
                   },
                   {
-                    property: 'illuminationSwitchOnMode',
+                    property: 'switchOnMode',
                     op: 'eq',
                     value: 'always',
+                  },
+                  {
+                    property: 'switchOnMode',
+                    op: 'eq',
+                    value: 'motionTriggered',
                   },
                 ],
               },
             ],
           },
-        ],
-      },
-      {
-        name: 'Total Illumination',
-        elements: [
           {
-            id: 'avgIlluminationPerYear',
-            required: true,
+            id: 'avgRuntimePerYear',
+            required: false,
             type: 'number',
-            label: 'How many days per year is the location illuminated on average?',
+            label: 'How many days per year is the location illuminated (on average)?',
+            helperText: 'If not answered, 365 days/year is assumed.',
             min: 0,
-            max: 366,
+            max: 365,
+            rules: [
+              {
+                effect: 'hide',
+                satisfy: 'any',
+                conditions: [
+                  {
+                    property: 'switchOnMode',
+                    op: 'absent',
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

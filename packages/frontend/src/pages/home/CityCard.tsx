@@ -20,17 +20,11 @@ import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { Bulb } from '../../api/bulb';
 import { RealEstate } from '../../api/realEstate';
-import { SurveyAnswer, calculateOverallFootprintAndMaintenance } from '../../api/surveyAnswer';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { routes } from '../../routes';
-import {
-  useDeleteRealEstateMutation,
-  useGetAllBulbsQuery,
-  useGetAllSurveyAnswersForRealEstateQuery,
-} from '../../store/api';
+import { useDeleteRealEstateMutation } from '../../store/api';
 import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
@@ -40,8 +34,6 @@ export interface CityCardProps {
 
 export default function CityCard({ realEstate }: CityCardProps) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
-  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
-  const { data: bulbs } = useGetAllBulbsQuery();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const toast = useToast();
@@ -108,7 +100,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
               {realEstate.employees}
             </p>
           </Box>
-          <CarbonTreeCard carbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0} />
+          <CarbonTreeCard realEstateId={realEstate._id} />
         </Grid>
 
         <Flex position="absolute" bottom="5" right="4">
@@ -141,9 +133,4 @@ export default function CityCard({ realEstate }: CityCardProps) {
       </VStack>
     </Card>
   );
-}
-
-function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-  const value = calculateOverallFootprintAndMaintenance(answers, bulbs, 1).calculations;
-  return +value[1].footprint.toFixed(1);
 }
