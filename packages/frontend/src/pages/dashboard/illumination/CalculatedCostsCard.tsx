@@ -1,5 +1,4 @@
 import { Table, Tbody, Tr, Td, SkeletonText } from '@chakra-ui/react';
-import { IlluminationCalculation } from '../../../api/surveyAnswer';
 import { getTransformedIlluminationElectricityCostPerYear } from '../../../calculations/illumination/electricityCost';
 import { getTransformedIlluminationFootprintPerYear } from '../../../calculations/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
@@ -7,11 +6,7 @@ import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 
-export interface CalculatedCostsCardProps extends DashboardCardProps {
-  calculatedCosts: IlluminationCalculation;
-}
-
-export default function CalculatedCostsCard({ calculatedCosts, ...rest }: CalculatedCostsCardProps) {
+export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => ({
@@ -30,7 +25,7 @@ export default function CalculatedCostsCard({ calculatedCosts, ...rest }: Calcul
   );
 
   return (
-    <DashboardCard header="Calculated costs" {...rest}>
+    <DashboardCard header="Calculated costs" {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText noOfLines={6} spacing="4" />}
         {data && (
@@ -38,11 +33,9 @@ export default function CalculatedCostsCard({ calculatedCosts, ...rest }: Calcul
             <Tbody>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">
-                  {calculatedCosts.amountOfIlluminants}
+                  {/* {calculatedCosts.amountOfIlluminants} */}
                 </Td>
-                <Td>
-                  <i>{calculatedCosts.typeOfBulb}</i> used
-                </Td>
+                <Td>{/* <i>{calculatedCosts.typeOfBulb}</i> used */}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">

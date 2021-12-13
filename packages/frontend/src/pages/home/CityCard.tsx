@@ -22,7 +22,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { Bulb } from '../../api/bulb';
 import { RealEstate } from '../../api/realEstate';
-import { SurveyAnswer, calculateOverallFootprint } from '../../api/surveyAnswer';
+import { SurveyAnswer, calculateOverallFootprintAndMaintenance } from '../../api/surveyAnswer';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { routes } from '../../routes';
@@ -144,6 +144,6 @@ export default function CityCard({ realEstate }: CityCardProps) {
 }
 
 function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-  const value = calculateOverallFootprint(answers, bulbs, 1);
-  return +value[0].footprint.toFixed(1);
+  const value = calculateOverallFootprintAndMaintenance(answers, bulbs, 1).calculations;
+  return +value[1].footprint.toFixed(1);
 }
