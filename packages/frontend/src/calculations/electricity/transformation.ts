@@ -14,8 +14,8 @@ export function transformElectricitySurveyAnswers(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
-  const illuminationSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'electricity');
-  return illuminationSurveyAnswers.map((surveyAnswer) => transformElectricitySurveyAnswer(surveyAnswer, actionAnswers));
+  const electricitySurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'electricity');
+  return electricitySurveyAnswers.map((surveyAnswer) => transformElectricitySurveyAnswer(surveyAnswer, actionAnswers));
 }
 
 export function transformElectricitySurveyAnswer(
