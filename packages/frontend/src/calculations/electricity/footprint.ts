@@ -4,6 +4,34 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { transformElectricitySurveyAnswers } from './transformation';
 import { ElectricitySurveyAnswerValue } from '../../data/surveys/electricity/electricitySurveyAnswerValue';
+import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
+import { getDeltaType } from '../../utils/deltaType';
+
+export function getElectricityFootprintDelta(
+  externalCalculationData: ExternalCalculationData,
+  surveyAnswers: IDataFrame<number, SurveyAnswer>,
+  actionAnswers: IDataFrame<number, ActionAnswerBase>,
+) {
+  const illuminationSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'electricity');
+  const originalFootprint = getElectricityFootprintPerYear(
+    externalCalculationData,
+    illuminationSurveyAnswers.map((answer) => answer.value),
+  );
+
+  const footprintAfterActions = getTransformedElectricityFootprintPerYear(
+    externalCalculationData,
+    externalCalculationData.surveyAnswers,
+    actionAnswers,
+  );
+
+  const delta = footprintAfterActions - originalFootprint;
+  const deltaType = getDeltaType(delta);
+
+  return {
+    delta,
+    deltaType,
+  };
+}
 
 export function getTransformedElectricityFootprintPerYear(
   externalCalculationData: ExternalCalculationData,
