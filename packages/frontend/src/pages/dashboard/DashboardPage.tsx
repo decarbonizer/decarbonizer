@@ -41,7 +41,6 @@ export default function DashboardPage() {
   return (
     <ActionPanelContext.Provider
       value={{
-        surveyAnswers,
         filledActionAnswers,
         setFilledActionAnswers,
         selectedActionCategory,

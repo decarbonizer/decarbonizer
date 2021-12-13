@@ -10,7 +10,6 @@ export type FilledActionAnswers = {
 };
 
 export interface ActionPanelContextValue {
-  surveyAnswers: SurveyAnswer[];
   filledActionAnswers: FilledActionAnswers;
   setFilledActionAnswers: Dispatch<SetStateAction<FilledActionAnswers>>;
   selectedActionCategory?: ActionCategory;

@@ -23,6 +23,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import ActionDetailsModal from './ActionDetailsModal';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
+import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -30,12 +31,12 @@ export interface ActionAccordionItemProps {
 
 export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
+  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
-  const { surveyAnswers } = useContext(ActionPanelContext);
   const schema = useMemo(() => {
     if (typeof action.getSchema === 'function') {
       const latestSurvey = surveyAnswers
-        .slice()
+        ?.slice()
         .reverse()
         .find((survey) => {
           return survey.surveyId === action.forSurvey;
