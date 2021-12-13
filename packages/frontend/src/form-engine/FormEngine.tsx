@@ -27,7 +27,6 @@ export interface FormEngineProps {
 export default function FormEngine(props: FormEngineProps) {
   const { schema, page } = props;
   const currentSchemaPage = schema.pages[page - 1];
-  console.log(page);
 
   return (
     <FormEnginePropsContext.Provider value={props}>

@@ -16,8 +16,6 @@ export default function CarbonTreeCard({ realEstateId }: CarbonTreeCardProps) {
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
 
-      console.log(externalCalculationData.surveyAnswers.toArray());
-
       const carbonFootprint =
         surveyAnswers.count() > 0
           ? getTransformedFootprintPerYear(
