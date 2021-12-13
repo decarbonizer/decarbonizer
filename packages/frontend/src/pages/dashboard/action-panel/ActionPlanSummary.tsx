@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, AccordionPanel, Icon, Grid } from '@chakra-ui/react';
+import { Accordion, AccordionItem, AccordionPanel, Grid, Icon } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { knownActionCategories, knownActions } from '../../../data/actions/action';
@@ -6,6 +6,8 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import { RealEstatePageParams } from '../../../routes';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
+import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
+import { useActionSchema } from '../../../data/actions/useActionSchema';
 
 export interface ActionPlanSummaryProps {
   actionAnswers: Array<ActionAnswerBase>;
@@ -32,11 +34,13 @@ interface ActionAnswerAccordionItemProps {
 
 function ActionAnswerAccordionItem({ actionId, actionAnswer }: ActionAnswerAccordionItemProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
+  const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const currentAction = knownActions.find((action) => actionId === action.id);
   const actionCategory = knownActionCategories.find((category) =>
     category.actions.some((action) => action === currentAction),
   );
+  const schema = useActionSchema(currentAction, surveyAnswers);
 
   return (
     <AccordionItem>
@@ -49,7 +53,7 @@ function ActionAnswerAccordionItem({ actionId, actionAnswer }: ActionAnswerAccor
           <FormEngine
             value={actionAnswer.values.value}
             isViewOnly
-            schema={currentAction?.schema ?? { pages: [] }}
+            schema={schema}
             page={1}
             choiceOptionProviders={providers}
             ruleEvaluationResults={{}}

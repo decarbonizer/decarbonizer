@@ -3,31 +3,34 @@ import { Action } from '../action';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { IlluminationSurveyAnswerValue } from '../../surveys/illumination/illuminationSurveyAnswerValue';
 
-export const changeRuntimeAction: Action = {
+export const changeRuntimeAction: Action<IlluminationSurveyAnswerValue> = {
   id: 'changeRuntime',
   name: 'Change Runtime',
   icon: AiOutlineFieldTime,
   description: 'Reduce the runtime of the light in your office may have a positive effect on your carbon footprint.',
   forSurvey: 'illumination',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newRuntime',
-            type: 'number-unit',
-            required: false,
-            units: 'time',
-            normedUnit: 'd',
-            placeholder: 'New runtime',
-            defaultSelectedUnit: 'h',
-            normedMin: 0,
-            normedMax: 1,
-          },
-        ],
-      },
-    ],
+  getSchema: () => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newRuntime',
+              type: 'number-unit',
+              required: false,
+              units: 'time',
+              normedUnit: 'd',
+              placeholder: 'New runtime',
+              defaultSelectedUnit: 'h',
+              normedMin: 0,
+              normedMax: 1,
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [

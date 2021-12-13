@@ -5,7 +5,7 @@ import { ApiObject, ApiObjectCreate, ApiObjectUpdate } from './apiObject';
 import { Bulb } from './bulb';
 import { RealEstate } from './realEstate';
 
-export interface SurveyAnswer<T = object> extends ApiObject {
+export interface SurveyAnswer<T extends object = any> extends ApiObject {
   realEstateId: string;
   surveyId: KnownSurveyId;
   value: T;

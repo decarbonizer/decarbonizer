@@ -11,19 +11,20 @@ import { heatingActionsCategory } from './heating/heatingActions';
 import { electricityActionsCategory } from './electricity/electricityActions';
 import { itActions } from './it/itActions';
 import { businessTravelActions } from './businessTravel/businessTravelActions';
+import { SurveyAnswer } from '../../api/surveyAnswer';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
  * properties which are used by the UI to render components.
  */
-export interface ActionCategory {
+export interface ActionCategory<T extends object = any> {
   /**
    * A unique identifier of the action category.
-   * Should be human readable.
+   * Should be human-readable.
    */
   id: string;
   /**
-   * The name of he category.
+   * The name of the category.
    */
   name: string;
   /**
@@ -33,7 +34,7 @@ export interface ActionCategory {
   /**
    * The encapsulated actions.
    */
-  actions: Array<Action>;
+  actions: Array<Action<T>>;
 }
 
 /**
@@ -45,7 +46,7 @@ export interface ActionCategory {
  * The two forms produce answers (-> an "action answer") which can be processed by the frontend
  * and sent to the backend.
  */
-export interface Action {
+export interface Action<T extends object = any> {
   /**
    * A unique identifier of the action.
    * Should be human readable.
@@ -71,7 +72,9 @@ export interface Action {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  schema: FormSchema;
+  // schema: FormSchema;
+  getSchema: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
+
   /**
    * If available, declares a form schema which can be used for collecting additional information
    * for the action.
@@ -100,7 +103,7 @@ export const knownActionCategories = [
   businessTravelActions,
 ];
 
-export const knownActions = knownActionCategories.flatMap((category) => category.actions);
+export const knownActions = knownActionCategories.flatMap<Action>((category) => category.actions);
 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;

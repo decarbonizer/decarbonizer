@@ -11,19 +11,21 @@ export const increaseDataCenterTemperature: Action = {
   icon: BsThermometerHigh,
   description: 'Approx. 23°C is the optimum temperature to save energy without risking overheating.',
   forSurvey: 'illumination',
-  schema: {
-    pages: [
-      {
-        elements: [
-          {
-            id: 'newDataCenterTemperature',
-            label: 'Which temperature do you want to reach in your data center?',
-            type: 'number',
-            required: false,
-          },
-        ],
-      },
-    ],
+  getSchema: () => {
+    return {
+      pages: [
+        {
+          elements: [
+            {
+              id: 'newDataCenterTemperature',
+              label: 'Which temperature do you want to reach in your data center?',
+              type: 'number',
+              required: false,
+            },
+          ],
+        },
+      ],
+    };
   },
   detailsSchema: {
     pages: [
