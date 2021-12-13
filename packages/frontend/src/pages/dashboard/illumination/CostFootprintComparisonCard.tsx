@@ -44,10 +44,10 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
 
       return range(1, 11).map((year) => ({
         Year: year,
-        'Old costs': year * oldElectricityCostsPerYear,
-        'New costs': year * newElectricityCostsPerYear,
-        'Old footprint': year * oldFootprintPerYear,
-        'New footprint': year * newFootprintPerYear,
+        'Old costs': Math.round(year * oldElectricityCostsPerYear),
+        'New costs': Math.round(year * newElectricityCostsPerYear),
+        'Old footprint': Math.round(year * oldFootprintPerYear),
+        'New footprint': Math.round(year * newFootprintPerYear),
       }));
     },
     [filledActionAnswersDf],
