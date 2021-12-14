@@ -21,9 +21,9 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
               type: 'single-choice',
               required: false,
               options: [
-                { display: 'Ground source heat pump', value: 'groundSourceHeatPump' },
-                { display: 'Air source heat pump', value: 'airSourceHeatPump' },
-                { display: 'Solar thermal', value: 'solarThermal' },
+                { display: 'Ground source heat pump', value: '00000000-0000-0000-0000-000000000001' },
+                { display: 'Air source heat pump', value: '00000000-0000-0000-0000-000000000002' },
+                { display: 'Solar thermal', value: '00000000-0000-0000-0000-000000000000' },
               ],
             },
           ],
@@ -41,7 +41,7 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
 };
 
 export interface SwitchToHeatPumpActionAnswerValue {
-  newHeatPump: 'groundSourceHeatPump' | 'airSourceHeatPump' | 'solarThermal';
+  newHeatPump: string;
 }
 
 export interface SwitchToHeatPumpActionDetailsAnswerValue

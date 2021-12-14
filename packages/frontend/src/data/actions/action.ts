@@ -12,6 +12,15 @@ import { electricityActionsCategory } from './electricity/electricityActions';
 import { itActions } from './it/itActions';
 import { businessTravelActions } from './businessTravel/businessTravelActions';
 import { SurveyAnswer } from '../../api/surveyAnswer';
+import {
+  SwitchToHeatPumpActionAnswerValue,
+  SwitchToHeatPumpActionDetailsAnswerValue,
+} from './heating/switchToHeatPumpAction';
+import {
+  IntegrateSmartRadiatorThermostatsActionAnswerValue,
+  IntegrateSmartRadiatorThermostatsActionDetailsAnswerValue,
+} from './heating/integrateSmartRadiatorThermostats';
+import { HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue } from './heating/heatLessAction';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -108,6 +117,12 @@ export const knownActions = knownActionCategories.flatMap<Action>((category) => 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
   reduceRuntime: ActionAnswerValues<ReduceRuntimeActionAnswerValue, ReduceRuntimeActionDetailsAnswerValue>;
+  switchToHeatPump: ActionAnswerValues<SwitchToHeatPumpActionAnswerValue, SwitchToHeatPumpActionDetailsAnswerValue>;
+  integrateSmartRadiatorThermostats: ActionAnswerValues<
+    IntegrateSmartRadiatorThermostatsActionAnswerValue,
+    IntegrateSmartRadiatorThermostatsActionDetailsAnswerValue
+  >;
+  heatLess: ActionAnswerValues<HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

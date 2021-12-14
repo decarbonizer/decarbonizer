@@ -31,27 +31,27 @@ export const heatingSurvey: Survey = {
             label: 'How do you heat',
             options: [
               {
-                value: 'solarThermal',
+                value: '00000000-0000-0000-0000-000000000000',
                 display: 'Solar thermal',
               },
               {
-                value: 'groundSourceHeatPump',
+                value: '00000000-0000-0000-0000-000000000001',
                 display: 'Ground source heat pump',
               },
               {
-                value: 'airSourceHeatPump',
+                value: '00000000-0000-0000-0000-000000000002',
                 display: 'Air source heat pump',
               },
               {
-                value: 'directElectricHeating ',
+                value: '00000000-0000-0000-0000-000000000003',
                 display: 'Direct electric heating',
               },
               {
-                value: 'gasBoiler ',
+                value: '00000000-0000-0000-0000-000000000004',
                 display: 'Gas boiler',
               },
               {
-                value: 'oilBoiler ',
+                value: '00000000-0000-0000-0000-000000000005',
                 display: 'Oil boiler',
               },
             ],

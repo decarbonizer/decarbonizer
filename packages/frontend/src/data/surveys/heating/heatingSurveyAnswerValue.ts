@@ -1,12 +1,6 @@
 export interface HeatingSurveyAnswerValue {
   realEstateName: string;
-  radiatorKind:
-    | 'solarThermal'
-    | 'groundSourceHeatPump'
-    | 'airSourceHeatPump'
-    | 'directElectricHeating'
-    | 'gasBoiler'
-    | 'oilBoiler';
+  radiatorKind: string;
   roomTemperature: number;
   smartThermostats: boolean;
   avgHeatingPerYear: number;
