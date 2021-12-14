@@ -32,6 +32,8 @@ export function getHeatingFootprintDelta(
   const deltaType = getDeltaType(delta);
 
   return {
+    originalFootprint,
+    footprintAfterActions,
     delta,
     deltaType,
   };
@@ -57,6 +59,9 @@ export function getHeatingFootprintPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, HeatingSurveyAnswerValue>,
 ) {
+  if (surveyAnswers.count() === 0) {
+    return 0;
+  }
   return surveyAnswers
     .map((answer) => getHeatingFootprintPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);

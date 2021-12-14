@@ -28,6 +28,8 @@ export function getElectricityCostDelta(
   const deltaType = getDeltaType(delta);
 
   return {
+    originalCost,
+    costAfterActions,
     delta,
     deltaType,
   };

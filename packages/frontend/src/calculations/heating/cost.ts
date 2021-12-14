@@ -32,6 +32,8 @@ export function getHeatingCostDelta(
   const deltaType = getDeltaType(delta);
 
   return {
+    originalCost,
+    costAfterActions,
     delta,
     deltaType,
   };
@@ -81,18 +83,18 @@ function getHeatingCostPerYearForSingleSurveyAnswer(
     overallkWhForHeating = overallkWhForHeating * 0.9;
   }
 
-  let overallkWhConsumptionForEnergyForm = overallkWhForHeating / heatingType.productionKwh;
-
-  if (heatingType.consumptionKwh !== 0) {
-    overallkWhConsumptionForEnergyForm = overallkWhConsumptionForEnergyForm * heatingType.consumptionKwh;
-  }
+  let overallkWhConsumptionForEnergyForm =
+    (overallkWhForHeating / heatingType.productionKwh) * heatingType.consumptionKwh;
 
   const energyFormCost = energyForm.euroPerKwh * overallkWhConsumptionForEnergyForm * avgHeatingPerYearHours;
 
-  const installationCostInEuro =
-    answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
-      ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
-      : heatingType.installationCostInEuro;
+  let installationCostInEuro = 0;
+  /*if (year === 0) { //calculate installation costs only for the first year
+    installationCostInEuro =
+      answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
+        ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
+        : heatingType.installationCostInEuro;
+  }*/
 
   return energyFormCost + installationCostInEuro;
 }
