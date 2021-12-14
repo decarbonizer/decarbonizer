@@ -34,6 +34,8 @@ export function getIlluminationElectricityCostDelta(
   return {
     delta,
     deltaType,
+    originalCost,
+    costAfterActions,
   };
 }
 
