@@ -57,6 +57,9 @@ export function getIlluminationFootprintPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, IlluminationSurveyAnswerValue>,
 ) {
+  if (surveyAnswers.count() === 0) {
+    return 0;
+  }
   return surveyAnswers
     .map((answer) => getIlluminationFootprintPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);
@@ -72,6 +75,5 @@ function getIlluminationFootprintPerYearForSingleSurveyAnswer(
   const germanyEF = 0.624;
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
   const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
-  const footprint = bulb.productionKwh * runtimeInHoursPerYear * germanyEF * answer.lampCount;
-  return footprint;
+  return bulb.productionKwh * runtimeInHoursPerYear * germanyEF * answer.lampCount;
 }
