@@ -65,7 +65,7 @@ export default function MaintenanceComparisonCard(props: DashboardCardProps) {
   );
 
   return (
-    <DashboardCard header="Compared maintenance costs over years" {...props}>
+    <DashboardCard header="Compared maintenance costs over years" isExpandable {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (

@@ -54,7 +54,7 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
   );
 
   return (
-    <DashboardCard header="Compared costs and footprints over years" {...props}>
+    <DashboardCard header="Compared costs and footprints over years" isExpandable {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
