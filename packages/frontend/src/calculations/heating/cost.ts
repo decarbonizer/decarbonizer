@@ -66,15 +66,33 @@ export function getHeatingCostPerYear(
  * Calculates the cost of **one** heating survey answer.
  */
 function getHeatingCostPerYearForSingleSurveyAnswer(
-  { energyForms, realEstates, heatingTypes }: ExternalCalculationData,
+  { energyForms, heatingTypes }: ExternalCalculationData,
   answer: HeatingSurveyAnswerValue,
 ) {
   const energyForm = energyForms.filter((form) => form._id === answer.radiatorKind).first();
-  //const realEstate = realEstates.filter((realEstate) => realEstate.cityName=== answer.realEstateName).first();
   const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
-  const avgHeatingPerYearHours = answer.avgHeatingPerYear * 24;
-  const heatingKwhPerQm = 0.1;
-  const energyFormCost = energyForm.euroPerKwh * heatingType.consumptionKwh;
 
-  return heatingKwhPerQm * avgHeatingPerYearHours;
+  const avgHeatingPerYearHours = answer.avgHeatingPerYear * 8; //assume heating is 8 hours on
+  const heatingKwhPerQm = 0.1;
+
+  let overallkWhForHeating = heatingKwhPerQm * answer.realEstateAreaInQm;
+
+  if (answer.smartThermostats) {
+    overallkWhForHeating = overallkWhForHeating * 0.9;
+  }
+
+  let overallkWhConsumptionForEnergyForm = overallkWhForHeating / heatingType.productionKwh;
+
+  if (heatingType.consumptionKwh !== 0) {
+    overallkWhConsumptionForEnergyForm = overallkWhConsumptionForEnergyForm * heatingType.consumptionKwh;
+  }
+
+  const energyFormCost = energyForm.euroPerKwh * overallkWhConsumptionForEnergyForm * avgHeatingPerYearHours;
+
+  const installationCostInEuro =
+    answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
+      ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
+      : heatingType.installationCostInEuro;
+
+  return energyFormCost + installationCostInEuro;
 }

@@ -5,4 +5,5 @@ export interface HeatingType extends ApiObject {
   energyForm: string;
   productionKwh: number;
   consumptionKwh: number;
+  installationCostInEuro: number;
 }

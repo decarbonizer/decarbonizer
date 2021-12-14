@@ -21,7 +21,6 @@ export function getHeatingFootprintDelta(
     externalCalculationData,
     heatingSurveyAnswers.map((answer) => answer.value),
   );
-  console.log(originalFootprint);
 
   const footprintAfterActions = getTransformedHeatingFootprintPerYear(
     externalCalculationData,
@@ -72,17 +71,22 @@ function getHeatingFootprintPerYearForSingleSurveyAnswer(
 ) {
   const heatingKwhPerQm = 0.1;
 
-  const heatingType = heatingTypes.filter((heatingType) => heatingType._id == answer.radiatorKind).first();
+  const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
+
   const energyForm = energyForms.filter((form) => form._id === heatingType._id).first();
-  const overallkWhForHeating = heatingKwhPerQm * 2000; //area is 2000
-  let overallkWhConsumptionForEnergyForm =
-    (overallkWhForHeating / heatingType.productionKwh) * heatingType.consumptionKwh;
+  let overallkWhForHeating = heatingKwhPerQm * answer.realEstateAreaInQm;
 
   if (answer.smartThermostats) {
-    overallkWhConsumptionForEnergyForm = overallkWhConsumptionForEnergyForm * 0.9;
+    overallkWhForHeating = overallkWhForHeating * 0.9;
+  }
+  let overallkWhConsumptionForEnergyForm = overallkWhForHeating / heatingType.productionKwh;
+
+  if (heatingType.consumptionKwh !== 0) {
+    overallkWhConsumptionForEnergyForm = overallkWhConsumptionForEnergyForm * heatingType.consumptionKwh;
   }
 
-  const footprint = (energyForm.co2PerGramPerKwh / 1000) * overallkWhConsumptionForEnergyForm;
-  console.log(footprint);
+  const footprint =
+    (energyForm.co2PerGramPerKwh / 1000) * overallkWhConsumptionForEnergyForm * 8 * answer.avgHeatingPerYear; //asume heating is 8 hours on
+
   return footprint;
 }
