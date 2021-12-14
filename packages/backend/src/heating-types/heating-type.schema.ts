@@ -25,6 +25,12 @@ export class HeatingType extends DbObject {
   @ApiProperty()
   @IsNumber()
   @Min(0)
+  installationCostInEuro: number;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
   productionKwh: number;
 
   @Prop()
