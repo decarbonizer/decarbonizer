@@ -16,56 +16,57 @@ import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 
-export default function MaintenanceComparisonCard(props: DashboardCardProps) {
+export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      // const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
-      //   externalCalculationData.surveyAnswers,
-      //   'illumination',
-      // );
-      // const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
-      //   externalCalculationData,
-      //   illuminationSurveyAnswers.map((answer) => answer.value),
-      // );
-      // const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
-      //   externalCalculationData,
-      //   externalCalculationData.surveyAnswers,
-      //   filledActionAnswersDf,
-      // );
+      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
+        externalCalculationData.surveyAnswers,
+        'illumination',
+      );
+      const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
+        externalCalculationData,
+        illuminationSurveyAnswers.map((answer) => answer.value),
+      );
+      const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      );
 
-      // const years = new Series(range(1, 51));
-      // const oldCostsPerYear = years.map((year) =>
-      //   getIlluminationMaintenanceCostForYear(
-      //     externalCalculationData,
-      //     illuminationSurveyAnswers.map((answer) => answer.value),
-      //     year,
-      //   ),
-      // );
+      const years = new Series(range(1, 11));
+      const oldCostsPerYear = years.map(
+        (year) =>
+          getIlluminationMaintenanceCostForYear(
+            externalCalculationData,
+            illuminationSurveyAnswers.map((answer) => answer.value),
+            year,
+          ) + oldElectricityCostsPerYear,
+      );
 
-      // const newCostsPerYear = years.map((year) =>
-      //   getTransformedIlluminationMaintenanceCostForYear(
-      //     externalCalculationData,
-      //     illuminationSurveyAnswers,
-      //     filledActionAnswersDf,
-      //     year,
-      //   ),
-      // );
+      const newCostsPerYear = years.map(
+        (year) =>
+          getTransformedIlluminationMaintenanceCostForYear(
+            externalCalculationData,
+            illuminationSurveyAnswers,
+            filledActionAnswersDf,
+            year,
+          ) + newElectricityCostsPerYear,
+      );
 
-      // return years
-      //   .map((year) => ({
-      //     Year: year,
-      //     'Old costs': Math.round(oldCostsPerYear.take(year).sum()),
-      //     'New costs': Math.round(newCostsPerYear.take(year).sum()),
-      //   }))
-      //   .toArray();
-      return [];
+      return years
+        .map((year) => ({
+          Year: year,
+          'Old costs': Math.round(oldCostsPerYear.take(year).sum()),
+          'New costs': Math.round(newCostsPerYear.take(year).sum()),
+        }))
+        .toArray();
     },
     [filledActionAnswersDf],
   );
 
   return (
-    <DashboardCard header="Compared maintenance costs over years" isExpandable {...props}>
+    <DashboardCard header="Cost comparison over 10 years" isExpandable {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
@@ -83,8 +84,8 @@ export default function MaintenanceComparisonCard(props: DashboardCardProps) {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Area type="monotone" dataKey="New costs" stroke="#B83280" strokeWidth={3} fill="transparent" />
-              <Area type="monotone" dataKey="Old costs" stroke="#702459" strokeWidth={3} fill="transparent" />
+              <Area type="monotone" dataKey="New costs" stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
+              <Area type="monotone" dataKey="Old costs" stroke="#B794F4" strokeWidth={3} fill="#B794F477" />
             </AreaChart>
           </ResponsiveContainer>
         )}

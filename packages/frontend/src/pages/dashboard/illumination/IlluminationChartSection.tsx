@@ -1,9 +1,9 @@
 import { Grid } from '@chakra-ui/react';
 import CalculatedCostsCard from './CalculatedCostsCard';
 import FootprintDeltaCard from './FootprintDeltaCard';
-import ComparisonOfCostsAndFootprints from './CostFootprintComparisonCard';
+import ComparisonOfCostsAndFootprints from './FootprintComparisonChartCard';
 import CostDeltaCard from './CostDeltaCard';
-import MaintenanceComparisonCard from './MaintenanceComparisonCard';
+import CostComparisonChartCard from './CostComparisonChartCard';
 
 export default function IlluminationChartsSection() {
   return (
@@ -12,7 +12,7 @@ export default function IlluminationChartsSection() {
       <CostDeltaCard gridRow="2" gridColumn="1 / span 2" />
       <CalculatedCostsCard gridRow="1 / span 2" gridColumn="3 / span 2" />
       <ComparisonOfCostsAndFootprints gridRow="3" gridColumn="1 / span 2" />
-      <MaintenanceComparisonCard gridRow="3" gridColumn="3 / span 2" />
+      <CostComparisonChartCard gridRow="3" gridColumn="3 / span 2" />
     </Grid>
   );
 }
