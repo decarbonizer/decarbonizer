@@ -9,5 +9,5 @@ export const heatingActionsCategory: ActionCategory<HeatingSurveyAnswerValue> = 
   id: 'heating',
   name: 'Heating',
   icon: GiHeatHaze,
-  actions: [switchToHeatPumpAction, integrateSmartRadiatorThermostats, heatLessAction],
+  actions: [switchToHeatPumpAction, integrateSmartRadiatorThermostats], //heatLessAction,
 };
