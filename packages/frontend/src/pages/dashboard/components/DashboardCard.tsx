@@ -5,10 +5,11 @@ import Card, { CardProps } from '../../../components/Card';
 
 export interface DashboardCardProps extends CardProps {
   header?: ReactNode;
+  headerControls?: ReactNode;
   isExpandable?: boolean;
 }
 
-export default function DashboardCard({ header, children, isExpandable, ...rest }: DashboardCardProps) {
+export default function DashboardCard({ header, children, headerControls, isExpandable, ...rest }: DashboardCardProps) {
   const [isExpanded, setIsExpanded] = useBoolean();
 
   return (
@@ -25,6 +26,7 @@ export default function DashboardCard({ header, children, isExpandable, ...rest 
             {header}
           </Heading>
           <Spacer />
+          {headerControls}
           {isExpandable && (
             <Tooltip label={isExpanded ? 'Collapse' : 'Expand'}>
               <IconButton

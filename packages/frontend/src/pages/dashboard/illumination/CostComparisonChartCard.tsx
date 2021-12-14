@@ -1,6 +1,7 @@
-import { SkeletonText } from '@chakra-ui/react';
+import { Select, SkeletonText } from '@chakra-ui/react';
 import { DataFrame, Series } from 'data-forge';
 import range from 'lodash-es/range';
+import { useState } from 'react';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
 import {
   getIlluminationElectricityCostPerYear,
@@ -24,49 +25,75 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
         externalCalculationData.surveyAnswers,
         'illumination',
       );
-      const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
-        externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
+      const oldElectricityCostsPerYear = Math.round(
+        getIlluminationElectricityCostPerYear(
+          externalCalculationData,
+          illuminationSurveyAnswers.map((answer) => answer.value),
+        ),
       );
-      const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
+      const newElectricityCostsPerYear = Math.round(
+        getTransformedIlluminationElectricityCostPerYear(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          filledActionAnswersDf,
+        ),
       );
 
       const years = new Series(range(1, 11));
-      const oldCostsPerYear = years.map(
-        (year) =>
+      const oldMaintenanceCosts = years.map((year) =>
+        Math.round(
           getIlluminationMaintenanceCostForYear(
             externalCalculationData,
             illuminationSurveyAnswers.map((answer) => answer.value),
             year,
-          ) + oldElectricityCostsPerYear,
+          ),
+        ),
       );
-
-      const newCostsPerYear = years.map(
-        (year) =>
+      const newMaintenanceCosts = years.map((year) =>
+        Math.round(
           getTransformedIlluminationMaintenanceCostForYear(
             externalCalculationData,
             illuminationSurveyAnswers,
             filledActionAnswersDf,
             year,
-          ) + newElectricityCostsPerYear,
+          ),
+        ),
+      );
+      const oldCostsPerYear = oldMaintenanceCosts.map(
+        (maintenanceCost) => maintenanceCost + oldElectricityCostsPerYear,
+      );
+      const newCostsPerYear = newMaintenanceCosts.map(
+        (maintenanceCost) => maintenanceCost + newElectricityCostsPerYear,
       );
 
       return years
         .map((year) => ({
           Year: year,
-          'Old costs': Math.round(oldCostsPerYear.take(year).sum()),
-          'New costs': Math.round(newCostsPerYear.take(year).sum()),
+          'Old costs': oldCostsPerYear.take(year).sum(),
+          'New costs': newCostsPerYear.take(year).sum(),
+          'Old maintenance costs': oldMaintenanceCosts.take(year).sum(),
+          'New maintenance costs': newMaintenanceCosts.take(year).sum(),
+          'Old electricity costs': oldElectricityCostsPerYear * year,
+          'New electricity costs': newElectricityCostsPerYear * year,
         }))
         .toArray();
     },
     [filledActionAnswersDf],
   );
+  const [selectedCostCategory, setSelectedCostCategory] = useState('all');
 
   return (
-    <DashboardCard header="Cost comparison over 10 years" isExpandable {...props}>
+    <DashboardCard
+      header="Cost comparison over 10 years"
+      isExpandable
+      headerControls={
+        <Select size="sm" maxW="40" defaultValue="all" onChange={(e) => setSelectedCostCategory(e.target.value)}>
+          <option value="all">All</option>
+          <option value="electricity">Electricity</option>
+          <option value="maintenance">Maintenance</option>
+        </Select>
+      }
+      {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
@@ -84,8 +111,48 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Area type="monotone" dataKey="New costs" stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
-              <Area type="monotone" dataKey="Old costs" stroke="#B794F4" strokeWidth={3} fill="#B794F477" />
+              {selectedCostCategory === 'all' && (
+                <>
+                  <Area type="monotone" dataKey="New costs" stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
+                  <Area type="monotone" dataKey="Old costs" stroke="#B794F4" strokeWidth={3} fill="#B794F477" />
+                </>
+              )}
+              {selectedCostCategory === 'electricity' && (
+                <>
+                  <Area
+                    type="monotone"
+                    dataKey="New electricity costs"
+                    stroke="#9AE6B4"
+                    strokeWidth={3}
+                    fill="#9AE6B477"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Old electricity costs"
+                    stroke="#B794F4"
+                    strokeWidth={3}
+                    fill="#B794F477"
+                  />
+                </>
+              )}
+              {selectedCostCategory === 'maintenance' && (
+                <>
+                  <Area
+                    type="monotone"
+                    dataKey="New maintenance costs"
+                    stroke="#9AE6B4"
+                    strokeWidth={3}
+                    fill="#9AE6B477"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Old maintenance costss"
+                    stroke="#B794F4"
+                    strokeWidth={3}
+                    fill="#B794F477"
+                  />
+                </>
+              )}
             </AreaChart>
           </ResponsiveContainer>
         )}
