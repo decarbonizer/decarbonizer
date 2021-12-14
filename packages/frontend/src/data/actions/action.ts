@@ -21,6 +21,10 @@ import {
   IntegrateSmartRadiatorThermostatsActionDetailsAnswerValue,
 } from './heating/integrateSmartRadiatorThermostats';
 import { HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue } from './heating/heatLessAction';
+import {
+  SwitchToGreenEnergyActionAnswerValue,
+  SwitchToGreenEnergyDetailsAnswerValue,
+} from './electricity/switchToGreenEnergy';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -81,7 +85,6 @@ export interface Action<T extends object = any> {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  // schema: FormSchema;
   getSchema: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
 
   /**
@@ -123,6 +126,7 @@ export type ActionsToActionAnswerMap = {
     IntegrateSmartRadiatorThermostatsActionDetailsAnswerValue
   >;
   heatLess: ActionAnswerValues<HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue>;
+  switchToGreenEnergy: ActionAnswerValues<SwitchToGreenEnergyActionAnswerValue, SwitchToGreenEnergyDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

@@ -11,7 +11,7 @@ import { RealEstatePageParams } from '../../../routes';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
-  const { filledActionAnswers } = useContext(ActionPanelContext);
+  const { filledActionAnswers, setSelectedActionCategory } = useContext(ActionPanelContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
   const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 
@@ -20,7 +20,12 @@ export default function ActionPanel() {
       <Heading as="h2" size="lg" pb="5" isTruncated>
         {currentRealEstate?.cityName}
       </Heading>
-      <Accordion minW="100%" allowToggle>
+      <Accordion
+        minW="100%"
+        allowToggle
+        onChange={(expandedIndex: number) => {
+          setSelectedActionCategory(expandedIndex === -1 ? undefined : knownActionCategories[expandedIndex]);
+        }}>
         {knownActionCategories.map((actionCategory, i) => (
           <ActionGroupAccordionItem key={i} actionCategory={actionCategory} />
         ))}

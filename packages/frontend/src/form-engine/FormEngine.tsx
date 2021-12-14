@@ -30,27 +30,27 @@ export default function FormEngine(props: FormEngineProps) {
 
   return (
     <FormEnginePropsContext.Provider value={props}>
-      <VStack spacing="8" align="flex-start">
-        <HStack w="100%" align="center">
-          {currentSchemaPage.name && (
-            <Box>
-              <Heading as="h2" size="md" alignSelf="flex-start">
-                {currentSchemaPage.name}
-              </Heading>
-            </Box>
-          )}
-          <Spacer />
-          {props.buttonPrevious && props.buttonNext && (
-            <HStack>
-              {props.buttonPrevious}
-              <Text pl="2" pr="2">
-                {page}
-              </Text>
-              {props.buttonNext}
-            </HStack>
-          )}
-        </HStack>
+      <HStack w="100%" align="center" mb="4">
+        {currentSchemaPage.name && (
+          <Box>
+            <Heading as="h2" size="md" alignSelf="flex-start">
+              {currentSchemaPage.name}
+            </Heading>
+          </Box>
+        )}
+        <Spacer />
+        {props.buttonPrevious && props.buttonNext && (
+          <HStack>
+            {props.buttonPrevious}
+            <Text pl="2" pr="2">
+              {page}
+            </Text>
+            {props.buttonNext}
+          </HStack>
+        )}
+      </HStack>
 
+      <VStack spacing="8" align="flex-start">
         {currentSchemaPage.elements.map((element, index) => (
           <FormEngineElement key={index} element={element} />
         ))}

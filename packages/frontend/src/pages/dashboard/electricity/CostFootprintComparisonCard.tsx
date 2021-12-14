@@ -1,42 +1,39 @@
 import { SkeletonText } from '@chakra-ui/react';
-import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
-import {
-  getIlluminationElectricityCostPerYear,
-  getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
-import {
-  getIlluminationFootprintPerYear,
-  getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import {
+  getElectricityCostPerYear,
+  getTransformedElectricityCostPerYear,
+} from '../../../calculations/electricity/cost';
+import {
+  getElectricityFootprintPerYear,
+  getTransformedElectricityFootprintPerYear,
+} from '../../../calculations/electricity/footprint';
 
 export default function CostFootprintComparisonCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
-        externalCalculationData.surveyAnswers,
-        'illumination',
-      );
-      const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
+      const electricitySurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'electricity');
+      const oldElectricityCostsPerYear = getElectricityCostPerYear(
         externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
+        electricitySurveyAnswers.map((answer) => answer.value),
       );
-      const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
+      const newElectricityCostsPerYear = getTransformedElectricityCostPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       );
-      const oldFootprintPerYear = getIlluminationFootprintPerYear(
+      const oldFootprintPerYear = getElectricityFootprintPerYear(
         externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
+        electricitySurveyAnswers.map((answer) => answer.value),
       );
-      const newFootprintPerYear = getTransformedIlluminationFootprintPerYear(
+      const newFootprintPerYear = getTransformedElectricityFootprintPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

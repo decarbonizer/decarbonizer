@@ -34,6 +34,8 @@ export function getIlluminationElectricityCostDelta(
   return {
     delta,
     deltaType,
+    originalCost,
+    costAfterActions,
   };
 }
 
@@ -57,6 +59,9 @@ export function getIlluminationElectricityCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, IlluminationSurveyAnswerValue>,
 ) {
+  if (surveyAnswers.count() === 0) {
+    return 0;
+  }
   return surveyAnswers
     .map((answer) => getIlluminationElectricityCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);

@@ -1,55 +1,38 @@
-import { SimpleGrid, SkeletonText } from '@chakra-ui/react';
+import { HStack, SkeletonText } from '@chakra-ui/react';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
 import HaloIcon from '../../../components/HaloIcon';
-import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
+import { BiEuro } from 'react-icons/bi';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getIlluminationElectricityCostDelta } from '../../../calculations/illumination/electricityCost';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { TiEquals } from 'react-icons/ti';
+import { getElectricityCostDelta } from '../../../calculations/electricity/cost';
 
 export default function CostDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getIlluminationElectricityCostDelta(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
-      ),
+      getElectricityCostDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
     [filledActionAnswersDf],
   );
 
   return (
-    <DashboardCard header="Electricity cost" {...props}>
+    <DashboardCard header="Electricity cost delta" {...props}>
       <InlineErrorDisplay error={error}>
-        {isLoading && <SkeletonText />}
-        {data && (
-          <SimpleGrid columns={2}>
+        <HStack>
+          {isLoading && <SkeletonText />}
+          {data && (
             <QuickInfo
               icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>
-              <QuickInfoLabelDescription
-                label={`${Math.abs(data.costAfterActions).toFixed(2)}€`}
-                description="electricity costs per year"
-              />
-            </QuickInfo>
-            <QuickInfo
-              icon={
-                <HaloIcon
-                  icon={mapDeltaType(data.deltaType, BiTrendingUp, BiTrendingDown, TiEquals)}
-                  colorScheme={mapDeltaType(data!.deltaType, 'red', 'green', 'gray')}
-                />
-              }>
               <QuickInfoLabelDescription
                 label={`${Math.abs(data.delta).toFixed(2)}€`}
                 description={<>{data.deltaType === 'decrease' ? 'less' : 'more'}</>}
               />
             </QuickInfo>
-          </SimpleGrid>
-        )}
+          )}
+        </HStack>
       </InlineErrorDisplay>
     </DashboardCard>
   );
