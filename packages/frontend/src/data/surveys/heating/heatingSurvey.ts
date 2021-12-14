@@ -19,6 +19,15 @@ export const heatingSurvey: Survey = {
             helperText:
               'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
           },
+          {
+            id: 'isInitialSurvey',
+            required: true,
+            type: 'boolean',
+            label: 'Is this your first survey for this location/room?',
+            trueText: 'Yes',
+            falseText: 'No',
+            helperText: 'All initial surveys will be considered for the start of your net-zero calculation.',
+          },
         ],
       },
       {
@@ -53,6 +62,30 @@ export const heatingSurvey: Survey = {
               {
                 value: '00000000-0000-0000-0000-000000000005',
                 display: 'Oil boiler',
+              },
+            ],
+          },
+          {
+            id: 'numberOfSolarPanels',
+            required: true,
+            type: 'number',
+            label: 'How many solar panels are used?',
+            min: 1,
+            rules: [
+              {
+                effect: 'hide',
+                satisfy: 'any',
+                conditions: [
+                  {
+                    property: 'radiatorKind',
+                    op: 'absent',
+                  },
+                  {
+                    property: 'radiatorKind',
+                    op: 'neq',
+                    value: '00000000-0000-0000-0000-000000000000',
+                  },
+                ],
               },
             ],
           },
