@@ -1,10 +1,6 @@
 import { SkeletonText } from '@chakra-ui/react';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
 import {
-  getIlluminationElectricityCostPerYear,
-  getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
-import {
   getIlluminationFootprintPerYear,
   getTransformedIlluminationFootprintPerYear,
 } from '../../../calculations/illumination/footprint';
@@ -15,22 +11,13 @@ import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 
-export default function CostFootprintComparisonCard(props: DashboardCardProps) {
+export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
       const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
         externalCalculationData.surveyAnswers,
         'illumination',
-      );
-      const oldElectricityCostsPerYear = getIlluminationElectricityCostPerYear(
-        externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
-      );
-      const newElectricityCostsPerYear = getTransformedIlluminationElectricityCostPerYear(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
       );
       const oldFootprintPerYear = getIlluminationFootprintPerYear(
         externalCalculationData,
@@ -44,8 +31,6 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
 
       return range(1, 11).map((year) => ({
         Year: year,
-        'Old costs': Math.round(year * oldElectricityCostsPerYear),
-        'New costs': Math.round(year * newElectricityCostsPerYear),
         'Old footprint': Math.round(year * oldFootprintPerYear),
         'New footprint': Math.round(year * newFootprintPerYear),
       }));
@@ -54,7 +39,7 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
   );
 
   return (
-    <DashboardCard header="Compared costs and footprints over years" {...props}>
+    <DashboardCard header="Footprint comparison over 10 years" isExpandable {...props}>
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
@@ -72,11 +57,9 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
               <XAxis dataKey="Year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
               <YAxis />
               <Tooltip />
-              <Legend />
-              <Area type="monotone" dataKey="New footprint" stroke="#2F855A" strokeWidth={3} fill="transparent" />
-              <Area type="monotone" dataKey="Old footprint" stroke="#68D391" strokeWidth={3} fill="transparent" />
-              <Area type="monotone" dataKey="New costs" stroke="#B83280" strokeWidth={3} fill="transparent" />
-              <Area type="monotone" dataKey="Old costs" stroke="#702459" strokeWidth={3} fill="transparent" />
+              <Legend margin={{ top: 10 }} offset={-10} />
+              <Area type="monotone" dataKey="New footprint" stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
+              <Area type="monotone" dataKey="Old footprint" stroke="#B794F4" strokeWidth={3} fill="#B794F477" />
             </AreaChart>
           </ResponsiveContainer>
         )}

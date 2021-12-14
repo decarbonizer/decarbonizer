@@ -32,6 +32,8 @@ export function getIlluminationFootprintDelta(
   const deltaType = getDeltaType(delta);
 
   return {
+    originalFootprint,
+    footprintAfterActions,
     delta,
     deltaType,
   };
