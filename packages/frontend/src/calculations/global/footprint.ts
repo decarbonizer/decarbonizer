@@ -2,6 +2,7 @@ import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ExternalCalculationData } from '../externalData';
+import { getTransformedHeatingFootprintPerYear } from '../heating/footprint';
 import { getTransformedIlluminationFootprintPerYear } from '../illumination/footprint';
 import { getTransformedElectricityFootprintPerYear } from '../electricity/footprint';
 
@@ -25,12 +26,15 @@ export function getTransformedFootprintPerYear(
     actionAnswers,
   );
 
+  const heatingFootprint = getTransformedHeatingFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers);
+
   // TODO: Sum other footprints that are added in the future.
-  const globalFootprint = electricityFootprint + illuminationFootprint;
+  const globalFootprint = illuminationFootprint + heatingFootprint + electricityFootprint;
 
   return {
     globalFootprint,
     electricityFootprint,
     illuminationFootprint,
+    heatingFootprint,
   };
 }
