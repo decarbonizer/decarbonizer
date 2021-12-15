@@ -136,6 +136,7 @@ export const api = createApi({
       query: () => ({
         url: 'api/v1/actionPlans',
       }),
+      providesTags: ['ActionPlans'],
     }),
     getAllActionPlansForRealEstate: builder.query<Array<ActionPlan>, { realEstateId: string }>({
       query: ({ realEstateId }) => ({

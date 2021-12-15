@@ -43,6 +43,7 @@ export interface SurveyAnswerDrawer {
 export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAnswerDrawer) {
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const [deleteSurveyAnswerMutation] = useDeleteSurveyAnswerMutation();
+  const [surveyAnswerDelete, setSurveyAnswerDelete] = useState<SurveyAnswer>();
   const [currentSortValue, setCurrentSortValue] = useState<SortValueChangedArgs>({
     sortCategory: 'value.realEstateName',
     sortDirection: 'asc',
@@ -51,9 +52,10 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
   const toast = useToast();
   const onConfirm = async (surveyAnswer) => {
     await deleteSurveyAnswerMutation({ id: surveyAnswer._id });
+    onCloseAlert();
     toast({
       title: 'Survey answer deleted.',
-      description: 'Survey answer has been successfully deleted.',
+      description: `Survey answer ${surveyAnswer.value.realEstateName} has been successfully deleted.`,
       status: 'success',
       duration: 5000,
       isClosable: true,
@@ -112,21 +114,29 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
                       />
                     </Tooltip>
                     <Tooltip label="Delete" hasArrow>
-                      <IconButton aria-label="delete" fontSize="21" icon={<MdDeleteForever />} onClick={onOpenAlert} />
+                      <IconButton
+                        aria-label="delete"
+                        fontSize="21"
+                        icon={<MdDeleteForever />}
+                        onClick={() => {
+                          setSurveyAnswerDelete(surveyAnswer);
+                          onOpenAlert();
+                        }}
+                      />
                     </Tooltip>
-                    <DeleteAlertDialog
-                      isOpen={isOpenAlert}
-                      onCancel={onCloseAlert}
-                      onConfirm={() => onConfirm(surveyAnswer)}
-                      deleteTextHeader="Delete survey answer?"
-                      deleteTextDialog="Are you sure you want to delete your survey answer?"
-                    />
                   </Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
         </DrawerBody>
+        <DeleteAlertDialog
+          isOpen={isOpenAlert}
+          onCancel={onCloseAlert}
+          onConfirm={() => onConfirm(surveyAnswerDelete)}
+          deleteTextHeader="Delete survey answer?"
+          deleteTextDialog={`Are you sure you want to delete your survey answer ${surveyAnswerDelete?.value.realEstateName}?`}
+        />
       </DrawerContent>
       <Drawer placement="bottom" size="full" isOpen={!!activeSurveyAnswer} onClose={null!}>
         <DrawerOverlay />

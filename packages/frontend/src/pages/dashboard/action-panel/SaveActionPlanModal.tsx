@@ -81,7 +81,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             isClosable: true,
             duration: 5000,
           });
-          onClose;
+          onClose();
         })
         .catch(() =>
           toast({
@@ -111,7 +111,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
           });
 
           history.push(routes.actionPlans({ realEstateId }));
-          onClose;
+          onClose();
         })
         .catch(() =>
           toast({

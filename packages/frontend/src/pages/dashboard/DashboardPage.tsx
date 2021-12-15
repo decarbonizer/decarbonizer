@@ -14,6 +14,7 @@ import { ActionCategory } from '../../data/actions/action';
 import GlobalFootprintCard from './global/GlobalFootprintCard';
 import Card from '../../components/Card';
 import ActionChartsSection from './ActionChartsSection';
+import NetZeroCard from './global/NetZeroCard';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -65,10 +66,7 @@ export default function DashboardPage() {
           <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
           <Grid templateColumns="repeat(4, 1fr)" gap={6}>
             <GlobalFootprintCard />
-            {/* <NetZeroCard
-              startCarbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0}
-              reducedValue={1000}
-            /> */}
+            <NetZeroCard />
             <ComparisonCard gridColumn="3 / span 2" />
           </Grid>
           {selectedActionCategory && (
@@ -89,8 +87,3 @@ export default function DashboardPage() {
     </ActionPanelContext.Provider>
   );
 }
-
-// function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-//   const value = calculateOverallFootprint(answers, bulbs, 1);
-//   return +value[0].footprint.toFixed(1);
-// }

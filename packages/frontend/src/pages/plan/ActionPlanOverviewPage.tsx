@@ -1,4 +1,4 @@
-import { Spinner, Wrap, WrapItem } from '@chakra-ui/react';
+import { Spinner, Wrap, WrapItem, Text, Flex, Grid } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
@@ -31,7 +31,7 @@ export default function ActionPlanOverviewPage() {
         ) : (
           filteredActionPlans!.map((actionPlan) => (
             <WrapItem key={actionPlan._id}>
-              <ActionPlanCard key={actionPlan._id} actionPlan={actionPlan} />
+              <ActionPlanCard key={actionPlan._id} currentActionPlan={actionPlan} />
             </WrapItem>
           ))
         )}
