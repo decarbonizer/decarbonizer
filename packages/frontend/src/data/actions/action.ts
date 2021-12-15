@@ -12,6 +12,10 @@ import { electricityActionsCategory } from './electricity/electricityActions';
 import { itActions } from './it/itActions';
 import { businessTravelActions } from './businessTravel/businessTravelActions';
 import { SurveyAnswer } from '../../api/surveyAnswer';
+import {
+  SwitchToGreenEnergyActionAnswerValue,
+  SwitchToGreenEnergyDetailsAnswerValue,
+} from './electricity/switchToGreenEnergy';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -72,7 +76,6 @@ export interface Action<T extends object = any> {
    * A form schema for fields which are required by the action.
    * Typically displayed inline.
    */
-  // schema: FormSchema;
   getSchema: (surveyAnswer?: SurveyAnswer<T>) => FormSchema;
 
   /**
@@ -108,6 +111,7 @@ export const knownActions = knownActionCategories.flatMap<Action>((category) => 
 export type ActionsToActionAnswerMap = {
   changeBulbs: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue>;
   reduceRuntime: ActionAnswerValues<ReduceRuntimeActionAnswerValue, ReduceRuntimeActionDetailsAnswerValue>;
+  switchToGreenEnergy: ActionAnswerValues<SwitchToGreenEnergyActionAnswerValue, SwitchToGreenEnergyDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

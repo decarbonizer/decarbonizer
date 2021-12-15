@@ -1,4 +1,4 @@
-import { Tooltip, ResponsiveContainer, Bar, BarChart, XAxis, YAxis } from 'recharts';
+import { Tooltip, ResponsiveContainer, Bar, BarChart, XAxis, YAxis, Legend } from 'recharts';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import distinctColors from 'distinct-colors';
 import { useCalculation } from '../../../calculations/useCalculation';
@@ -67,6 +67,7 @@ export default function ComparisonCard(props: DashboardCardProps) {
                   unit="kg"
                 />
               ))}
+              <Legend />
             </BarChart>
           </ResponsiveContainer>
         )}

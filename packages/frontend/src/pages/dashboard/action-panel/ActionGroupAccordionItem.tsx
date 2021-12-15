@@ -1,5 +1,5 @@
-import { Accordion, AccordionItem, AccordionPanel, Tag, Icon } from '@chakra-ui/react';
-import { useContext, useEffect } from 'react';
+import { Accordion, AccordionItem, AccordionPanel, Icon, Tag } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { ActionCategory } from '../../../data/actions/action';
 import { ActionAccordionItem } from './ActionAccordionItem';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
@@ -23,18 +23,10 @@ interface ActionGroupAccordionContentProps {
 }
 
 function ActionGroupAccordionContent({ isExpanded, actionCategory }: ActionGroupAccordionContentProps) {
-  const { filledActionAnswers, setSelectedActionCategory } = useContext(ActionPanelContext);
+  const { filledActionAnswers } = useContext(ActionPanelContext);
   const countOfFilledAnswers = Object.values(filledActionAnswers).filter((filledAction) =>
     actionCategory.actions.some((action) => action.id === filledAction?.actionId),
   ).length;
-
-  useEffect(() => {
-    if (isExpanded) {
-      setSelectedActionCategory(actionCategory);
-    } else {
-      setSelectedActionCategory(undefined);
-    }
-  }, [actionCategory, isExpanded, setSelectedActionCategory]);
 
   return (
     <>

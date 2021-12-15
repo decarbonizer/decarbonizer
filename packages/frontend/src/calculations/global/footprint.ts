@@ -4,6 +4,7 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../externalData';
 import { getTransformedIlluminationFootprintPerYear } from '../illumination/footprint';
+import { getTransformedElectricityFootprintPerYear } from '../electricity/footprint';
 
 export function getFootprintDelta(
   externalCalculationData: ExternalCalculationData,
@@ -42,6 +43,11 @@ export function getTransformedFootprintPerYear(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
+  const electricityFootprint = getTransformedElectricityFootprintPerYear(
+    externalCalculationData,
+    surveyAnswers,
+    actionAnswers,
+  );
   const illuminationFootprint = getTransformedIlluminationFootprintPerYear(
     externalCalculationData,
     surveyAnswers,
@@ -49,10 +55,11 @@ export function getTransformedFootprintPerYear(
   );
 
   // TODO: Sum other footprints that are added in the future.
-  const globalFootprint = illuminationFootprint;
+  const globalFootprint = electricityFootprint + illuminationFootprint;
 
   return {
     globalFootprint,
+    electricityFootprint,
     illuminationFootprint,
   };
 }
