@@ -8,9 +8,12 @@ export function getNetZero(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
+  realEstateId: string,
 ) {
   const surveyAnswersInitial = surveyAnswers.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
-  const actionPlans = externalCalculationData.actionPlans;
+  const actionPlans = externalCalculationData.actionPlans.filter(
+    (actionPlan) => actionPlan.realEstateId === realEstateId,
+  );
   const achievedGoalActionPlans =
     actionPlans.toArray().length === 0
       ? 0

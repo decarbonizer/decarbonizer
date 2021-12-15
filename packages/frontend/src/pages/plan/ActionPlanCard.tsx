@@ -47,7 +47,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) => {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
-        (surveyAnswer) => surveyAnswer.value.isInitialSurvey,
+        (surveyAnswer) => surveyAnswer.value.isInitialSurvey && surveyAnswer.realEstateId === realEstateId,
       );
       const footPrintDelta = getFootprintDelta(
         externalCalculationData,
