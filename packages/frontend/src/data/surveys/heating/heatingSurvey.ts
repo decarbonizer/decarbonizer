@@ -19,6 +19,23 @@ export const heatingSurvey: Survey = {
             helperText:
               'The location or room for which you want to record illumination data.\nExamples: Main Hall, CEO Office, Storage Room 1, Hangar, Living Room, ...',
           },
+          {
+            id: 'realEstateAreaInQm',
+            required: true,
+            type: 'number',
+            min: 1,
+            label: 'How big is the area for this location?',
+            helperText: 'Please use square meters',
+          },
+          {
+            id: 'isInitialSurvey',
+            required: true,
+            type: 'boolean',
+            label: 'Is this your first survey for this location/room?',
+            trueText: 'Yes',
+            falseText: 'No',
+            helperText: 'All initial surveys will be considered for the start of your net-zero calculation.',
+          },
         ],
       },
       {
@@ -31,27 +48,27 @@ export const heatingSurvey: Survey = {
             label: 'How do you heat',
             options: [
               {
-                value: 'solarThermal',
+                value: '00000000-0000-0000-0000-000000000000',
                 display: 'Solar thermal',
               },
               {
-                value: 'groundSourceHeatPump',
+                value: '00000000-0000-0000-0000-000000000001',
                 display: 'Ground source heat pump',
               },
               {
-                value: 'airSourceHeatPump',
+                value: '00000000-0000-0000-0000-000000000002',
                 display: 'Air source heat pump',
               },
               {
-                value: 'directElectricHeating ',
+                value: '00000000-0000-0000-0000-000000000003',
                 display: 'Direct electric heating',
               },
               {
-                value: 'gasBoiler ',
+                value: '00000000-0000-0000-0000-000000000004',
                 display: 'Gas boiler',
               },
               {
-                value: 'oilBoiler ',
+                value: '00000000-0000-0000-0000-000000000005',
                 display: 'Oil boiler',
               },
             ],

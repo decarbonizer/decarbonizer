@@ -6,6 +6,7 @@ import { LoginPost, LoginResult } from '../api/login';
 import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
 import { ActionPlan, ActionPlanCreate, ActionPlanUpdate } from '../api/actionPlan';
+import { HeatingType } from '../api/heatingType';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -41,7 +42,11 @@ export const api = createApi({
         url: 'api/v1/energyForms',
       }),
     }),
-
+    getAllHeatingTypes: builder.query<Array<HeatingType>, void>({
+      query: () => ({
+        url: 'api/v1/heatingTypes',
+      }),
+    }),
     getAllRealEstates: builder.query<Array<RealEstate>, void>({
       query: () => ({
         url: 'api/v1/realEstates',
@@ -175,6 +180,7 @@ export const {
 
   useGetAllBulbsQuery,
   useGetAllEnergyFormsQuery,
+  useGetAllHeatingTypesQuery,
 
   useGetAllRealEstatesQuery,
   useGetRealEstateQuery,

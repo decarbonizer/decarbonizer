@@ -28,6 +28,8 @@ export function getElectricityFootprintDelta(
   const deltaType = getDeltaType(delta);
 
   return {
+    originalFootprint,
+    footprintAfterActions,
     delta,
     deltaType,
   };

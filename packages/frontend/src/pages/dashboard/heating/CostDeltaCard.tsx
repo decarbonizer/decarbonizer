@@ -1,4 +1,4 @@
-import { SimpleGrid, SkeletonText } from '@chakra-ui/react';
+import { HStack, SimpleGrid, SkeletonText } from '@chakra-ui/react';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
@@ -8,14 +8,14 @@ import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getElectricityCostDelta } from '../../../calculations/electricity/cost';
+import { getHeatingCostDelta } from '../../../calculations/heating/cost';
 import { TiEquals } from 'react-icons/ti';
 
 export default function CostDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getElectricityCostDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
+      getHeatingCostDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
     [filledActionAnswersDf],
   );
 
@@ -29,7 +29,7 @@ export default function CostDeltaCard(props: DashboardCardProps) {
               icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>
               <QuickInfoLabelDescription
                 label={`${Math.abs(data.costAfterActions).toFixed(2)}€`}
-                description="electricity costs per year"
+                description="heating costs per year"
               />
             </QuickInfo>
             <QuickInfo
