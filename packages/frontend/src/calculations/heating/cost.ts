@@ -2,7 +2,6 @@ import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
-import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
 import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../externalData';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
@@ -53,6 +52,19 @@ export function getTransformedHeatingCostPerYear(
 }
 
 /**
+ * Transforms **all given** heating survey answers so that they integrate the given action answers
+ * and then calculates their resulting installation cost.
+ */
+export function getTransformedHeatingInstallationCostPerYear(
+  externalCalculationData: ExternalCalculationData,
+  surveyAnswers: IDataFrame<number, SurveyAnswer>,
+  actionAnswers: IDataFrame<number, ActionAnswerBase>,
+) {
+  const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
+  return getHeatingInstallationCostPerYear(externalCalculationData, transformedAnswers);
+}
+
+/**
  * Calculates the cost of **all given** heating survey answers.
  */
 export function getHeatingCostPerYear(
@@ -61,6 +73,18 @@ export function getHeatingCostPerYear(
 ) {
   return surveyAnswers
     .map((answer) => getHeatingCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
+    .aggregate((a, b) => a + b);
+}
+
+/**
+ * Calculates the installation cost of **all given** heating survey answers.
+ */
+export function getHeatingInstallationCostPerYear(
+  externalCalculationData: ExternalCalculationData,
+  surveyAnswers: IDataFrame<number, HeatingSurveyAnswerValue>,
+) {
+  return surveyAnswers
+    .map((answer) => getHeatingInstallationCostForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);
 }
 
@@ -88,13 +112,21 @@ function getHeatingCostPerYearForSingleSurveyAnswer(
 
   const energyFormCost = energyForm.euroPerKwh * overallkWhConsumptionForEnergyForm * avgHeatingPerYearHours;
 
-  let installationCostInEuro = 0;
-  /*if (year === 0) { //calculate installation costs only for the first year
-    installationCostInEuro =
-      answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
-        ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
-        : heatingType.installationCostInEuro;
-  }*/
+  return energyFormCost;
+}
 
-  return energyFormCost + installationCostInEuro;
+/**
+ * Calculates the installation cost of **one** heating survey answer.
+ */
+function getHeatingInstallationCostForSingleSurveyAnswer(
+  { heatingTypes }: ExternalCalculationData,
+  answer: HeatingSurveyAnswerValue,
+) {
+  const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
+  const heatingKwhPerQm = 0.1;
+  const installationCostInEuro =
+    answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
+      ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
+      : heatingType.installationCostInEuro;
+  return installationCostInEuro;
 }

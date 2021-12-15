@@ -1,6 +1,11 @@
 import { SkeletonText } from '@chakra-ui/react';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
-import { getHeatingCostPerYear, getTransformedHeatingCostPerYear } from '../../../calculations/heating/cost';
+import {
+  getHeatingCostPerYear,
+  getHeatingInstallationCostPerYear,
+  getTransformedHeatingCostPerYear,
+  getTransformedHeatingInstallationCostPerYear,
+} from '../../../calculations/heating/cost';
 import {
   getHeatingFootprintPerYear,
   getTransformedHeatingFootprintPerYear,
@@ -35,14 +40,35 @@ export default function CostFootprintComparisonCard(props: DashboardCardProps) {
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       );
+      const oldInstallationCost = getHeatingInstallationCostPerYear(
+        externalCalculationData,
+        heatingSurveyAnswers.map((answer) => answer.value),
+      );
+      const newInstallationCost = getTransformedHeatingInstallationCostPerYear(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      );
 
-      return range(1, 11).map((year) => ({
-        Year: year,
-        'Old costs': Math.round(year * oldHeatingCostsPerYear),
-        'New costs': Math.round(year * newHeatingCostsPerYear),
-        'Old footprint': Math.round(year * oldFootprintPerYear),
-        'New footprint': Math.round(year * newFootprintPerYear),
-      }));
+      return range(1, 11).map((year) => {
+        if (year === 1) {
+          return {
+            Year: year,
+            'Old costs': Math.round(oldHeatingCostsPerYear + oldInstallationCost),
+            'New costs': Math.round(newHeatingCostsPerYear + newInstallationCost),
+            'Old footprint': Math.round(oldFootprintPerYear),
+            'New footprint': Math.round(newFootprintPerYear),
+          };
+        } else {
+          return {
+            Year: year,
+            'Old costs': Math.round(year * oldHeatingCostsPerYear),
+            'New costs': Math.round(year * newHeatingCostsPerYear),
+            'Old footprint': Math.round(year * oldFootprintPerYear),
+            'New footprint': Math.round(year * newFootprintPerYear),
+          };
+        }
+      });
     },
     [filledActionAnswersDf],
   );

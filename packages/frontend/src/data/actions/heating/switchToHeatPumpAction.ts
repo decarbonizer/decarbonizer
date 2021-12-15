@@ -11,7 +11,7 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
   icon: AiOutlineBoxPlot,
   description: 'A heat pump does not use fossil fuels, it actively contributes to the reduction of your CO₂ emissions',
   forSurvey: 'heating',
-  getSchema: () => {
+  getSchema: (survey) => {
     return {
       pages: [
         {
@@ -20,6 +20,7 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
               id: 'newHeatPump',
               type: 'single-choice',
               required: false,
+              defaultValue: survey?.value.radiatorKind,
               options: [
                 { display: 'Ground source heat pump', value: '00000000-0000-0000-0000-000000000001' },
                 { display: 'Air source heat pump', value: '00000000-0000-0000-0000-000000000002' },
