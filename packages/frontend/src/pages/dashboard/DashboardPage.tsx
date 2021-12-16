@@ -1,4 +1,4 @@
-import { Button, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetActionPlanQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import { RealEstateDashboardPageParams, routes } from '../../routes';
@@ -63,19 +63,21 @@ export default function DashboardPage() {
       }}>
       <DefaultPageLayout
         leftArea={
-          <Card
-            as="aside"
-            isStatic
-            flexGrow={1}
-            w="md"
-            borderBottomRadius={0}
-            borderLeftRadius={0}
-            h="100%"
-            px="8"
-            py="4"
-            size="lg">
-            <ActionPanel />
-          </Card>
+          <Box position="sticky" top="5rem">
+            <Card
+              as="aside"
+              isStatic
+              flexGrow={1}
+              w="md"
+              borderBottomRadius={0}
+              borderLeftRadius={0}
+              h="calc(100vh - 5rem)"
+              px="8"
+              py="4"
+              size="lg">
+              <ActionPanel />
+            </Card>
+          </Box>
         }>
         <DashboardCharts selectedActionCategory={selectedActionCategory} />
       </DefaultPageLayout>
