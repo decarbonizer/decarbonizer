@@ -29,10 +29,10 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
       },
       {
         _id: '00000000-0000-0000-0000-000000000002',
-        cityName: 'Munich',
+        cityName: 'Hamburg',
         description: 'The entire building except for a small area in the 4th floor.',
         imageUrl:
-          'https://images.unsplash.com/photo-1595867818082-083862f3d630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+          'https://images.unsplash.com/photo-1589726994892-f103ab7feb5b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80',
         employees: 1168,
         area: 4000,
       },
