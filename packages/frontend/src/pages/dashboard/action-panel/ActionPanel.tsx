@@ -11,7 +11,7 @@ import { RealEstatePageParams } from '../../../routes';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
-  const { filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
+  const { actionPlanToEdit, filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
   const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 
@@ -38,6 +38,7 @@ export default function ActionPanel() {
           isOpen
           onClose={saveActionPlanDisclosure.onClose}
           actionAnswers={Object.values(filledActionAnswers).filter(Boolean)}
+          actionPlan={actionPlanToEdit}
         />
       )}
     </VStack>

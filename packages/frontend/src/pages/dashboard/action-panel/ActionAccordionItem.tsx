@@ -15,7 +15,7 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { MouseEvent, useContext, useEffect } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect } from 'react';
 import { DashboardContext } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
@@ -39,7 +39,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
 
-  useFilledActionAnswerSync(action, value);
+  useFilledActionAnswerSync(action, value, setValue);
 
   const handleClearClick = (e: MouseEvent) => {
     setValue({});
@@ -115,8 +115,17 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
  * filled out action answers.
  * Clears the value when the user clears the accordion.
  */
-function useFilledActionAnswerSync(action: Action, value: object) {
-  const { filledActionAnswers, setFilledActionAnswers } = useContext(DashboardContext);
+function useFilledActionAnswerSync(action: Action, value: object, setValue: Dispatch<SetStateAction<object>>) {
+  const { actionPlanToEdit, filledActionAnswers, setFilledActionAnswers } = useContext(DashboardContext);
+
+  useEffect(() => {
+    if (actionPlanToEdit) {
+      setValue(
+        actionPlanToEdit.actionAnswers.find((actionAnswer) => actionAnswer.actionId === action.id)?.values.value ?? {},
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionPlanToEdit]);
 
   useEffect(
     () => {
@@ -126,7 +135,7 @@ function useFilledActionAnswerSync(action: Action, value: object) {
             actionId: action.id as KnownActionId,
             values: {
               value,
-              detailsValue: undefined, // TODO: Populate from modal.
+              detailsValue: filledActionAnswers[action.id]?.values.detailsValue,
             },
           };
 

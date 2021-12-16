@@ -1,6 +1,7 @@
 import { DataFrame } from 'data-forge';
 import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { ActionAnswerBase } from '../../api/actionAnswer';
+import { ActionPlan } from '../../api/actionPlan';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../data/actions/action';
 
 export const DashboardContext = createContext<DashboardContextValue>(null!);
@@ -10,6 +11,7 @@ export type FilledActionAnswers = {
 };
 
 export interface DashboardContextValue {
+  actionPlanToEdit?: ActionPlan;
   filledActionAnswers: FilledActionAnswers;
   setFilledActionAnswers: Dispatch<SetStateAction<FilledActionAnswers>>;
   selectedActionCategory?: ActionCategory;

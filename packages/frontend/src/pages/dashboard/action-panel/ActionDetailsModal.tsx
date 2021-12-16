@@ -28,7 +28,7 @@ export interface ActionDetailsModalProps {
 
 export default function ActionDetailsModal({ action, isOpen, onClose }: ActionDetailsModalProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
-  const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
+  const { providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const { filledActionAnswers, setFilledActionAnswers } = useContext(DashboardContext);
   const { value, page, ruleEvaluationResults, validationErrors, verifySubmit, handleValueChanged } = useFormEngine(
     action.detailsSchema!,
