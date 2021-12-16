@@ -1,7 +1,6 @@
 import {
   AspectRatio,
   Box,
-  Button,
   Flex,
   Grid,
   Heading,
@@ -14,13 +13,14 @@ import {
   Text,
   useDisclosure,
   useToast,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { DataFrame } from 'data-forge';
-import { AiOutlineArrowRight } from 'react-icons/ai';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
+import { RiDashboardFill, RiSurveyLine } from 'react-icons/ri';
 import { GiFootprint } from 'react-icons/gi';
-import { MdDeleteForever } from 'react-icons/md';
+import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
@@ -33,14 +33,13 @@ import { routes } from '../../routes';
 import {
   useDeleteRealEstateMutation,
   useGetAllActionPlansForRealEstateQuery,
-  useGetAllBulbsQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
 } from '../../store/api';
 import QuickInfo from '../dashboard/components/QuickInfo';
 import QuickInfoLabelDescription from '../dashboard/components/QuickInfoLabelDescription';
 import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
-import GlobalFootprintCard from '../dashboard/global/GlobalFootprintCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
+import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 
 export interface CityCardProps {
   realEstate: RealEstate;
@@ -50,7 +49,6 @@ export default function CityCard({ realEstate }: CityCardProps) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
   const { data: actionPlans } = useGetAllActionPlansForRealEstateQuery({ realEstateId: realEstate._id });
-  const { data: bulbs } = useGetAllBulbsQuery();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const history = useHistory();
@@ -61,14 +59,15 @@ export default function CityCard({ realEstate }: CityCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
       );
+      const actionAnswers = externalCalculationData.actionPlans
+        .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
+        .flatMap((actionPlan) => actionPlan.actionAnswers);
+
+      const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
 
       const footprint =
         surveyAnswers.count() > 0
-          ? getTransformedFootprintPerYear(
-              externalCalculationData,
-              surveyAnswers,
-              new DataFrame<number, ActionAnswerBase>(),
-            ).globalFootprint
+          ? getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, allActionAnswers).globalFootprint
           : 0;
 
       return {
@@ -93,12 +92,16 @@ export default function CityCard({ realEstate }: CityCardProps) {
     });
   };
 
-  function startSurvey(realEstateId: string) {
+  function goToSurveyOverview(realEstateId: string) {
     history.push(routes.surveys({ realEstateId }));
   }
 
   function goToDashboard(realEstateId: string) {
     history.push(routes.realEstateDashboard({ realEstateId }));
+  }
+
+  function goToActionPlanOverview(realEstateId: string) {
+    history.push(routes.actionPlans({ realEstateId }));
   }
 
   return (
@@ -150,16 +153,21 @@ export default function CityCard({ realEstate }: CityCardProps) {
                 <b>Number of action plans: </b>
                 {actionPlans ? actionPlans.length : 0}
               </p>
-              <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />} pt="5">
-                <QuickInfoLabelDescription
-                  label={
-                    <>
-                      {adjustedFootprint.toFixed(1)}
-                      {unitSymbol}
-                    </>
-                  }
-                />
-              </QuickInfo>
+              <InlineErrorDisplay error={error}>
+                {isLoading && <SkeletonText />}
+                {data && (
+                  <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />} pt="5">
+                    <QuickInfoLabelDescription
+                      label={
+                        <>
+                          {adjustedFootprint.toFixed(1)}
+                          {unitSymbol}
+                        </>
+                      }
+                    />
+                  </QuickInfo>
+                )}
+              </InlineErrorDisplay>
             </Box>
           </Box>
           <CarbonTreeCard carbonFootprint={carbonFootprint} />
@@ -167,21 +175,38 @@ export default function CityCard({ realEstate }: CityCardProps) {
 
         <Flex position="absolute" bottom="5" right="4">
           <HStack>
-            <Button
-              rightIcon={<AiOutlineArrowRight />}
-              colorScheme="green"
-              size="sm"
-              onClick={() => goToDashboard(realEstate._id)}>
-              Dashboard
-            </Button>
+            <Tooltip label="Survey Overview">
+              <IconButton
+                aria-label="SurveyOverview"
+                icon={<RiSurveyLine />}
+                colorScheme="primary"
+                fontSize="27"
+                size="md"
+                onClick={() => goToSurveyOverview(realEstate._id)}
+              />
+            </Tooltip>
             <Spacer />
-            <Button
-              rightIcon={<AiOutlineArrowRight />}
-              colorScheme="green"
-              size="sm"
-              onClick={() => startSurvey(realEstate._id)}>
-              Survey Overview
-            </Button>
+            <Tooltip label="Dashboard">
+              <IconButton
+                aria-label="Dashboard"
+                icon={<RiDashboardFill />}
+                colorScheme="primary"
+                fontSize="27"
+                size="md"
+                onClick={() => goToDashboard(realEstate._id)}
+              />
+            </Tooltip>
+            <Spacer />
+            <Tooltip label="Action Plan Overview">
+              <IconButton
+                aria-label="ActionPlanOverview"
+                icon={<MdPendingActions />}
+                colorScheme="primary"
+                fontSize="27"
+                size="md"
+                onClick={() => goToActionPlanOverview(realEstate._id)}
+              />
+            </Tooltip>
           </HStack>
         </Flex>
         <DeleteAlertDialog

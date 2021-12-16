@@ -14,7 +14,7 @@ import {
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
@@ -46,17 +46,25 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
             externalCalculationData,
             illuminationSurveyAnswers.map((answer) => answer.value),
             year,
-          ),
+          ).maintenanceCostThisYear,
         ),
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
-          getTransformedIlluminationMaintenanceCostForYear(
-            externalCalculationData,
-            illuminationSurveyAnswers,
-            filledActionAnswersDf,
-            year,
-          ),
+          year === 1
+            ? getTransformedIlluminationMaintenanceCostForYear(
+                externalCalculationData,
+                illuminationSurveyAnswers,
+                filledActionAnswersDf,
+                year,
+              ).costOnReplace
+            : 0 +
+                getTransformedIlluminationMaintenanceCostForYear(
+                  externalCalculationData,
+                  illuminationSurveyAnswers,
+                  filledActionAnswersDf,
+                  year,
+                ).maintenanceCostThisYear,
         ),
       );
       const oldCostsPerYear = oldMaintenanceCosts.map(
@@ -100,6 +108,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
+              syncId="illuminationCostComparison"
               margin={{
                 top: 10,
                 right: 30,

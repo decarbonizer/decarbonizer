@@ -1,29 +1,43 @@
-import { Box, Button, Flex, Grid } from '@chakra-ui/react';
+import { Box, Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
-import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
-import { RealEstatePageParams, routes } from '../../routes';
+import { useGetActionPlanQuery, useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
+import { RealEstateDashboardPageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
-import { useState } from 'react';
-import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
+import { useEffect, useState } from 'react';
+import { DashboardContext, FilledActionAnswers } from './dashboardContext';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
-import ChartSectionHeader from './components/ChartSectionHeader';
-import ComparisonCard from './global/ComparisonCard';
 import { ActionCategory } from '../../data/actions/action';
-import GlobalFootprintCard from './global/GlobalFootprintCard';
 import Card from '../../components/Card';
-import ActionChartsSection from './ActionChartsSection';
-import NetZeroCard from './global/NetZeroCard';
+import DashboardCharts from './DashboardCharts';
 
 export default function DashboardPage() {
-  const { realEstateId } = useParams<RealEstatePageParams>();
+  const { realEstateId, actionPlanId } = useParams<RealEstateDashboardPageParams>();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
+  const { data: actionPlanToEdit, isFetching: isFetchingActionPlanToEdit } = useGetActionPlanQuery(
+    { id: actionPlanId! },
+    { skip: !actionPlanId },
+  );
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const [selectedActionCategory, setSelectedActionCategory] = useState<ActionCategory | undefined>(undefined);
   const history = useHistory();
 
-  if (!surveyAnswers) {
+  useEffect(
+    function populateFilledActionsFromActionPlan() {
+      if (actionPlanToEdit) {
+        setFilledActionAnswers(
+          actionPlanToEdit.actionAnswers.reduce(
+            (acc, actionAnswer) => ({ ...acc, [actionAnswer.actionId]: actionAnswer }),
+            {},
+          ),
+        );
+      }
+    },
+    [actionPlanToEdit],
+  );
+
+  if (!surveyAnswers || isFetchingActionPlanToEdit) {
     return null;
   }
 
@@ -39,8 +53,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <ActionPanelContext.Provider
+    <DashboardContext.Provider
       value={{
+        actionPlanToEdit,
         filledActionAnswers,
         setFilledActionAnswers,
         selectedActionCategory,
@@ -48,42 +63,24 @@ export default function DashboardPage() {
       }}>
       <DefaultPageLayout
         leftArea={
-          <Card
-            as="aside"
-            isStatic
-            flexGrow={1}
-            w="md"
-            borderBottomRadius={0}
-            borderLeftRadius={0}
-            h="100%"
-            px="8"
-            py="4"
-            size="lg">
-            <ActionPanel />
-          </Card>
+          <Box position="sticky" top="5rem">
+            <Card
+              as="aside"
+              isStatic
+              flexGrow={1}
+              w="md"
+              borderBottomRadius={0}
+              borderLeftRadius={0}
+              h="calc(100vh - 5rem)"
+              px="8"
+              py="4"
+              size="lg">
+              <ActionPanel />
+            </Card>
+          </Box>
         }>
-        <Flex minH="100%" flexDir="column">
-          <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-            <GlobalFootprintCard />
-            <NetZeroCard />
-            <ComparisonCard gridColumn="3 / span 2" />
-          </Grid>
-          {selectedActionCategory && (
-            <>
-              <ChartSectionHeader
-                header="Action Impact"
-                description="What impact do your currently visible actions to the left have?"
-                mt="8"
-                mb="4"
-              />
-              <Box flexGrow={1} mb="8" display="flex" alignItems="stretch">
-                <ActionChartsSection />
-              </Box>
-            </>
-          )}
-        </Flex>
+        <DashboardCharts selectedActionCategory={selectedActionCategory} />
       </DefaultPageLayout>
-    </ActionPanelContext.Provider>
+    </DashboardContext.Provider>
   );
 }

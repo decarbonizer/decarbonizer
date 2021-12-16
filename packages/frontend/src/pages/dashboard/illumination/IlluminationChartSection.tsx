@@ -4,15 +4,20 @@ import FootprintDeltaCard from './FootprintDeltaCard';
 import ComparisonOfCostsAndFootprints from './FootprintComparisonChartCard';
 import CostDeltaCard from './CostDeltaCard';
 import CostComparisonChartCard from './CostComparisonChartCard';
+import { ActionChartsSectionProps } from '../ActionChartsSection';
 
-export default function IlluminationChartsSection() {
+export default function IlluminationChartsSection({ isNarrow }: ActionChartsSectionProps) {
   return (
-    <Grid flexGrow={1} templateRows="auto auto 1fr" templateColumns="repeat(4, 1fr)" gap="6">
-      <FootprintDeltaCard gridRow="1" gridColumn="1 / span 2" />
-      <CostDeltaCard gridRow="2" gridColumn="1 / span 2" />
-      <CalculatedCostsCard gridRow="1 / span 2" gridColumn="3 / span 2" />
-      <ComparisonOfCostsAndFootprints gridRow="3" gridColumn="1 / span 2" />
-      <CostComparisonChartCard gridRow="3" gridColumn="3 / span 2" />
+    <Grid
+      flexGrow={1}
+      templateRows={isNarrow ? 'auto auto 20rem 20rem 20rem' : 'auto auto 1fr'}
+      templateColumns={isNarrow ? '1fr' : '1fr 1fr'}
+      gap="6">
+      <FootprintDeltaCard />
+      <CostDeltaCard gridRow={isNarrow ? undefined : '2'} />
+      <CalculatedCostsCard gridRow={isNarrow ? undefined : 'span 2'} />
+      <ComparisonOfCostsAndFootprints />
+      <CostComparisonChartCard />
     </Grid>
   );
 }

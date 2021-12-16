@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ActionCategory } from '../../../data/actions/action';
 import { ActionAccordionItem } from './ActionAccordionItem';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { ActionPanelContext } from './actionPanelContext';
+import { DashboardContext } from '../dashboardContext';
 
 export interface ActionGroupAccordionItemProps {
   actionCategory: ActionCategory;
@@ -23,7 +23,7 @@ interface ActionGroupAccordionContentProps {
 }
 
 function ActionGroupAccordionContent({ isExpanded, actionCategory }: ActionGroupAccordionContentProps) {
-  const { filledActionAnswers } = useContext(ActionPanelContext);
+  const { filledActionAnswers } = useContext(DashboardContext);
   const countOfFilledAnswers = Object.values(filledActionAnswers).filter((filledAction) =>
     actionCategory.actions.some((action) => action.id === filledAction?.actionId),
   ).length;

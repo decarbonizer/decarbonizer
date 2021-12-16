@@ -1,25 +1,34 @@
-import { Heading, Accordion, VStack, Button, useDisclosure } from '@chakra-ui/react';
+import { Heading, Accordion, VStack, useDisclosure, HStack, Spacer, IconButton, Icon, Tooltip } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { knownActionCategories } from '../../../data/actions/action';
 import ActionGroupAccordionItem from './ActionGroupAccordionItem';
-import { ActionPanelContext } from './actionPanelContext';
+import { DashboardContext } from '../dashboardContext';
 import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
-import { useGetRealEstateQuery } from '../../../store/api';
-import { useParams } from 'react-router';
-import { RealEstatePageParams } from '../../../routes';
+import { FaSave } from 'react-icons/fa';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
-  const { filledActionAnswers, setSelectedActionCategory } = useContext(ActionPanelContext);
+  const { actionPlanToEdit, filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
-  const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 
   return (
-    <VStack align="flex-start" w="100%">
-      <Heading as="h2" size="lg" pb="5" isTruncated>
-        {currentRealEstate?.cityName}
-      </Heading>
+    <VStack align="stretch" w="100%">
+      <HStack pb="5">
+        <Heading as="h2" size="lg" isTruncated>
+          {actionPlanToEdit?.name ?? 'New action plan'}
+        </Heading>
+        <Spacer />
+        <Tooltip label="Save action plan">
+          <IconButton
+            icon={<Icon as={FaSave} />}
+            colorScheme="primary"
+            aria-label="Save"
+            isDisabled={!canSaveActionPlan}
+            onClick={saveActionPlanDisclosure.onOpen}
+          />
+        </Tooltip>
+      </HStack>
       <Accordion
         minW="100%"
         allowToggle
@@ -30,14 +39,12 @@ export default function ActionPanel() {
           <ActionGroupAccordionItem key={i} actionCategory={actionCategory} />
         ))}
       </Accordion>
-      <Button colorScheme="primary" isDisabled={!canSaveActionPlan} onClick={saveActionPlanDisclosure.onOpen}>
-        Save Actions
-      </Button>
       {saveActionPlanDisclosure.isOpen && (
         <SaveActionPlanModal
           isOpen
           onClose={saveActionPlanDisclosure.onClose}
           actionAnswers={Object.values(filledActionAnswers).filter(Boolean)}
+          actionPlan={actionPlanToEdit}
         />
       )}
     </VStack>

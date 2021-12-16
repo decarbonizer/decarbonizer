@@ -30,7 +30,10 @@ export function getIlluminationMaintenanceCostForYear(
 ) {
   return surveyAnswers
     .map((answer) => getIlluminationMaintenanceCostForYearForSingleSurveyAnswer(externalCalculationData, answer, year))
-    .aggregate((a, b) => a + b);
+    .aggregate((a, b) => ({
+      maintenanceCostThisYear: a.maintenanceCostThisYear + b.maintenanceCostThisYear,
+      costOnReplace: a.costOnReplace + b.costOnReplace,
+    }));
 }
 
 function getIlluminationMaintenanceCostForYearForSingleSurveyAnswer(
@@ -38,20 +41,15 @@ function getIlluminationMaintenanceCostForYearForSingleSurveyAnswer(
   answer: IlluminationSurveyAnswerValue,
   year: number,
 ) {
-  const { requiredReplacementsPerYear, costOnReplace } = getIlluminationMaintenanceCostForSingleSurveyAnswer(
-    externalCalculationData,
-    answer,
-  );
+  const { costOnReplace, runtimeInHoursPerYearPerBulb, bulbLifetime } =
+    getIlluminationMaintenanceCostForSingleSurveyAnswer(externalCalculationData, answer);
 
-  let replacements = requiredReplacementsPerYear;
-  for (let currentYear = 1; currentYear < year; currentYear++) {
-    replacements -= Math.floor(replacements);
-    replacements += requiredReplacementsPerYear;
-  }
+  const totalReplacementsUntilYear = (runtimeInHoursPerYearPerBulb * year) / bulbLifetime;
+  const totalReplacementsUntilLastYear = Math.floor((runtimeInHoursPerYearPerBulb * (year - 1)) / bulbLifetime);
+  const replacementsCurrentYear = totalReplacementsUntilYear - totalReplacementsUntilLastYear;
 
-  const replacementsThisYear = Math.floor(replacements);
-  // console.info(replacementsThisYear * costOnReplace, replacementsThisYear, costOnReplace);
-  return replacementsThisYear * costOnReplace;
+  const replacementsThisYear = Math.floor(replacementsCurrentYear);
+  return { maintenanceCostThisYear: replacementsThisYear * costOnReplace, costOnReplace };
 }
 
 /**
@@ -65,13 +63,14 @@ function getIlluminationMaintenanceCostForSingleSurveyAnswer(
   const avgElectritianWagePerBulb = avgElectritianWagePerHour / 6; // assume that it takes 10 min to change a bulb
 
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
+  const bulbLifetime = bulb.lifetimeInHours;
   const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
   const runtimeInHoursPerYearPerBulb = runtimeInHoursPerYear / answer.lampCount;
-  const requiredReplacementsPerYear = runtimeInHoursPerYearPerBulb / bulb.lifetimeInHours;
   const costOnReplace = answer.lampCount * bulb.costInEuro + answer.lampCount * avgElectritianWagePerBulb;
 
   return {
-    requiredReplacementsPerYear,
     costOnReplace,
+    runtimeInHoursPerYearPerBulb,
+    bulbLifetime,
   };
 }

@@ -1,4 +1,4 @@
-import { BoxProps, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Heading, Text } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 export interface ChartSectionHeaderProps extends BoxProps {
@@ -8,13 +8,13 @@ export interface ChartSectionHeaderProps extends BoxProps {
 
 export default function ChartSectionHeader({ header, description, ...rest }: ChartSectionHeaderProps) {
   return (
-    <HStack {...rest}>
+    <Box {...rest}>
       <p>
         <Heading as="h2" size="lg">
           {header}
         </Heading>
         {description && <Text layerStyle="hint">{description}</Text>}
       </p>
-    </HStack>
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
 import { Icon, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { ReactElement } from 'react';
-import { FcSurvey } from 'react-icons/fc';
+import { RiSurveyLine } from 'react-icons/ri';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDashboard, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
@@ -22,7 +22,7 @@ export interface NavigationMenuProps {
 export default function NavigationMenu({ currentPage, realEstateId }: NavigationMenuProps) {
   const history = useHistory();
   const pages: PageNavigation[] = [
-    { value: routes.surveys({ realEstateId }), display: 'Survey Overview', icon: <Icon as={FcSurvey} /> },
+    { value: routes.surveys({ realEstateId }), display: 'Survey Overview', icon: <Icon as={RiSurveyLine} /> },
     { value: routes.realEstateDashboard({ realEstateId }), display: 'Dashboard', icon: <Icon as={MdDashboard} /> },
     {
       value: routes.actionPlans({ realEstateId }),

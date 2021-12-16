@@ -2,7 +2,7 @@ import { SkeletonText } from '@chakra-ui/react';
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
