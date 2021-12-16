@@ -21,7 +21,7 @@ export default function NavBar() {
       spacing="4"
       pos="sticky"
       top="0"
-      zIndex={10000}
+      zIndex={100}
       bg={isScrolled ? 'white' : undefined}
       shadow={isScrolled ? 'sm' : undefined}
       transition="all 250ms">
