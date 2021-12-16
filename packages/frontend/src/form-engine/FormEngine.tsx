@@ -30,7 +30,7 @@ export default function FormEngine(props: FormEngineProps) {
 
   return (
     <FormEnginePropsContext.Provider value={props}>
-      {/* {currentSchemaPage.name && props.buttonPrevious && props.buttonNext && (
+      {currentSchemaPage.name && props.buttonPrevious && props.buttonNext && (
         <HStack w="100%" align="center" mb="4">
           {currentSchemaPage.name && (
             <Box>
@@ -50,7 +50,7 @@ export default function FormEngine(props: FormEngineProps) {
             </HStack>
           )}
         </HStack>
-      )} */}
+      )}
 
       <VStack spacing="8" align="flex-start">
         {currentSchemaPage.elements.map((element, index) => (
