@@ -4,7 +4,7 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import { RealEstatePageParams, routes } from '../../routes';
 import ActionPanel from './action-panel/ActionPanel';
 import { useState } from 'react';
-import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPanelContext';
+import { DashboardContext, FilledActionAnswers } from './dashboardContext';
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
@@ -36,7 +36,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <ActionPanelContext.Provider
+    <DashboardContext.Provider
       value={{
         filledActionAnswers,
         setFilledActionAnswers,
@@ -74,6 +74,6 @@ export default function DashboardPage() {
           )}
         </SimpleGrid>
       </DefaultPageLayout>
-    </ActionPanelContext.Provider>
+    </DashboardContext.Provider>
   );
 }

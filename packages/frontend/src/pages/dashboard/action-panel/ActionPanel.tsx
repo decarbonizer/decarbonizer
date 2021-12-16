@@ -2,7 +2,7 @@ import { Heading, Accordion, VStack, Button, useDisclosure } from '@chakra-ui/re
 import { useContext } from 'react';
 import { knownActionCategories } from '../../../data/actions/action';
 import ActionGroupAccordionItem from './ActionGroupAccordionItem';
-import { ActionPanelContext } from './actionPanelContext';
+import { DashboardContext } from '../dashboardContext';
 import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
 import { useGetRealEstateQuery } from '../../../store/api';
@@ -11,7 +11,7 @@ import { RealEstatePageParams } from '../../../routes';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
-  const { filledActionAnswers, setSelectedActionCategory } = useContext(ActionPanelContext);
+  const { filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
   const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 

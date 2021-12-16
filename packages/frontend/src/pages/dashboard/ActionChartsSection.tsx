@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ActionPanelContext } from './action-panel/actionPanelContext';
+import { DashboardContext } from './dashboardContext';
 import HeatingChartsSection from './heating/HeatingChartSection';
 import IlluminationChartsSection from './illumination/IlluminationChartSection';
 import ElectricityChartsSection from './electricity/ElectricityChartSection';
@@ -15,7 +15,7 @@ export interface ActionChartsSectionProps {
 }
 
 export default function ActionChartsSection({ isNarrow }: ActionChartsSectionProps) {
-  const { selectedActionCategory } = useContext(ActionPanelContext);
+  const { selectedActionCategory } = useContext(DashboardContext);
   const ChartSection = chartSections[selectedActionCategory?.id ?? ''];
 
   if (!ChartSection) {

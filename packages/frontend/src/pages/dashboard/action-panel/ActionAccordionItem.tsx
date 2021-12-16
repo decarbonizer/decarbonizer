@@ -16,7 +16,7 @@ import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
 import { MouseEvent, useContext, useEffect } from 'react';
-import { ActionPanelContext } from './actionPanelContext';
+import { DashboardContext } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
@@ -116,7 +116,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
  * Clears the value when the user clears the accordion.
  */
 function useFilledActionAnswerSync(action: Action, value: object) {
-  const { filledActionAnswers, setFilledActionAnswers } = useContext(ActionPanelContext);
+  const { filledActionAnswers, setFilledActionAnswers } = useContext(DashboardContext);
 
   useEffect(
     () => {

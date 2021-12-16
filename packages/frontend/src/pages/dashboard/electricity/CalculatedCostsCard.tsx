@@ -1,7 +1,7 @@
 import { SkeletonText, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import { getTransformedElectricityCostPerYear } from '../../../calculations/electricity/cost';
 import { getTransformedElectricityFootprintPerYear } from '../../../calculations/electricity/footprint';
