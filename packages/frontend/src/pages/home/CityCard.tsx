@@ -15,13 +15,17 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { DataFrame } from 'data-forge';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever } from 'react-icons/md';
 import { useHistory } from 'react-router';
+import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
+import { getTransformedFootprintPerYear } from '../../calculations/global/footprint';
+import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import HaloIcon from '../../components/HaloIcon';
@@ -35,6 +39,7 @@ import {
 import QuickInfo from '../dashboard/components/QuickInfo';
 import QuickInfoLabelDescription from '../dashboard/components/QuickInfoLabelDescription';
 import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
+import GlobalFootprintCard from '../dashboard/global/GlobalFootprintCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 
 export interface CityCardProps {
@@ -48,7 +53,34 @@ export default function CityCard({ realEstate }: CityCardProps) {
   const { data: bulbs } = useGetAllBulbsQuery();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
+  const history = useHistory();
   const toast = useToast();
+
+  const { isLoading, data, error } = useCalculation(
+    (externalCalculationData) => {
+      const surveyAnswers = externalCalculationData.surveyAnswers.filter(
+        (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
+      );
+
+      const footprint =
+        surveyAnswers.count() > 0
+          ? getTransformedFootprintPerYear(
+              externalCalculationData,
+              surveyAnswers,
+              new DataFrame<number, ActionAnswerBase>(),
+            ).globalFootprint
+          : 0;
+
+      return {
+        footprint,
+      };
+    },
+    [realEstate._id],
+  );
+
+  const carbonFootprint = data?.footprint ?? 0;
+  const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
+  const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
   const onConfirm = async (city) => {
     await deleteRealEstateMutation({ id: city._id });
@@ -60,8 +92,6 @@ export default function CityCard({ realEstate }: CityCardProps) {
       isClosable: true,
     });
   };
-
-  const history = useHistory();
 
   function startSurvey(realEstateId: string) {
     history.push(routes.surveys({ realEstateId }));
@@ -121,11 +151,18 @@ export default function CityCard({ realEstate }: CityCardProps) {
                 {actionPlans ? actionPlans.length : 0}
               </p>
               <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />} pt="5">
-                <QuickInfoLabelDescription label={<>{'6.1 t'}</>} />
+                <QuickInfoLabelDescription
+                  label={
+                    <>
+                      {adjustedFootprint.toFixed(1)}
+                      {unitSymbol}
+                    </>
+                  }
+                />
               </QuickInfo>
             </Box>
           </Box>
-          <CarbonTreeCard realEstateId={realEstate._id} />
+          <CarbonTreeCard carbonFootprint={carbonFootprint} />
         </Grid>
 
         <Flex position="absolute" bottom="5" right="4">

@@ -10,6 +10,7 @@ import {
   useToast,
   Badge,
   HStack,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
 import { BiTargetLock } from 'react-icons/bi';
@@ -25,19 +26,54 @@ import { useDeleteActionPlanMutation } from '../../store/api';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
 import { ActionPlansPageParams, routes } from '../../routes';
 import { useHistory, useParams } from 'react-router';
+import { getFootprintDelta } from '../../calculations/global/footprint';
+import { useCalculation } from '../../calculations/useCalculation';
+import { DataFrame } from 'data-forge';
+import { mapDeltaType } from '../../utils/deltaType';
+import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 
 export interface ActionPlanCardProps {
-  actionPlan: ActionPlan;
+  currentActionPlan: ActionPlan;
 }
 
-export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
+export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProps) {
   const { realEstateId } = useParams<ActionPlansPageParams>();
-
   const [deleteActionPlanMutation] = useDeleteActionPlanMutation();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const toast = useToast();
   const history = useHistory();
+
+  const { isLoading, data, error } = useCalculation(
+    (externalCalculationData) => {
+      const surveyAnswers = externalCalculationData.surveyAnswers.filter(
+        (surveyAnswer) => surveyAnswer.value.isInitialSurvey && surveyAnswer.realEstateId === realEstateId,
+      );
+      const footPrintDelta = getFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        new DataFrame(currentActionPlan.actionAnswers),
+      );
+      const netZeroCalculation = getFootprintDelta(
+        externalCalculationData,
+        surveyAnswers,
+        new DataFrame(currentActionPlan.actionAnswers),
+      );
+
+      const delta =
+        netZeroCalculation.delta < 0 ? Math.abs(netZeroCalculation.delta) : -Math.abs(netZeroCalculation.delta);
+      const achievedGoal = delta / (netZeroCalculation.originalFootprint / 100);
+      const adjustedAchievedGoal = achievedGoal > 100 ? 100 : achievedGoal.toFixed(2);
+
+      return {
+        footPrintDelta,
+        netZeroCalculation,
+        adjustedAchievedGoal,
+      };
+    },
+
+    [currentActionPlan.actionAnswers],
+  );
 
   const onConfirm = async (actionPlan) => {
     await deleteActionPlanMutation({ id: actionPlan._id });
@@ -60,12 +96,13 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
         <VStack align="flex-start">
           <HStack>
             <Heading size="md" fontWeight="semibold" pt="3" justifyContent="center">
-              {actionPlan.name}
+              {currentActionPlan.name}
             </Heading>
-            {<BadgeStatus status={actionPlan.status} />}
+            {<BadgeStatus status={currentActionPlan.status} />}
           </HStack>
           <Text>
-            {new Date(actionPlan.startDate).toLocaleDateString()} - {new Date(actionPlan.endDate).toLocaleDateString()}
+            {new Date(currentActionPlan.startDate).toLocaleDateString()} -{' '}
+            {new Date(currentActionPlan.endDate).toLocaleDateString()}
           </Text>
           <Heading size="xs"></Heading>
         </VStack>
@@ -95,21 +132,61 @@ export default function ActionPlanCard({ actionPlan }: ActionPlanCardProps) {
           />
         </Tooltip>
       </Flex>
-      <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
-        <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />}>
-          <QuickInfoLabelDescription label={<>{'⬇ 1.73t'}</>} description={'Before: 6.1t, After: 4.73t'} />
-        </QuickInfo>
-        <QuickInfo h="50%" icon={<HaloIcon icon={BiTargetLock} />}>
-          <QuickInfoLabelDescription label={<>{'⬆ 40%'}</>} description={'Before: 38%, After: 40%'} />
-        </QuickInfo>
-      </VStack>
-      <SaveActionPlanModal isOpen={isOpenEditModal} onClose={onCloseEditModal} actionPlan={actionPlan} />
+      <InlineErrorDisplay error={error}>
+        {isLoading && <SkeletonText />}
+        {data && (
+          <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
+            <QuickInfo
+              icon={
+                <HaloIcon
+                  icon={GiFootprint}
+                  colorScheme={mapDeltaType(data.footPrintDelta.deltaType, 'red', 'green', 'gray')}
+                />
+              }>
+              <QuickInfoLabelDescription
+                label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
+                description={
+                  <>
+                    {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
+                  </>
+                }
+                furtherDescription={
+                  <>
+                    {`Before: ${data.footPrintDelta.originalFootprint.toFixed(2)}, `}
+                    {`After: ${data.footPrintDelta.footprintAfterActions.toFixed(2)}`}
+                  </>
+                }
+              />
+            </QuickInfo>
+            <QuickInfo
+              pt="8"
+              icon={
+                <HaloIcon
+                  icon={BiTargetLock}
+                  colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+                />
+              }>
+              <QuickInfoLabelDescription
+                label={
+                  <>
+                    {data.netZeroCalculation.deltaType === 'decrease'
+                      ? `⬆ ${data.adjustedAchievedGoal} %`
+                      : `⬇ ${data.adjustedAchievedGoal} %`}
+                  </>
+                }
+                description={'Net-Zero after fulfilling the action plan.'}
+              />
+            </QuickInfo>
+          </VStack>
+        )}
+      </InlineErrorDisplay>
+      <SaveActionPlanModal isOpen={isOpenEditModal} onClose={onCloseEditModal} actionPlan={currentActionPlan} />
       <DeleteAlertDialog
         isOpen={isOpenAlert}
         onCancel={onCloseAlert}
-        onConfirm={() => onConfirm(actionPlan)}
-        deleteTextHeader={`Delete ${actionPlan.name}?`}
-        deleteTextDialog={`Are you sure you want to delete ${actionPlan.name}?`}
+        onConfirm={() => onConfirm(currentActionPlan)}
+        deleteTextHeader={`Delete ${currentActionPlan.name}?`}
+        deleteTextDialog={`Are you sure you want to delete ${currentActionPlan.name}?`}
       />
     </Card>
   );

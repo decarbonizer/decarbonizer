@@ -107,7 +107,7 @@ function getHeatingCostPerYearForSingleSurveyAnswer(
     overallkWhForHeating = overallkWhForHeating * 0.9;
   }
 
-  let overallkWhConsumptionForEnergyForm =
+  const overallkWhConsumptionForEnergyForm =
     (overallkWhForHeating / heatingType.productionKwh) * heatingType.consumptionKwh;
 
   const energyFormCost = energyForm.euroPerKwh * overallkWhConsumptionForEnergyForm * avgHeatingPerYearHours;

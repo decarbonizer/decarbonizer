@@ -2,7 +2,6 @@ import { DataFrame } from 'data-forge';
 import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../../data/actions/action';
-import { SurveyAnswer } from '../../../api/surveyAnswer';
 
 export const ActionPanelContext = createContext<ActionPanelContextValue>(null!);
 
