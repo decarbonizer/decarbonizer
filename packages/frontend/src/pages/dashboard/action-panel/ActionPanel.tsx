@@ -1,15 +1,4 @@
-import {
-  Heading,
-  Accordion,
-  VStack,
-  Button,
-  useDisclosure,
-  HStack,
-  Spacer,
-  IconButton,
-  Icon,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Heading, Accordion, VStack, useDisclosure, HStack, Spacer, IconButton, Icon, Tooltip } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { knownActionCategories } from '../../../data/actions/action';
 import ActionGroupAccordionItem from './ActionGroupAccordionItem';
