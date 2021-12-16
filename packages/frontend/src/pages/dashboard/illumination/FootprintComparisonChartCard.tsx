@@ -46,7 +46,7 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
-              syncId="compareData"
+              syncId="illuminationFootprintComparison"
               margin={{
                 top: 10,
                 right: 30,
