@@ -77,9 +77,7 @@ export default function DashboardPage() {
             <ActionPanel />
           </Card>
         }>
-        <Flex minH="100%" flexDir="column">
-          <DashboardCharts selectedActionCategory={selectedActionCategory} />
-        </Flex>
+        <DashboardCharts selectedActionCategory={selectedActionCategory} />
       </DefaultPageLayout>
     </DashboardContext.Provider>
   );

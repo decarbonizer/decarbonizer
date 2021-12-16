@@ -30,7 +30,7 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
   );
 
   return (
-    <>
+    <Flex minH="100%" flexDir="column">
       <Flex justify="space-between">
         <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
         {isLoadingActionPlans && <Skeleton w="80" h="10" />}
@@ -72,8 +72,8 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
             mt="8"
             mb="4"
           />
-          <SimpleGrid columns={isComparingPlans ? 2 : 1} gap={8}>
-            <Box flexGrow={1} mb="8" display="flex" alignItems="stretch">
+          <SimpleGrid flexGrow={1} columns={isComparingPlans ? 2 : 1} mb="8" gap={8}>
+            <Box flexGrow={1} display="flex" alignItems="stretch">
               <ActionChartsSection isNarrow={isComparingPlans} />
             </Box>
             {isComparingPlans && (
@@ -85,6 +85,6 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
           </SimpleGrid>
         </>
       )}
-    </>
+    </Flex>
   );
 }
