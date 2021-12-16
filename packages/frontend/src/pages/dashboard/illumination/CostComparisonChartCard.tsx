@@ -46,17 +46,25 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
             externalCalculationData,
             illuminationSurveyAnswers.map((answer) => answer.value),
             year,
-          ),
+          ).maintenanceCostThisYear,
         ),
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
-          getTransformedIlluminationMaintenanceCostForYear(
-            externalCalculationData,
-            illuminationSurveyAnswers,
-            filledActionAnswersDf,
-            year,
-          ),
+          year === 1
+            ? getTransformedIlluminationMaintenanceCostForYear(
+                externalCalculationData,
+                illuminationSurveyAnswers,
+                filledActionAnswersDf,
+                year,
+              ).costOnReplace
+            : 0 +
+                getTransformedIlluminationMaintenanceCostForYear(
+                  externalCalculationData,
+                  illuminationSurveyAnswers,
+                  filledActionAnswersDf,
+                  year,
+                ).maintenanceCostThisYear,
         ),
       );
       const oldCostsPerYear = oldMaintenanceCosts.map(

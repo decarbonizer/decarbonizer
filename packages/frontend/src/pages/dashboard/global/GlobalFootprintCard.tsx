@@ -1,4 +1,5 @@
 import { SkeletonText } from '@chakra-ui/skeleton';
+import { DataFrame } from 'data-forge';
 import { GiFootprint } from 'react-icons/gi';
 import { useParams } from 'react-router';
 import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
@@ -19,7 +20,16 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
-      const footprint = getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, filledActionAnswersDf);
+      const actionAnswers = externalCalculationData.actionPlans
+        .filter((actionPlan) => actionPlan.realEstateId === realEstateId)
+        .flatMap((actionPlan) => actionPlan.actionAnswers);
+
+      const allActionAnswers = actionAnswers ? [...actionAnswers, ...filledActionAnswersDf] : filledActionAnswersDf;
+      const footprint = getTransformedFootprintPerYear(
+        externalCalculationData,
+        surveyAnswers,
+        new DataFrame(allActionAnswers),
+      );
       return {
         footprint,
       };
