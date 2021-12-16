@@ -16,7 +16,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
         name: 'Bulb 1380 lum',
         watt: 100,
         productionKwh: 0.1,
-        costInEuro: 0.5,
+        costInEuro: 4.99,
         lifetimeInHours: 1000,
       },
       {
@@ -24,7 +24,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
         name: 'Bulb 710 lum',
         watt: 60,
         productionKwh: 0.06,
-        costInEuro: 0.4,
+        costInEuro: 0.89,
         lifetimeInHours: 1500,
       },
       {
@@ -32,7 +32,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
         name: 'LED 1300 lum',
         watt: 10,
         productionKwh: 0.01,
-        costInEuro: 8.5,
+        costInEuro: 19.95,
         lifetimeInHours: 30000,
       },
       {
@@ -40,7 +40,7 @@ export class BulbSeeder extends DefaultDbSeeder<Bulb> {
         name: 'LED 800 lum',
         watt: 6,
         productionKwh: 0.006,
-        costInEuro: 5,
+        costInEuro: 7.99,
         lifetimeInHours: 30000,
       },
     ];

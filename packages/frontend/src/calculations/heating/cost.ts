@@ -71,6 +71,10 @@ export function getHeatingCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, HeatingSurveyAnswerValue>,
 ) {
+  if (surveyAnswers.count() === 0) {
+    return 0;
+  }
+
   return surveyAnswers
     .map((answer) => getHeatingCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);
@@ -83,6 +87,10 @@ export function getHeatingInstallationCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, HeatingSurveyAnswerValue>,
 ) {
+  if (surveyAnswers.count() === 0) {
+    return 0;
+  }
+
   return surveyAnswers
     .map((answer) => getHeatingInstallationCostForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);

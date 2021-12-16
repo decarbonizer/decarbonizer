@@ -17,7 +17,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
-          realEstateName: 'Always On',
+          realEstateName: 'Reception',
           isInitialSurvey: true,
           lampCount: 10,
           bulbType: '00000000-0000-0000-0000-000000000000',
@@ -31,7 +31,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
-          realEstateName: 'Manually',
+          realEstateName: 'Conference room',
           isInitialSurvey: true,
           lampCount: 10,
           bulbType: '00000000-0000-0000-0000-000000000001',
@@ -47,7 +47,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
-          realEstateName: 'Motion Triggered',
+          realEstateName: 'Kitchen',
           isInitialSurvey: true,
           lampCount: 10,
           bulbType: '00000000-0000-0000-0000-000000000002',
@@ -64,7 +64,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
-          realEstateName: 'Time Triggered',
+          realEstateName: 'CEO Office',
           isInitialSurvey: true,
           lampCount: 10,
           bulbType: '00000000-0000-0000-0000-000000000003',
@@ -80,7 +80,7 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         userId: '00000000-0000-0000-0000-000000000000',
         realEstateId: '00000000-0000-0000-0000-000000000000',
         value: {
-          realEstateName: 'Brightness Triggered',
+          realEstateName: 'Main Hall',
           isInitialSurvey: true,
           lampCount: 123,
           bulbType: '00000000-0000-0000-0000-000000000001',
