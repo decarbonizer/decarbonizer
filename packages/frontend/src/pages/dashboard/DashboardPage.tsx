@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, SimpleGrid } from '@chakra-ui/react';
+import { Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import { RealEstatePageParams, routes } from '../../routes';

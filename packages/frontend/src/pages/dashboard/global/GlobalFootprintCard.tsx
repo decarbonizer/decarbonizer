@@ -1,9 +1,11 @@
 import { SkeletonText } from '@chakra-ui/skeleton';
 import { GiFootprint } from 'react-icons/gi';
+import { useParams } from 'react-router';
 import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
+import { RealEstatePageParams } from '../../../routes';
 import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
@@ -11,16 +13,21 @@ import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 
 export default function GlobalFootprintCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const { isLoading, data, error } = useCalculation(
-    (externalCalculationData) =>
-      getTransformedFootprintPerYear(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
-      ),
+    (externalCalculationData) => {
+      const surveyAnswers = externalCalculationData.surveyAnswers.filter(
+        (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
+      );
+      const footprint = getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, filledActionAnswersDf);
+      return {
+        footprint,
+      };
+    },
     [filledActionAnswersDf],
   );
-  const carbonFootprint = data?.globalFootprint ?? 0;
+
+  const carbonFootprint = data?.footprint.globalFootprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
