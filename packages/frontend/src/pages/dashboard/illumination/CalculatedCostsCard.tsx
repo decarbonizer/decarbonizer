@@ -5,7 +5,7 @@ import { transformIlluminationSurveyAnswers } from '../../../calculations/illumi
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {

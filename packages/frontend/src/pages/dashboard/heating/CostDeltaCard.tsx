@@ -5,7 +5,7 @@ import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
 import HaloIcon from '../../../components/HaloIcon';
 import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { getHeatingCostDelta } from '../../../calculations/heating/cost';

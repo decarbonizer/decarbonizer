@@ -107,6 +107,18 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
           <Heading size="xs"></Heading>
         </VStack>
         <Spacer />
+        <Tooltip label="Dashboard" hasArrow>
+          <IconButton
+            aria-label="Dashboard"
+            icon={<FaEdit />}
+            mr="1"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
+            }}
+          />
+        </Tooltip>
         <Tooltip label="Edit" hasArrow>
           <IconButton
             aria-label="edit"

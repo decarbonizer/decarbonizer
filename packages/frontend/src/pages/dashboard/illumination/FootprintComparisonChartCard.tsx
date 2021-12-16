@@ -6,7 +6,7 @@ import {
 } from '../../../calculations/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../action-panel/actionPanelContext';
+import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
@@ -46,7 +46,7 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
-              syncId="compareData"
+              syncId="illuminationFootprintComparison"
               margin={{
                 top: 10,
                 right: 30,

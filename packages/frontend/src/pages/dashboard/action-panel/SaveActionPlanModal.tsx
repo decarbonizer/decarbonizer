@@ -68,7 +68,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
         startDate: data.duration.startDate!,
         endDate: data.duration.endDate!,
         status: data.status,
-        actionAnswers: actionPlan.actionAnswers,
+        actionAnswers: actionAnswers ?? actionPlan.actionAnswers,
       };
 
       updateActionPlan({ id: actionPlan._id, body })
@@ -81,6 +81,8 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             isClosable: true,
             duration: 5000,
           });
+
+          history.push(routes.actionPlans({ realEstateId }));
           onClose();
         })
         .catch(() =>
