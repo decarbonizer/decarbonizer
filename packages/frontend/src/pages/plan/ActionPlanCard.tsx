@@ -31,6 +31,7 @@ import { useCalculation } from '../../calculations/useCalculation';
 import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
+import { RiDashboardFill } from 'react-icons/ri';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -110,7 +111,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         <Tooltip label="Dashboard" hasArrow>
           <IconButton
             aria-label="Dashboard"
-            icon={<FaEdit />}
+            icon={<RiDashboardFill />}
             mr="1"
             onClick={(e) => {
               e.preventDefault();

@@ -9,7 +9,8 @@ export const changeBulbsAction: Action<IlluminationSurveyAnswerValue> = {
   id: 'changeBulbs',
   name: 'Change Bulbs',
   icon: AiOutlineBulb,
-  description: 'Upgrading the light bulbs in your office may have a positive effect on your carbon footprint.',
+  description:
+    'Upgrading the light bulbs in your office may have a positive effect on your carbon footprint. LEDs tend to produce less footprint',
   forSurvey: 'illumination',
   getSchema: () => {
     return {

@@ -13,11 +13,11 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
     return [
       {
         _id: '6072d9ed-bb02-4809-a1a0-a677a60e35ff',
-        name: 'Dieter',
+        name: 'Dieter Plan 2022',
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
-        endDate: new Date('2022-01-30T23:00:00.000Z'),
-        startDate: new Date('2021-12-31T23:00:00.000Z'),
+        endDate: new Date('2023-01-01T01:00:00.000Z'),
+        startDate: new Date('2022-01-01T01:00:00.000Z'),
         status: 'open',
         actionAnswers: [
           {
@@ -56,12 +56,12 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
       },
       {
         _id: '77a11e98-9c73-4273-ae6e-ae650cfe6030',
-        name: 'Hans',
+        name: 'Hans Plan 2022',
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
-        endDate: new Date('2021-12-30T23:00:00.000Z'),
-        startDate: new Date('2021-12-20T23:00:00.000Z'),
-        status: 'inProgress',
+        endDate: new Date('2023-01-01T01:00:00.000Z'),
+        startDate: new Date('2022-01-01T01:00:00.000Z'),
+        status: 'open',
         actionAnswers: [
           {
             actionId: 'changeBulbs',
