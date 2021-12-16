@@ -59,15 +59,19 @@ export default function CityCard({ realEstate }: CityCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
       );
-      const actionAnswers = externalCalculationData.actionPlans
-        .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-        .flatMap((actionPlan) => actionPlan.actionAnswers);
+      // const actionAnswers = externalCalculationData.actionPlans
+      //   .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
+      //   .flatMap((actionPlan) => actionPlan.actionAnswers);
 
-      const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
+      // const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
 
       const footprint =
         surveyAnswers.count() > 0
-          ? getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, allActionAnswers).globalFootprint
+          ? getTransformedFootprintPerYear(
+              externalCalculationData,
+              surveyAnswers,
+              new DataFrame<number, ActionAnswerBase>(),
+            ).globalFootprint
           : 0;
 
       return {

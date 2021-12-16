@@ -20,15 +20,16 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
-      const actionAnswers = externalCalculationData.actionPlans
-        .filter((actionPlan) => actionPlan.realEstateId === realEstateId)
-        .flatMap((actionPlan) => actionPlan.actionAnswers);
+      // const actionAnswers = externalCalculationData.actionPlans
+      //   .filter((actionPlan) => actionPlan.realEstateId === realEstateId)
+      //   .flatMap((actionPlan) => actionPlan.actionAnswers);
 
-      const allActionAnswers = actionAnswers ? [...actionAnswers, ...filledActionAnswersDf] : filledActionAnswersDf;
+      // const allActionAnswers = actionAnswers ? [...actionAnswers, ...filledActionAnswersDf] : filledActionAnswersDf;
       const footprint = getTransformedFootprintPerYear(
         externalCalculationData,
         surveyAnswers,
-        new DataFrame(allActionAnswers),
+        //new DataFrame(allActionAnswers),
+        filledActionAnswersDf,
       );
       return {
         footprint,
