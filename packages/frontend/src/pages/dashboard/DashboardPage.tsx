@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid } from '@chakra-ui/react';
+import { Button, Flex, HStack, SimpleGrid } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../store/api';
 import { RealEstatePageParams, routes } from '../../routes';
@@ -8,12 +8,9 @@ import { ActionPanelContext, FilledActionAnswers } from './action-panel/actionPa
 import EmptyState from '../../components/EmptyState';
 import cloud from '../../img/cloud.svg';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
-import ChartSectionHeader from './components/ChartSectionHeader';
-import ComparisonCard from './global/ComparisonCard';
 import { ActionCategory } from '../../data/actions/action';
-import GlobalFootprintCard from './global/GlobalFootprintCard';
 import Card from '../../components/Card';
-import ActionChartsSection from './ActionChartsSection';
+import DashboardCharts from './DashboardCharts';
 
 export default function DashboardPage() {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -21,6 +18,7 @@ export default function DashboardPage() {
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const [selectedActionCategory, setSelectedActionCategory] = useState<ActionCategory | undefined>(undefined);
   const history = useHistory();
+  const isNarrow = true;
 
   if (!surveyAnswers) {
     return null;
@@ -61,36 +59,21 @@ export default function DashboardPage() {
             <ActionPanel />
           </Card>
         }>
-        <Flex minH="100%" flexDir="column">
-          <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-            <GlobalFootprintCard />
-            {/* <NetZeroCard
-              startCarbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0}
-              reducedValue={1000}
-            /> */}
-            <ComparisonCard gridColumn="3 / span 2" />
-          </Grid>
-          {selectedActionCategory && (
-            <>
-              <ChartSectionHeader
-                header="Action Impact"
-                description="What impact do your currently visible actions to the left have?"
-                mt="8"
-                mb="4"
+        <SimpleGrid spacing="8" columns={isNarrow ? 2 : 1}>
+          <Flex minH="100%" flexDir="column">
+            <DashboardCharts selectedActionCategory={selectedActionCategory} isNarrow={isNarrow} showHeaders={true} />
+          </Flex>
+          {isNarrow && (
+            <Flex minH="100%" flexDir="column">
+              <DashboardCharts
+                selectedActionCategory={selectedActionCategory}
+                isNarrow={isNarrow}
+                showHeaders={false}
               />
-              <Box flexGrow={1} mb="8" display="flex" alignItems="stretch">
-                <ActionChartsSection />
-              </Box>
-            </>
+            </Flex>
           )}
-        </Flex>
+        </SimpleGrid>
       </DefaultPageLayout>
     </ActionPanelContext.Provider>
   );
 }
-
-// function getFootprint(answers: SurveyAnswer<object>[], bulbs: Bulb[]): number {
-//   const value = calculateOverallFootprint(answers, bulbs, 1);
-//   return +value[0].footprint.toFixed(1);
-// }

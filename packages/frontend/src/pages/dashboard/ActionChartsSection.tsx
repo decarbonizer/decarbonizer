@@ -10,7 +10,11 @@ const chartSections = {
   heating: HeatingChartsSection,
 };
 
-export default function ActionChartsSection() {
+export interface ActionChartsSectionProps {
+  isNarrow: boolean;
+}
+
+export default function ActionChartsSection({ isNarrow }: ActionChartsSectionProps) {
   const { selectedActionCategory } = useContext(ActionPanelContext);
   const ChartSection = chartSections[selectedActionCategory?.id ?? ''];
 
@@ -18,5 +22,5 @@ export default function ActionChartsSection() {
     return null;
   }
 
-  return <ChartSection />;
+  return <ChartSection isNarrow={isNarrow} />;
 }
