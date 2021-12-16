@@ -155,7 +155,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
                   />
                   <Area
                     type="monotone"
-                    dataKey="Old maintenance costss"
+                    dataKey="Old maintenance costs"
                     stroke="#B794F4"
                     strokeWidth={3}
                     fill="#B794F477"
