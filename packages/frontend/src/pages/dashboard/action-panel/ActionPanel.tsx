@@ -5,20 +5,16 @@ import ActionGroupAccordionItem from './ActionGroupAccordionItem';
 import { DashboardContext } from '../dashboardContext';
 import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
-import { useGetRealEstateQuery } from '../../../store/api';
-import { useParams } from 'react-router';
-import { RealEstatePageParams } from '../../../routes';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
   const { actionPlanToEdit, filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
-  const { data: currentRealEstate } = useGetRealEstateQuery({ id: useParams<RealEstatePageParams>().realEstateId });
 
   return (
     <VStack align="flex-start" w="100%">
       <Heading as="h2" size="lg" pb="5" isTruncated>
-        {currentRealEstate?.cityName}
+        {actionPlanToEdit?.name ?? 'New action plan'}
       </Heading>
       <Accordion
         minW="100%"
