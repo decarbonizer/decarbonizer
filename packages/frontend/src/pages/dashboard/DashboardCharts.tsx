@@ -31,7 +31,7 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
 
   return (
     <Flex minH="100%" flexDir="column">
-      <Flex justify="space-between">
+      <Flex justify="space-between" pos="sticky" top="5rem">
         <ChartSectionHeader header="Global" description="How does this real estate compare to others?" mb="4" />
         {isLoadingActionPlans && <Skeleton w="80" h="10" />}
         {actionPlans && comparableActionPlans.length && (

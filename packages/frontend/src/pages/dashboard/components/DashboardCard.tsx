@@ -16,12 +16,13 @@ export default function DashboardCard({ header, children, headerControls, isExpa
     <Card
       p="6"
       {...rest}
+      isStatic={isExpanded ? true : rest.isStatic}
       zIndex={isExpanded ? 100 : rest.zIndex}
       position={isExpanded ? 'fixed' : rest.position}
-      top={isExpanded ? '1rem' : rest.top}
+      top={isExpanded ? '5rem' : rest.top}
       bottom={isExpanded ? '1rem' : rest.bottom}
       left={isExpanded ? '30rem' : rest.left}
-      right={isExpanded ? '1rem' : rest.right}>
+      right={isExpanded ? '2rem' : rest.right}>
       <VStack alignItems="stretch" spacing="4" h="100%">
         <HStack align="flex-start">
           <Heading as="h3" size="sm" color="gray.600" isTruncated>
