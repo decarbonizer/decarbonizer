@@ -22,7 +22,6 @@ export default function DashboardPage() {
   const [filledActionAnswers, setFilledActionAnswers] = useState<FilledActionAnswers>({});
   const [selectedActionCategory, setSelectedActionCategory] = useState<ActionCategory | undefined>(undefined);
   const history = useHistory();
-  const isNarrow = false;
 
   useEffect(
     function populateFilledActionsFromActionPlan() {
@@ -79,7 +78,7 @@ export default function DashboardPage() {
           </Card>
         }>
         <Flex minH="100%" flexDir="column">
-          <DashboardCharts selectedActionCategory={selectedActionCategory} isNarrow={isNarrow} showHeaders={true} />
+          <DashboardCharts selectedActionCategory={selectedActionCategory} />
         </Flex>
       </DefaultPageLayout>
     </DashboardContext.Provider>
