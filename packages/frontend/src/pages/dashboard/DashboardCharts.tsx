@@ -4,6 +4,7 @@ import ActionChartsSection from './ActionChartsSection';
 import ChartSectionHeader from './components/ChartSectionHeader';
 import ComparisonCard from './global/ComparisonCard';
 import GlobalFootprintCard from './global/GlobalFootprintCard';
+import NetZeroCard from './global/NetZeroCard';
 
 export interface DashboardChartsProps {
   isNarrow: boolean;
@@ -25,10 +26,7 @@ export default function DashboardCharts({ isNarrow, showHeaders, selectedActionC
         templateColumns={isNarrow ? '1fr' : 'repeat(4, 1fr)'}
         gap={6}>
         <GlobalFootprintCard />
-        {/* <NetZeroCard
-              startCarbonFootprint={surveyAnswers && bulbs ? getFootprint(surveyAnswers, bulbs) : 0}
-              reducedValue={1000}
-            /> */}
+        <NetZeroCard />
         <ComparisonCard gridColumn={isNarrow ? undefined : 'span 2'} />
       </Grid>
       {selectedActionCategory && (
