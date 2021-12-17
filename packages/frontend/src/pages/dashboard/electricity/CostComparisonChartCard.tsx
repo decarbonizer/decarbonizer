@@ -6,24 +6,23 @@ import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import ComparisonChartCard from '../components/ComparisonChartCard';
 import {
-  getHeatingCostPerYear,
-  getTransformedHeatingCostPerYear,
-  getTransformedHeatingInstallationCostPerYear,
-} from '../../../calculations/heating/cost';
+  getElectricityCostPerYear,
+  getTransformedElectricityCostPerYear,
+} from '../../../calculations/electricity/cost';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const heatingSurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'heating');
-      const oldHeatingCostsPerYear = Math.round(
-        getHeatingCostPerYear(
+      const electricitySurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'electricity');
+      const oldCostsPerYear = Math.round(
+        getElectricityCostPerYear(
           externalCalculationData,
-          heatingSurveyAnswers.map((answer) => answer.value),
+          electricitySurveyAnswers.map((answer) => answer.value),
         ),
       );
-      const newHeatingCostsPerYear = Math.round(
-        getTransformedHeatingCostPerYear(
+      const newCostsPerYear = Math.round(
+        getTransformedElectricityCostPerYear(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
@@ -31,25 +30,11 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       );
 
       const years = new Series(range(1, 11));
-      const oldMaintenanceCosts = years.map(() => 0);
-      const newMaintenanceCosts = years.map((year) =>
-        year === 1
-          ? getTransformedHeatingInstallationCostPerYear(
-              externalCalculationData,
-              externalCalculationData.surveyAnswers,
-              filledActionAnswersDf,
-            )
-          : 0,
-      );
-
-      const oldCostsPerYear = oldMaintenanceCosts.map((maintenanceCost) => maintenanceCost + oldHeatingCostsPerYear);
-      const newCostsPerYear = newMaintenanceCosts.map((maintenanceCost) => maintenanceCost + newHeatingCostsPerYear);
-
       return years
         .map((year) => ({
           Year: year,
-          'Old costs': oldCostsPerYear.take(year).sum(),
-          'New costs': newCostsPerYear.take(year).sum(),
+          'Old costs': year * oldCostsPerYear,
+          'New costs': year * newCostsPerYear,
         }))
         .toArray();
     },
@@ -63,7 +48,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       data={data}
       isLoading={isLoading}
       error={error}
-      syncId="heatingCostComparison"
+      syncId="electricityCostComparison"
       oldDataKey="Old costs"
       newDataKey="New costs"
     />

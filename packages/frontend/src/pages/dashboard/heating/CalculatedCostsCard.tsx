@@ -36,7 +36,7 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText noOfLines={6} spacing="4" />}
         {data && (
-          <Table variant="" size="sm" overflowY="auto">
+          <Table variant="">
             <Tbody>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">

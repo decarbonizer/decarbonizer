@@ -32,10 +32,6 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
           <Table variant="">
             <Tbody>
               <Tr>
-                <Td fontWeight="bold" fontSize="lg" pl="0" />
-                <Td />
-              </Tr>
-              <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">
                   {data.electricityCosts.toFixed(2)}€
                 </Td>
