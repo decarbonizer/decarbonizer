@@ -10,6 +10,7 @@ import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
+import { mapDeltaType } from '../../../utils/deltaType';
 
 export default function NetZeroCard() {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
@@ -33,7 +34,13 @@ export default function NetZeroCard() {
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
-          <QuickInfo icon={<HaloIcon icon={BiTargetLock} />}>
+          <QuickInfo
+            icon={
+              <HaloIcon
+                icon={BiTargetLock}
+                colorScheme={mapDeltaType(data.netZero.deltaType, 'red', 'green', 'gray')}
+              />
+            }>
             <QuickInfoLabelDescription label={`${data?.netZero.newAdjustedAchievedGoal.toFixed(1)} %`} />
           </QuickInfo>
         )}
