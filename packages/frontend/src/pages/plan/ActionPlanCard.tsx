@@ -11,9 +11,10 @@ import {
   Badge,
   HStack,
   SkeletonText,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
-import { BiTargetLock } from 'react-icons/bi';
+import { BiEuro, BiTargetLock, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { ActionPlan, ActionPlanStatus } from '../../api/actionPlan';
@@ -32,6 +33,9 @@ import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
+import { getIlluminationElectricityCostDelta } from '../../calculations/illumination/electricityCost';
+import { TiEquals } from 'react-icons/ti';
+import { getHeatingCostDelta } from '../../calculations/heating/cost';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -61,6 +65,21 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
+      //TODO: Put this in new function which calculates all costs
+      const illuminationCosts = getIlluminationElectricityCostDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        new DataFrame(currentActionPlan.actionAnswers),
+      );
+
+      const heatingCosts = getHeatingCostDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        new DataFrame(currentActionPlan.actionAnswers),
+      );
+
+      const combinedCosts = heatingCosts.delta + illuminationCosts.delta;
+
       const delta =
         netZeroCalculation.delta < 0 ? Math.abs(netZeroCalculation.delta) : -Math.abs(netZeroCalculation.delta);
       const achievedGoal = delta / (netZeroCalculation.originalFootprint / 100);
@@ -69,6 +88,9 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       return {
         footPrintDelta,
         netZeroCalculation,
+        illuminationCosts,
+        heatingCosts,
+        combinedCosts,
         adjustedAchievedGoal,
       };
     },
@@ -92,7 +114,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
   };
 
   return (
-    <Card as="button" pos="relative" display="flex" flexDir="column" w="sm" h="sm" onClick={onClick}>
+    <Card as="button" pos="relative" display="flex" flexDir="column" w="lg" h="lg" onClick={onClick}>
       <Flex w="100%" pl="5" pt="3" pr="2">
         <VStack align="flex-start">
           <HStack>
@@ -148,7 +170,8 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
         {data && (
-          <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
+          // <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
+          <SimpleGrid rows="{4}" h="100%" pl="10">
             <QuickInfo
               icon={
                 <HaloIcon
@@ -163,16 +186,9 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
                   </>
                 }
-                furtherDescription={
-                  <>
-                    {`Before: ${data.footPrintDelta.originalFootprint.toFixed(2)}, `}
-                    {`After: ${data.footPrintDelta.footprintAfterActions.toFixed(2)}`}
-                  </>
-                }
               />
             </QuickInfo>
             <QuickInfo
-              pt="8"
               icon={
                 <HaloIcon
                   icon={BiTargetLock}
@@ -180,17 +196,47 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                 />
               }>
               <QuickInfoLabelDescription
-                label={
+                label={<>{`${data.adjustedAchievedGoal} %`}</>}
+                description={
                   <>
-                    {data.netZeroCalculation.deltaType === 'decrease'
-                      ? `⬆ ${data.adjustedAchievedGoal} %`
-                      : `⬇ ${data.adjustedAchievedGoal} %`}
+                    Net-Zero
+                    {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
+                    by {data.adjustedAchievedGoal} %
                   </>
                 }
-                description={'Net-Zero after fulfilling the action plan.'}
               />
             </QuickInfo>
-          </VStack>
+            {/* <QuickInfo
+              icon={
+                <HaloIcon
+                  icon={BiEuro}
+                  colorScheme={mapDeltaType(data.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                />
+              }>
+              <QuickInfoLabelDescription
+                label={`${Math.abs(data.illuminationCosts.costAfterActions).toFixed(2)}€`}
+                description="electricity costs per year"
+              />
+            </QuickInfo> */}
+            <QuickInfo
+              icon={
+                <HaloIcon
+                  icon={data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown}
+                  colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                />
+              }>
+              <QuickInfoLabelDescription
+                label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
+                description={
+                  <>
+                    {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity costs
+                  </>
+                }
+              />
+            </QuickInfo>
+          </SimpleGrid>
+
+          // </VStack>
         )}
       </InlineErrorDisplay>
       <SaveActionPlanModal isOpen={isOpenEditModal} onClose={onCloseEditModal} actionPlan={currentActionPlan} />
