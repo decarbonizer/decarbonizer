@@ -3,11 +3,15 @@ import { DashboardContext } from './dashboardContext';
 import HeatingChartsSection from './heating/HeatingChartSection';
 import IlluminationChartsSection from './illumination/IlluminationChartSection';
 import ElectricityChartsSection from './electricity/ElectricityChartSection';
+import BusinessTravelChartSection from './businessTravel/BusinessTravelChartSection';
+import ItChartSection from './it/ItChartSection';
 
 const chartSections = {
   electricity: ElectricityChartsSection,
   illumination: IlluminationChartsSection,
   heating: HeatingChartsSection,
+  businessTravel: BusinessTravelChartSection,
+  it: ItChartSection,
 };
 
 export interface ActionChartsSectionProps {
