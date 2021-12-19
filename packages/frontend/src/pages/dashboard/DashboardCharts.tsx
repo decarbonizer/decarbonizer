@@ -25,7 +25,7 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
   const [actionPlanComparand, setActionPlanComparand] = useState<ActionPlan | undefined>(undefined);
   const isComparingPlans = !!actionPlanComparand;
   const actionPlanComparandAnswers = (actionPlanComparand?.actionAnswers ?? []).reduce<FilledActionAnswers>(
-    (acc, actionAnswer) => ({ ...acc, [actionAnswer._id as KnownActionId]: actionAnswer }),
+    (acc, actionAnswer) => ({ ...acc, [actionAnswer.actionId as KnownActionId]: actionAnswer }),
     {},
   );
 
