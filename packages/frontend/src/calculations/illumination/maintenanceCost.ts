@@ -59,14 +59,14 @@ function getIlluminationMaintenanceCostForSingleSurveyAnswer(
   { bulbs }: ExternalCalculationData,
   answer: IlluminationSurveyAnswerValue,
 ) {
-  const avgElectritianWagePerHour = 12.0; // Minimum wage in Germany as of soon. :^)
-  const avgElectritianWagePerBulb = avgElectritianWagePerHour / 6; // assume that it takes 10 min to change a bulb
+  const avgElectricianWagePerHour = 12.0; // Minimum wage in Germany as of soon. :^)
+  const avgElectricianWagePerBulb = avgElectricianWagePerHour / 6; // assume that it takes 10 min to change a bulb
 
   const bulb = bulbs.filter((bulb) => bulb._id === answer.bulbType).first();
   const bulbLifetime = bulb.lifetimeInHours;
   const runtimeInHoursPerYear = getIlluminationRuntimePerYear(answer);
   const runtimeInHoursPerYearPerBulb = runtimeInHoursPerYear / answer.lampCount;
-  const costOnReplace = answer.lampCount * bulb.costInEuro + answer.lampCount * avgElectritianWagePerBulb;
+  const costOnReplace = answer.lampCount * bulb.costInEuro + answer.lampCount * avgElectricianWagePerBulb;
 
   return {
     costOnReplace,

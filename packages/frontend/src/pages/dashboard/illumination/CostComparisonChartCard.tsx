@@ -1,8 +1,7 @@
-import { Select, SkeletonText } from '@chakra-ui/react';
-import { DataFrame, Series } from 'data-forge';
+import { Select } from '@chakra-ui/react';
+import { Series } from 'data-forge';
 import range from 'lodash-es/range';
 import { useState } from 'react';
-import { CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart, Legend, ResponsiveContainer } from 'recharts';
 import {
   getIlluminationElectricityCostPerYear,
   getTransformedIlluminationElectricityCostPerYear,
@@ -13,9 +12,11 @@ import {
 } from '../../../calculations/illumination/maintenanceCost';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
-import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
-import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
+import { DashboardCardProps } from '../components/DashboardCard';
+import ComparisonChartCard from '../components/ComparisonChartCard';
+
+type CostCategory = 'all' | 'electricity' | 'maintenance';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
@@ -88,84 +89,51 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
     },
     [filledActionAnswersDf],
   );
-  const [selectedCostCategory, setSelectedCostCategory] = useState('all');
+  const [selectedCostCategory, setSelectedCostCategory] = useState<CostCategory>('all');
+
+  const { oldDataKey, newDataKey } = getDataKeys();
 
   return (
-    <DashboardCard
-      header="Cost comparison over 10 years"
-      isExpandable
+    <ComparisonChartCard
+      {...props}
       headerControls={
-        <Select size="sm" maxW="40" defaultValue="all" onChange={(e) => setSelectedCostCategory(e.target.value)}>
+        <Select
+          size="sm"
+          maxW="40"
+          defaultValue="all"
+          onChange={(e) => setSelectedCostCategory(e.target.value as CostCategory)}>
           <option value="all">All</option>
           <option value="electricity">Electricity</option>
           <option value="maintenance">Maintenance</option>
         </Select>
       }
-      {...props}>
-      <InlineErrorDisplay error={error}>
-        {isLoading && <SkeletonText />}
-        {data && (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              data={data}
-              syncId="illuminationCostComparison"
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 15,
-              }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="Year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              {selectedCostCategory === 'all' && (
-                <>
-                  <Area type="monotone" dataKey="New costs" stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
-                  <Area type="monotone" dataKey="Old costs" stroke="#B794F4" strokeWidth={3} fill="#B794F477" />
-                </>
-              )}
-              {selectedCostCategory === 'electricity' && (
-                <>
-                  <Area
-                    type="monotone"
-                    dataKey="New electricity costs"
-                    stroke="#9AE6B4"
-                    strokeWidth={3}
-                    fill="#9AE6B477"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="Old electricity costs"
-                    stroke="#B794F4"
-                    strokeWidth={3}
-                    fill="#B794F477"
-                  />
-                </>
-              )}
-              {selectedCostCategory === 'maintenance' && (
-                <>
-                  <Area
-                    type="monotone"
-                    dataKey="New maintenance costs"
-                    stroke="#9AE6B4"
-                    strokeWidth={3}
-                    fill="#9AE6B477"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="Old maintenance costs"
-                    stroke="#B794F4"
-                    strokeWidth={3}
-                    fill="#B794F477"
-                  />
-                </>
-              )}
-            </AreaChart>
-          </ResponsiveContainer>
-        )}
-      </InlineErrorDisplay>
-    </DashboardCard>
+      header="Cost comparison over 10 years"
+      data={data}
+      isLoading={isLoading}
+      error={error}
+      syncId="illuminationCostComparison"
+      oldDataKey={oldDataKey}
+      newDataKey={newDataKey}
+    />
   );
+
+  function getDataKeys() {
+    switch (selectedCostCategory) {
+      case 'all':
+        return {
+          oldDataKey: 'Old costs',
+          newDataKey: 'New costs',
+        };
+      case 'electricity':
+        return {
+          oldDataKey: 'Old electricity costs',
+          newDataKey: 'New electricity costs',
+        };
+      case 'maintenance':
+        return {
+          oldDataKey: 'Old maintenance costs',
+          newDataKey: 'New maintenance costs',
+        };
+    }
+  }
 }

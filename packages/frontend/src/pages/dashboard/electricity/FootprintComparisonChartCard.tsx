@@ -1,27 +1,24 @@
-import {
-  getIlluminationFootprintPerYear,
-  getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
+import {
+  getElectricityFootprintPerYear,
+  getTransformedElectricityFootprintPerYear,
+} from '../../../calculations/electricity/footprint';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
-        externalCalculationData.surveyAnswers,
-        'illumination',
-      );
-      const oldFootprintPerYear = getIlluminationFootprintPerYear(
+      const electricitySurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'electricity');
+      const oldFootprintPerYear = getElectricityFootprintPerYear(
         externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
+        electricitySurveyAnswers.map((answer) => answer.value),
       );
-      const newFootprintPerYear = getTransformedIlluminationFootprintPerYear(
+      const newFootprintPerYear = getTransformedElectricityFootprintPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
@@ -43,7 +40,7 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
       data={data}
       isLoading={isLoading}
       error={error}
-      syncId="illuminationFootprintComparison"
+      syncId="electricityFootprintComparison"
       oldDataKey="Old footprint"
       newDataKey="New footprint"
     />
