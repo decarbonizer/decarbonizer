@@ -13,7 +13,7 @@ export default function DatesFormEngineControl({ element }: FormEngineControlPro
   const startDate = value?.startDate ? new Date(value.startDate) : undefined;
   const endDate = value?.endDate ? new Date(value.endDate) : undefined;
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
-  const years = range(1990, new Date().getFullYear() + 1, 1);
+  const years = range(1990, 2051, 1);
   const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
 
   if (isViewOnly) {
