@@ -11,7 +11,7 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
   icon: GiGreenPower,
   description: 'Switching to another energy form may have a positive effect on your carbon footprint.',
   forSurvey: 'electricity',
-  getSchema: (survey) => {
+  getSchema: () => {
     return {
       pages: [
         {
@@ -20,7 +20,6 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
               id: 'newEnergyForm',
               type: 'single-choice',
               required: false,
-              defaultValue: survey?.value.energyForm,
               options: 'energyForms',
             },
           ],
