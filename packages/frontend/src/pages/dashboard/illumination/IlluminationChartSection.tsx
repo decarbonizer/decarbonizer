@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import CalculatedCostsCard from './CalculatedCostsCard';
 import FootprintDeltaCard from './FootprintDeltaCard';
-import ComparisonOfCostsAndFootprints from './FootprintComparisonChartCard';
+import FootprintComparisonChartCard from './FootprintComparisonChartCard';
 import CostDeltaCard from './CostDeltaCard';
 import CostComparisonChartCard from './CostComparisonChartCard';
 import { ActionChartsSectionProps } from '../ActionChartsSection';
@@ -16,7 +16,7 @@ export default function IlluminationChartsSection({ isNarrow }: ActionChartsSect
       <FootprintDeltaCard />
       <CostDeltaCard gridRow={isNarrow ? undefined : '2'} />
       <CalculatedCostsCard gridRow={isNarrow ? undefined : 'span 2'} />
-      <ComparisonOfCostsAndFootprints />
+      <FootprintComparisonChartCard />
       <CostComparisonChartCard />
     </Grid>
   );

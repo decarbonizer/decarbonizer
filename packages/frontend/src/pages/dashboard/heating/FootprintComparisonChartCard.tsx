@@ -1,27 +1,24 @@
-import {
-  getIlluminationFootprintPerYear,
-  getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
+import {
+  getHeatingFootprintPerYear,
+  getTransformedHeatingFootprintPerYear,
+} from '../../../calculations/heating/footprint';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
-        externalCalculationData.surveyAnswers,
-        'illumination',
-      );
-      const oldFootprintPerYear = getIlluminationFootprintPerYear(
+      const heatingSurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'heating');
+      const oldFootprintPerYear = getHeatingFootprintPerYear(
         externalCalculationData,
-        illuminationSurveyAnswers.map((answer) => answer.value),
+        heatingSurveyAnswers.map((answer) => answer.value),
       );
-      const newFootprintPerYear = getTransformedIlluminationFootprintPerYear(
+      const newFootprintPerYear = getTransformedHeatingFootprintPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
@@ -43,7 +40,7 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
       data={data}
       isLoading={isLoading}
       error={error}
-      syncId="illuminationFootprintComparison"
+      syncId="heatingFootprintComparison"
       oldDataKey="Old footprint"
       newDataKey="New footprint"
     />

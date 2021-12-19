@@ -21,11 +21,7 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
               type: 'single-choice',
               required: false,
               defaultValue: survey?.value.radiatorKind,
-              options: [
-                { display: 'Ground source heat pump', value: '00000000-0000-0000-0000-000000000001' },
-                { display: 'Air source heat pump', value: '00000000-0000-0000-0000-000000000002' },
-                { display: 'Solar thermal', value: '00000000-0000-0000-0000-000000000000' },
-              ],
+              options: 'heatingTypes',
             },
           ],
         },

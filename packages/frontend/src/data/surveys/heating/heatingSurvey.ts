@@ -46,32 +46,7 @@ export const heatingSurvey: Survey = {
             required: true,
             type: 'single-choice',
             label: 'How do you heat',
-            options: [
-              {
-                value: '00000000-0000-0000-0000-000000000000',
-                display: 'Solar thermal',
-              },
-              {
-                value: '00000000-0000-0000-0000-000000000001',
-                display: 'Ground source heat pump',
-              },
-              {
-                value: '00000000-0000-0000-0000-000000000002',
-                display: 'Air source heat pump',
-              },
-              {
-                value: '00000000-0000-0000-0000-000000000003',
-                display: 'Direct electric heating',
-              },
-              {
-                value: '00000000-0000-0000-0000-000000000004',
-                display: 'Gas boiler',
-              },
-              {
-                value: '00000000-0000-0000-0000-000000000005',
-                display: 'Oil boiler',
-              },
-            ],
+            options: 'heatingTypes',
           },
         ],
       },

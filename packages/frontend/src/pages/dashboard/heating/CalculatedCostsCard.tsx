@@ -3,24 +3,31 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedElectricityCostPerYear } from '../../../calculations/electricity/cost';
-import { getTransformedElectricityFootprintPerYear } from '../../../calculations/electricity/footprint';
+import {
+  getTransformedHeatingCostPerYear,
+  getTransformedHeatingInstallationCostPerYear,
+} from '../../../calculations/heating/cost';
+import { getTransformedHeatingFootprintPerYear } from '../../../calculations/heating/footprint';
+import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { transformHeatingSurveyAnswers } from '../../../calculations/heating/transformation';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
-    (externalCalculationData) => ({
-      electricityCosts: getTransformedElectricityCostPerYear(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
-      ),
-      footprint: getTransformedElectricityFootprintPerYear(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
-      ),
-    }),
+    (externalCalculationData) => {
+      return {
+        heatingCosts: getTransformedHeatingCostPerYear(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          filledActionAnswersDf,
+        ),
+        footprint: getTransformedHeatingFootprintPerYear(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          filledActionAnswersDf,
+        ),
+      };
+    },
     [filledActionAnswersDf],
   );
 
@@ -33,15 +40,15 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
             <Tbody>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">
-                  {data.electricityCosts.toFixed(2)}€
+                  {data.heatingCosts.toFixed(2)}€
                 </Td>
-                <Td>Electricity costs per year</Td>
+                <Td>Heating costs per year</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold" fontSize="lg" pl="0">
                   {data.footprint.toFixed(2)}t
                 </Td>
-                <Td>Carbon emissions through electricity</Td>
+                <Td>Carbon emissions through heating</Td>
               </Tr>
             </Tbody>
           </Table>

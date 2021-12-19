@@ -50,7 +50,7 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
   return (
     <DashboardCard header="Calculated costs" {...props}>
       <InlineErrorDisplay error={error ?? bulbCalculations.error}>
-        {isLoading || (bulbCalculations.isLoading && <SkeletonText noOfLines={6} spacing="4" />)}
+        {(isLoading || bulbCalculations.isLoading) && <SkeletonText noOfLines={6} spacing="4" />}
         {data && bulbCalculations.data && (
           <Table variant="" size="sm" overflowY="auto">
             <Tbody>

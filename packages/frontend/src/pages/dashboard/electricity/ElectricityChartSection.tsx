@@ -1,16 +1,23 @@
 import { Grid } from '@chakra-ui/react';
 import FootprintDeltaCard from './FootprintDeltaCard';
 import CostDeltaCard from './CostDeltaCard';
-import ComparisonOfCostsAndFootprints from './CostFootprintComparisonCard';
 import CalculatedCostsCard from './CalculatedCostsCard';
+import FootprintComparisonChartCard from './FootprintComparisonChartCard';
+import CostComparisonChartCard from './CostComparisonChartCard';
+import { ActionChartsSectionProps } from '../ActionChartsSection';
 
-export default function ElectricityChartsSection() {
+export default function ElectricityChartsSection({ isNarrow }: ActionChartsSectionProps) {
   return (
-    <Grid flexGrow={1} templateColumns="repeat(6, 1fr)" templateRows="auto 1fr" gap="6">
-      <FootprintDeltaCard gridRow="1" gridColumn="1 / span 2" />
-      <CostDeltaCard gridRow="1" gridColumn="3 / span 2" />
-      <ComparisonOfCostsAndFootprints gridRow="2 / span 13" gridColumn="1 / span 3" />
-      <CalculatedCostsCard gridRow="15" gridColumn="1 / span 2" />
+    <Grid
+      flexGrow={1}
+      templateRows={isNarrow ? 'auto auto 20rem 20rem 20rem' : 'auto auto 1fr'}
+      templateColumns={isNarrow ? '1fr' : '1fr 1fr'}
+      gap="6">
+      <FootprintDeltaCard />
+      <CostDeltaCard gridRow={isNarrow ? undefined : '2'} />
+      <CalculatedCostsCard gridRow={isNarrow ? undefined : 'span 2'} />
+      <FootprintComparisonChartCard />
+      <CostComparisonChartCard />
     </Grid>
   );
 }
