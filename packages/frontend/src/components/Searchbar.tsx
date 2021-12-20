@@ -12,7 +12,7 @@ export default function Searchbar({ placeholder, onChange }: SearchbarProps) {
     onChange(e.target.value);
   };
   return (
-    <InputGroup bg="white" maxW="md">
+    <InputGroup bg="white" w="md">
       <InputLeftElement>
         <FiSearch color="gray.200" />
       </InputLeftElement>

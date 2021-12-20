@@ -1,20 +1,23 @@
 import {
   VStack,
-  Flex,
   Heading,
   IconButton,
-  Tooltip,
-  Spacer,
   Text,
   useDisclosure,
   useToast,
   Badge,
   HStack,
   SkeletonText,
-  SimpleGrid,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Portal,
+  Box,
 } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
-import { BiEuro, BiTargetLock, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
+import { BiTargetLock, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { ActionPlan, ActionPlanStatus } from '../../api/actionPlan';
@@ -36,6 +39,7 @@ import { RiDashboardFill } from 'react-icons/ri';
 import { getIlluminationElectricityCostDelta } from '../../calculations/illumination/electricityCost';
 import { TiEquals } from 'react-icons/ti';
 import { getHeatingCostDelta } from '../../calculations/heating/cost';
+import { FiMoreHorizontal } from 'react-icons/fi';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -109,104 +113,105 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
     });
   };
 
-  const onClick = () => {
-    history.push(routes.realEstateDashboard({ realEstateId }));
-  };
-
   return (
-    <Card as="button" pos="relative" display="flex" flexDir="column" w="lg" h="lg" onClick={onClick}>
-      <Flex w="100%" pl="5" pt="3" pr="2">
-        <VStack align="flex-start">
-          <HStack>
-            <Heading size="md" fontWeight="semibold" pt="3" justifyContent="center">
-              {currentActionPlan.name}
-            </Heading>
-            {<BadgeStatus status={currentActionPlan.status} />}
-          </HStack>
-          <Text>
-            {new Date(currentActionPlan.startDate).toLocaleDateString()} -{' '}
-            {new Date(currentActionPlan.endDate).toLocaleDateString()}
-          </Text>
-          <Heading size="xs"></Heading>
-        </VStack>
-        <Spacer />
-        <Tooltip label="Dashboard" hasArrow>
-          <IconButton
-            aria-label="Dashboard"
-            icon={<RiDashboardFill />}
-            mr="1"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
-            }}
-          />
-        </Tooltip>
-        <Tooltip label="Edit" hasArrow>
-          <IconButton
-            aria-label="edit"
-            icon={<FaEdit />}
-            mr="1"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onOpenEditModal();
-            }}
-          />
-        </Tooltip>
-        <Tooltip label="Delete" hasArrow>
-          <IconButton
-            aria-label="delete"
-            fontSize="21"
-            icon={<MdDeleteForever />}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onOpenAlert();
-            }}
-          />
-        </Tooltip>
-      </Flex>
-      <InlineErrorDisplay error={error}>
-        {isLoading && <SkeletonText />}
-        {data && (
-          // <VStack pl="5" pt="5" pb="5" h="100%" align="flex-start">
-          <SimpleGrid rows="{4}" h="100%" pl="10">
-            <QuickInfo
-              icon={
-                <HaloIcon
-                  icon={GiFootprint}
-                  colorScheme={mapDeltaType(data.footPrintDelta.deltaType, 'red', 'green', 'gray')}
+    <Card as="button" pos="relative" display="flex" flexDir="column" w="lg" h="sm">
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          pos="absolute"
+          top="2"
+          right="2"
+          aria-label="Options"
+          icon={<Icon as={FiMoreHorizontal} />}
+          variant="ghost"
+        />
+        <Portal>
+          <MenuList transform="">
+            <MenuItem
+              icon={<Icon as={RiDashboardFill} />}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
+              }}>
+              Dashboard
+            </MenuItem>
+            <MenuItem
+              icon={<Icon as={FaEdit} />}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onOpenEditModal();
+              }}>
+              Edit...
+            </MenuItem>
+            <MenuItem
+              icon={<Icon as={MdDeleteForever} />}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onOpenAlert();
+              }}>
+              Delete...
+            </MenuItem>
+          </MenuList>
+        </Portal>
+      </Menu>
+
+      <VStack flexGrow={1} p="4" align="stretch">
+        <HStack align="center">
+          <Heading size="md" fontWeight="semibold" textAlign="left">
+            {currentActionPlan.name}
+          </Heading>
+          <Box>
+            <BadgeStatus status={currentActionPlan.status} />
+          </Box>
+        </HStack>
+
+        <Text layerStyle="hint" textAlign="left">
+          {new Date(currentActionPlan.startDate).toLocaleDateString()} -{' '}
+          {new Date(currentActionPlan.endDate).toLocaleDateString()}
+        </Text>
+
+        <InlineErrorDisplay error={error} pt="6" flexGrow={1}>
+          {isLoading && <SkeletonText noOfLines={14} />}
+          {data && (
+            <VStack flexGrow={1} align="flex-start" spacing="4">
+              <QuickInfo
+                icon={
+                  <HaloIcon
+                    icon={GiFootprint}
+                    colorScheme={mapDeltaType(data.footPrintDelta.deltaType, 'red', 'green', 'gray')}
+                  />
+                }>
+                <QuickInfoLabelDescription
+                  label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
+                  description={
+                    <>
+                      {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
+                    </>
+                  }
                 />
-              }>
-              <QuickInfoLabelDescription
-                label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
-                description={
-                  <>
-                    {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
-                  </>
-                }
-              />
-            </QuickInfo>
-            <QuickInfo
-              icon={
-                <HaloIcon
-                  icon={BiTargetLock}
-                  colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+              </QuickInfo>
+              <QuickInfo
+                icon={
+                  <HaloIcon
+                    icon={BiTargetLock}
+                    colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+                  />
+                }>
+                <QuickInfoLabelDescription
+                  label={<>{`${data.adjustedAchievedGoal}%`}</>}
+                  description={
+                    <>
+                      Net-Zero
+                      {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
+                      by {data.adjustedAchievedGoal}%
+                    </>
+                  }
                 />
-              }>
-              <QuickInfoLabelDescription
-                label={<>{`${data.adjustedAchievedGoal} %`}</>}
-                description={
-                  <>
-                    Net-Zero
-                    {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
-                    by {data.adjustedAchievedGoal} %
-                  </>
-                }
-              />
-            </QuickInfo>
-            {/* <QuickInfo
+              </QuickInfo>
+              {/* <QuickInfo
               icon={
                 <HaloIcon
                   icon={BiEuro}
@@ -218,27 +223,27 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                 description="electricity costs per year"
               />
             </QuickInfo> */}
-            <QuickInfo
-              icon={
-                <HaloIcon
-                  icon={data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown}
-                  colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+              <QuickInfo
+                icon={
+                  <HaloIcon
+                    icon={data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown}
+                    colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                  />
+                }>
+                <QuickInfoLabelDescription
+                  label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
+                  description={
+                    <>
+                      {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
+                      costs
+                    </>
+                  }
                 />
-              }>
-              <QuickInfoLabelDescription
-                label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
-                description={
-                  <>
-                    {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity costs
-                  </>
-                }
-              />
-            </QuickInfo>
-          </SimpleGrid>
-
-          // </VStack>
-        )}
-      </InlineErrorDisplay>
+              </QuickInfo>
+            </VStack>
+          )}
+        </InlineErrorDisplay>
+      </VStack>
       <SaveActionPlanModal isOpen={isOpenEditModal} onClose={onCloseEditModal} actionPlan={currentActionPlan} />
       <DeleteAlertDialog
         isOpen={isOpenAlert}

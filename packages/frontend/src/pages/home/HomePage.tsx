@@ -49,7 +49,7 @@ export default function HomePage() {
             onSortChanged={setCurrentSortValue}
             direction="row"
           />
-          <Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />
+          <Searchbar placeholder="Search for real estate" onChange={setSearchValue} />
         </>
       }>
       <Wrap spacing="8">

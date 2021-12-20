@@ -1,4 +1,4 @@
-import { StackProps, Stack, VStack, Text, Heading, Center } from '@chakra-ui/react';
+import { Box, StackProps, Stack, VStack, Text, Heading, Center } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { VscError } from 'react-icons/vsc';
 import HaloIcon from './HaloIcon';
@@ -10,7 +10,7 @@ export interface InlineErrorDisplayProps extends StackProps {
 
 export default function InlineErrorDisplay({ error, children, ...rest }: InlineErrorDisplayProps) {
   if (!error) {
-    return <>{children}</>;
+    return <Box {...rest}>{children}</Box>;
   }
 
   return (
