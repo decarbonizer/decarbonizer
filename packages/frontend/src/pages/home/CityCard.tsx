@@ -11,9 +11,17 @@ import {
   VStack,
   Image,
   Text,
+  MenuDivider,
   useDisclosure,
   useToast,
   SkeletonText,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Icon,
+  SimpleGrid,
+  Portal,
 } from '@chakra-ui/react';
 import { DataFrame } from 'data-forge';
 import { BiImage } from 'react-icons/bi';
@@ -40,6 +48,7 @@ import QuickInfoLabelDescription from '../dashboard/components/QuickInfoLabelDes
 import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
+import { FiMoreHorizontal } from 'react-icons/fi';
 
 export interface CityCardProps {
   realEstate: RealEstate;
@@ -109,38 +118,45 @@ export default function CityCard({ realEstate }: CityCardProps) {
   }
 
   return (
-    <Card pos="relative" display="flex" flexDir="column" w="xl" h="xl">
+    <Card display="flex" flexDir="column" w="xl" h="xl">
       <AspectRatio maxW="100%" ratio={4 / 1.75}>
-        <Image
-          src={realEstate.imageUrl}
-          // fallbackSrc="https://via.placeholder.com/150"
-          fallback={<BiImage />}
-          alt="City Image"
-          objectFit="cover"
-          roundedTop="md"
-        />
+        <Image src={realEstate.imageUrl} fallback={<BiImage />} alt="City Image" objectFit="cover" roundedTop="md" />
       </AspectRatio>
-      <VStack>
-        <Grid templateColumns="repeat(3,1fr)" gap={2} w="100%">
-          <Flex gridColumnStart="2" w="100%" justifyContent="center">
-            <Heading as="h4" size="md" fontWeight="semibold" pt="3">
-              {realEstate.cityName}
-            </Heading>
-          </Flex>
-          <Flex gridColumnStart="3" w="100%" justifyContent="flex-end" pr="2" pt="1">
-            <Tooltip label="Edit City" hasArrow>
-              <IconButton aria-label="edit" icon={<FaEdit />} mr="1" onClick={onOpenEditModal} />
-            </Tooltip>
-            <Tooltip label="Delete City" hasArrow>
-              <IconButton aria-label="delete" fontSize="21" icon={<MdDeleteForever />} onClick={onOpenAlert} />
-            </Tooltip>
-          </Flex>
-        </Grid>
-        <Text fontSize="sm" color="gray.500" textAlign="center">
-          {realEstate.description ?? 'No description available.'}
-        </Text>
-        <Grid templateColumns="repeat(2,1fr)" pt="3" gap={4} w="95%" h="auto">
-          <Box borderColor="black" pl="2">
+
+      <VStack align="stretch" flexGrow={1} pos="relative">
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            pos="absolute"
+            top="2"
+            right="2"
+            aria-label="Options"
+            icon={<Icon as={FiMoreHorizontal} />}
+            variant="ghost"
+          />
+          <Portal>
+            <MenuList transform="">
+              <MenuItem onClick={() => goToSurveyOverview(realEstate._id)}>Surveys</MenuItem>
+              <MenuItem onClick={() => goToDashboard(realEstate._id)}>Dashboard</MenuItem>
+              <MenuItem onClick={() => goToActionPlanOverview(realEstate._id)}>Action Plans</MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={onOpenEditModal}>Edit...</MenuItem>
+              <MenuItem onClick={onOpenAlert}>Delete...</MenuItem>
+            </MenuList>
+          </Portal>
+        </Menu>
+
+        <VStack spacing="1">
+          <Heading as="h4" size="md" fontWeight="semibold" pt="3">
+            {realEstate.cityName}
+          </Heading>
+          <Text fontSize="sm" color="gray.500" textAlign="center" noOfLines={2} isTruncated>
+            {realEstate.description ?? 'No description available.'}
+          </Text>
+        </VStack>
+
+        <SimpleGrid flexGrow={1} align="center" columns={2} p="8">
+          <VStack align="flex-start">
             <p>
               <b>Size of the office:</b> {realEstate.area} m<sup>2</sup>
             </p>
@@ -148,71 +164,42 @@ export default function CityCard({ realEstate }: CityCardProps) {
               <b>Number of employees: </b>
               {realEstate.employees}
             </p>
-            <Box pt="5">
-              <p>
-                <b>Number of surveys: </b>
-                {surveyAnswers ? surveyAnswers.length : 0}
-              </p>
-              <p>
-                <b>Number of action plans: </b>
-                {actionPlans ? actionPlans.length : 0}
-              </p>
-              <InlineErrorDisplay error={error}>
-                {isLoading && <SkeletonText />}
-                {data && (
-                  <QuickInfo h="50%" icon={<HaloIcon icon={GiFootprint} />} pt="5">
-                    <QuickInfoLabelDescription
-                      label={
-                        <>
-                          {adjustedFootprint.toFixed(1)}
-                          {unitSymbol}
-                        </>
-                      }
-                    />
-                  </QuickInfo>
-                )}
-              </InlineErrorDisplay>
-            </Box>
-          </Box>
-          <CarbonTreeCard carbonFootprint={carbonFootprint} />
-        </Grid>
+            <br />
+            <br />
+            <p>
+              <b>Number of surveys: </b>
+              {surveyAnswers ? surveyAnswers.length : 0}
+            </p>
+            <p>
+              <b>Number of action plans: </b>
+              {actionPlans ? actionPlans.length : 0}
+            </p>
+          </VStack>
+          <VStack align="flex-start" spacing="4">
+            <InlineErrorDisplay error={error}>
+              {isLoading && <SkeletonText />}
+              {data && (
+                <QuickInfo icon={<HaloIcon icon={GiFootprint} />}>
+                  <QuickInfoLabelDescription
+                    label={
+                      <>
+                        {adjustedFootprint.toFixed(1)}
+                        {unitSymbol}
+                      </>
+                    }
+                    description={
+                      <>
+                        CO<sub>2</sub> produced
+                      </>
+                    }
+                  />
+                </QuickInfo>
+              )}
+            </InlineErrorDisplay>
+            <CarbonTreeCard carbonFootprint={carbonFootprint} />
+          </VStack>
+        </SimpleGrid>
 
-        <Flex position="absolute" bottom="5" right="4">
-          <HStack>
-            <Tooltip label="Survey Overview">
-              <IconButton
-                aria-label="SurveyOverview"
-                icon={<RiSurveyLine />}
-                colorScheme="primary"
-                fontSize="27"
-                size="md"
-                onClick={() => goToSurveyOverview(realEstate._id)}
-              />
-            </Tooltip>
-            <Spacer />
-            <Tooltip label="Dashboard">
-              <IconButton
-                aria-label="Dashboard"
-                icon={<RiDashboardFill />}
-                colorScheme="primary"
-                fontSize="27"
-                size="md"
-                onClick={() => goToDashboard(realEstate._id)}
-              />
-            </Tooltip>
-            <Spacer />
-            <Tooltip label="Action Plan Overview">
-              <IconButton
-                aria-label="ActionPlanOverview"
-                icon={<MdPendingActions />}
-                colorScheme="primary"
-                fontSize="27"
-                size="md"
-                onClick={() => goToActionPlanOverview(realEstate._id)}
-              />
-            </Tooltip>
-          </HStack>
-        </Flex>
         <DeleteAlertDialog
           isOpen={isOpenAlert}
           onCancel={onCloseAlert}

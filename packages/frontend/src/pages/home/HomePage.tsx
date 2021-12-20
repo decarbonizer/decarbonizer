@@ -52,13 +52,13 @@ export default function HomePage() {
           <Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />
         </>
       }>
-      <Wrap justify="space-evenly">
+      <Wrap spacing="8">
         {!searchValue && (
           <WrapItem>
             <Card as="button" border="2px" w="xl" h="xl" borderColor="gray.400" borderStyle="dashed" onClick={onOpen}>
               <Icon as={GoPlus} w="14" h="14" color="gray.600" />
               <Text color="gray.600" pt="3">
-                Add new real estate
+                New real estate
               </Text>
             </Card>
           </WrapItem>
