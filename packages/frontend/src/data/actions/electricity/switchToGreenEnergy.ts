@@ -2,7 +2,10 @@ import { Action } from '../action';
 import { GiGreenPower } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import {
+  createChooseSurveyAnswerElement,
+  ChooseSurveyAnswerElementAnswerValue,
+} from '../shared/chooseSurveyAnswerElement';
 import { ElectricitySurveyAnswerValue } from '../../surveys/electricity/electricitySurveyAnswerValue';
 
 export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
@@ -30,7 +33,11 @@ export const switchToGreenEnergy: Action<ElectricitySurveyAnswerValue> = {
   detailsSchema: {
     pages: [
       {
-        elements: [chooseTimePeriodElement, choosePriorityElement, chooseSurveyAnswerElement],
+        elements: [
+          chooseTimePeriodElement,
+          choosePriorityElement,
+          createChooseSurveyAnswerElement('currentRealEstateElectricitySurveyAnswers'),
+        ],
       },
     ],
   },

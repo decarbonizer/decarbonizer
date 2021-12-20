@@ -2,7 +2,10 @@ import { Action } from '../action';
 import { BsThermometerSnow } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import {
+  createChooseSurveyAnswerElement,
+  ChooseSurveyAnswerElementAnswerValue,
+} from '../shared/chooseSurveyAnswerElement';
 import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 
 export const heatLessAction: Action<HeatingSurveyAnswerValue> = {
@@ -31,7 +34,11 @@ export const heatLessAction: Action<HeatingSurveyAnswerValue> = {
   detailsSchema: {
     pages: [
       {
-        elements: [chooseTimePeriodElement, choosePriorityElement, chooseSurveyAnswerElement],
+        elements: [
+          chooseTimePeriodElement,
+          choosePriorityElement,
+          createChooseSurveyAnswerElement('currentRealEstateHeatingSurveyAnswers'),
+        ],
       },
     ],
   },
