@@ -1,7 +1,10 @@
 import { AiOutlineFieldTime } from 'react-icons/ai';
 import { Action } from '../action';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import {
+  createChooseSurveyAnswerElement,
+  ChooseSurveyAnswerElementAnswerValue,
+} from '../shared/chooseSurveyAnswerElement';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { IlluminationSurveyAnswerValue } from '../../surveys/illumination/illuminationSurveyAnswerValue';
 
@@ -41,7 +44,11 @@ export const reduceRuntimeAction: Action<IlluminationSurveyAnswerValue> = {
   detailsSchema: {
     pages: [
       {
-        elements: [chooseTimePeriodElement, choosePriorityElement, chooseSurveyAnswerElement],
+        elements: [
+          chooseTimePeriodElement,
+          choosePriorityElement,
+          createChooseSurveyAnswerElement('currentRealEstateIlluminationSurveyAnswers'),
+        ],
       },
     ],
   },

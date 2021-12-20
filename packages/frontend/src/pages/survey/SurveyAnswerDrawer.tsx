@@ -45,11 +45,29 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
   const [deleteSurveyAnswerMutation] = useDeleteSurveyAnswerMutation();
   const [surveyAnswerDelete, setSurveyAnswerDelete] = useState<SurveyAnswer>();
   const [currentSortValue, setCurrentSortValue] = useState<SortValueChangedArgs>({
-    sortCategory: 'value.realEstateName',
+    sortCategory: undefined,
     sortDirection: 'asc',
   });
   const [activeSurveyAnswer, setActiveSurveyAnswer] = useState<SurveyAnswer | undefined>(undefined);
   const toast = useToast();
+  const { realEstateId } = useParams<SurveysPageParams>();
+  const sortedSurveyAnswers = useMemo(
+    () =>
+      orderBy(
+        surveyAnswers,
+        [currentSortValue.sortCategory ?? 'value.realEstateName'],
+        [currentSortValue.sortDirection],
+      ),
+    [surveyAnswers, currentSortValue],
+  );
+
+  const survey = knownSurveys[surveyAnswers[0].surveyId];
+  const sortCategory: SortCategory[] = [
+    { value: 'value.realEstateName', display: 'Name' },
+    { value: 'createdAt', display: 'Created at' },
+    { value: 'updatedAt', display: 'Updated at' },
+  ];
+
   const onConfirm = async (surveyAnswer) => {
     await deleteSurveyAnswerMutation({ id: surveyAnswer._id });
     onCloseAlert();
@@ -62,23 +80,10 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
     });
   };
 
-  const { realEstateId } = useParams<SurveysPageParams>();
-  const sortedSurveyAnswers = useMemo(
-    () => orderBy(surveyAnswers, [currentSortValue.sortCategory], [currentSortValue.sortDirection]),
-    [surveyAnswers, currentSortValue],
-  );
-
   const finishSurvey = () => {
     setActiveSurveyAnswer(undefined);
   };
 
-  const survey = knownSurveys[surveyAnswers[0].surveyId];
-
-  const sortCategory: SortCategory[] = [
-    { value: 'value.realEstateName', display: 'Name' },
-    { value: 'createdAt', display: 'Created at' },
-    { value: 'updatedAt', display: 'Updated at' },
-  ];
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay />
@@ -89,7 +94,7 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
         </DrawerHeader>
         <DrawerBody>
           <VStack align="flex-start" pb="5">
-            <SortingSelection sortingCategories={sortCategory} onChange={setCurrentSortValue} alignment="vertical" />
+            <SortingSelection sortingCategories={sortCategory} onSortChanged={setCurrentSortValue} />
           </VStack>
           <Table>
             <Tbody>

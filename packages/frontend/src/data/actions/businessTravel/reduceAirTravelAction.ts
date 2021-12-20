@@ -2,7 +2,10 @@ import { Action } from '../action';
 import { RiComputerLine } from 'react-icons/all';
 import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
-import { chooseSurveyAnswerElement, ChooseSurveyAnswerElementAnswerValue } from '../shared/chooseSurveyAnswerElement';
+import {
+  createChooseSurveyAnswerElement,
+  ChooseSurveyAnswerElementAnswerValue,
+} from '../shared/chooseSurveyAnswerElement';
 
 //TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
 export const reduceAirTravelAction: Action = {
@@ -36,7 +39,7 @@ export const reduceAirTravelAction: Action = {
   detailsSchema: {
     pages: [
       {
-        elements: [chooseTimePeriodElement, choosePriorityElement, chooseSurveyAnswerElement],
+        elements: [chooseTimePeriodElement, choosePriorityElement, createChooseSurveyAnswerElement('heatingTypes')],
       },
     ],
   },

@@ -41,7 +41,7 @@ export default function NetZeroCard() {
                 colorScheme={mapDeltaType(data.netZero.deltaType, 'red', 'green', 'gray')}
               />
             }>
-            <QuickInfoLabelDescription label={`${data?.netZero.newAdjustedAchievedGoal.toFixed(1)} %`} />
+            <QuickInfoLabelDescription label={`${data?.netZero.newAdjustedAchievedGoal.toFixed(1)}%`} />
           </QuickInfo>
         )}
       </InlineErrorDisplay>

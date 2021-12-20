@@ -33,7 +33,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       const years = new Series(range(1, 11));
       const oldMaintenanceCosts = years.map(() => 0);
       const newMaintenanceCosts = years.map((year) =>
-        year === 1
+        year === 1 && oldHeatingCostsPerYear !== newHeatingCostsPerYear
           ? getTransformedHeatingInstallationCostPerYear(
               externalCalculationData,
               externalCalculationData.surveyAnswers,

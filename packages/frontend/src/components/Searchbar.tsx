@@ -4,7 +4,7 @@ import { FiSearch } from 'react-icons/fi';
 
 export interface SearchbarProps {
   placeholder: string;
-  onChange: (e: string) => void;
+  onChange(e: string): void;
 }
 
 export default function Searchbar({ placeholder, onChange }: SearchbarProps) {
@@ -12,16 +12,11 @@ export default function Searchbar({ placeholder, onChange }: SearchbarProps) {
     onChange(e.target.value);
   };
   return (
-    <InputGroup>
+    <InputGroup bg="white" w="md">
       <InputLeftElement>
         <FiSearch color="gray.200" />
       </InputLeftElement>
-      <Input
-        focusBorderColor="gray.300"
-        placeholder={placeholder}
-        onChange={(e) => handleFilter(e)}
-        variant="flushed"
-      />
+      <Input focusBorderColor="gray.300" placeholder={placeholder} onChange={(e) => handleFilter(e)} />
     </InputGroup>
   );
 }

@@ -1,4 +1,4 @@
-import { Spinner, Wrap, WrapItem, Text, Flex, Grid } from '@chakra-ui/react';
+import { Spinner, Wrap, WrapItem } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
@@ -22,8 +22,8 @@ export default function ActionPlanOverviewPage() {
   return (
     <DefaultPageLayout
       title="Action Plans"
-      actions={<Searchbar placeholder="Search for action plan.." onChange={setSearchValue} />}>
-      <Wrap spacing="4" pt="3">
+      actions={<Searchbar placeholder="Search for action plan" onChange={setSearchValue} />}>
+      <Wrap spacing="8" pt="3">
         {isLoadingActionPlans ? (
           <Spinner />
         ) : filteredActionPlans?.length === 0 ? (
