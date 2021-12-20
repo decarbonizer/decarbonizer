@@ -10,9 +10,10 @@ import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAns
 
 export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
   id: 'switchToHeatPump',
-  name: 'Switch to heat pump',
+  name: 'Change heating',
   icon: AiOutlineBoxPlot,
-  description: 'A heat pump does not use fossil fuels, it actively contributes to the reduction of your CO₂ emissions',
+  description:
+    'A heat pump does not use fossil fuels and a solar panel does not use electricity. They both actively contribute to the reduction of your CO₂ emissions.',
   forSurvey: 'heating',
   getSchema: () => {
     return {
@@ -23,7 +24,28 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
               id: 'newHeatPump',
               type: 'single-choice',
               required: false,
-              options: 'heatingTypes',
+              options: [
+                {
+                  value: '00000000-0000-0000-0000-000000000000',
+                  display: 'Solar panels',
+                },
+                {
+                  value: '00000000-0000-0000-0000-000000000001',
+                  display: 'Ground source heat pump',
+                },
+                {
+                  value: '00000000-0000-0000-0000-000000000003',
+                  display: 'Direct electric heating',
+                },
+                {
+                  value: '00000000-0000-0000-0000-000000000004',
+                  display: 'Gas boiler',
+                },
+                {
+                  value: '00000000-0000-0000-0000-000000000005',
+                  display: 'Oil boiler',
+                },
+              ],
             },
           ],
         },
