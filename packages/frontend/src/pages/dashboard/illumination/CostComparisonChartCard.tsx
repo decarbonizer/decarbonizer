@@ -7,6 +7,7 @@ import {
   getTransformedIlluminationElectricityCostPerYear,
 } from '../../../calculations/illumination/electricityCost';
 import {
+  getInitialIlluminationReplacementCost,
   getIlluminationMaintenanceCostForYear,
   getTransformedIlluminationMaintenanceCostForYear,
 } from '../../../calculations/illumination/maintenanceCost';
@@ -52,13 +53,12 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
-          year === 1 && filledActionAnswersDf.any()
-            ? getTransformedIlluminationMaintenanceCostForYear(
+          year === 1
+            ? getInitialIlluminationReplacementCost(
                 externalCalculationData,
                 illuminationSurveyAnswers,
                 filledActionAnswersDf,
-                year,
-              ).costOnReplace
+              )
             : 0 +
                 getTransformedIlluminationMaintenanceCostForYear(
                   externalCalculationData,
