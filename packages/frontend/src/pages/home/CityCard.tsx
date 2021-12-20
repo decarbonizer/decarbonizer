@@ -136,12 +136,22 @@ export default function CityCard({ realEstate }: CityCardProps) {
           />
           <Portal>
             <MenuList transform="">
-              <MenuItem onClick={() => goToSurveyOverview(realEstate._id)}>Surveys</MenuItem>
-              <MenuItem onClick={() => goToDashboard(realEstate._id)}>Dashboard</MenuItem>
-              <MenuItem onClick={() => goToActionPlanOverview(realEstate._id)}>Action Plans</MenuItem>
+              <MenuItem icon={<Icon as={RiSurveyLine} />} onClick={() => goToSurveyOverview(realEstate._id)}>
+                Surveys
+              </MenuItem>
+              <MenuItem icon={<Icon as={RiDashboardFill} />} onClick={() => goToDashboard(realEstate._id)}>
+                Dashboard
+              </MenuItem>
+              <MenuItem icon={<Icon as={MdPendingActions} />} onClick={() => goToActionPlanOverview(realEstate._id)}>
+                Action Plans
+              </MenuItem>
               <MenuDivider />
-              <MenuItem onClick={onOpenEditModal}>Edit...</MenuItem>
-              <MenuItem onClick={onOpenAlert}>Delete...</MenuItem>
+              <MenuItem icon={<Icon as={FaEdit} />} onClick={onOpenEditModal}>
+                Edit...
+              </MenuItem>
+              <MenuItem icon={<Icon as={MdDeleteForever} />} onClick={onOpenAlert}>
+                Delete...
+              </MenuItem>
             </MenuList>
           </Portal>
         </Menu>
