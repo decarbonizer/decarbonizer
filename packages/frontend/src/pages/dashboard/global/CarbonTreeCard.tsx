@@ -13,7 +13,7 @@ export default function CarbonTreeCard({ carbonFootprint, ...rest }: CarbonTreeC
   const calculatedTreeSequestrationPerYear = Math.round(carbonFootprint / treeSequestrationPerYear);
   const calculatedTreeSequestrationPerMonth = (carbonFootprint / treeSequestrationPerMonth).toFixed(2);
   const displayTreeSequestrationYear = `${calculatedTreeSequestrationPerYear} years`;
-  const displayTreeSequestrationMonth = `${calculatedTreeSequestrationPerMonth} years`;
+  const displayTreeSequestrationMonth = `${calculatedTreeSequestrationPerMonth} months`;
 
   return (
     <QuickInfo icon={<Image boxSize="16" src={tree} alt="Tree Image" objectFit="cover" roundedTop="md" />} {...rest}>
