@@ -7,7 +7,7 @@ import CreateRealEstateModal from './CreateRealEstateModal';
 import CityCard from './CityCard';
 import cloud from '../../img/cloud.svg';
 import Searchbar from '../../components/Searchbar';
-import { orderBy } from 'lodash-es';
+import orderBy from 'lodash-es/orderBy';
 import { useState } from 'react';
 import SortingSelection, { SortValueChangedArgs, SortCategory } from '../../components/SortingSelection';
 import EmptyState from '../../components/EmptyState';
@@ -16,7 +16,7 @@ export default function HomePage() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentSortValue, setCurrentSortValue] = useState<SortValueChangedArgs>({
-    sortCategory: 'cityName',
+    sortCategory: undefined,
     sortDirection: 'asc',
   });
 
@@ -28,7 +28,7 @@ export default function HomePage() {
 
   const sortedRealEstates = orderBy(
     filteredRealEstates,
-    [currentSortValue.sortCategory],
+    [currentSortValue.sortCategory ?? 'cityName'],
     [currentSortValue.sortDirection],
   );
 
@@ -41,8 +41,17 @@ export default function HomePage() {
   return (
     <DefaultPageLayout
       title="Home"
-      actions={<Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />}>
-      <SortingSelection sortingCategories={sortCategory} onChange={setCurrentSortValue} alignment="horizontal" />
+      actions={
+        <>
+          <SortingSelection
+            w="2xl"
+            sortingCategories={sortCategory}
+            onSortChanged={setCurrentSortValue}
+            direction="row"
+          />
+          <Searchbar placeholder="Search for real estate.." onChange={setSearchValue} />
+        </>
+      }>
       <Wrap justify="space-evenly">
         {!searchValue && (
           <WrapItem>
