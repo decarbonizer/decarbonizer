@@ -52,7 +52,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
-          year === 1
+          year === 1 && filledActionAnswersDf.any()
             ? getTransformedIlluminationMaintenanceCostForYear(
                 externalCalculationData,
                 illuminationSurveyAnswers,

@@ -173,45 +173,46 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
           {new Date(currentActionPlan.endDate).toLocaleDateString()}
         </Text>
 
-        <InlineErrorDisplay error={error} pt="6" flexGrow={1}>
-          {isLoading && <SkeletonText noOfLines={14} />}
-          {data && (
-            <VStack flexGrow={1} align="flex-start" spacing="4">
-              <QuickInfo
-                icon={
-                  <HaloIcon
-                    icon={GiFootprint}
-                    colorScheme={mapDeltaType(data.footPrintDelta.deltaType, 'red', 'green', 'gray')}
+        <Box pt="6" flexGrow={1}>
+          <InlineErrorDisplay error={error}>
+            {isLoading && <SkeletonText noOfLines={14} />}
+            {data && (
+              <VStack flexGrow={1} align="flex-start" spacing="4">
+                <QuickInfo
+                  icon={
+                    <HaloIcon
+                      icon={GiFootprint}
+                      colorScheme={mapDeltaType(data.footPrintDelta.deltaType, 'red', 'green', 'gray')}
+                    />
+                  }>
+                  <QuickInfoLabelDescription
+                    label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
+                    description={
+                      <>
+                        {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
+                      </>
+                    }
                   />
-                }>
-                <QuickInfoLabelDescription
-                  label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
-                  description={
-                    <>
-                      {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
-                    </>
-                  }
-                />
-              </QuickInfo>
-              <QuickInfo
-                icon={
-                  <HaloIcon
-                    icon={BiTargetLock}
-                    colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+                </QuickInfo>
+                <QuickInfo
+                  icon={
+                    <HaloIcon
+                      icon={BiTargetLock}
+                      colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+                    />
+                  }>
+                  <QuickInfoLabelDescription
+                    label={<>{`${data.adjustedAchievedGoal}%`}</>}
+                    description={
+                      <>
+                        Net-Zero
+                        {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
+                        by {data.adjustedAchievedGoal}%
+                      </>
+                    }
                   />
-                }>
-                <QuickInfoLabelDescription
-                  label={<>{`${data.adjustedAchievedGoal}%`}</>}
-                  description={
-                    <>
-                      Net-Zero
-                      {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
-                      by {data.adjustedAchievedGoal}%
-                    </>
-                  }
-                />
-              </QuickInfo>
-              {/* <QuickInfo
+                </QuickInfo>
+                {/* <QuickInfo
               icon={
                 <HaloIcon
                   icon={BiEuro}
@@ -223,26 +224,29 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                 description="electricity costs per year"
               />
             </QuickInfo> */}
-              <QuickInfo
-                icon={
-                  <HaloIcon
-                    icon={data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown}
-                    colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                <QuickInfo
+                  icon={
+                    <HaloIcon
+                      icon={
+                        data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown
+                      }
+                      colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                    />
+                  }>
+                  <QuickInfoLabelDescription
+                    label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
+                    description={
+                      <>
+                        {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
+                        costs
+                      </>
+                    }
                   />
-                }>
-                <QuickInfoLabelDescription
-                  label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
-                  description={
-                    <>
-                      {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
-                      costs
-                    </>
-                  }
-                />
-              </QuickInfo>
-            </VStack>
-          )}
-        </InlineErrorDisplay>
+                </QuickInfo>
+              </VStack>
+            )}
+          </InlineErrorDisplay>
+        </Box>
       </VStack>
       <SaveActionPlanModal isOpen={isOpenEditModal} onClose={onCloseEditModal} actionPlan={currentActionPlan} />
       <DeleteAlertDialog
