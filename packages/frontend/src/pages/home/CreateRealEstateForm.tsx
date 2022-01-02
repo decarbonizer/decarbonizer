@@ -1,6 +1,6 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
-import { Box, Grid, GridItem } from '@chakra-ui/react';
+import { AspectRatio, Box, Center, Flex, Grid, GridItem, IconButton, Spacer } from '@chakra-ui/react';
 import {
   Button,
   NumberDecrementStepper,
@@ -9,11 +9,15 @@ import {
   NumberInputField,
   NumberInputStepper,
   Text,
+  Image,
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
 import { RealEstate } from '../../api/realEstate';
 import { useCreateRealEstateMutation, useUpdateRealEstateMutation } from '../../store/api';
+import FileBase from 'react-file-base64';
+import { BiImage } from 'react-icons/bi';
+import { RiDeleteBin5Fill } from 'react-icons/ri';
 
 interface CreateRealEstateFormProps {
   onClose(): void;
@@ -25,6 +29,7 @@ export default function CreateRealEstateForm({ onClose, realEstate }: CreateReal
   const [description, setDescription] = useState(realEstate?.description ?? '');
   const [employees, setEmployees] = useState(realEstate?.employees ?? 1);
   const [area, setArea] = useState(realEstate?.area ?? 1);
+  const [image, setImage] = useState(realEstate?.image ?? '');
   const [error, setError] = useState('');
   const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
   const [updateRealEstate, { isLoading: isUpdatingRealEstate }] = useUpdateRealEstateMutation();
@@ -34,7 +39,7 @@ export default function CreateRealEstateForm({ onClose, realEstate }: CreateReal
       if (realEstate) {
         await updateRealEstate({
           id: realEstate._id,
-          body: { cityName: cityName, description: description, employees: employees, area: area },
+          body: { cityName: cityName, description: description, employees: employees, area: area, image: image },
         });
       } else {
         await createRealEstate({
@@ -42,6 +47,7 @@ export default function CreateRealEstateForm({ onClose, realEstate }: CreateReal
           description: description,
           employees: employees,
           area: area,
+          image: image,
         }).unwrap();
       }
 
@@ -83,10 +89,31 @@ export default function CreateRealEstateForm({ onClose, realEstate }: CreateReal
     setArea(+value);
   };
 
+  const onChangeImage = () => {
+    setImage('');
+  };
+
+  const getBaseFile = (files) => {
+    setImage(files.base64.toString());
+  };
+
   return (
     <>
       <Box>
-        <FormControl isRequired>
+        <Flex>
+          <Center>
+            <Text>Upload picture</Text>
+          </Center>
+          <Spacer />
+          <IconButton aria-label="Search database" icon={<RiDeleteBin5Fill color="red" />} onClick={onChangeImage} />
+        </Flex>
+        <AspectRatio maxW="100%" ratio={4 / 1.75} mt={4}>
+          <Image src={image} fallback={<BiImage />} alt="City Image" objectFit="cover" roundedTop="md" />
+        </AspectRatio>
+        <Box mt={4}>
+          <FileBase type="file" multiple={false} onDone={getBaseFile} />
+        </Box>
+        <FormControl isRequired mt={4}>
           <FormLabel>City</FormLabel>
           <Input placeholder="e.g Stuttgart" type="text" value={cityName} onChange={onChangeName} />
         </FormControl>
