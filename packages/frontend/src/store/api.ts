@@ -7,6 +7,7 @@ import { AppState } from './store';
 import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/surveyAnswer';
 import { ActionPlan, ActionPlanCreate, ActionPlanUpdate } from '../api/actionPlan';
 import { HeatingType } from '../api/heatingType';
+import { RegisterPost } from '../api/register';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -27,6 +28,13 @@ export const api = createApi({
     login: builder.mutation<LoginResult, LoginPost>({
       query: (body) => ({
         url: 'auth/login',
+        method: 'POST',
+        body,
+      }),
+    }),
+    register: builder.mutation<LoginResult, RegisterPost>({
+      query: (body) => ({
+        url: 'auth/register',
         method: 'POST',
         body,
       }),
@@ -183,6 +191,7 @@ export const api = createApi({
 
 export const {
   useLoginMutation,
+  useRegisterMutation,
 
   useGetAllBulbsQuery,
   useGetAllEnergyFormsQuery,

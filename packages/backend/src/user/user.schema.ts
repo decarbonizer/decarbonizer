@@ -19,6 +19,11 @@ export class User extends DbObject {
   email: string;
 
   @Prop({ required: true })
+  @ApiProperty()
+  @IsEmail()
+  companyId: string;
+
+  @Prop({ required: true })
   passwordHash: string;
 
   @Prop({ required: true, default: [UserRoles.User] })

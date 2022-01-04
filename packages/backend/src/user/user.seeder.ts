@@ -18,6 +18,7 @@ export class UserSeeder extends DefaultDbSeeder<User> {
         email: 'user@decarbonizer.com',
         roles: [UserRoles.User],
         passwordHash: hashSync('User123', authHashRounds),
+        companyId: 'Capgemini',
       },
     ];
   }
