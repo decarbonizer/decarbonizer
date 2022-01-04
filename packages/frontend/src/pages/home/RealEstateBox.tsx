@@ -19,13 +19,13 @@ import { AiOutlineArrowRight } from 'react-icons/ai';
 import { RiAddLine } from 'react-icons/ri';
 import { BiCube } from 'react-icons/bi';
 import CreateRealEstateModal from './CreateRealEstateModal';
-import { useGetAllRealEstatesQuery } from '../../store/api';
+import { useGetRealEstatesOfCompanyQuery } from '../../store/api';
 import { useHistory } from 'react-router';
 import { routes } from '../../routes';
 
 export default function RealEstateBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetRealEstatesOfCompanyQuery();
   const history = useHistory();
 
   function startSurvey(realEstateId: string) {

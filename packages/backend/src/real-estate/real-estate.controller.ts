@@ -25,7 +25,7 @@ export class RealEstateController {
   @Get()
   @ApiResponse({ status: HttpStatus.OK, type: [RealEstate] })
   async getAll() {
-    return await this.realEstateService.getAll();
+    return await this.realEstateService.getAllForCurrentCompany();
   }
 
   @Post()

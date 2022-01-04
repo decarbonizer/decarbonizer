@@ -8,6 +8,7 @@ import { SurveyAnswer, SurveyAnswerCreate, SurveyAnswerUpdate } from '../api/sur
 import { ActionPlan, ActionPlanCreate, ActionPlanUpdate } from '../api/actionPlan';
 import { HeatingType } from '../api/heatingType';
 import { RegisterPost } from '../api/register';
+import { Company } from '../api/company';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -39,7 +40,11 @@ export const api = createApi({
         body,
       }),
     }),
-
+    getAllCompanies: builder.query<Array<Company>, void>({
+      query: () => ({
+        url: 'api/v1/companies',
+      }),
+    }),
     getAllBulbs: builder.query<Array<Bulb>, void>({
       query: () => ({
         url: 'api/v1/bulbs',
@@ -55,7 +60,7 @@ export const api = createApi({
         url: 'api/v1/heatingTypes',
       }),
     }),
-    getAllRealEstates: builder.query<Array<RealEstate>, void>({
+    getRealEstatesOfCompany: builder.query<Array<RealEstate>, void>({
       query: () => ({
         url: 'api/v1/realEstates',
       }),
@@ -193,11 +198,12 @@ export const {
   useLoginMutation,
   useRegisterMutation,
 
+  useGetAllCompaniesQuery,
   useGetAllBulbsQuery,
   useGetAllEnergyFormsQuery,
   useGetAllHeatingTypesQuery,
 
-  useGetAllRealEstatesQuery,
+  useGetRealEstatesOfCompanyQuery,
   useGetRealEstateQuery,
   useCreateRealEstateMutation,
   useDeleteRealEstateMutation,

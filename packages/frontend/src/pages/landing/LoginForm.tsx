@@ -4,7 +4,11 @@ import { useLoginMutation } from '../../store/api';
 import { loggedIn } from '../../store/auth';
 import { useAppDispatch } from '../../store/store';
 
-export default function LoginBox() {
+export interface LoginBoxProps {
+  goToRegistration: () => void;
+}
+
+export default function LoginBox({ goToRegistration }: LoginBoxProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hasLoginError, setHasLoginError] = useState(false);
@@ -52,7 +56,7 @@ export default function LoginBox() {
       <Heading as="h1" size="md" mb="4">
         New here?
       </Heading>
-      <Button w="100%" colorScheme="gray">
+      <Button w="100%" colorScheme="gray" onClick={goToRegistration}>
         Create an account
       </Button>
     </Box>

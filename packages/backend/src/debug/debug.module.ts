@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ActionPlanModule } from '../action-plan/action-plan.module';
 import { ActionPlanSeeder } from '../action-plan/action-plan.seeder';
 import { BulbModule } from '../bulbs/bulb.module';
+import { CompanyModule } from '../companies/company.module';
 import { EnergyFormModule } from '../energy-form/energy-form.module';
 import { HeatingTypeModule } from '../heating-types/heating-type.module';
 import { MessageModule } from '../message/message.module';
@@ -23,6 +24,7 @@ import { DebugController } from './debug.controller';
     RealEstateModule,
     SurveyAnswerModule,
     ActionPlanModule,
+    CompanyModule,
   ],
 })
 export class DebugModule {}

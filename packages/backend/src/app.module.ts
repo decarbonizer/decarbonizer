@@ -5,6 +5,7 @@ import { ActionPlanModule } from './action-plan/action-plan.module';
 import { AppConfig } from './app-config';
 import { AuthModule } from './auth/auth.module';
 import { BulbModule } from './bulbs/bulb.module';
+import { CompanyModule } from './companies/company.module';
 import { DebugModule } from './debug/debug.module';
 import { EnergyFormModule } from './energy-form/energy-form.module';
 import { MessageModule } from './message/message.module';
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     MessageModule,
     UserModule,
     RealEstateModule,
+    CompanyModule,
   ],
 })
 export class AppModule {}

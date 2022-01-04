@@ -41,6 +41,15 @@ export class AuthService {
   }
 
   /**
+   * Returns the company which current user belogs to.
+   * @returns company id.
+   */
+  getCurrentUserCompanyId() {
+    const user = this.getCurrentUser();
+    return user.companyId;
+  }
+
+  /**
    * Attempts to sign-in a user using the given credentials.
    * If successful, issues a JWT which can be used to access protected endpoints.
    */
