@@ -120,7 +120,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
   return (
     <Card display="flex" flexDir="column" w="xl" h="xl">
       <AspectRatio maxW="100%" ratio={4 / 1.75}>
-        <Image src={realEstate.imageUrl} fallback={<BiImage />} alt="City Image" objectFit="cover" roundedTop="md" />
+        <Image src={realEstate.image} fallback={<BiImage />} alt="City Image" objectFit="cover" roundedTop="md" />
       </AspectRatio>
 
       <VStack align="stretch" flexGrow={1} pos="relative">

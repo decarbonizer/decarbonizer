@@ -27,5 +27,8 @@
     "pretty-quick": "^3.1.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "react-file-base64": "^1.0.3"
   }
 }
