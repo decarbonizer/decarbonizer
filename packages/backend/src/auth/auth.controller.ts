@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginPayload, LoginResult } from './auth.schema';
+import { LoginPayload, LoginResult, RegisterPayload } from './auth.schema';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -14,5 +14,13 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Invalid username or password.' })
   async login(@Body() loginPayload: LoginPayload) {
     return this.authService.loginAndSignJwt(loginPayload);
+  }
+
+  @Post('register')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, type: LoginResult })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'A user with this email already exists.' })
+  async register(@Body() registerPayload: RegisterPayload) {
+    return this.authService.registerUser(registerPayload);
   }
 }

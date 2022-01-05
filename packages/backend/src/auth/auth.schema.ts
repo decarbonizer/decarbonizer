@@ -19,3 +19,10 @@ export class LoginResult {
   @ApiProperty()
   token_type: 'Bearer';
 }
+
+export class RegisterPayload extends LoginPayload {
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  companyId: string;
+}

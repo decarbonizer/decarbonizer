@@ -2,8 +2,20 @@ import { Box, Flex } from '@chakra-ui/react';
 import Hero from './Hero';
 import LoginForm from './LoginForm';
 import bg from './bg.svg';
+import RegistrationForm from './RegistrationForm';
+import React from 'react';
 
 export default function LandingPage() {
+  const [authForm, setAuthForm] = React.useState('login');
+
+  const goToLoginForm = () => {
+    setAuthForm('login');
+  };
+
+  const goToRegistrationForm = () => {
+    setAuthForm('register');
+  };
+
   return (
     <Flex minH="100%" backgroundImage={bg}>
       <Box w="100%" grow={1}>
@@ -21,7 +33,11 @@ export default function LandingPage() {
         border="1px"
         borderColor="gray.200"
         shadow="xl">
-        <LoginForm />
+        {authForm === 'login' ? (
+          <LoginForm goToRegistration={goToRegistrationForm} />
+        ) : (
+          <RegistrationForm goToLogin={goToLoginForm} />
+        )}
       </Flex>
     </Flex>
   );
