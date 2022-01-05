@@ -14,6 +14,7 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
       {
         _id: '00000000-0000-0000-0000-000000000000',
         cityName: 'Ratingen',
+        companyId: '00000000-0000-0000-0000-000000000000',
         description: '3 floors of a 6-floored building.',
         employees: 551,
         area: 2300,
@@ -21,6 +22,7 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
       {
         _id: '00000000-0000-0000-0000-000000000001',
         cityName: 'Berlin',
+        companyId: '00000000-0000-0000-0000-000000000000',
         description: '4 floors of a 14-floored building.',
         employees: 618,
         area: 3000,
@@ -28,6 +30,7 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
       {
         _id: '00000000-0000-0000-0000-000000000002',
         cityName: 'Hamburg',
+        companyId: '00000000-0000-0000-0000-000000000000',
         description: 'The entire building except for a small area in the 4th floor.',
         employees: 1168,
         area: 4000,
@@ -35,6 +38,7 @@ export class RealEstateSeeder extends DefaultDbSeeder<RealEstate> {
       {
         _id: '00000000-0000-0000-0000-000000000003',
         cityName: 'Stuttgart',
+        companyId: '00000000-0000-0000-0000-000000000000',
         description: '3 floors of a 5-floored building.',
         employees: 450,
         area: 2000,

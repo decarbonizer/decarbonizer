@@ -10,7 +10,7 @@ import {
   useGetAllBulbsQuery,
   useGetAllEnergyFormsQuery,
   useGetAllHeatingTypesQuery,
-  useGetAllRealEstatesQuery,
+  useGetRealEstatesOfCompanyQuery,
   useGetAllSurveyAnswersQuery,
 } from '../store/api';
 
@@ -31,7 +31,7 @@ export function useExternalCalculationData() {
   const bulbsQuery = useGetAllBulbsQuery();
   const energyFormsQuery = useGetAllEnergyFormsQuery();
   const heatingTypesQuery = useGetAllHeatingTypesQuery();
-  const realEstatesQuery = useGetAllRealEstatesQuery();
+  const realEstatesQuery = useGetRealEstatesOfCompanyQuery();
   const surveyAnswersQuery = useGetAllSurveyAnswersQuery();
   const actionPlansQuery = useGetAllActionPlansQuery();
   const queries = [

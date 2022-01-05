@@ -2,7 +2,6 @@ import { Icon, Spinner, Text, useDisclosure, Wrap, WrapItem } from '@chakra-ui/r
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import { GoPlus } from 'react-icons/go';
 import Card from '../../components/Card';
-import { useGetAllRealEstatesQuery } from '../../store/api';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import CityCard from './CityCard';
 import cloud from '../../img/cloud.svg';
@@ -11,9 +10,10 @@ import orderBy from 'lodash-es/orderBy';
 import { useState } from 'react';
 import SortingSelection, { SortValueChangedArgs, SortCategory } from '../../components/SortingSelection';
 import EmptyState from '../../components/EmptyState';
+import { useGetRealEstatesOfCompanyQuery } from '../../store/api';
 
 export default function HomePage() {
-  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetAllRealEstatesQuery();
+  const { isLoading: isLoadingRealEstates, data: realEstates } = useGetRealEstatesOfCompanyQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentSortValue, setCurrentSortValue] = useState<SortValueChangedArgs>({
     sortCategory: undefined,
