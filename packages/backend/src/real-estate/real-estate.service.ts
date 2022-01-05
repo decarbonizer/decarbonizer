@@ -7,7 +7,7 @@ import { RealEstate, RealEstateCreate, RealEstateUpdate } from './real-estate.sc
 @Injectable()
 export class RealEstateService extends GenericCrudService<
   RealEstate,
-  RealEstateCreate,
+  Omit<RealEstate, 'companyId'>,
   RealEstateUpdate,
   RealEstateRepository
 > {
@@ -20,8 +20,8 @@ export class RealEstateService extends GenericCrudService<
     return await this.repository.getAll({ companyId });
   }
 
-  protected async mapCreateToEntity(entity: RealEstateCreate): Promise<RealEstate> {
-    return entity;
+  protected async mapCreateToEntity(entity: Omit<RealEstate, 'companyId'>): Promise<RealEstate> {
+    return { ...entity, companyId: this.authService.getCurrentUserCompanyId() };
   }
 
   protected async mapUpdateToEntity(entity: RealEstateUpdate): Promise<Partial<RealEstate>> {

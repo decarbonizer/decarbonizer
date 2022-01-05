@@ -49,5 +49,5 @@ export class RealEstate extends DbObject {
 
 export const RealEstateSchema = SchemaFactory.createForClass(RealEstate);
 
-export class RealEstateCreate extends OmitType(RealEstate, ['createdAt', 'updatedAt']) {}
-export class RealEstateUpdate extends OmitType(RealEstate, ['createdAt', 'updatedAt']) {}
+export class RealEstateCreate extends OmitType(RealEstate, ['createdAt', 'updatedAt', 'companyId']) {}
+export class RealEstateUpdate extends OmitType(RealEstate, ['createdAt', 'updatedAt', 'companyId']) {}
