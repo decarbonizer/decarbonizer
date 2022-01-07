@@ -3,6 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
 import { FormSchemaElement } from '../formSchema';
 import { useValidationErrorsForElement } from '../internals/hooks';
+import { Text, View } from '@react-pdf/renderer';
 
 export interface DefaultFormControlLayoutProps {
   element: FormSchemaElement;
@@ -11,7 +12,25 @@ export interface DefaultFormControlLayoutProps {
 
 export default function DefaultFormControlLayout({ element, children }: DefaultFormControlLayoutProps) {
   const validationErrors = useValidationErrorsForElement(element);
-  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+  const { isPdfView, isViewOnly } = useContext(FormEnginePropsContext);
+
+  if (isPdfView) {
+    return (
+      <View
+        style={{
+          marginVertical: 3,
+          flexDirection: 'row',
+        }}>
+        {element.label && (
+          <Text>
+            {element.label}
+            {element.label.endsWith(':') ? '' : ':'}{' '}
+          </Text>
+        )}
+        <Text>{children}</Text>
+      </View>
+    );
+  }
 
   return (
     <FormControl isRequired={element.required} isInvalid={validationErrors.length > 0}>

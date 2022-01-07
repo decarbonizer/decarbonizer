@@ -40,6 +40,7 @@ import { getIlluminationElectricityCostDelta } from '../../calculations/illumina
 import { TiEquals } from 'react-icons/ti';
 import { getHeatingCostDelta } from '../../calculations/heating/cost';
 import { FiMoreHorizontal } from 'react-icons/fi';
+import { CgExport } from 'react-icons/all';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -135,6 +136,15 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                 history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
               }}>
               Dashboard
+            </MenuItem>
+            <MenuItem
+              icon={<Icon as={CgExport} />}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                history.push(routes.actionPlanFileExport({ realEstateId, actionPlanId: currentActionPlan._id }));
+              }}>
+              Export
             </MenuItem>
             <MenuItem
               icon={<Icon as={FaEdit} />}
