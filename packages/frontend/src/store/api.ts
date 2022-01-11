@@ -32,6 +32,7 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['ActionPlans', 'RealEstate', 'SurveyAnswer'],
     }),
     register: builder.mutation<LoginResult, RegisterPost>({
       query: (body) => ({
@@ -39,6 +40,7 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['ActionPlans', 'RealEstate', 'SurveyAnswer'],
     }),
     getAllCompanies: builder.query<Array<Company>, void>({
       query: () => ({
