@@ -9,6 +9,9 @@ export const routes = {
     '/realEstates/:realEstateId/actionPlan/:actionPlanId?',
   ),
   actionPlans: createRouteFactory<ActionPlansPageParams>('/realEstates/:realEstateId/actionPlans'),
+  actionPlanFileExport: createRouteFactory<ActionPlanFileExportPageParams>(
+    '/realEstates/:realEstateId/actionPlan/:actionPlanId/export',
+  ),
 };
 
 export interface RealEstatePageParams {
@@ -24,6 +27,10 @@ export interface RealEstateDashboardPageParams extends RealEstatePageParams {
 }
 
 export interface ActionPlansPageParams extends RealEstatePageParams {}
+
+export interface ActionPlanFileExportPageParams extends RealEstatePageParams {
+  actionPlanId: string;
+}
 
 function createRouteFactory<T = void>(route: string) {
   const factory = (params: T) => generatePath(route, params);

@@ -6,6 +6,7 @@ import { FormEngineControlProps } from './types';
 import { useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
 import { MdCheckCircle } from 'react-icons/md';
+import { View, Text } from '@react-pdf/renderer';
 
 export default function MultiChoiceFormEngineControl({
   element,
@@ -13,7 +14,25 @@ export default function MultiChoiceFormEngineControl({
   const [value, setValue] = useValueProperty<Array<string> | undefined>(element);
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
   const options = useChoiceOptions(element.options);
-  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+  const { isPdfView, isViewOnly } = useContext(FormEnginePropsContext);
+
+  if (isPdfView) {
+    return (
+      <View style={{ marginVertical: 3 }}>
+        {element.label && <Text>{element.label}: </Text>}
+        <View
+          style={{
+            marginLeft: 40,
+          }}>
+          {(value ?? options.map((option) => option.value)).map((value) => (
+            <Text key={value} style={{ marginVertical: 1 }}>
+              - {options.find((option) => option.value === value)?.display ?? value}
+            </Text>
+          ))}
+        </View>
+      </View>
+    );
+  }
 
   if (isViewOnly) {
     return (

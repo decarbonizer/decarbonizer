@@ -19,6 +19,7 @@ export interface FormEngineProps {
   ruleEvaluationResults: FormEngineRuleEvaluationResults;
   validationErrors: FormEngineValidationErrors;
   isViewOnly?: boolean;
+  isPdfView?: boolean;
   onValueChanged(e: { value: FormEngineValue });
   buttonPrevious?: ReactNode;
   buttonNext?: ReactNode;

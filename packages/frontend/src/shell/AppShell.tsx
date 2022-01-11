@@ -6,6 +6,7 @@ import HomePage from '../pages/home/HomePage';
 import SurveyOverviewPage from '../pages/survey/SurveyOverviewPage';
 import ActionPlanOverviewPage from '../pages/plan/ActionPlanOverviewPage';
 import NavBar from './NavBar';
+import ActionPlanFileExportPage from '../pages/plan/ActionPlanFileExportPage';
 
 export default function AppShell() {
   return (
@@ -17,6 +18,7 @@ export default function AppShell() {
           <Route exact path={routes.surveys.route} component={SurveyOverviewPage} />
           <Route exact path={routes.realEstateDashboard.route} component={DashboardPage} />
           <Route exact path={routes.actionPlans.route} component={ActionPlanOverviewPage} />
+          <Route exact path={routes.actionPlanFileExport.route} component={ActionPlanFileExportPage} />
           <Route render={() => <Redirect to={routes.home.route} />} />
         </Switch>
       </Flex>
