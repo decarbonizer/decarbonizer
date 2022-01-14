@@ -7,6 +7,8 @@ import { electricitySurvey } from './electricity/electricitySurvey';
 import { ElectricitySurveyAnswerValue } from './electricity/electricitySurveyAnswerValue';
 import { businessTravelSurvey } from './businessTravel/businessTravelSurvey';
 import { BusinessTravelSurveyAnswerValue } from './businessTravel/businessTravelSurveyAnswerValue';
+import { itSurvey } from './it/itSurvey';
+import { ItSurveyAnswerValue } from './it/itSurveyAnswerValue';
 
 export interface Survey {
   id: string;
@@ -20,6 +22,7 @@ export const knownSurveys = {
   [illuminationSurvey.id]: illuminationSurvey,
   [heatingSurvey.id]: heatingSurvey,
   [electricitySurvey.id]: electricitySurvey,
+  [itSurvey.id]: itSurvey,
   [businessTravelSurvey.id]: businessTravelSurvey,
 } as const;
 
@@ -27,6 +30,7 @@ export type SurveyToSurveyAnswerMap = {
   illumination: IlluminationSurveyAnswerValue;
   heating: HeatingSurveyAnswerValue;
   electricity: ElectricitySurveyAnswerValue;
+  it: ItSurveyAnswerValue;
   businessTravel: BusinessTravelSurveyAnswerValue;
 };
 

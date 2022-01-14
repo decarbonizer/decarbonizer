@@ -29,6 +29,10 @@ import {
   ReduceAirTravelActionAnswerValue,
   ReduceAirTravelActionDetailsAnswerValue,
 } from './businessTravel/reduceAirTravelAction';
+import {
+  IncreaseDataCenterTemperatureActionAnswerValue,
+  IncreaseDataCenterTemperatureActionDetailsAnswerValue,
+} from './it/increaseDataCenterTemperature';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -131,6 +135,10 @@ export type ActionsToActionAnswerMap = {
   >;
   heatLess: ActionAnswerValues<HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue>;
   switchToGreenEnergy: ActionAnswerValues<SwitchToGreenEnergyActionAnswerValue, SwitchToGreenEnergyDetailsAnswerValue>;
+  increaseDataCenterTemperature: ActionAnswerValues<
+    IncreaseDataCenterTemperatureActionAnswerValue,
+    IncreaseDataCenterTemperatureActionDetailsAnswerValue
+  >;
   reduceAirTravel: ActionAnswerValues<ReduceAirTravelActionAnswerValue, ReduceAirTravelActionDetailsAnswerValue>;
 };
 
