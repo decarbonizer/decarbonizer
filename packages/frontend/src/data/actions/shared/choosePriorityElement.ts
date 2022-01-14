@@ -3,7 +3,7 @@ import { SingleChoiceSelectFormSchemaElement } from '../../../form-engine/formSc
 export const choosePriorityElement: SingleChoiceSelectFormSchemaElement = {
   id: 'priority',
   required: false,
-  label: '📊 Choose priority',
+  label: '📊 Priority',
   type: 'single-choice-select',
   options: [
     {

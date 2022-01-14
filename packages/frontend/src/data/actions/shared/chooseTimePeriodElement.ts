@@ -4,7 +4,7 @@ import { DatesFormSchemaElement } from '../../../form-engine/formSchema';
 export const chooseTimePeriodElement: DatesFormSchemaElement = {
   id: 'chooseTimePeriod',
   required: false,
-  label: '📆 Choose time period',
+  label: '📆 Time period',
   type: 'dates',
 };
 
