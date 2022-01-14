@@ -25,6 +25,10 @@ import {
   SwitchToGreenEnergyActionAnswerValue,
   SwitchToGreenEnergyDetailsAnswerValue,
 } from './electricity/switchToGreenEnergy';
+import {
+  ReduceAirTravelActionAnswerValue,
+  ReduceAirTravelActionDetailsAnswerValue,
+} from './businessTravel/reduceAirTravelAction';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -127,6 +131,7 @@ export type ActionsToActionAnswerMap = {
   >;
   heatLess: ActionAnswerValues<HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue>;
   switchToGreenEnergy: ActionAnswerValues<SwitchToGreenEnergyActionAnswerValue, SwitchToGreenEnergyDetailsAnswerValue>;
+  reduceAirTravel: ActionAnswerValues<ReduceAirTravelActionAnswerValue, ReduceAirTravelActionDetailsAnswerValue>;
 };
 
 export type KnownActionId = keyof ActionsToActionAnswerMap;

@@ -7,7 +7,6 @@ import {
   ChooseSurveyAnswerElementAnswerValue,
 } from '../shared/chooseSurveyAnswerElement';
 
-//TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
 export const reduceAirTravelAction: Action = {
   id: 'reduceAirTravel',
   name: 'Reduce air travel',
@@ -21,14 +20,20 @@ export const reduceAirTravelAction: Action = {
           elements: [
             {
               id: 'lessLongTraveling',
-              type: 'number',
-              label: 'How many long-distance flights (>4000 km) can you save next year?',
+              type: 'number-unit',
+              units: 'length',
+              normedUnit: 'km',
+              normedMin: 0,
+              label: 'How much travel via long-distance flights (>4000 km) can you save?',
               required: false,
             },
             {
               id: 'lessShortTraveling',
-              type: 'number',
-              label: 'How many short- and medium-haul flights (<4000 km) can you save next year?',
+              type: 'number-unit',
+              units: 'length',
+              normedUnit: 'km',
+              normedMin: 0,
+              label: 'How much travel via short- and medium-haul flights (<4000 km) can you save?',
               required: false,
             },
           ],
