@@ -3,6 +3,7 @@ import {
   AccordionPanel,
   Icon,
   IconButton,
+  Radio,
   SkeletonText,
   Text,
   Tooltip,
@@ -15,7 +16,7 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useState } from 'react';
 import { DashboardContext } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
@@ -25,6 +26,8 @@ import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
+import { useExternalCalculationData } from '../../../calculations/externalData';
+import { getSuggestion } from '../../../calculations/getSuggestion';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -35,20 +38,38 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const schema = useActionSchema(action, surveyAnswers);
+  const [isBestOption, setIsBestOption] = useState(false);
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
+  const { isLoading: dataLoading, data: externalData, error: externalDatatError } = useExternalCalculationData();
 
   useFilledActionAnswerSync(action, value, setValue);
 
   const handleClearClick = (e: MouseEvent) => {
     setValue({});
+    setIsBestOption(false);
     e.preventDefault();
   };
 
   const handleDetailsClick = (e: MouseEvent) => {
     detailsModalDisclosure.onOpen();
     e.preventDefault();
+  };
+
+  const handleChange = (e: { value }) => {
+    handleValueChanged(e);
+    setIsBestOption(false);
+  };
+
+  const handleSuggestionsClick = (e: MouseEvent) => {
+    if (externalData) {
+      const data = getSuggestion(externalData, action.id as KnownActionId);
+      if (data) {
+        handleValueChanged({ value: data });
+        setIsBestOption(true);
+      }
+    }
   };
 
   return (
@@ -83,6 +104,11 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
             </>
           }
         />
+        {action.suggestionExists && (
+          <Radio colorScheme="green" onClick={handleSuggestionsClick} name="suggestion" isChecked={isBestOption}>
+            Suggest best action{' '}
+          </Radio>
+        )}
         <AccordionPanel display="flex" flexDir="column">
           <Text layerStyle="hint" pb="4">
             {action.description}
@@ -97,7 +123,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
               choiceOptionProviders={providers}
               ruleEvaluationResults={ruleEvaluationResults}
               validationErrors={validationErrors}
-              onValueChanged={handleValueChanged}
+              onValueChanged={handleChange}
             />
           )}
         </AccordionPanel>

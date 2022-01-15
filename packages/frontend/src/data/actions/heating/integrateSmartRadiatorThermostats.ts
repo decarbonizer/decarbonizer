@@ -14,6 +14,7 @@ export const integrateSmartRadiatorThermostats: Action<HeatingSurveyAnswerValue>
   icon: BsThermometerSun,
   description: 'Smart radiator thermostats heat your office efficiently and climate-friendly.',
   forSurvey: 'heating',
+  suggestionExists: false,
   getSchema: () => {
     return {
       pages: [

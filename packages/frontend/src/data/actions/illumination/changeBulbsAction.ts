@@ -15,6 +15,7 @@ export const changeBulbsAction: Action<IlluminationSurveyAnswerValue> = {
   description:
     'Upgrading the light bulbs in your office may have a positive effect on your carbon footprint. LEDs tend to produce less footprint',
   forSurvey: 'illumination',
+  suggestionExists: true,
   getSchema: () => {
     return {
       pages: [

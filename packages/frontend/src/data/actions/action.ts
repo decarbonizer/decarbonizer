@@ -74,6 +74,10 @@ export interface Action<T extends object = any> {
    */
   description?: string;
   /**
+   * Specifies if a best option can be suggested.
+   */
+  suggestionExists: boolean;
+  /**
    * An optional icon.
    */
   icon?: ComponentType;
