@@ -1,5 +1,4 @@
 import { SkeletonText } from '@chakra-ui/skeleton';
-import { DataFrame } from 'data-forge';
 import { GiFootprint } from 'react-icons/gi';
 import { useParams } from 'react-router';
 import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';

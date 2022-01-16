@@ -48,6 +48,8 @@ export interface NumberFormSchemaElement extends FormSchemaBaseElement<'number'>
 
 export const knownUnitInputTemplates: Record<string, Array<AllMeasuresUnits>> = {
   energy: ['Wh', 'kWh', 'GWh'],
+  length: ['km'],
+  temperature: ['C', 'F'],
   time: ['d', 'h', 'min', 's'],
   timeMinutes: ['min', 's'],
 };

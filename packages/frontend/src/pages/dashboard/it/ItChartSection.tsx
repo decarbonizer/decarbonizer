@@ -1,7 +1,17 @@
-import EmptyState from '../../../components/EmptyState';
 import { ActionChartsSectionProps } from '../ActionChartsSection';
-import inProgress from '../../../img/inProgress.svg';
+import { Grid } from '@chakra-ui/react';
+import FootprintDeltaCard from './FootprintDeltaCard';
+import FootprintComparisonChartCard from './FootprintComparisonChartCard';
 
 export default function ItChartSection({ isNarrow }: ActionChartsSectionProps) {
-  return <EmptyState imgSrc={inProgress} title="Work in progress" />;
+  return (
+    <Grid
+      flexGrow={1}
+      templateRows={isNarrow ? 'auto auto 20rem 20rem 20rem' : 'auto auto 1fr'}
+      templateColumns={'1fr'}
+      gap="6">
+      <FootprintDeltaCard />
+      <FootprintComparisonChartCard />
+    </Grid>
+  );
 }

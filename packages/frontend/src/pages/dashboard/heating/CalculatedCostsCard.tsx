@@ -3,13 +3,8 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import {
-  getTransformedHeatingCostPerYear,
-  getTransformedHeatingInstallationCostPerYear,
-} from '../../../calculations/heating/cost';
+import { getTransformedHeatingCostPerYear } from '../../../calculations/heating/cost';
 import { getTransformedHeatingFootprintPerYear } from '../../../calculations/heating/footprint';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
-import { transformHeatingSurveyAnswers } from '../../../calculations/heating/transformation';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
