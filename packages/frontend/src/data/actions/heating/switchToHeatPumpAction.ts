@@ -15,6 +15,7 @@ export const switchToHeatPumpAction: Action<HeatingSurveyAnswerValue> = {
   description:
     'A heat pump does not use fossil fuels and a solar panel does not use electricity. They both actively contribute to the reduction of your CO₂ emissions.',
   forSurvey: 'heating',
+  suggestionExists: true,
   getSchema: () => {
     return {
       pages: [

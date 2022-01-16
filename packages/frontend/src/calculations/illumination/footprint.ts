@@ -1,4 +1,4 @@
-import { IDataFrame } from 'data-forge';
+import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
@@ -7,6 +7,39 @@ import { ExternalCalculationData } from '../externalData';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { transformIlluminationSurveyAnswers } from './transformation';
 import { getIlluminationRuntimePerYear } from './utils';
+import {
+  ChangeBulbsActionAnswerValue,
+  ChangeBulbsActionDetailsAnswerValue,
+} from '../../data/actions/illumination/changeBulbsAction';
+import { ActionAnswerValues } from '../../data/actions/action';
+
+/**
+ * Returns id of bulb which reduces Co2 the most.
+ */
+export function getSuggestionForChangeBulbs(externalCalculationData: ExternalCalculationData) {
+  const result = externalCalculationData.bulbs.reduce<{ difference: number; bulbId: string | undefined }>(
+    ({ difference, bulbId }, bulb) => {
+      const newBulb: ChangeBulbsActionAnswerValue = { newBulb: bulb._id };
+      const possibleAnswerValue: ActionAnswerValues<ChangeBulbsActionAnswerValue, ChangeBulbsActionDetailsAnswerValue> =
+        { value: newBulb, detailsValue: undefined };
+      const possibleAction: ActionAnswerBase<ActionAnswerValues> = {
+        actionId: 'changeBulbs',
+        values: possibleAnswerValue,
+      };
+      const result = getIlluminationFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        new DataFrame([possibleAction]),
+      );
+
+      return result.delta < difference
+        ? { difference: result.delta, bulbId: bulb._id }
+        : { difference: difference, bulbId: bulbId };
+    },
+    { difference: 0, bulbId: undefined },
+  );
+  return { newBulb: result.bulbId };
+}
 
 /**
  * Returns the CO2 footprint delta of a set of illumination survey answers before and after applying the given actions.

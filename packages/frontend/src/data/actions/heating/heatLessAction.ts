@@ -15,6 +15,7 @@ export const heatLessAction: Action<HeatingSurveyAnswerValue> = {
   description:
     'As a rule of thumb, for every less degree of room temperature, approx. 6% of your heating energy is saved.',
   forSurvey: 'heating',
+  suggestionExists: false,
   getSchema: () => {
     return {
       pages: [

@@ -14,6 +14,7 @@ export const reduceRuntimeAction: Action<IlluminationSurveyAnswerValue> = {
   icon: AiOutlineFieldTime,
   description: 'You can reduce your CO2 footprint and costs by reducing the runtime of your lights.',
   forSurvey: 'illumination',
+  suggestionExists: false,
   getSchema: () => ({
     pages: [
       {
