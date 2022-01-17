@@ -63,9 +63,9 @@ export function getCostForYearRange(
 
     return {
       year,
-      totalOriginalCost: totalOriginalCost.toFixed(0),
-      totalNewCost: totalNewCost.toFixed(0),
-      delta: (totalOriginalCost - totalNewCost).toFixed(0),
+      totalOriginalCost: Math.round(totalOriginalCost),
+      totalNewCost: Math.round(totalNewCost),
+      delta: Math.round(totalOriginalCost - totalNewCost),
     };
   });
 }
