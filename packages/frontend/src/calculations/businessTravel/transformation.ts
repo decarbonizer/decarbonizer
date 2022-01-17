@@ -7,7 +7,7 @@ import {
   ReduceAirTravelActionDetailsAnswerValue,
 } from '../../data/actions/businessTravel/reduceAirTravelAction';
 import { BusinessTravelSurveyAnswerValue } from '../../data/surveys/businessTravel/businessTravelSurveyAnswerValue';
-import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**
@@ -32,9 +32,9 @@ export function transformBusinessTravelSurveyAnswer(
 ): BusinessTravelSurveyAnswerValue {
   let result = surveyAnswer.value;
 
-  const reduceAirTravelActionAnswer = getActionAnswerForAction(actionAnswers, 'reduceAirTravel');
-  if (reduceAirTravelActionAnswer) {
-    result = applyReduceAirTravelActionAnswer(surveyAnswer._id, result, reduceAirTravelActionAnswer.values);
+  const reduceAirTravelActionAnswers = getActionAnswersForAction(actionAnswers, 'reduceAirTravel');
+  for (const answer of reduceAirTravelActionAnswers) {
+    result = applyReduceAirTravelActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;
