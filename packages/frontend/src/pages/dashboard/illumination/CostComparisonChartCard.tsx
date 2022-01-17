@@ -107,6 +107,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
           <option value="maintenance">Maintenance</option>
         </Select>
       }
+      unit="€"
       header="Cost comparison over 10 years"
       data={data}
       isLoading={isLoading}

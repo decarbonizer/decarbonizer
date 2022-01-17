@@ -59,6 +59,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
   return (
     <ComparisonChartCard
       {...props}
+      unit="€"
       header="Cost comparison over 10 years"
       data={data}
       isLoading={isLoading}
