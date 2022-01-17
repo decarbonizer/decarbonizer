@@ -12,6 +12,7 @@ export const routes = {
   actionPlanFileExport: createRouteFactory<ActionPlanFileExportPageParams>(
     '/realEstates/:realEstateId/actionPlan/:actionPlanId/export',
   ),
+  actionPlansBudgetOverview: createRouteFactory<RealEstatePageParams>('/realEstates/:realEstateId/actionPlans/budget'),
 };
 
 export interface RealEstatePageParams {

@@ -145,6 +145,10 @@ export default function CityCard({ realEstate }: CityCardProps) {
               <MenuItem icon={<Icon as={MdPendingActions} />} onClick={() => goToActionPlanOverview(realEstate._id)}>
                 Action Plans
               </MenuItem>
+              <MenuItem
+                onClick={() => history.push(routes.actionPlansBudgetOverview({ realEstateId: realEstate._id }))}>
+                Action Plan Budgets
+              </MenuItem>
               <MenuDivider />
               <MenuItem icon={<Icon as={FaEdit} />} onClick={onOpenEditModal}>
                 Edit...
