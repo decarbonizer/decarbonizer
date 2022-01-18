@@ -1,30 +1,26 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import { useParams } from 'react-router';
+import { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, Tooltip, XAxis, YAxis, Bar, LabelList } from 'recharts';
-import { useCalculation } from '../../calculations/useCalculation';
-import { RealEstatePageParams } from '../../routes';
+import { ActionPlan } from '../../api/actionPlan';
 
 export interface ActionPlanChartProps extends BoxProps {
   fromYear: number;
   toYear: number;
+  actionPlans: Array<ActionPlan>;
 }
 
-export default function ActionPlanChart({ fromYear, toYear, ...rest }: ActionPlanChartProps) {
-  const { realEstateId } = useParams<RealEstatePageParams>();
-  const { data } = useCalculation(
-    ({ actionPlans }) =>
-      actionPlans
-        .where((x) => x.realEstateId === realEstateId)
-        .map((x) => ({
-          name: x.name,
-          time: [
-            // For a bar spanning two values recharts requires a tuple with the two values.
-            new Date(x.startDate).getFullYear(),
-            new Date(x.endDate).getFullYear(),
-          ],
-        }))
-        .toArray(),
-    [realEstateId],
+export default function ActionPlanChart({ fromYear, toYear, actionPlans, ...rest }: ActionPlanChartProps) {
+  const data = useMemo(
+    () =>
+      actionPlans.map((x) => ({
+        name: x.name,
+        time: [
+          // For a bar spanning two values recharts requires a tuple with the two values.
+          new Date(x.startDate).getFullYear(),
+          new Date(x.endDate).getFullYear(),
+        ],
+      })),
+    [actionPlans],
   );
 
   return (
@@ -34,7 +30,7 @@ export default function ActionPlanChart({ fromYear, toYear, ...rest }: ActionPla
           <Tooltip />
           <XAxis type="number" dataKey="time" domain={[fromYear, toYear]} allowDataOverflow hide />
           <YAxis type="category" dataKey="name" domain={['dataMin', 'dataMax']} hide />
-          <Bar dataKey="time" opacity={0.6} fill="red">
+          <Bar dataKey="time" opacity={0.6} fill="red" maxBarSize={20}>
             <LabelList dataKey="name" position="center" />
           </Bar>
         </BarChart>

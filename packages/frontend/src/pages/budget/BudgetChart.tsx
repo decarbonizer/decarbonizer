@@ -1,23 +1,22 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import { useParams } from 'react-router';
+import { DataFrame } from 'data-forge';
 import { Bar, BarChart, Legend, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ActionPlan } from '../../api/actionPlan';
 import { getCostForYearRange } from '../../calculations/global/cost';
 import { useCalculation } from '../../calculations/useCalculation';
-import { RealEstatePageParams } from '../../routes';
 
 export interface BudgetChartProps extends BoxProps {
   fromYear: number;
   toYear: number;
+  actionPlans: Array<ActionPlan>;
 }
 
-export default function BudgetChart({ fromYear, toYear, ...rest }: BudgetChartProps) {
-  const { realEstateId } = useParams<RealEstatePageParams>();
+export default function BudgetChart({ fromYear, toYear, actionPlans, ...rest }: BudgetChartProps) {
   const { data } = useCalculation(
     (externalCalculationData) => {
-      const actionPlans = externalCalculationData.actionPlans.where((x) => x.realEstateId === realEstateId);
-      return getCostForYearRange(externalCalculationData, actionPlans, fromYear, toYear);
+      return getCostForYearRange(externalCalculationData, new DataFrame(actionPlans), fromYear, toYear);
     },
-    [fromYear, toYear, realEstateId],
+    [fromYear, toYear, actionPlans],
   );
 
   return (
