@@ -30,7 +30,7 @@ export default function ActionPlanChart({ fromYear, toYear, actionPlans, ...rest
           <Tooltip />
           <XAxis type="number" dataKey="time" domain={[fromYear, toYear]} allowDataOverflow hide />
           <YAxis type="category" dataKey="name" domain={['dataMin', 'dataMax']} hide />
-          <Bar dataKey="time" opacity={0.6} fill="red" maxBarSize={20}>
+          <Bar dataKey="time" fill="cornflowerblue" maxBarSize={20}>
             <LabelList dataKey="name" position="center" />
           </Bar>
         </BarChart>
