@@ -12,10 +12,11 @@ export interface ComparisonChartCardProps extends DashboardCardProps {
   syncId: string;
   oldDataKey: string;
   newDataKey: string;
+  unit: string;
 }
 
 export default function ComparisonChartCard(props: ComparisonChartCardProps) {
-  const { isLoading, data, error, syncId, oldDataKey, newDataKey, ...dashboardCardProps } = props;
+  const { isLoading, data, error, syncId, oldDataKey, newDataKey, unit, ...dashboardCardProps } = props;
 
   return (
     <DashboardCard isExpandable {...dashboardCardProps}>
@@ -35,7 +36,16 @@ export default function ComparisonChartCard(props: ComparisonChartCardProps) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
               <YAxis />
-              <Tooltip />
+              <Tooltip
+                formatter={(value, label) => {
+                  return [`${value} ${unit}`, label];
+                }}
+                labelFormatter={(year, values) => {
+                  const oldFootprint = values[0]?.value as number;
+                  const newFootprint = values[1]?.value as number;
+                  return [`Savings after ${year} years: ${newFootprint - oldFootprint} ${unit}`];
+                }}
+              />
               <Legend />
               <Area type="monotone" dataKey={newDataKey} stroke="#9AE6B4" strokeWidth={3} fill="#9AE6B477" />
               <Area type="monotone" dataKey={oldDataKey} stroke="#B794F4" strokeWidth={3} fill="#B794F477" />

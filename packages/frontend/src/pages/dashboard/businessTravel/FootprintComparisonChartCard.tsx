@@ -40,6 +40,7 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
     <ComparisonChartCard
       {...props}
       header="Footprint comparison over 10 years"
+      unit="kg"
       data={data}
       isLoading={isLoading}
       error={error}
