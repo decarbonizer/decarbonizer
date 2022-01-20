@@ -15,7 +15,7 @@ import { transformHeatingSurveyAnswers } from './transformation';
 /**
  * Returns id of heating type which reduces Co2 the most.
  */
-export function getSuggestionForSwitchToHeatPump(externalCalculationData: ExternalCalculationData) {
+export function getSuggestionForSwitchToHeatPumpFootprint(externalCalculationData: ExternalCalculationData) {
   const result = externalCalculationData.heatingTypes.reduce<{ difference: number; heatingTypeId: string | undefined }>(
     ({ difference, heatingTypeId }, heatingType) => {
       const newHeatPump: SwitchToHeatPumpActionAnswerValue = { newHeatPump: heatingType._id };
