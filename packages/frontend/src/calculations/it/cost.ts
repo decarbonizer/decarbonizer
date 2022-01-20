@@ -1,50 +1,60 @@
-import { ExternalCalculationData } from '../externalData';
 import { IDataFrame } from 'data-forge';
-import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-import { transformItSurveyAnswers } from './transformation';
+import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ItSurveyAnswerValue } from '../../data/surveys/it/itSurveyAnswerValue';
-import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { getDeltaType } from '../../utils/deltaType';
+import { ExternalCalculationData } from '../externalData';
+import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
+import { transformItSurveyAnswers } from './transformation';
 
-export function getItFootprintDelta(
+/**
+ * Returns the cost delta of a set of illumination survey answers before and after applying the given actions.
+ */
+export function getItCostDelta(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
   const itSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'it');
-  const originalFootprint = getItFootprintPerYear(
+  const originalCost = getItCostPerYear(
     externalCalculationData,
     itSurveyAnswers.map((answer) => answer.value),
   );
 
-  const footprintAfterActions = getTransformedItFootprintPerYear(
+  const costAfterActions = getTransformedItCostPerYear(
     externalCalculationData,
     externalCalculationData.surveyAnswers,
     actionAnswers,
   );
 
-  const delta = footprintAfterActions - originalFootprint;
+  const delta = costAfterActions - originalCost;
   const deltaType = getDeltaType(delta);
 
   return {
-    originalFootprint,
-    footprintAfterActions,
     delta,
     deltaType,
+    originalCost,
+    costAfterActions,
   };
 }
 
-export function getTransformedItFootprintPerYear(
+/**
+ * Transforms **all given** illumination survey answers so that they integrate the given action answers
+ * and then calculates their resulting cost.
+ */
+export function getTransformedItCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
   const transformedAnswers = transformItSurveyAnswers(surveyAnswers, actionAnswers);
-  return getItFootprintPerYear(externalCalculationData, transformedAnswers);
+  return getItCostPerYear(externalCalculationData, transformedAnswers);
 }
 
-export function getItFootprintPerYear(
+/**
+ * Calculates the cost of **all given** illumination survey answers.
+ */
+export function getItCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, ItSurveyAnswerValue>,
 ) {
@@ -52,20 +62,14 @@ export function getItFootprintPerYear(
     return 0;
   }
   return surveyAnswers
-    .map((answer) => getItFootprintPerYearForSingleSurveyAnswer(externalCalculationData, answer))
+    .map((answer) => getItCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);
 }
 
-function getItFootprintPerYearForSingleSurveyAnswer(
-  { energyForms, realEstates }: ExternalCalculationData,
-  answer: ItSurveyAnswerValue,
-) {
-  if (answer.superServer) {
-    const heatingKwhPerServer = 11;
-
-    const generatedHeating = answer.gpuServerCount * heatingKwhPerServer;
-  }
-
+/**
+ * Calculates the cost of **one** illumination survey answer.
+ */
+function getItCostPerYearForSingleSurveyAnswer({ energyForms }: ExternalCalculationData, answer: ItSurveyAnswerValue) {
   const energyForm = energyForms.filter((energyForm) => energyForm._id === answer.dataCenterEnergyForm).first();
-  return energyForm.co2PerGramPerKwh * answer.dataCenterConsumption;
+  return energyForm.euroPerKwh * answer.dataCenterConsumption;
 }

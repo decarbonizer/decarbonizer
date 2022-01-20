@@ -1,18 +1,18 @@
 import { Action } from '../action';
-import { BsThermometerHigh } from 'react-icons/all';
-import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
+import { GrCloudComputer } from 'react-icons/gr';
+import { ItSurveyAnswerValue } from '../../surveys/it/itSurveyAnswerValue';
 import { choosePriorityElement, ChoosePriorityElementAnswerValue } from '../shared/choosePriorityElement';
 import {
   createChooseSurveyAnswerElement,
   ChooseSurveyAnswerElementAnswerValue,
 } from '../shared/chooseSurveyAnswerElement';
+import { chooseTimePeriodElement, ChooseTimePeriodElementAnswerValue } from '../shared/chooseTimePeriodElement';
 
-//TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
-export const increaseDataCenterTemperature: Action = {
-  id: 'increaseDataCenterTemperature',
-  name: 'Increase data center temperature',
-  icon: BsThermometerHigh,
-  description: 'Approx. 23°C is the optimum temperature to save energy without risking overheating.',
+export const useSuperServer: Action<ItSurveyAnswerValue> = {
+  id: 'useSuperServer',
+  name: 'Change GPU Servers',
+  icon: GrCloudComputer,
+  description: 'Clound&Heat provides technology that uses produced heating from GPU Servers to heat rooms.',
   forSurvey: 'it',
   suggestionExists: false,
   getSchema: () => {
@@ -21,9 +21,10 @@ export const increaseDataCenterTemperature: Action = {
         {
           elements: [
             {
-              id: 'newDataCenterTemperature',
-              label: 'Which temperature do you want to reach in your data center?',
-              type: 'number',
+              id: 'newServer',
+              type: 'boolean-checkbox',
+              label: 'Use Supermicro SuperServers 9029GP',
+              defaultValue: false,
               required: false,
             },
           ],
@@ -44,11 +45,11 @@ export const increaseDataCenterTemperature: Action = {
   },
 };
 
-export interface IncreaseDataCenterTemperatureActionAnswerValue {
-  newDataCenterTemperature: number;
+export interface UseSuperServerActionAnswerValue {
+  newServer: boolean;
 }
 
-export interface IncreaseDataCenterTemperatureActionDetailsAnswerValue
+export interface UseSuperServerActionDetailsAnswerValue
   extends ChoosePriorityElementAnswerValue,
     ChooseTimePeriodElementAnswerValue,
     ChooseSurveyAnswerElementAnswerValue {}
