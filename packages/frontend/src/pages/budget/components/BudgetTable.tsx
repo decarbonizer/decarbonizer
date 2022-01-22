@@ -197,7 +197,7 @@ export function RawBudgetTable({
           style={{
             flexDirection: 'row',
             width: '100%',
-            fontFamily: 'Times-Bold',
+            fontWeight: 'bold',
             color: '#094D13',
             paddingVertical: 2,
           }}>
@@ -222,7 +222,7 @@ export function RawBudgetTable({
             </Pdf.Text>
             <Pdf.Text
               style={{
-                fontSize: 10,
+                fontSize: 8,
               }}>
               2
             </Pdf.Text>
@@ -249,7 +249,7 @@ export function RawBudgetTable({
             </Pdf.Text>
             <Pdf.Text
               style={{
-                fontSize: 10,
+                fontSize: 8,
               }}>
               2
             </Pdf.Text>
@@ -310,7 +310,7 @@ export function RawBudgetTable({
                 <Pdf.Text>{formatFootprint(category.transformedFootprint)}</Pdf.Text>
                 <Pdf.Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: '#696969',
                   }}>
                   {footprintDelta !== 0 ? (
@@ -335,7 +335,7 @@ export function RawBudgetTable({
                 <Pdf.Text>{category.transformedCost.toFixed(2)} €</Pdf.Text>
                 <Pdf.Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: '#696969',
                   }}>
                   {costDelta !== 0 ? (
@@ -352,7 +352,7 @@ export function RawBudgetTable({
           style={{
             flexDirection: 'row',
             width: '100%',
-            fontFamily: 'Times-Bold',
+            fontWeight: 'bold',
             borderTop: '1px solid #eee',
             color: '#094D13',
             paddingVertical: 2,
@@ -378,7 +378,7 @@ export function RawBudgetTable({
             <Pdf.Text>{formatFootprint(totalTransformedFootprint)}</Pdf.Text>
             <Pdf.Text
               style={{
-                fontSize: 12,
+                fontSize: 10,
                 color: '#696969',
               }}>
               {totalFootprintDelta !== 0 ? (
@@ -403,7 +403,7 @@ export function RawBudgetTable({
             <Pdf.Text>{totalTransformedCost.toFixed(2)} €</Pdf.Text>
             <Pdf.Text
               style={{
-                fontSize: 12,
+                fontSize: 10,
                 color: '#696969',
               }}>
               {totalCostDelta !== 0 ? (

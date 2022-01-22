@@ -3,7 +3,9 @@ import { ReactNode, useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
 import { FormSchemaElement } from '../formSchema';
 import { useValidationErrorsForElement } from '../internals/hooks';
-import { Text, View } from '@react-pdf/renderer';
+import { Text, View, Image } from '@react-pdf/renderer';
+
+import checkmark from '../../img/checkmark.png';
 
 export interface DefaultFormControlLayoutProps {
   element: FormSchemaElement;
@@ -15,19 +17,32 @@ export default function DefaultFormControlLayout({ element, children }: DefaultF
   const { isPdfView, isViewOnly } = useContext(FormEnginePropsContext);
 
   if (isPdfView) {
+    const label = element.label ? (
+      <Text>
+        {element.label}
+        {element.label.endsWith(':') || element.label.endsWith('?') ? '' : ':'}{' '}
+      </Text>
+    ) : null;
+
     return (
       <View
         style={{
           marginVertical: 3,
           flexDirection: 'row',
+          alignItems: 'flex-end',
         }}>
-        {element.label && (
-          <Text>
-            {element.label}
-            {element.label.endsWith(':') ? '' : ':'}{' '}
-          </Text>
-        )}
-        <Text>{children}</Text>
+        {element.label ? (
+          <View
+            style={{
+              flex: 1,
+            }}>
+            {label}
+          </View>
+        ) : null}
+        <View style={{ flexGrow: 0, paddingLeft: 10, flexDirection: 'row', alignItems: 'center' }}>
+          {element.label ? null : <Image src={checkmark} style={{ width: 16, height: 16, marginRight: 5 }} />}
+          <Text>{children}</Text>
+        </View>
       </View>
     );
   }

@@ -1,4 +1,4 @@
-import { Document, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Document, Font, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer';
 import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import { RealEstateDashboardPageParams } from '../../routes';
@@ -15,10 +15,30 @@ import FormEngine from '../../form-engine/FormEngine';
 import { RawBudgetTable, useBudgetTableData } from '../budget/components/BudgetTable';
 import { DataFrame } from 'data-forge';
 
-// Create styles
+// curl https://fonts.googleapis.com/css2\?family\=EB+Garamond:ital,wght@0,400\;0,700\;1,400
+Font.register({
+  family: 'Font',
+  fonts: [
+    {
+      src: 'https://fonts.gstatic.com/s/ebgaramond/v19/~ChoKC0VCIEdhcmFtb25kOgsI9NCduwcVAADIQyAA.ttf',
+      fontWeight: 'normal',
+    },
+    {
+      src: 'https://fonts.gstatic.com/s/ebgaramond/v19/~ChwKC0VCIEdhcmFtb25kEAI6Cwj00J27BxUAAMhDIAA=.ttf',
+      fontWeight: 'normal',
+      fontStyle: 'italic',
+    },
+    {
+      src: 'https://fonts.gstatic.com/s/ebgaramond/v19/~ChoKC0VCIEdhcmFtb25kOgsI9NCduwcVAAAvRCAA.ttf',
+      fontWeight: 'bold',
+    },
+  ],
+});
+
 const styles = StyleSheet.create({
   page: {
-    fontFamily: 'Times-Roman',
+    fontFamily: 'Font',
+    fontSize: 16,
     paddingTop: 65,
     paddingBottom: 65,
     paddingHorizontal: 35,
@@ -59,7 +79,7 @@ export default function ActionPlanFileExportPage() {
 
               <Text style={{ marginVertical: 3 }}>
                 Location: {realEstate.cityName}
-                <Text style={{ fontFamily: 'Times-Italic', fontSize: 16 }}>
+                <Text style={{ fontStyle: 'italic', fontSize: 14 }}>
                   {realEstate.description ? ` (${realEstate.description})` : null}
                 </Text>
               </Text>
@@ -85,7 +105,7 @@ export default function ActionPlanFileExportPage() {
                   marginBottom: 10,
                 }}
                 wrap={false}>
-                <Text style={{ color: '#094D13', fontFamily: 'Times-Bold' }}>Budget table</Text>
+                <Text style={{ color: '#094D13', fontWeight: 'bold' }}>Budget table</Text>
                 <RawBudgetTable data={budgetTableData} isPdfView />
               </View>
             </View>
@@ -112,7 +132,7 @@ function ActionAnswer({ actionId, actionAnswer, surveyAnswers, providers }: Acti
 
   return (
     <View style={{ marginVertical: 10 }}>
-      <Text style={{ color: '#094D13', fontFamily: 'Times-Bold' }}>
+      <Text style={{ color: '#094D13', fontWeight: 'bold' }}>
         {`${actionCategory?.name}: ${currentAction?.name}` ?? actionId}
       </Text>
       <FormEngine
