@@ -203,62 +203,88 @@ export function RawBudgetTable({
           }}>
           <Pdf.View
             style={{
-              flex: 1.5,
+              flex: 1,
             }}>
             <Pdf.Text>Category</Pdf.Text>
           </Pdf.View>
           <Pdf.View
             style={{
               flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
+              textAlign: 'right',
             }}>
+            <Pdf.View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}>
+              <Pdf.Text
+                style={{
+                  paddingBottom: 1,
+                }}>
+                CO
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  fontSize: 8,
+                }}>
+                2
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  paddingLeft: 5,
+                  paddingBottom: 1,
+                }}>
+                / yr
+              </Pdf.Text>
+            </Pdf.View>
             <Pdf.Text
               style={{
-                paddingBottom: 1,
+                fontSize: 10,
+                color: '#696969',
               }}>
-              CO
-            </Pdf.Text>
-            <Pdf.Text
-              style={{
-                fontSize: 8,
-              }}>
-              2
-            </Pdf.Text>
-            <Pdf.Text
-              style={{
-                paddingLeft: 5,
-                paddingBottom: 1,
-              }}>
-              / yr
+              before actions
             </Pdf.Text>
           </Pdf.View>
           <Pdf.View
             style={{
               flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
+              textAlign: 'right',
             }}>
+            <Pdf.View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}>
+              <Pdf.Text
+                style={{
+                  paddingBottom: 1,
+                }}>
+                CO
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  fontSize: 8,
+                }}>
+                2
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  paddingLeft: 5,
+                  paddingBottom: 1,
+                }}>
+                / yr
+              </Pdf.Text>
+            </Pdf.View>
             <Pdf.Text
               style={{
-                paddingBottom: 1,
+                fontSize: 10,
+                color: '#696969',
               }}>
-              CO
-            </Pdf.Text>
-            <Pdf.Text
-              style={{
-                fontSize: 8,
-              }}>
-              2
-            </Pdf.Text>
-            <Pdf.Text
-              style={{
-                paddingLeft: 5,
-                paddingBottom: 1,
-              }}>
-              / yr
+              after actions
             </Pdf.Text>
           </Pdf.View>
           <Pdf.View
@@ -267,6 +293,13 @@ export function RawBudgetTable({
               textAlign: 'right',
             }}>
             <Pdf.Text>Cost / yr</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              before actions
+            </Pdf.Text>
           </Pdf.View>
           <Pdf.View
             style={{
@@ -274,6 +307,13 @@ export function RawBudgetTable({
               textAlign: 'right',
             }}>
             <Pdf.Text>Cost / yr</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              after actions
+            </Pdf.Text>
           </Pdf.View>
         </Pdf.View>
         {data.map((category) => {
@@ -288,10 +328,11 @@ export function RawBudgetTable({
                 flexDirection: 'row',
                 width: '100%',
                 paddingVertical: 2,
+                opacity: footprintDelta === 0 && costDelta === 0 ? 0.6 : 1,
               }}>
               <Pdf.View
                 style={{
-                  flex: 1.5,
+                  flex: 1,
                 }}>
                 <Pdf.Text>{category.label}</Pdf.Text>
               </Pdf.View>
@@ -359,7 +400,7 @@ export function RawBudgetTable({
           }}>
           <Pdf.View
             style={{
-              flex: 1.5,
+              flex: 1,
             }}>
             <Pdf.Text>Total</Pdf.Text>
           </Pdf.View>
@@ -383,7 +424,7 @@ export function RawBudgetTable({
               }}>
               {totalFootprintDelta !== 0 ? (
                 <>
-                  {formatFootprint(Math.abs(totalFootprintDelta))} € {totalFootprintDelta > 0 ? 'saved' : 'wasted'}
+                  {formatFootprint(Math.abs(totalFootprintDelta))} {totalFootprintDelta > 0 ? 'saved' : 'wasted'}
                 </>
               ) : null}
             </Pdf.Text>
