@@ -12,6 +12,8 @@ import { useFormEngineChoiceOptionProviders } from '../../form-engine/useFormEng
 import { knownActionCategories, knownActions } from '../../data/actions/action';
 import { useActionSchema } from '../../data/actions/useActionSchema';
 import FormEngine from '../../form-engine/FormEngine';
+import { RawBudgetTable, useBudgetTableData } from '../budget/components/BudgetTable';
+import { DataFrame } from 'data-forge';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -35,7 +37,13 @@ export default function ActionPlanFileExportPage() {
   const { data: actionPlan, isFetching: isFetchingActionPlan } = useGetActionPlanQuery({ id: actionPlanId! });
   const { providers } = useFormEngineChoiceOptionProviders(realEstateId);
 
-  if (isFetchingActionPlan || !actionPlan || !realEstate) {
+  const filledActionAnswers =
+    actionPlan?.actionAnswers.reduce((acc, actionAnswer) => ({ ...acc, [actionAnswer.actionId]: actionAnswer }), {}) ??
+    {};
+  const filledAnswersDf = new DataFrame(Object.values(filledActionAnswers).filter(Boolean));
+  const { data: budgetTableData, isLoading: isLoadingBudgetTableData } = useBudgetTableData(filledAnswersDf);
+
+  if (isFetchingActionPlan || !actionPlan || isLoadingBudgetTableData || !budgetTableData || !realEstate) {
     return null;
   }
 
@@ -70,6 +78,16 @@ export default function ActionPlanFileExportPage() {
                   providers={providers}
                 />
               ))}
+
+              <View
+                style={{
+                  marginTop: 20,
+                  marginBottom: 10,
+                }}
+                wrap={false}>
+                <Text style={{ color: '#094D13', fontFamily: 'Times-Bold' }}>Budget table</Text>
+                <RawBudgetTable data={budgetTableData} isPdfView />
+              </View>
             </View>
           </Page>
         </Document>
