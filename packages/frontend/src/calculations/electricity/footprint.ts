@@ -15,7 +15,7 @@ import {
 /**
  * Returns id of energy form which reduces Co2 the most.
  */
-export function getSuggestionForSwitchToGreenEnergy(externalCalculationData: ExternalCalculationData) {
+export function getSuggestionForSwitchToGreenEnergyFootprint(externalCalculationData: ExternalCalculationData) {
   const result = externalCalculationData.energyForms.reduce<{ difference: number; energyFormId: string | undefined }>(
     ({ difference, energyFormId }, energyForm) => {
       const newEnergyForm: SwitchToGreenEnergyActionAnswerValue = { newEnergyForm: energyForm._id };
