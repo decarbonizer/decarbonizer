@@ -36,6 +36,7 @@ import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
 import { SurveyAnswer } from '../../../api/surveyAnswer';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { ReactNode } from 'react';
+import * as Pdf from '@react-pdf/renderer';
 
 interface Category<T extends keyof SurveyToSurveyAnswerMap = any> {
   surveyId: T;
@@ -103,9 +104,8 @@ const categories: Category[] = [
   },
 ];
 
-export default function BudgetTable() {
-  const filledActionAnswersDf = useFilledActionAnswersDataFrame();
-  const { data, isLoading, error } = useCalculation(
+export function useBudgetTableData(filledActionAnswersDf) {
+  return useCalculation(
     (externalCalculationData) => {
       return categories.map((category) => {
         const { surveyId, label, getFootprint, getCost, getTransformedFootprint, getTransformedCost } = category;
@@ -142,7 +142,34 @@ export default function BudgetTable() {
     },
     [filledActionAnswersDf],
   );
+}
 
+export default function BudgetTable() {
+  const filledAnswersDf = useFilledActionAnswersDataFrame();
+  const { data, isLoading, error } = useBudgetTableData(filledAnswersDf);
+
+  return (
+    <InlineErrorDisplay error={error}>
+      {isLoading && <SkeletonText />}
+      {data && <RawBudgetTable data={data} />}
+    </InlineErrorDisplay>
+  );
+}
+
+export function RawBudgetTable({
+  data,
+  isPdfView,
+}: {
+  data: {
+    surveyId: string;
+    label: string;
+    footprint: number;
+    cost: number;
+    transformedFootprint: number;
+    transformedCost: number;
+  }[];
+  isPdfView?: boolean;
+}) {
   const totalFootprint = sum(data?.map((category) => category.footprint));
   const totalTransformedFootprint = sum(data?.map((category) => category.transformedFootprint));
   const totalFootprintDelta = totalFootprint - totalTransformedFootprint;
@@ -158,100 +185,369 @@ export default function BudgetTable() {
     return `${adjustedFootprint.toFixed(2)} ${unitSymbol}`;
   }
 
-  return (
-    <InlineErrorDisplay error={error}>
-      {isLoading && <SkeletonText />}
-      {data && (
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <ThWithHelpText>Category</ThWithHelpText>
-              <ThWithHelpText isNumeric helpText="before actions">
-                CO<sub>2</sub> footprint / yr
-              </ThWithHelpText>
-              <ThWithHelpText isNumeric helpText="after actions">
-                CO<sub>2</sub> footprint / yr
-              </ThWithHelpText>
-              <ThWithHelpText isNumeric helpText="before actions">
-                Cost / yr
-              </ThWithHelpText>
-              <ThWithHelpText isNumeric helpText="after actions">
-                Cost / yr
-              </ThWithHelpText>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map((category) => {
-              const footprintDelta = category.footprint - category.transformedFootprint;
-              const costDelta = category.cost - category.transformedCost;
+  if (isPdfView) {
+    return (
+      <Pdf.View
+        style={{
+          flexDirection: 'column',
+          width: '100%',
+          marginVertical: 5,
+        }}>
+        <Pdf.View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            fontWeight: 'bold',
+            color: '#094D13',
+            paddingVertical: 2,
+          }}>
+          <Pdf.View
+            style={{
+              flex: 1,
+            }}>
+            <Pdf.Text>Category</Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}>
+              <Pdf.Text
+                style={{
+                  paddingBottom: 1,
+                }}>
+                CO
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  fontSize: 8,
+                }}>
+                2
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  paddingLeft: 5,
+                  paddingBottom: 1,
+                }}>
+                / yr
+              </Pdf.Text>
+            </Pdf.View>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              before actions
+            </Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}>
+              <Pdf.Text
+                style={{
+                  paddingBottom: 1,
+                }}>
+                CO
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  fontSize: 8,
+                }}>
+                2
+              </Pdf.Text>
+              <Pdf.Text
+                style={{
+                  paddingLeft: 5,
+                  paddingBottom: 1,
+                }}>
+                / yr
+              </Pdf.Text>
+            </Pdf.View>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              after actions
+            </Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>Cost / yr</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              before actions
+            </Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>Cost / yr</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              after actions
+            </Pdf.Text>
+          </Pdf.View>
+        </Pdf.View>
+        {data.map((category) => {
+          const footprintDelta = category.footprint - category.transformedFootprint;
+          const costDelta = category.cost - category.transformedCost;
 
-              return (
-                <Tr
-                  key={category.surveyId}
+          return (
+            <Pdf.View
+              key={category.surveyId}
+              style={{
+                borderTop: '1px solid #eee',
+                flexDirection: 'row',
+                width: '100%',
+                paddingVertical: 2,
+                opacity: footprintDelta === 0 && costDelta === 0 ? 0.6 : 1,
+              }}>
+              <Pdf.View
+                style={{
+                  flex: 1,
+                }}>
+                <Pdf.Text>{category.label}</Pdf.Text>
+              </Pdf.View>
+              <Pdf.View
+                style={{
+                  flex: 1,
+                  textAlign: 'right',
+                }}>
+                <Pdf.Text>{formatFootprint(category.footprint)}</Pdf.Text>
+              </Pdf.View>
+              <Pdf.View
+                style={{
+                  flex: 1,
+                  textAlign: 'right',
+                }}>
+                <Pdf.Text>{formatFootprint(category.transformedFootprint)}</Pdf.Text>
+                <Pdf.Text
                   style={{
-                    opacity: footprintDelta === 0 && costDelta === 0 ? 0.6 : 1,
+                    fontSize: 10,
+                    color: '#696969',
                   }}>
-                  <TdWithHelpText>{category.label}</TdWithHelpText>
-                  <TdWithHelpText isNumeric>{formatFootprint(category.footprint)}</TdWithHelpText>
-                  <TdWithHelpText
-                    isNumeric
-                    helpText={
-                      footprintDelta !== 0 ? (
-                        <>
-                          {formatFootprint(Math.abs(footprintDelta))} {footprintDelta > 0 ? 'saved' : 'wasted'}
-                        </>
-                      ) : null
-                    }>
-                    {formatFootprint(category.transformedFootprint)}
-                  </TdWithHelpText>
-                  <TdWithHelpText isNumeric>{category.cost.toFixed(2)} €</TdWithHelpText>
-                  <TdWithHelpText
-                    isNumeric
-                    helpText={
-                      costDelta !== 0 ? (
-                        <>
-                          {Math.abs(costDelta).toFixed(2)} {costDelta > 0 ? 'saved' : 'wasted'}
-                        </>
-                      ) : null
-                    }>
-                    {category.transformedCost.toFixed(2)} €
-                  </TdWithHelpText>
-                </Tr>
-              );
-            })}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <ThWithHelpText>Total</ThWithHelpText>
-              <ThWithHelpText isNumeric>{formatFootprint(totalFootprint)}</ThWithHelpText>
-              <ThWithHelpText
+                  {footprintDelta !== 0 ? (
+                    <>
+                      {formatFootprint(Math.abs(footprintDelta))} {footprintDelta > 0 ? 'saved' : 'wasted'}
+                    </>
+                  ) : null}
+                </Pdf.Text>
+              </Pdf.View>
+              <Pdf.View
+                style={{
+                  flex: 1,
+                  textAlign: 'right',
+                }}>
+                <Pdf.Text>{category.cost.toFixed(2)} €</Pdf.Text>
+              </Pdf.View>
+              <Pdf.View
+                style={{
+                  flex: 1,
+                  textAlign: 'right',
+                }}>
+                <Pdf.Text>{category.transformedCost.toFixed(2)} €</Pdf.Text>
+                <Pdf.Text
+                  style={{
+                    fontSize: 10,
+                    color: '#696969',
+                  }}>
+                  {costDelta !== 0 ? (
+                    <>
+                      {Math.abs(costDelta).toFixed(2)} € {costDelta > 0 ? 'saved' : 'wasted'}
+                    </>
+                  ) : null}
+                </Pdf.Text>
+              </Pdf.View>
+            </Pdf.View>
+          );
+        })}
+        <Pdf.View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            fontWeight: 'bold',
+            borderTop: '1px solid #eee',
+            color: '#094D13',
+            paddingVertical: 2,
+          }}>
+          <Pdf.View
+            style={{
+              flex: 1,
+            }}>
+            <Pdf.Text>Total</Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>{formatFootprint(totalFootprint)}</Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>{formatFootprint(totalTransformedFootprint)}</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              {totalFootprintDelta !== 0 ? (
+                <>
+                  {formatFootprint(Math.abs(totalFootprintDelta))} {totalFootprintDelta > 0 ? 'saved' : 'wasted'}
+                </>
+              ) : null}
+            </Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>{totalCost.toFixed(2)} €</Pdf.Text>
+          </Pdf.View>
+          <Pdf.View
+            style={{
+              flex: 1,
+              textAlign: 'right',
+            }}>
+            <Pdf.Text>{totalTransformedCost.toFixed(2)} €</Pdf.Text>
+            <Pdf.Text
+              style={{
+                fontSize: 10,
+                color: '#696969',
+              }}>
+              {totalCostDelta !== 0 ? (
+                <>
+                  {Math.abs(totalCostDelta).toFixed(2)} € {totalCostDelta > 0 ? 'saved' : 'wasted'}
+                </>
+              ) : null}
+            </Pdf.Text>
+          </Pdf.View>
+        </Pdf.View>
+      </Pdf.View>
+    );
+  }
+
+  return (
+    <Table variant="simple">
+      <Thead>
+        <Tr>
+          <ThWithHelpText>Category</ThWithHelpText>
+          <ThWithHelpText isNumeric helpText="before actions">
+            CO<sub>2</sub> footprint / yr
+          </ThWithHelpText>
+          <ThWithHelpText isNumeric helpText="after actions">
+            CO<sub>2</sub> footprint / yr
+          </ThWithHelpText>
+          <ThWithHelpText isNumeric helpText="before actions">
+            Cost / yr
+          </ThWithHelpText>
+          <ThWithHelpText isNumeric helpText="after actions">
+            Cost / yr
+          </ThWithHelpText>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.map((category) => {
+          const footprintDelta = category.footprint - category.transformedFootprint;
+          const costDelta = category.cost - category.transformedCost;
+
+          return (
+            <Tr
+              key={category.surveyId}
+              style={{
+                opacity: footprintDelta === 0 && costDelta === 0 ? 0.6 : 1,
+              }}>
+              <TdWithHelpText>{category.label}</TdWithHelpText>
+              <TdWithHelpText isNumeric>{formatFootprint(category.footprint)}</TdWithHelpText>
+              <TdWithHelpText
                 isNumeric
                 helpText={
-                  totalFootprintDelta !== 0 ? (
+                  footprintDelta !== 0 ? (
                     <>
-                      {formatFootprint(Math.abs(totalFootprintDelta))} {totalFootprintDelta > 0 ? 'saved' : 'wasted'}
+                      {formatFootprint(Math.abs(footprintDelta))} {footprintDelta > 0 ? 'saved' : 'wasted'}
                     </>
                   ) : null
                 }>
-                {formatFootprint(totalTransformedFootprint)} €
-              </ThWithHelpText>
-              <ThWithHelpText isNumeric>{sum(data.map((category) => category.cost)).toFixed(2)} €</ThWithHelpText>
-              <ThWithHelpText
+                {formatFootprint(category.transformedFootprint)}
+              </TdWithHelpText>
+              <TdWithHelpText isNumeric>{category.cost.toFixed(2)} €</TdWithHelpText>
+              <TdWithHelpText
                 isNumeric
                 helpText={
-                  totalCostDelta !== 0 ? (
+                  costDelta !== 0 ? (
                     <>
-                      {Math.abs(totalCostDelta).toFixed(2)} € {totalCostDelta > 0 ? 'saved' : 'wasted'}
+                      {Math.abs(costDelta).toFixed(2)} € {costDelta > 0 ? 'saved' : 'wasted'}
                     </>
                   ) : null
                 }>
-                {totalTransformedCost.toFixed(2)} €
-              </ThWithHelpText>
+                {category.transformedCost.toFixed(2)} €
+              </TdWithHelpText>
             </Tr>
-          </Tfoot>
-        </Table>
-      )}
-    </InlineErrorDisplay>
+          );
+        })}
+      </Tbody>
+      <Tfoot>
+        <Tr>
+          <ThWithHelpText>Total</ThWithHelpText>
+          <ThWithHelpText isNumeric>{formatFootprint(totalFootprint)}</ThWithHelpText>
+          <ThWithHelpText
+            isNumeric
+            helpText={
+              totalFootprintDelta !== 0 ? (
+                <>
+                  {formatFootprint(Math.abs(totalFootprintDelta))} {totalFootprintDelta > 0 ? 'saved' : 'wasted'}
+                </>
+              ) : null
+            }>
+            {formatFootprint(totalTransformedFootprint)} €
+          </ThWithHelpText>
+          <ThWithHelpText isNumeric>{sum(data.map((category) => category.cost)).toFixed(2)} €</ThWithHelpText>
+          <ThWithHelpText
+            isNumeric
+            helpText={
+              totalCostDelta !== 0 ? (
+                <>
+                  {Math.abs(totalCostDelta).toFixed(2)} € {totalCostDelta > 0 ? 'saved' : 'wasted'}
+                </>
+              ) : null
+            }>
+            {totalTransformedCost.toFixed(2)} €
+          </ThWithHelpText>
+        </Tr>
+      </Tfoot>
+    </Table>
   );
 }
 
@@ -259,8 +555,8 @@ function TdWithHelpText({ children, helpText, ...props }: TableCellProps & { hel
   return (
     <Td {...props}>
       <VStack align={props.isNumeric ? 'flex-end' : undefined} spacing="0">
-        <Box h="20px">{children}</Box>
-        <Box h="20px">
+        <Box minH="20px">{children}</Box>
+        <Box minH="20px">
           <Text fontSize="xs" color="gray.500">
             {helpText}
           </Text>
@@ -274,8 +570,8 @@ function ThWithHelpText({ children, helpText, ...props }: TableCellProps & { hel
   return (
     <Th {...props}>
       <VStack align={props.isNumeric ? 'flex-end' : undefined} spacing="0">
-        <Box h="20px">{children}</Box>
-        <Box h="20px">
+        <Box minH="20px">{children}</Box>
+        <Box minH="20px">
           <Text
             fontSize="xs"
             color="gray.500"
