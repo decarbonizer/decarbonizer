@@ -16,7 +16,7 @@ import { ActionAnswerValues } from '../../data/actions/action';
 /**
  * Returns id of bulb which reduces Co2 the most.
  */
-export function getSuggestionForChangeBulbs(externalCalculationData: ExternalCalculationData) {
+export function getSuggestionForChangeBulbsFootprint(externalCalculationData: ExternalCalculationData) {
   const result = externalCalculationData.bulbs.reduce<{ difference: number; bulbId: string | undefined }>(
     ({ difference, bulbId }, bulb) => {
       const newBulb: ChangeBulbsActionAnswerValue = { newBulb: bulb._id };
