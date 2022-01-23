@@ -7,6 +7,7 @@ export interface ActionPlan extends ApiObject {
   name: string;
   startDate: string;
   endDate: string;
+  budget: number;
   userId: string;
   realEstateId: string;
   status: ActionPlanStatus;
@@ -17,6 +18,7 @@ export interface ActionPlanCreate extends ApiObjectCreate {
   name: string;
   startDate: Date;
   endDate: Date;
+  budget: number;
   status: ActionPlanStatus;
   actionAnswers: Array<ActionAnswerCreate>;
 }
@@ -25,6 +27,7 @@ export interface ActionPlanUpdate extends ApiObjectUpdate {
   name?: string;
   startDate?: Date;
   endDate?: Date;
+  budget?: number;
   status?: ActionPlanStatus;
   actionAnswers?: Array<ActionAnswerUpdate>;
 }
