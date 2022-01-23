@@ -1,11 +1,15 @@
 import { ExternalCalculationData } from '../externalData';
 import range from 'lodash-es/range';
 import { ActionPlan } from '../../api/actionPlan';
-import { IDataFrame } from 'data-forge';
+import { DataFrame, IDataFrame } from 'data-forge';
 import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
 import { getIlluminationElectricityCostDelta } from '../illumination/electricityCost';
-import { getHeatingCostDelta } from '../heating/cost';
+import { getHeatingCostDelta, getTransformedHeatingInstallationCostPerYear } from '../heating/cost';
 import { getElectricityCostDelta } from '../electricity/cost';
+import {
+  getIlluminationMaintenanceCostForYear,
+  getTransformedIlluminationMaintenanceCostForYear,
+} from '../illumination/maintenanceCost';
 
 export function getCostForYearRange(
   externalCalculationData: ExternalCalculationData,
@@ -27,18 +31,36 @@ export function getCostForYearRange(
         };
       }),
     )
-    .orderBy((x) => x.endDate)
-    .thenBy((x) => x.startDate);
+    .orderBy((x) => x.startDate)
+    .thenBy((x) => x.endDate);
 
-  return range(fromYear, toYear + 1).map((year) => {
+  return new DataFrame(range(fromYear, toYear + 1)).map((year) => {
+    const normalizedYear = year - fromYear + 1;
     const activeActionAnswers = linearizedActionAnswers
-      .where((x) => x.endDate.getFullYear() <= year)
+      .where((x) => x.startDate.getFullYear() <= year)
+      .map((x) => x.answer);
+    const newActionAnswersThisYear = linearizedActionAnswers
+      .where((x) => x.startDate.getFullYear() === year)
       .map((x) => x.answer);
 
     const illuminationElectricityCosts = getIlluminationElectricityCostDelta(
       externalCalculationData,
       externalCalculationData.surveyAnswers,
       activeActionAnswers,
+    );
+
+    const originalIlluminationMaintenanceCosts = getTransformedIlluminationMaintenanceCostForYear(
+      externalCalculationData,
+      externalCalculationData.surveyAnswers,
+      new DataFrame(),
+      normalizedYear,
+    );
+
+    const newIlluminationMaintenanceCosts = getTransformedIlluminationMaintenanceCostForYear(
+      externalCalculationData,
+      externalCalculationData.surveyAnswers,
+      activeActionAnswers,
+      normalizedYear,
     );
 
     const heatingElectricityCosts = getHeatingCostDelta(
@@ -61,8 +83,14 @@ export function getCostForYearRange(
       heatingElectricityCosts.costAfterActions +
       electricityCosts.costAfterActions;
 
+    const totalOriginalInvestmentCosts = originalIlluminationMaintenanceCosts.maintenanceCostThisYear;
+
+    const totalNewInvestmentCosts = newIlluminationMaintenanceCosts.maintenanceCostThisYear;
+
     return {
       year,
+      totalOriginalInvestmentCosts: Math.round(totalOriginalInvestmentCosts),
+      totalNewInvestmentCosts: Math.round(totalNewInvestmentCosts),
       totalOriginalCost: Math.round(totalOriginalCost),
       totalNewCost: Math.round(totalNewCost),
       delta: Math.round(totalOriginalCost - totalNewCost),
