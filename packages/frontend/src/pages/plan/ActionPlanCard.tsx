@@ -247,7 +247,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
                     description={
                       <>
-                        {data.combinedCosts === 0 ? 'equals' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
+                        {data.combinedCosts === 0 ? 'equal' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
                         costs
                       </>
                     }
