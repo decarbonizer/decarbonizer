@@ -59,13 +59,12 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
                 illuminationSurveyAnswers,
                 filledActionAnswersDf,
               )
-            : 0 +
-                getTransformedIlluminationMaintenanceCostForYear(
-                  externalCalculationData,
-                  illuminationSurveyAnswers,
-                  filledActionAnswersDf,
-                  year,
-                ).maintenanceCostThisYear,
+            : getTransformedIlluminationMaintenanceCostForYear(
+                externalCalculationData,
+                illuminationSurveyAnswers,
+                filledActionAnswersDf,
+                year,
+              ).maintenanceCostThisYear,
         ),
       );
       const oldCostsPerYear = oldMaintenanceCosts.map(

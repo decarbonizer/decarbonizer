@@ -69,7 +69,6 @@ function getIlluminationMaintenanceCostForYearForSingleSurveyAnswer(
   const totalReplacementsUntilYear = (runtimeInHoursPerYearPerBulb * year) / bulbLifetime;
   const totalReplacementsUntilLastYear = Math.floor((runtimeInHoursPerYearPerBulb * (year - 1)) / bulbLifetime);
   const replacementsCurrentYear = totalReplacementsUntilYear - totalReplacementsUntilLastYear;
-
   const replacementsThisYear = Math.floor(replacementsCurrentYear);
   return { maintenanceCostThisYear: replacementsThisYear * costOnReplace, costOnReplace };
 }
