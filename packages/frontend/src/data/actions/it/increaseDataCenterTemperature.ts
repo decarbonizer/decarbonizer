@@ -23,7 +23,9 @@ export const increaseDataCenterTemperature: Action = {
             {
               id: 'newDataCenterTemperature',
               label: 'Which temperature do you want to reach in your data center?',
-              type: 'number',
+              type: 'number-unit',
+              units: 'temperature',
+              normedUnit: 'C',
               required: false,
             },
           ],
