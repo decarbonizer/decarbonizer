@@ -6,6 +6,7 @@ import DefaultPageLayout from '../../components/DefaultPageLayout';
 import ActionPlanChart from './ActionPlanChart';
 import ActionPlanSelectionPanel from './ActionPlanSelectionPanel';
 import BudgetChart from './BudgetChart';
+import FootprintBurnDownChart from './FootprintBurnDownChart';
 
 export default function BudgetPage() {
   const [actionPlans, setActionPlans] = useState<Array<ActionPlan>>([]);
@@ -34,6 +35,12 @@ export default function BudgetPage() {
         <Grid w="100%" h="100%" templateRows="10% 1fr">
           <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
           <BudgetChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
+        </Grid>
+      </Card>
+      <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
+        <Grid w="100%" h="100%" templateRows="10% 1fr">
+          <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
+          <FootprintBurnDownChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
         </Grid>
       </Card>
     </DefaultPageLayout>
