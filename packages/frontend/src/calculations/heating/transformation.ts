@@ -12,7 +12,7 @@ import {
   SwitchToHeatPumpActionDetailsAnswerValue,
 } from '../../data/actions/heating/switchToHeatPumpAction';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
-import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**
@@ -35,26 +35,22 @@ export function transformHeatingSurveyAnswer(
 ): HeatingSurveyAnswerValue {
   let result = surveyAnswer.value;
 
-  const switchToHeatPumpActionAnswer = getActionAnswerForAction(actionAnswers, 'switchToHeatPump');
-  if (switchToHeatPumpActionAnswer) {
-    result = applySwitchToHeatPumpActionAnswer(surveyAnswer._id, result, switchToHeatPumpActionAnswer.values);
+  const switchToHeatPumpActionAnswers = getActionAnswersForAction(actionAnswers, 'switchToHeatPump');
+  for (const answer of switchToHeatPumpActionAnswers) {
+    result = applySwitchToHeatPumpActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
-  const integrateSmartRadiatorThermostatsActionAnswer = getActionAnswerForAction(
+  const integrateSmartRadiatorThermostatsActionAnswers = getActionAnswersForAction(
     actionAnswers,
     'integrateSmartRadiatorThermostats',
   );
-  if (integrateSmartRadiatorThermostatsActionAnswer) {
-    result = applyIntegrateSmartRadiatorThermostatsActionAnswer(
-      surveyAnswer._id,
-      result,
-      integrateSmartRadiatorThermostatsActionAnswer.values,
-    );
+  for (const answer of integrateSmartRadiatorThermostatsActionAnswers) {
+    result = applyIntegrateSmartRadiatorThermostatsActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
-  const heatLessActionAnswer = getActionAnswerForAction(actionAnswers, 'heatLess');
-  if (heatLessActionAnswer) {
-    result = applyHeatLessActionAnswer(surveyAnswer._id, result, heatLessActionAnswer.values);
+  const heatLessActionAnswers = getActionAnswersForAction(actionAnswers, 'heatLess');
+  for (const answer of heatLessActionAnswers) {
+    result = applyHeatLessActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;

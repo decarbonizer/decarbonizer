@@ -5,6 +5,8 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  InputGroup,
+  InputRightAddon,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -35,6 +37,7 @@ export interface SaveActionPlanModalProps {
 interface FormValues {
   name: string;
   duration: DateRange;
+  budget: number;
   status: ActionPlanStatus;
 }
 
@@ -42,6 +45,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
   const defaultValues: FormValues | undefined = actionPlan
     ? {
         name: actionPlan.name,
+        budget: actionPlan.budget,
         status: actionPlan.status,
         duration: {
           startDate: actionPlan.startDate ? new Date(actionPlan.startDate) : undefined,
@@ -67,6 +71,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
         name: data.name,
         startDate: data.duration.startDate!,
         endDate: data.duration.endDate!,
+        budget: +data.budget,
         status: data.status,
         actionAnswers: actionAnswers ?? actionPlan.actionAnswers,
       };
@@ -98,6 +103,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
         name: data.name,
         startDate: data.duration.startDate!,
         endDate: data.duration.endDate!,
+        budget: +data.budget,
         status: data.status,
         actionAnswers: actionAnswers ?? [],
       };
@@ -169,6 +175,30 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
                 Specify the planned duration during which you would like to implement the actions.
               </FormHelperText>
               <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+
+            {/* <FormControl mt="8">
+              <FormLabel>Plan Budget</FormLabel>
+              <NumberInput defaultValue={0} {...register('status')}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl> */}
+
+            <FormControl mt="8">
+              <FormLabel>Plan Budget</FormLabel>
+              <InputGroup>
+                <Input
+                  type="number"
+                  placeholder="Enter your budget for this action plan"
+                  min={0}
+                  {...register('budget')}
+                />
+                <InputRightAddon>€</InputRightAddon>
+              </InputGroup>
             </FormControl>
 
             <FormControl mt="8">

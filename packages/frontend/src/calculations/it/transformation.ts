@@ -2,7 +2,7 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ItSurveyAnswerValue } from '../../data/surveys/it/itSurveyAnswerValue';
 import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { ActionAnswerValues } from '../../data/actions/action';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import {
@@ -24,16 +24,12 @@ export function transformItSurveyAnswer(
 ): ItSurveyAnswerValue {
   let result = surveyAnswer.value;
 
-  const increaseDataCenterTemperatureActionAnswer = getActionAnswerForAction(
+  const increaseDataCenterTemperatureActionAnswers = getActionAnswersForAction(
     actionAnswers,
     'increaseDataCenterTemperature',
   );
-  if (increaseDataCenterTemperatureActionAnswer) {
-    result = applyIncreaseDataCenterTemperatureActionAnswer(
-      surveyAnswer._id,
-      result,
-      increaseDataCenterTemperatureActionAnswer.values,
-    );
+  for (const answer of increaseDataCenterTemperatureActionAnswers) {
+    result = applyIncreaseDataCenterTemperatureActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;

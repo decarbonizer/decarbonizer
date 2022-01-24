@@ -1,4 +1,4 @@
-import { Flex, Box, Heading, HStack } from '@chakra-ui/react';
+import { Flex, Box, Heading, HStack, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 export interface DefaultPageLayoutProps {
@@ -7,11 +7,19 @@ export interface DefaultPageLayoutProps {
   actions?: ReactNode;
   leftArea?: ReactNode;
   rightArea?: ReactNode;
+  contentProps?: FlexProps;
 }
 
-export default function DefaultPageLayout({ title, children, actions, leftArea, rightArea }: DefaultPageLayoutProps) {
+export default function DefaultPageLayout({
+  title,
+  children,
+  actions,
+  leftArea,
+  rightArea,
+  contentProps,
+}: DefaultPageLayoutProps) {
   const mainContent = (
-    <Flex grow={1} flexDir="column" px="8">
+    <Flex grow={1} flexDir="column" px="8" {...contentProps}>
       {(title || actions) && (
         <Flex justify="space-between" mb="8">
           <Box as="header">

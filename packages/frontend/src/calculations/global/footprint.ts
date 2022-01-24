@@ -1,4 +1,5 @@
 import { DataFrame, IDataFrame } from 'data-forge';
+import range from 'lodash-es/range';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { getDeltaType } from '../../utils/deltaType';
@@ -8,6 +9,57 @@ import { getTransformedIlluminationFootprintPerYear } from '../illumination/foot
 import { getTransformedElectricityFootprintPerYear } from '../electricity/footprint';
 import { getTransformedBusinessTravelFootprintPerYear } from '../businessTravel/footprint';
 import { getTransformedItFootprintPerYear } from '../it/footprint';
+import { ActionPlan } from '../../api/actionPlan';
+import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
+
+export function getFootprintForYearRange(
+  externalCalculationData: ExternalCalculationData,
+  surveyAnswers: IDataFrame<number, SurveyAnswer>,
+  actionPlans: IDataFrame<number, ActionPlan>,
+  fromYear: number,
+  toYear: number,
+) {
+  const startFootprint = getTransformedFootprintPerYear(
+    externalCalculationData,
+    surveyAnswers,
+    new DataFrame<number, ActionAnswerBase>(),
+  ).globalFootprint;
+
+  const linearizedActionAnswers = actionPlans
+    .flatMap((actionPlan) =>
+      actionPlan.actionAnswers.map((answer) => {
+        const detailsValue = (answer.values.detailsValue ?? {}) as ChooseTimePeriodElementAnswerValue;
+        const startDate = new Date(detailsValue.timePeriod?.startDate ?? actionPlan.startDate);
+        const endDate = new Date(detailsValue.timePeriod?.endDate ?? actionPlan.endDate);
+
+        return {
+          answer,
+          startDate,
+          endDate,
+        };
+      }),
+    )
+    .orderBy((x) => x.endDate)
+    .thenBy((x) => x.startDate);
+
+  return range(fromYear, toYear + 1).map((year) => {
+    const activeActionAnswers = linearizedActionAnswers
+      .where((x) => x.endDate.getFullYear() <= year)
+      .map((x) => x.answer);
+
+    const footprint = getTransformedFootprintPerYear(
+      externalCalculationData,
+      surveyAnswers,
+      new DataFrame(activeActionAnswers),
+    ).globalFootprint;
+
+    return {
+      year,
+      footprint: Math.round(footprint),
+      startFootprint: Math.round(startFootprint),
+    };
+  });
+}
 
 export function getFootprintDelta(
   externalCalculationData: ExternalCalculationData,

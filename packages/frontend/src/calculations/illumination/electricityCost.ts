@@ -95,6 +95,7 @@ export function getIlluminationElectricityCostPerYear(
   if (surveyAnswers.count() === 0) {
     return 0;
   }
+
   return surveyAnswers
     .map((answer) => getIlluminationElectricityCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
     .aggregate((a, b) => a + b);
