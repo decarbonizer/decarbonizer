@@ -15,7 +15,8 @@ export default function NumberUnitFormEngineControl({ element }: FormEngineContr
   if (isViewOnly) {
     return (
       <DefaultFormControlLayout element={element}>
-        {value} {element.normedUnit}
+        {value}{' '}
+        {element.normedUnit === 'C' || element.normedUnit === 'F' ? `°${element.normedUnit}` : element.normedUnit}
       </DefaultFormControlLayout>
     );
   }
