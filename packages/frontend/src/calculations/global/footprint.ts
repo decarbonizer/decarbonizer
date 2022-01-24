@@ -19,6 +19,12 @@ export function getFootprintForYearRange(
   fromYear: number,
   toYear: number,
 ) {
+  const startFootprint = getTransformedFootprintPerYear(
+    externalCalculationData,
+    surveyAnswers,
+    new DataFrame<number, ActionAnswerBase>(),
+  ).globalFootprint;
+
   const linearizedActionAnswers = actionPlans
     .flatMap((actionPlan) =>
       actionPlan.actionAnswers.map((answer) => {
@@ -50,6 +56,7 @@ export function getFootprintForYearRange(
     return {
       year,
       footprint: Math.round(footprint),
+      startFootprint: Math.round(startFootprint),
     };
   });
 }

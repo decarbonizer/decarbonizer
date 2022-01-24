@@ -39,6 +39,7 @@ export default function FootprintBurnDownChart({
           <XAxis dataKey="year" domain={[fromYear, toYear]} allowDataOverflow />
           <YAxis width={100} unit=" CO²" scale="linear" />
           <Line type="step" dataKey="footprint" stroke="#82ca9d" activeDot={{ r: 6 }} />
+          {/* <Line type="step" dataKey="startFootprint" stroke="#8884d8" activeDot={{ r: 6 }} /> */}
         </LineChart>
       </ResponsiveContainer>
     </Box>
