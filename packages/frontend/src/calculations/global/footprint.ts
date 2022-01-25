@@ -7,7 +7,7 @@ import { getTransformedHeatingFootprintPerYear } from '../heating/footprint';
 import { getTransformedIlluminationFootprintPerYear } from '../illumination/footprint';
 import { getTransformedElectricityFootprintPerYear } from '../electricity/footprint';
 import { getTransformedBusinessTravelFootprintPerYear } from '../businessTravel/footprint';
-import { getTransformedItFootprintPerYear } from '../it/footprint';
+import { getTransformedItFootprintPerYear, getTransformedProducedHeatingPerYear } from '../it/footprint';
 
 export function getFootprintDelta(
   externalCalculationData: ExternalCalculationData,
@@ -56,9 +56,15 @@ export function getTransformedFootprintPerYear(
     surveyAnswers,
     actionAnswers,
   );
-
-  const heatingFootprint = getTransformedHeatingFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers);
   const itFootprint = getTransformedItFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers);
+  const producedHeatingByItInKwh = getTransformedProducedHeatingPerYear(surveyAnswers, actionAnswers);
+  const heatingFootprint = getTransformedHeatingFootprintPerYear(
+    externalCalculationData,
+    surveyAnswers,
+    actionAnswers,
+    producedHeatingByItInKwh,
+  );
+
   const businessTravelFootprint = getTransformedBusinessTravelFootprintPerYear(
     externalCalculationData,
     surveyAnswers,

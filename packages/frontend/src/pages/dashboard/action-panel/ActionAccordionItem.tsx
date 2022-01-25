@@ -1,6 +1,14 @@
 import {
   AccordionItem,
   AccordionPanel,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
   Icon,
   IconButton,
   Radio,
@@ -16,8 +24,8 @@ import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useState } from 'react';
-import { DashboardContext } from '../dashboardContext';
+import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { DashboardContext, useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
 import isEmpty from 'lodash-es/isEmpty';
@@ -28,6 +36,8 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 import { useExternalCalculationData } from '../../../calculations/externalData';
 import { getSuggestion } from '../../../calculations/getSuggestion';
+import { useCalculation } from '../../../calculations/useCalculation';
+import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/footprint';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -43,6 +53,21 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
   const { isLoading: dataLoading, data: externalData, error: externalDatatError } = useExternalCalculationData();
+  const { isOpen, onOpen, onClose } = useDisclosure(); //dialog for produced heating
+  const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const {
+    data,
+    isLoading: calculationLoading,
+    error,
+  } = useCalculation(
+    (externalCalculationData) => ({
+      producedHeating: getTransformedProducedHeatingPerYear(
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
+    }),
+    [filledActionAnswersDf],
+  );
 
   useFilledActionAnswerSync(action, value, setValue);
 
@@ -60,6 +85,9 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const handleChange = (e: { value }) => {
     handleValueChanged(e);
     setIsBestOption(false);
+    if ((action.id as KnownActionId) === 'useSuperServer') {
+      if (e.value.newServer) onOpen(); //open dialog only when action is selected
+    }
   };
 
   const handleSuggestionsClick = (e: MouseEvent) => {
@@ -125,6 +153,32 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
               validationErrors={validationErrors}
               onValueChanged={handleChange}
             />
+          )}
+          {action.id === 'useSuperServer' ? (
+            <AlertDialog
+              motionPreset="slideInBottom"
+              leastDestructiveRef={undefined}
+              onClose={onClose}
+              isOpen={isOpen}
+              isCentered>
+              <AlertDialogOverlay />
+
+              <AlertDialogContent>
+                <AlertDialogHeader>Extra heating produced!</AlertDialogHeader>
+                <AlertDialogCloseButton />
+                <AlertDialogBody>
+                  This action produces extra heating in form of <b>{data?.producedHeating}kWh</b>. It has affected your
+                  heating action as some amount of required heating is compensated by using Cloud and Heat technology.
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Button colorScheme="green" ml={3} onClick={onClose}>
+                    OK
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <></>
           )}
         </AccordionPanel>
       </AccordionItem>

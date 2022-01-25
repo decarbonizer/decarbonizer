@@ -4,7 +4,10 @@ import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import { getTransformedItCostPerYear } from '../../../calculations/it/cost';
-import { getTransformedItFootprintPerYear } from '../../../calculations/it/footprint';
+import {
+  getTransformedItFootprintPerYear,
+  getTransformedProducedHeatingPerYear,
+} from '../../../calculations/it/footprint';
 import { useEffect } from 'react';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
@@ -21,13 +24,13 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),
+      producedHeating: getTransformedProducedHeatingPerYear(
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
     }),
     [filledActionAnswersDf],
   );
-
-  useEffect(() => {
-    if (data) console.log(data.footprint);
-  }, []);
 
   return (
     <DashboardCard header="Calculated costs" {...props}>
@@ -46,8 +49,16 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
                 <Td fontWeight="bold" fontSize="lg" pl="0">
                   {data.footprint.toFixed(2)}t
                 </Td>
-                <Td>Carbon emissions through electricity</Td>
+                <Td>Carbon emissions through data center</Td>
               </Tr>
+              {data.producedHeating > 0 && (
+                <Tr>
+                  <Td fontWeight="bold" fontSize="lg" pl="0">
+                    {data.producedHeating.toFixed(2)}kWh
+                  </Td>
+                  <Td>Heating produced by super servers</Td>
+                </Tr>
+              )}
             </Tbody>
           </Table>
         )}
