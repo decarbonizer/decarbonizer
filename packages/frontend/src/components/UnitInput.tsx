@@ -93,7 +93,7 @@ export default function UnitInput({
           onChange={handleSelectedUnitChanged}>
           {units.map((unit) => (
             <option key={unit} value={unit}>
-              {unit}
+              {unit === 'C' || unit === 'F' ? `°${unit}` : unit}
             </option>
           ))}
         </Select>

@@ -2,7 +2,7 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ElectricitySurveyAnswerValue } from '../../data/surveys/electricity/electricitySurveyAnswerValue';
 import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
   SwitchToGreenEnergyActionAnswerValue,
@@ -24,9 +24,9 @@ export function transformElectricitySurveyAnswer(
 ): ElectricitySurveyAnswerValue {
   let result = surveyAnswer.value;
 
-  const switchToGreenEnergyActionAnswer = getActionAnswerForAction(actionAnswers, 'switchToGreenEnergy');
-  if (switchToGreenEnergyActionAnswer) {
-    result = applySwitchToGreenEnergyActionAnswer(surveyAnswer._id, result, switchToGreenEnergyActionAnswer.values);
+  const switchToGreenEnergyActionAnswers = getActionAnswersForAction(actionAnswers, 'switchToGreenEnergy');
+  for (const answer of switchToGreenEnergyActionAnswers) {
+    result = applySwitchToGreenEnergyActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;

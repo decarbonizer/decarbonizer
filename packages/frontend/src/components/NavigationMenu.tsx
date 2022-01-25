@@ -1,6 +1,6 @@
 import { Icon, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { ReactElement } from 'react';
-import { RiSurveyLine } from 'react-icons/ri';
+import { RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDashboard, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
@@ -12,7 +12,7 @@ export interface PageNavigation {
   display: string;
 }
 
-export type PageDisplayTypes = 'Survey Overview' | 'Dashboard' | 'Action Plan Overview';
+export type PageDisplayTypes = 'Survey Overview' | 'Dashboard' | 'Action Plan Overview' | 'Budget Management';
 
 export interface NavigationMenuProps {
   currentPage: PageDisplayTypes;
@@ -28,6 +28,11 @@ export default function NavigationMenu({ currentPage, realEstateId }: Navigation
       value: routes.actionPlans({ realEstateId }),
       display: 'Action Plan Overview',
       icon: <Icon as={MdPendingActions} />,
+    },
+    {
+      value: routes.actionPlansBudgetOverview({ realEstateId }),
+      display: 'Budget Management',
+      icon: <Icon as={RiMoneyEuroCircleLine} />,
     },
   ];
   const filteredPages = pages.filter((page) => page.display !== currentPage);

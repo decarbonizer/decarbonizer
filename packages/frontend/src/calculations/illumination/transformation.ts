@@ -11,7 +11,7 @@ import {
   ReduceRuntimeActionDetailsAnswerValue,
 } from '../../data/actions/illumination/reduceRuntimeAction';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
-import { getActionAnswerForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**
@@ -36,14 +36,14 @@ export function transformIlluminationSurveyAnswer(
 ): IlluminationSurveyAnswerValue {
   let result = surveyAnswer.value;
 
-  const changeBulbsActionAnswer = getActionAnswerForAction(actionAnswers, 'changeBulbs');
-  if (changeBulbsActionAnswer) {
-    result = applyChangeBulbsActionAnswer(surveyAnswer._id, result, changeBulbsActionAnswer.values);
+  const changeBulbsActionAnswers = getActionAnswersForAction(actionAnswers, 'changeBulbs');
+  for (const answer of changeBulbsActionAnswers) {
+    result = applyChangeBulbsActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
-  const reduceRuntimeActionAnswer = getActionAnswerForAction(actionAnswers, 'reduceRuntime');
-  if (reduceRuntimeActionAnswer) {
-    result = applyReduceRuntimeActionAnswer(surveyAnswer._id, result, reduceRuntimeActionAnswer.values);
+  const reduceRuntimeActionAnswers = getActionAnswersForAction(actionAnswers, 'reduceRuntime');
+  for (const answer of reduceRuntimeActionAnswers) {
+    result = applyReduceRuntimeActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;

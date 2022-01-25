@@ -1,17 +1,34 @@
 import { KnownActionId } from '../data/actions/action';
-import { getSuggestionForSwitchToGreenEnergy } from './electricity/footprint';
+import { getSuggestionForSwitchToGreenEnergyCost } from './electricity/cost';
+import { getSuggestionForSwitchToGreenEnergyFootprint } from './electricity/footprint';
 import { ExternalCalculationData } from './externalData';
-import { getSuggestionForSwitchToHeatPump } from './heating/footprint';
-import { getSuggestionForChangeBulbs } from './illumination/footprint';
+import { getSuggestionForSwitchToHeatPumpCost } from './heating/cost';
+import { getSuggestionForSwitchToHeatPumpFootprint } from './heating/footprint';
+import { getSuggestionForChangeBulbsCost } from './illumination/electricityCost';
+import { getSuggestionForChangeBulbsFootprint } from './illumination/footprint';
 
-export function getSuggestion(externalCalculationData: ExternalCalculationData, actionId: KnownActionId) {
+//get action that reduces co2 the most
+export function getSuggestionForFootprint(externalCalculationData: ExternalCalculationData, actionId: KnownActionId) {
   switch (actionId) {
     case 'changeBulbs':
-      return getSuggestionForChangeBulbs(externalCalculationData);
+      return getSuggestionForChangeBulbsFootprint(externalCalculationData);
     case 'switchToHeatPump':
-      return getSuggestionForSwitchToHeatPump(externalCalculationData);
+      return getSuggestionForSwitchToHeatPumpFootprint(externalCalculationData);
     case 'switchToGreenEnergy':
-      return getSuggestionForSwitchToGreenEnergy(externalCalculationData);
+      return getSuggestionForSwitchToGreenEnergyFootprint(externalCalculationData);
+    default:
+      break;
+  }
+}
+//get action that reduces cost the most
+export function getSuggestionForCost(externalCalculationData: ExternalCalculationData, actionId: KnownActionId) {
+  switch (actionId) {
+    case 'changeBulbs':
+      return getSuggestionForChangeBulbsCost(externalCalculationData);
+    case 'switchToHeatPump':
+      return getSuggestionForSwitchToHeatPumpCost(externalCalculationData);
+    case 'switchToGreenEnergy':
+      return getSuggestionForSwitchToGreenEnergyCost(externalCalculationData);
     default:
       break;
   }

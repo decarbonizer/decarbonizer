@@ -11,7 +11,7 @@ import {
   Button,
   Icon,
   IconButton,
-  Radio,
+  Select,
   SkeletonText,
   Text,
   Tooltip,
@@ -35,9 +35,9 @@ import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 import { useExternalCalculationData } from '../../../calculations/externalData';
-import { getSuggestion } from '../../../calculations/getSuggestion';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/footprint';
+import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/getSuggestion';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -48,7 +48,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
   const { isLoading, providers } = useFormEngineChoiceOptionProviders(realEstateId);
   const schema = useActionSchema(action, surveyAnswers);
-  const [isBestOption, setIsBestOption] = useState(false);
+  const [suggestion, setSuggestion] = useState<string>('');
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
@@ -72,8 +72,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   useFilledActionAnswerSync(action, value, setValue);
 
   const handleClearClick = (e: MouseEvent) => {
+    setSuggestion('');
     setValue({});
-    setIsBestOption(false);
     e.preventDefault();
   };
 
@@ -84,18 +84,25 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
 
   const handleChange = (e: { value }) => {
     handleValueChanged(e);
-    setIsBestOption(false);
+    setSuggestion('');
     if ((action.id as KnownActionId) === 'useSuperServer') {
       if (e.value.newServer) onOpen(); //open dialog only when action is selected
     }
   };
 
-  const handleSuggestionsClick = (e: MouseEvent) => {
+  const handleSuggestionsClick = (e) => {
     if (externalData) {
-      const data = getSuggestion(externalData, action.id as KnownActionId);
-      if (data) {
-        handleValueChanged({ value: data });
-        setIsBestOption(true);
+      setSuggestion(e.target.value);
+      if (e.target.value.length > 0) {
+        const data =
+          e.target.value == 'footprint'
+            ? getSuggestionForFootprint(externalData, action.id as KnownActionId)
+            : getSuggestionForCost(externalData, action.id as KnownActionId);
+        if (data) {
+          handleValueChanged({ value: data });
+        }
+      } else {
+        setValue({});
       }
     }
   };
@@ -132,11 +139,6 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
             </>
           }
         />
-        {action.suggestionExists && (
-          <Radio colorScheme="green" onClick={handleSuggestionsClick} name="suggestion" isChecked={isBestOption}>
-            Suggest best action{' '}
-          </Radio>
-        )}
         <AccordionPanel display="flex" flexDir="column">
           <Text layerStyle="hint" pb="4">
             {action.description}
@@ -144,15 +146,30 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
           {isLoading ? (
             range(3).map((i) => <SkeletonText key={i} mb="2" />)
           ) : (
-            <FormEngine
-              schema={schema}
-              value={value}
-              page={page}
-              choiceOptionProviders={providers}
-              ruleEvaluationResults={ruleEvaluationResults}
-              validationErrors={validationErrors}
-              onValueChanged={handleChange}
-            />
+            <>
+              {action.suggestionExists && (
+                <Select
+                  w="80"
+                  bg="white"
+                  p={2}
+                  placeholder="Get recommendation for lowest..."
+                  value={suggestion}
+                  onChange={(e) => handleSuggestionsClick(e)}>
+                  <option value="footprint">footrpint</option>
+                  <option value="cost">cost</option>
+                </Select>
+              )}
+
+              <FormEngine
+                schema={schema}
+                value={value}
+                page={page}
+                choiceOptionProviders={providers}
+                ruleEvaluationResults={ruleEvaluationResults}
+                validationErrors={validationErrors}
+                onValueChanged={handleChange}
+              />
+            </>
           )}
           {action.id === 'useSuperServer' ? (
             <AlertDialog

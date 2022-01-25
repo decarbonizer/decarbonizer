@@ -5,6 +5,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsDate,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -62,6 +63,11 @@ export class ActionPlan extends DbObject {
   @IsDate()
   @Type(() => Date)
   endDate: Date;
+
+  @Prop()
+  @ApiProperty()
+  @IsNumber()
+  budget: number;
 
   @Prop()
   @ApiProperty()

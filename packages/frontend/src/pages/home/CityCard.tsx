@@ -1,13 +1,7 @@
 import {
   AspectRatio,
-  Box,
-  Flex,
-  Grid,
   Heading,
-  HStack,
   IconButton,
-  Spacer,
-  Tooltip,
   VStack,
   Image,
   Text,
@@ -26,7 +20,7 @@ import {
 import { DataFrame } from 'data-forge';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
-import { RiDashboardFill, RiSurveyLine } from 'react-icons/ri';
+import { RiDashboardFill, RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
@@ -144,6 +138,11 @@ export default function CityCard({ realEstate }: CityCardProps) {
               </MenuItem>
               <MenuItem icon={<Icon as={MdPendingActions} />} onClick={() => goToActionPlanOverview(realEstate._id)}>
                 Action Plans
+              </MenuItem>
+              <MenuItem
+                icon={<Icon as={RiMoneyEuroCircleLine} />}
+                onClick={() => history.push(routes.actionPlansBudgetOverview({ realEstateId: realEstate._id }))}>
+                Action Plan Budgets
               </MenuItem>
               <MenuDivider />
               <MenuItem icon={<Icon as={FaEdit} />} onClick={onOpenEditModal}>

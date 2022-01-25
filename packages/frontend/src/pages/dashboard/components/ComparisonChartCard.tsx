@@ -3,6 +3,7 @@ import { SkeletonText } from '@chakra-ui/react';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ReactNode } from 'react';
+import { DefaultTooltipContent, DefaultTooltipContentProps } from 'recharts/lib/component/DefaultTooltipContent';
 
 export interface ComparisonChartCardProps extends DashboardCardProps {
   header: ReactNode;
@@ -37,13 +38,9 @@ export default function ComparisonChartCard(props: ComparisonChartCardProps) {
               <XAxis dataKey="Year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
               <YAxis />
               <Tooltip
+                content={CustomTooltip}
                 formatter={(value, label) => {
                   return [`${value} ${unit}`, label];
-                }}
-                labelFormatter={(year, values) => {
-                  const oldFootprint = values[0]?.value as number;
-                  const newFootprint = values[1]?.value as number;
-                  return [`Savings after ${year} years: ${newFootprint - oldFootprint} ${unit}`];
                 }}
               />
               <Legend />
@@ -55,4 +52,20 @@ export default function ComparisonChartCard(props: ComparisonChartCardProps) {
       </InlineErrorDisplay>
     </DashboardCard>
   );
+
+  function CustomTooltip(props: DefaultTooltipContentProps) {
+    const year = props.label;
+    const oldFootprint = props.payload[0]?.value as number;
+    const newFootprint = props.payload[1]?.value as number;
+
+    const newPayload = [
+      ...props.payload,
+      {
+        name: `Savings after ${year} years`,
+        value: newFootprint - oldFootprint,
+      },
+    ];
+
+    return <DefaultTooltipContent {...props} payload={newPayload} label="" />;
+  }
 }
