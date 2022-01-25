@@ -49,7 +49,7 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...re
 
           {mode === 'cost' && (
             <>
-              <Bar dataKey="budget" stackId="cost" name="Budget" fill="#bAf6d4" unit="€">
+              <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€">
                 {(data ?? []).map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.budget > 0 ? '#baf6d4' : '#fa8989'} />
                 ))}
@@ -57,7 +57,16 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...re
               <ReferenceLine y={0} stroke="black" />
             </>
           )}
-          {mode === 'co2' && <Area yAxisId="co2" dataKey="footprint" name="Carbon Footprint" stroke="#9AE6B4" />}
+          {mode === 'co2' && (
+            <Area
+              yAxisId="co2"
+              dataKey="footprint"
+              name="Carbon Footprint"
+              stroke="#9AE6B4"
+              strokeWidth={3}
+              fill="#9AE6B477"
+            />
+          )}
         </ComposedChart>
       </ResponsiveContainer>
     </Box>
