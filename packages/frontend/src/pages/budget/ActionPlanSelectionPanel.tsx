@@ -1,4 +1,4 @@
-import { Checkbox, VStack, Heading, CheckboxGroup, IconButton, Icon, HStack, Spacer } from '@chakra-ui/react';
+import { Checkbox, VStack, Heading, CheckboxGroup, IconButton, Icon, HStack, Spacer, Tooltip } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { useParams } from 'react-router';
@@ -36,12 +36,14 @@ export default function ActionPlanSelectionPanel({ actionPlans, setActionPlans }
           <HStack key={actionPlan._id} w="100%">
             <Checkbox value={actionPlan._id}>{actionPlan.name}</Checkbox>
             <Spacer />
-            <IconButton
-              variant="ghost"
-              aria-label="Edit"
-              icon={<Icon as={FaEdit} />}
-              onClick={() => setActionPlanToEdit(actionPlan)}
-            />
+            <Tooltip label="Edit...">
+              <IconButton
+                variant="ghost"
+                aria-label="Edit..."
+                icon={<Icon as={FaEdit} />}
+                onClick={() => setActionPlanToEdit(actionPlan)}
+              />
+            </Tooltip>
           </HStack>
         ))}
       </CheckboxGroup>
