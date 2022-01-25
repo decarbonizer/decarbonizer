@@ -10,6 +10,7 @@ import { IlluminationCalculationProvider } from './illuminationCalculationProvid
 export interface BudgetChartDataEntry {
   year: number;
   budget: number;
+  footprint: number;
 }
 
 export function getBudgetChartData(
@@ -49,8 +50,6 @@ export function getBudgetChartData(
   const results: Array<BudgetChartDataEntry> = [];
 
   for (let year = fromYear; year <= toYear; year++) {
-    const normalizedYear = year - fromYear + 1;
-
     const activeActionAnswers = linearizedActionAnswers
       .where((x) => x.startDate.getFullYear() <= year)
       .map((x) => x.answer);
@@ -80,7 +79,6 @@ export function getBudgetChartData(
       .map((provider) => provider.getTotalSummedInvestmentCosts(surveyAnswersWhichChangedThisYear))
       .reduce((result, cost) => result + cost, 0);
 
-    //
     const originalConstantCost = calculationProviders
       .map((provider) =>
         provider.getTotalYearlyConstantCostsDelta(externalCalculationData.surveyAnswers, activeActionAnswers),
@@ -94,9 +92,16 @@ export function getBudgetChartData(
     const budget =
       budgetRemainingFromLastYear + budgetNewThisYear + -originalConstantCost.delta - totalInvestmentCostsThisYear;
 
+    const footprint = calculationProviders
+      .map((provider) =>
+        provider.getSummedYearlyFootprintDelta(externalCalculationData.surveyAnswers, activeActionAnswers),
+      )
+      .reduce(deltaResultReducer);
+
     results.push({
       year,
       budget: Math.round(budget),
+      footprint: Math.round(footprint.after),
     });
   }
 
