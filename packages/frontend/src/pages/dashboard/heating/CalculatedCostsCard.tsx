@@ -9,11 +9,7 @@ import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/f
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
-  const {
-    data: producedHeating,
-    isLoading: producedHeatingLoading,
-    error: producedHeatingError,
-  } = useCalculation(
+  const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
       return {
         producedHeating: getTransformedProducedHeatingPerYear(
@@ -25,19 +21,7 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
         ),
-      };
-    },
-    [filledActionAnswersDf],
-  );
-  const { data, isLoading, error } = useCalculation(
-    (externalCalculationData) => {
-      return {
         heatingCosts: getTransformedHeatingCostPerYear(
-          externalCalculationData,
-          externalCalculationData.surveyAnswers,
-          filledActionAnswersDf,
-        ),
-        footprint: getTransformedHeatingFootprintPerYear(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
@@ -66,10 +50,10 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
                 </Td>
                 <Td>Carbon emissions through heating</Td>
               </Tr>
-              {producedHeating && producedHeating.producedHeating > 0 ? (
+              {data.producedHeating > 0 ? (
                 <Tr>
                   <Td fontWeight="bold" fontSize="lg" pl="0">
-                    {producedHeating?.producedHeating.toFixed(2)}kWh
+                    {data.producedHeating.toFixed(2)}kWh
                   </Td>
                   <Td>Heating compensated by data center</Td>
                 </Tr>
