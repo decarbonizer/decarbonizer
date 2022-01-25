@@ -53,6 +53,14 @@ export default function NavBarBreadcrumbs() {
         </Breadcrumb>
         <RealEstateLocationPicker currentPage="Action Plan Overview" />
       </Route>
+      <Route exact path={routes.actionPlansBudgetOverview.route}>
+        <Breadcrumb {...breadcrumbProps}>
+          <HomeItem />
+          <RealEstateItem />
+          <ActionPlanBudgetOverviewItem isCurrentPage marginRight="-3" />
+        </Breadcrumb>
+        <RealEstateLocationPicker currentPage="Budget Management" />
+      </Route>
     </Switch>
   );
 }
@@ -99,6 +107,18 @@ function ActionPlanItem(props: BreadcrumbItemProps) {
     <BreadcrumbItem {...props}>
       <BreadcrumbLink as={Link} to={routes.actionPlans({ realEstateId })} isCurrentPage>
         Action Plans
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+  );
+}
+
+function ActionPlanBudgetOverviewItem(props: BreadcrumbItemProps) {
+  const { realEstateId } = useParams<RealEstatePageParams>();
+
+  return (
+    <BreadcrumbItem {...props}>
+      <BreadcrumbLink as={Link} to={routes.actionPlansBudgetOverview({ realEstateId })} isCurrentPage>
+        Budget Overview
       </BreadcrumbLink>
     </BreadcrumbItem>
   );
