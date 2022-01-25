@@ -19,10 +19,10 @@ import {
 } from '@chakra-ui/react';
 import { ActionPlanSummary } from './ActionPlanSummary';
 import { Controller, useForm } from 'react-hook-form';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ActionPlan, ActionPlanCreate, ActionPlanStatus, ActionPlanUpdate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
-import { RealEstatePageParams, routes } from '../../../routes';
+import { RealEstatePageParams } from '../../../routes';
 import { useCreateActionPlanMutation, useUpdateActionPlanMutation } from '../../../store/api';
 import range from 'lodash-es/range';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
@@ -60,10 +60,9 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
     formState: { errors },
   } = useForm<FormValues>({ defaultValues });
   const { realEstateId } = useParams<RealEstatePageParams>();
-  const [createActionPlan, { isLoading }] = useCreateActionPlanMutation();
-  const [updateActionPlan] = useUpdateActionPlanMutation();
+  const [createActionPlan, { isLoading: isLoadingCreate }] = useCreateActionPlanMutation();
+  const [updateActionPlan, { isLoading: isLoadingUpdate }] = useUpdateActionPlanMutation();
   const toast = useToast();
-  const history = useHistory();
 
   const onSubmit = (data: FormValues) => {
     if (actionPlan) {
@@ -87,7 +86,6 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             duration: 5000,
           });
 
-          history.push(routes.actionPlans({ realEstateId }));
           onClose();
         })
         .catch(() =>
@@ -118,7 +116,6 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             duration: 5000,
           });
 
-          history.push(routes.actionPlans({ realEstateId }));
           onClose();
         })
         .catch(() =>
@@ -177,17 +174,6 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
 
-            {/* <FormControl mt="8">
-              <FormLabel>Plan Budget</FormLabel>
-              <NumberInput defaultValue={0} {...register('status')}>
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </FormControl> */}
-
             <FormControl mt="8">
               <FormLabel>Plan Budget</FormLabel>
               <InputGroup>
@@ -195,7 +181,9 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
                   type="number"
                   placeholder="Enter your budget for this action plan"
                   min={0}
-                  {...register('budget')}
+                  {...register('budget', {
+                    min: { value: 0, message: 'The budget cannot be negative.' },
+                  })}
                 />
                 <InputRightAddon>€</InputRightAddon>
               </InputGroup>
@@ -219,7 +207,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             <Button onClick={onClose} mr="3">
               Cancel
             </Button>
-            <Button type="submit" colorScheme="primary" isLoading={isLoading}>
+            <Button type="submit" colorScheme="primary" isLoading={isLoadingCreate || isLoadingUpdate}>
               Save
             </Button>
           </ModalFooter>
