@@ -71,5 +71,7 @@ export function getItCostPerYear(
  */
 function getItCostPerYearForSingleSurveyAnswer({ energyForms }: ExternalCalculationData, answer: ItSurveyAnswerValue) {
   const energyForm = energyForms.filter((energyForm) => energyForm._id === answer.dataCenterEnergyForm).first();
-  return energyForm.euroPerKwh * answer.dataCenterConsumption;
+  return answer.superServer
+    ? energyForm.euroPerKwh * answer.dataCenterConsumption * 0.3
+    : energyForm.euroPerKwh * answer.dataCenterConsumption;
 }
