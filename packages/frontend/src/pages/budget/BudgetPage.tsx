@@ -1,4 +1,4 @@
-import { Grid, HStack, Radio, RadioGroup } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ActionPlan } from '../../api/actionPlan';
 import Card from '../../components/Card';
@@ -10,8 +10,8 @@ import BudgetChart, { BudgetChartMode } from './BudgetChart';
 export default function BudgetPage() {
   const [actionPlans, setActionPlans] = useState<Array<ActionPlan>>([]);
   const [budgetChartMode, setBudgetChartMode] = useState<BudgetChartMode>('cost');
-  const fromYear = 2022;
-  const toYear = 2050;
+  const [fromYear, setFromYear] = useState(new Date().getFullYear());
+  const [toYear, setToYear] = useState(2050);
 
   return (
     <DefaultPageLayout
@@ -28,20 +28,22 @@ export default function BudgetPage() {
           px="8"
           py="4"
           size="lg">
-          <ActionPlanSelectionPanel actionPlans={actionPlans} setActionPlans={setActionPlans} />
+          <ActionPlanSelectionPanel
+            minYear={new Date().getFullYear()}
+            maxYear={2050}
+            fromYear={fromYear}
+            setFromYear={setFromYear}
+            toYear={toYear}
+            setToYear={setToYear}
+            budgetChartMode={budgetChartMode}
+            setBudgetChartMode={setBudgetChartMode}
+            actionPlans={actionPlans}
+            setActionPlans={setActionPlans}
+          />
         </Card>
       }>
       <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
-        <Grid w="100%" h="100%" templateRows="auto 10% 1fr">
-          <RadioGroup
-            colorScheme="green"
-            value={budgetChartMode}
-            onChange={(value) => setBudgetChartMode(value as BudgetChartMode)}>
-            <HStack ml="6">
-              <Radio value="cost">Cost</Radio>
-              <Radio value="co2">Carbon Footprint</Radio>
-            </HStack>
-          </RadioGroup>
+        <Grid w="100%" h="100%" templateRows="10% 1fr">
           <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
           <BudgetChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} mode={budgetChartMode} />
         </Grid>

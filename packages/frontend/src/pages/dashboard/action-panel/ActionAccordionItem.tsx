@@ -15,7 +15,6 @@ import { Action, KnownActionId } from '../../../data/actions/action';
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
-import ActionPanelAccordionButton from './ActionPanelAccordionButton';
 import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useState } from 'react';
 import { DashboardContext } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
@@ -28,7 +27,7 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 import { useExternalCalculationData } from '../../../calculations/externalData';
 import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/getSuggestion';
-import CostDeltaCard from '../electricity/CostDeltaCard';
+import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -43,7 +42,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
-  const { isLoading: dataLoading, data: externalData, error: externalDatatError } = useExternalCalculationData();
+  const { isLoading: dataLoading, data: externalData, error: externalDataError } = useExternalCalculationData();
 
   useFilledActionAnswerSync(action, value, setValue);
 
@@ -83,7 +82,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   return (
     <>
       <AccordionItem key={action.id} borderWidth="0 !important">
-        <ActionPanelAccordionButton
+        <SidePanelAccordionButton
+          px="2"
           title={action.name}
           icon={<Icon as={action.icon} />}
           badge={isFilledOut ? <Text>✅</Text> : ''}

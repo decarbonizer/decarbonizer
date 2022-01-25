@@ -2,7 +2,7 @@ import { Accordion, AccordionItem, AccordionPanel, Icon, Tag } from '@chakra-ui/
 import { useContext } from 'react';
 import { ActionCategory } from '../../../data/actions/action';
 import { ActionAccordionItem } from './ActionAccordionItem';
-import ActionPanelAccordionButton from './ActionPanelAccordionButton';
+import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
 import { DashboardContext } from '../dashboardContext';
 
 export interface ActionGroupAccordionItemProps {
@@ -30,7 +30,8 @@ function ActionGroupAccordionContent({ isExpanded, actionCategory }: ActionGroup
 
   return (
     <>
-      <ActionPanelAccordionButton
+      <SidePanelAccordionButton
+        px="2"
         badge={countOfFilledAnswers > 0 ? <Tag colorScheme="primary">{countOfFilledAnswers}</Tag> : undefined}
         icon={<Icon as={actionCategory.icon} />}
         title={actionCategory.name}
