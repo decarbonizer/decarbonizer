@@ -14,13 +14,11 @@ import {
   ButtonGroup,
   Button,
   FormControl,
-  FormHelperText,
   FormLabel,
   RangeSlider,
   RangeSliderFilledTrack,
   RangeSliderThumb,
   RangeSliderTrack,
-  SliderMark,
   RangeSliderMark,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
