@@ -23,7 +23,7 @@ export const useSuperServer: Action<ItSurveyAnswerValue> = {
             {
               id: 'newServer',
               type: 'boolean-checkbox',
-              label: 'Use Supermicro SuperServers 9029GP',
+              label: 'Use Supermicro SuperServers',
               defaultValue: false,
               required: false,
             },
