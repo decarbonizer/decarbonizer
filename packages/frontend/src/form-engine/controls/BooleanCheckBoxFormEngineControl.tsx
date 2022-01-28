@@ -5,6 +5,7 @@ import { Checkbox, Flex } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
+import { View, Text } from '@react-pdf/renderer';
 
 export default function BooleanCheckBoxFormEngineControl({
   element,
@@ -12,7 +13,11 @@ export default function BooleanCheckBoxFormEngineControl({
   const [value, setValue] = useValueProperty<boolean | undefined>(element);
   const ruleEvaluationResult = useRuleEvaluationResultForElement(element);
 
-  const isViewOnly = useContext(FormEnginePropsContext).isViewOnly;
+  const { isPdfView, isViewOnly } = useContext(FormEnginePropsContext);
+
+  if (isPdfView) {
+    return <DefaultFormControlLayout element={{ ...element, label: '' }}>{element.label}</DefaultFormControlLayout>;
+  }
 
   if (isViewOnly) {
     return (

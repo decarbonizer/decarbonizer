@@ -86,7 +86,9 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
     handleValueChanged(e);
     setSuggestion('');
     if ((action.id as KnownActionId) === 'useSuperServer') {
-      if (e.value.newServer) onOpen(); //open dialog only when action is selected
+      if (e.value.newServer) {
+        onOpen(); //open dialog only when action is selected
+      }
     }
   };
 
