@@ -1,7 +1,7 @@
-import { Document, Font, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Document, Font, Page, PDFViewer, Text, View } from '@react-pdf/renderer';
 import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router';
-import { RealEstateDashboardPageParams } from '../../routes';
+import { ActionPlanFileExportPageParams } from '../../routes';
 import {
   useGetActionPlanQuery,
   useGetAllSurveyAnswersForRealEstateQuery,
@@ -35,26 +35,11 @@ Font.register({
   ],
 });
 
-const styles = StyleSheet.create({
-  page: {
-    fontFamily: 'Font',
-    fontSize: 16,
-    paddingTop: 65,
-    paddingBottom: 65,
-    paddingHorizontal: 35,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
-
 export default function ActionPlanFileExportPage() {
-  const { realEstateId, actionPlanId } = useParams<RealEstateDashboardPageParams>();
+  const { realEstateId, actionPlanId } = useParams<ActionPlanFileExportPageParams>();
   const { data: realEstate } = useGetRealEstateQuery({ id: realEstateId });
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstateId });
-  const { data: actionPlan, isFetching: isFetchingActionPlan } = useGetActionPlanQuery({ id: actionPlanId! });
+  const { data: actionPlan, isFetching: isFetchingActionPlan } = useGetActionPlanQuery({ id: actionPlanId });
   const { providers } = useFormEngineChoiceOptionProviders(realEstateId);
 
   const filledActionAnswers =
@@ -68,10 +53,18 @@ export default function ActionPlanFileExportPage() {
   }
 
   return (
-    <Box flexGrow={1} display={'flex'}>
-      <PDFViewer width={'100%'}>
+    <Box flexGrow={1} display="flex">
+      <PDFViewer width="100%">
         <Document>
-          <Page size="A4" style={styles.page}>
+          <Page
+            size="A4"
+            style={{
+              fontFamily: 'Font',
+              fontSize: 16,
+              paddingTop: 65,
+              paddingBottom: 65,
+              paddingHorizontal: 35,
+            }}>
             <View>
               <View style={{ textAlign: 'center', marginBottom: '45px' }}>
                 <Text style={{ fontSize: '25px' }}>{actionPlan.name}</Text>

@@ -33,6 +33,7 @@ import {
   IncreaseDataCenterTemperatureActionAnswerValue,
   IncreaseDataCenterTemperatureActionDetailsAnswerValue,
 } from './it/increaseDataCenterTemperature';
+import { UseSuperServerActionAnswerValue, UseSuperServerActionDetailsAnswerValue } from './it/useSuperServer';
 
 /**
  * An action category essentially is a group of various actions, enhanced with additional
@@ -143,6 +144,7 @@ export type ActionsToActionAnswerMap = {
     IncreaseDataCenterTemperatureActionAnswerValue,
     IncreaseDataCenterTemperatureActionDetailsAnswerValue
   >;
+  useSuperServer: ActionAnswerValues<UseSuperServerActionAnswerValue, UseSuperServerActionDetailsAnswerValue>;
   reduceAirTravel: ActionAnswerValues<ReduceAirTravelActionAnswerValue, ReduceAirTravelActionDetailsAnswerValue>;
 };
 

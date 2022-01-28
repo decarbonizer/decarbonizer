@@ -41,6 +41,11 @@ export function useFormEngineChoiceOptionProviders(realEstateId: string) {
     currentRealEstateIlluminationSurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'illumination'),
     currentRealEstateHeatingSurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'heating'),
     currentRealEstateElectricitySurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'electricity'),
+    currentRealEstateItSurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'it'),
+    currentRealEstateBusinessTravelSurveyAnswers: makeSurveyAnswerProvider(
+      surveyAnswersQuery.data ?? [],
+      'businessTravel',
+    ),
   };
 
   return {

@@ -8,7 +8,9 @@ import {
 } from '../../data/actions/heating/switchToHeatPumpAction';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
 import { getDeltaType } from '../../utils/deltaType';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { ExternalCalculationData } from '../externalData';
+import { getTransformedProducedHeatingPerYear } from '../it/footprint';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { transformHeatingSurveyAnswers } from './transformation';
 
@@ -51,15 +53,23 @@ export function getHeatingCostDelta(
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
   const heatingSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'heating');
+
   const originalCost = getHeatingCostPerYear(
     externalCalculationData,
     heatingSurveyAnswers.map((answer) => answer.value),
+    0,
+  );
+
+  const producedHeatingAfterActionsInKwh = getTransformedProducedHeatingPerYear(
+    externalCalculationData.surveyAnswers,
+    actionAnswers,
   );
 
   const costAfterActions = getTransformedHeatingCostPerYear(
     externalCalculationData,
     externalCalculationData.surveyAnswers,
     actionAnswers,
+    producedHeatingAfterActionsInKwh,
   );
 
   const delta = costAfterActions - originalCost;
@@ -81,9 +91,13 @@ export function getTransformedHeatingCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
+  producedHeatingInKwh?: number,
 ) {
   const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
-  return getHeatingCostPerYear(externalCalculationData, transformedAnswers);
+  if (producedHeatingInKwh == null) {
+    producedHeatingInKwh = getTransformedProducedHeatingPerYear(surveyAnswers, actionAnswers);
+  }
+  return getHeatingCostPerYear(externalCalculationData, transformedAnswers, producedHeatingInKwh);
 }
 
 /**
@@ -95,8 +109,13 @@ export function getTransformedHeatingInstallationCostPerYear(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
-  const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
-  return getHeatingInstallationCostPerYear(externalCalculationData, transformedAnswers);
+  const newHeatPumpActionAnswers = getActionAnswersForAction(actionAnswers, 'switchToHeatPump');
+  if (newHeatPumpActionAnswers.length === 0) {
+    return 0;
+  } else {
+    const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
+    return getHeatingInstallationCostPerYear(externalCalculationData, transformedAnswers);
+  }
 }
 
 /**
@@ -105,14 +124,34 @@ export function getTransformedHeatingInstallationCostPerYear(
 export function getHeatingCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, HeatingSurveyAnswerValue>,
+  producedHeatingInKwh?: number,
 ) {
   if (surveyAnswers.count() === 0) {
     return 0;
   }
 
-  return surveyAnswers
-    .map((answer) => getHeatingCostPerYearForSingleSurveyAnswer(externalCalculationData, answer))
-    .aggregate((a, b) => a + b);
+  if (producedHeatingInKwh == null) {
+    return surveyAnswers
+      .map((answer) => {
+        const result = getHeatingCostPerYearForSingleSurveyAnswer(externalCalculationData, answer, 0);
+        return result.cost;
+      })
+      .aggregate((a, b) => a + b);
+  } else {
+    let availableHeatingInKwh = producedHeatingInKwh;
+    return surveyAnswers
+      .map((answer) => {
+        const result = getHeatingCostPerYearForSingleSurveyAnswer(
+          externalCalculationData,
+          answer,
+          availableHeatingInKwh,
+        );
+        availableHeatingInKwh = result.availableHeatingInKwh; //use produced heating that is left
+
+        return result.cost;
+      })
+      .aggregate((a, b) => a + b);
+  }
 }
 
 /**
@@ -137,7 +176,8 @@ export function getHeatingInstallationCostPerYear(
 function getHeatingCostPerYearForSingleSurveyAnswer(
   { energyForms, heatingTypes }: ExternalCalculationData,
   answer: HeatingSurveyAnswerValue,
-) {
+  availableHeatingInKwh: number,
+): { cost: number; availableHeatingInKwh: number } {
   const energyForm = energyForms.filter((form) => form._id === answer.radiatorKind).first();
   const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
 
@@ -145,6 +185,16 @@ function getHeatingCostPerYearForSingleSurveyAnswer(
   const heatingKwhPerQm = 0.1;
 
   let overallkWhForHeating = heatingKwhPerQm * answer.realEstateAreaInQm;
+
+  // take produced heating through it into consideration
+  let heatingLeftInKwh = availableHeatingInKwh;
+  if (availableHeatingInKwh >= overallkWhForHeating) {
+    heatingLeftInKwh = availableHeatingInKwh - overallkWhForHeating;
+
+    return { cost: 0, availableHeatingInKwh: heatingLeftInKwh }; //all heating is compensated by it
+  } else {
+    overallkWhForHeating = overallkWhForHeating - availableHeatingInKwh;
+  }
 
   if (answer.smartThermostats) {
     overallkWhForHeating = overallkWhForHeating * 0.9;
@@ -155,7 +205,7 @@ function getHeatingCostPerYearForSingleSurveyAnswer(
 
   const energyFormCost = energyForm.euroPerKwh * overallkWhConsumptionForEnergyForm * avgHeatingPerYearHours;
 
-  return energyFormCost;
+  return { cost: energyFormCost, availableHeatingInKwh: heatingLeftInKwh };
 }
 
 /**

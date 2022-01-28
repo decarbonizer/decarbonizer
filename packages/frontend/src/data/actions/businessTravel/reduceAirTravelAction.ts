@@ -12,7 +12,7 @@ export const reduceAirTravelAction: Action = {
   name: 'Reduce air travel',
   icon: RiComputerLine,
   description: 'Online conferences and working remotely instead of air traveling may reduce your carbon footprint.',
-  forSurvey: 'illumination',
+  forSurvey: 'businessTravel',
   suggestionExists: false,
   getSchema: () => {
     return {
@@ -45,7 +45,11 @@ export const reduceAirTravelAction: Action = {
   detailsSchema: {
     pages: [
       {
-        elements: [chooseTimePeriodElement, choosePriorityElement, createChooseSurveyAnswerElement('heatingTypes')],
+        elements: [
+          chooseTimePeriodElement,
+          choosePriorityElement,
+          createChooseSurveyAnswerElement('currentRealEstateBusinessTravelSurveyAnswers'),
+        ],
       },
     ],
   },
