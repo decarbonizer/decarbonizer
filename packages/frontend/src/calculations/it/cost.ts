@@ -16,12 +16,12 @@ export function getItCostDelta(
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
   const itSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'it');
-  const originalCost = getItCostPerYear(
+  const originalCost = getItElectricityCostPerYear(
     externalCalculationData,
     itSurveyAnswers.map((answer) => answer.value),
   );
 
-  const costAfterActions = getTransformedItCostPerYear(
+  const costAfterActions = getTransformedItElectricityCostPerYear(
     externalCalculationData,
     externalCalculationData.surveyAnswers,
     actionAnswers,
@@ -42,19 +42,19 @@ export function getItCostDelta(
  * Transforms **all given** illumination survey answers so that they integrate the given action answers
  * and then calculates their resulting cost.
  */
-export function getTransformedItCostPerYear(
+export function getTransformedItElectricityCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
   const transformedAnswers = transformItSurveyAnswers(surveyAnswers, actionAnswers);
-  return getItCostPerYear(externalCalculationData, transformedAnswers);
+  return getItElectricityCostPerYear(externalCalculationData, transformedAnswers);
 }
 
 /**
  * Calculates the cost of **all given** illumination survey answers.
  */
-export function getItCostPerYear(
+export function getItElectricityCostPerYear(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, ItSurveyAnswerValue>,
 ) {

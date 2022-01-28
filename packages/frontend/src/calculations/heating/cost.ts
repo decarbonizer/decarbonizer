@@ -8,6 +8,7 @@ import {
 } from '../../data/actions/heating/switchToHeatPumpAction';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
 import { getDeltaType } from '../../utils/deltaType';
+import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
 import { ExternalCalculationData } from '../externalData';
 import { getTransformedProducedHeatingPerYear } from '../it/footprint';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
@@ -108,8 +109,13 @@ export function getTransformedHeatingInstallationCostPerYear(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
-  const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
-  return getHeatingInstallationCostPerYear(externalCalculationData, transformedAnswers);
+  const newHeatPumpActionAnswers = getActionAnswersForAction(actionAnswers, 'switchToHeatPump');
+  if (newHeatPumpActionAnswers.length === 0) {
+    return 0;
+  } else {
+    const transformedAnswers = transformHeatingSurveyAnswers(surveyAnswers, actionAnswers);
+    return getHeatingInstallationCostPerYear(externalCalculationData, transformedAnswers);
+  }
 }
 
 /**

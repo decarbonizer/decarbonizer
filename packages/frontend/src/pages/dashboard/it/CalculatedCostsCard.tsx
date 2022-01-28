@@ -3,18 +3,17 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedItCostPerYear } from '../../../calculations/it/cost';
+import { getTransformedItElectricityCostPerYear } from '../../../calculations/it/cost';
 import {
   getTransformedItFootprintPerYear,
   getTransformedProducedHeatingPerYear,
 } from '../../../calculations/it/footprint';
-import { useEffect } from 'react';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => ({
-      electricityCosts: getTransformedItCostPerYear(
+      electricityCosts: getTransformedItElectricityCostPerYear(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

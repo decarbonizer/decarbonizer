@@ -184,8 +184,9 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
                 <AlertDialogHeader>Extra heating produced!</AlertDialogHeader>
                 <AlertDialogCloseButton />
                 <AlertDialogBody>
-                  This action produces extra heating in form of <b>{data?.producedHeating}kWh</b>. It has affected your
-                  heating action as some amount of required heating is compensated by using Cloud and Heat technology.
+                  This action produces extra heating in form of <b>{data?.producedHeating.toFixed(2)}kWh</b>. It has
+                  affected your heating action as some amount of required heating is compensated by using Cloud and Heat
+                  technology.
                 </AlertDialogBody>
                 <AlertDialogFooter>
                   <Button colorScheme="green" ml={3} onClick={onClose}>
