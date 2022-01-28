@@ -171,6 +171,17 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
                 validationErrors={validationErrors}
                 onValueChanged={handleChange}
               />
+              {action.suggestionExists &&
+                suggestion.length > 0 &&
+                (suggestion === 'cost' ? (
+                  <Text layerStyle="hint" pb="4" p="4" color="green">
+                    Current choice is the best option for reducing cost as its energy costs are the lowest.
+                  </Text>
+                ) : (
+                  <Text layerStyle="hint" pb="4" p="4" color="green">
+                    Current choice is the best option for reducing footprint as it produces the least kg/Co2 per kWh.
+                  </Text>
+                ))}
             </>
           )}
           {action.id === 'useSuperServer' ? (
