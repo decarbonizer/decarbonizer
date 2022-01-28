@@ -60,7 +60,7 @@ function getItFootprintPerYearForSingleSurveyAnswer(
   { energyForms }: ExternalCalculationData,
   answer: ItSurveyAnswerValue,
 ) {
-  let footprintPerServer = 320; // 320 kg/year for servers that are on premise or in data center
+  const footprintPerServer = 320; // 320 kg/year for servers that are on premise or in data center
 
   const energyForm = energyForms.filter((energyForm) => energyForm._id === answer.dataCenterEnergyForm).first();
   let energyFootprint = (energyForm.co2PerGramPerKwh / 1000) * answer.dataCenterConsumption;
