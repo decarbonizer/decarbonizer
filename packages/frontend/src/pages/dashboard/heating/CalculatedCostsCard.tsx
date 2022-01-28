@@ -63,7 +63,7 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
                 )}
               </Tbody>
             </Table>
-            {parseInt(data.heatingCosts.toFixed(2)) === 0 && parseInt(data.footprint.toFixed(2)) === 0 && (
+            {data.heatingCosts === 0 && data.footprint === 0 && (
               <Text color="green">
                 Produced heating by data center completely compensates current heating costs and footprint
               </Text>
