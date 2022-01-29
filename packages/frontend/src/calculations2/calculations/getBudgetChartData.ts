@@ -1,11 +1,15 @@
 import { IDataFrame, DataFrame } from 'data-forge';
 import isEqual from 'lodash-es/isEqual';
-import { ActionPlan } from '../api/actionPlan';
-import { ExternalCalculationData } from '../calculations/externalData';
-import { ChooseTimePeriodElementAnswerValue } from '../data/actions/shared/chooseTimePeriodElement';
-import { DeltaResult, getDeltaType } from '../utils/deltaType';
-import { CategoryCoreCalculations } from './core/categoryCoreCalculations';
-import { illuminationCoreCalculations } from './core/illuminationCoreCalculations';
+import { ActionPlan } from '../../api/actionPlan';
+import { ExternalCalculationData } from '../../calculations/externalData';
+import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
+import { DeltaResult, getDeltaType } from '../../utils/deltaType';
+import { businessTravelCoreCalculations } from '../core/businessTravelCoreCalculations';
+import { CategoryCoreCalculations } from '../core/categoryCoreCalculations';
+import { electricityCoreCalculations } from '../core/electricityCoreCalculations';
+import { heatingCoreCalculations } from '../core/heatingCoreCalculations';
+import { illuminationCoreCalculations } from '../core/illuminationCoreCalculations';
+import { itCoreCalculations } from '../core/itCoreCalculations';
 
 export interface BudgetChartDataEntry {
   year: number;
@@ -15,16 +19,22 @@ export interface BudgetChartDataEntry {
 
 export function getBudgetChartData(
   externalCalculationData: ExternalCalculationData,
-  actionPlans: IDataFrame<number, ActionPlan>,
+  actionPlans: Array<ActionPlan>,
   fromYear: number,
   toYear: number,
 ): Array<BudgetChartDataEntry> {
-  const coreCalculations: IDataFrame<number, CategoryCoreCalculations> = new DataFrame([illuminationCoreCalculations]);
+  const coreCalculations: IDataFrame<number, CategoryCoreCalculations> = new DataFrame([
+    illuminationCoreCalculations,
+    // businessTravelCoreCalculations,
+    // electricityCoreCalculations,
+    // // heatingCoreCalculations,
+    // itCoreCalculations,
+  ]);
 
   // All action answers enriched with their start and end date, sorted by the time when they
   // start. The sorting ensures that they are applied in the correct order when transforming
   // survey answers.
-  const linearizedActionAnswers = actionPlans
+  const linearizedActionAnswers = new DataFrame(actionPlans)
     .flatMap((actionPlan) =>
       actionPlan.actionAnswers.map((answer) => {
         const detailsValue = (answer.values.detailsValue ?? {}) as ChooseTimePeriodElementAnswerValue;

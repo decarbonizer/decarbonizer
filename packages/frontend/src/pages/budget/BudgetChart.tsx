@@ -14,7 +14,8 @@ import {
 } from 'recharts';
 import { ActionPlan } from '../../api/actionPlan';
 import { useCalculation } from '../../calculations/useCalculation';
-import { getBudgetChartData } from '../../calculations2/budget';
+import { getBudgetChartData } from '../../calculations2/calculations/getBudgetChartData';
+import { useAsyncCalculation } from '../../calculations2/useAsyncCalculation';
 
 export type BudgetChartMode = 'cost' | 'co2';
 
@@ -26,11 +27,16 @@ export interface BudgetChartProps extends BoxProps {
 }
 
 export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...rest }: BudgetChartProps) {
-  const { data } = useCalculation(
-    (externalCalculationData) =>
-      getBudgetChartData(externalCalculationData, new DataFrame(actionPlans), fromYear, toYear),
-    [fromYear, toYear, actionPlans],
-  );
+  // const { data } = useCalculation(
+  //   (externalCalculationData) => getBudgetChartData(externalCalculationData, actionPlans, fromYear, toYear),
+  //   [fromYear, toYear, actionPlans],
+  // );
+
+  const { data } = useAsyncCalculation('getBudgetChartData', (_) => [actionPlans, fromYear, toYear], [
+    fromYear,
+    toYear,
+    actionPlans,
+  ]);
 
   return (
     <Box w="100%" h="100%" {...rest}>

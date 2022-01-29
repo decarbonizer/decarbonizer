@@ -95,7 +95,7 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
 
     let footprint = 0;
 
-    for (const surveyAnswer of surveyAnswers) {
+    for (const surveyAnswer of surveyAnswersToUse) {
       const requiredkWh = this.getRequiredkWhForSingleSurveyAnswer(externalCalculationData, surveyAnswer);
       externallyProducedHeatingInKwh -= requiredkWh;
 
