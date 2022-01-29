@@ -39,8 +39,8 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...re
           <Tooltip />
           <Legend />
           <XAxis dataKey="year" domain={[fromYear, toYear]} allowDataOverflow />
-          {mode === 'cost' && <YAxis width={100} domain={['data-min', 'data-max']} unit="€" />}
-          {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['data-min', 'data-max']} unit="kg" />}
+          {mode === 'cost' && <YAxis width={100} domain={['auto', 'data-max']} unit="€" />}
+          {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['auto', 'data-max']} unit="kg" />}
           {/* <Bar dataKey="totalOriginalCost" name="Cost Without Action Plans" fill="#bAf6d4" unit="€" />
           <Bar dataKey="totalNewCost" name="Cost With Action Plans" fill="#9AE6B4" unit="€" />
           <Bar dataKey="delta" name="Cost Delta" opacity={0.6} fill="gray" unit="€" />
