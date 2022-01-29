@@ -34,7 +34,12 @@ export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
       return;
     }
 
-    const worker = new Worker(new URL('./useAsyncCalculationWorker.ts', import.meta.url), { type: 'module' });
+    const worker = new Worker(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore Reason: import.meta.url is correctly handled by Parcel.
+      new URL('./useAsyncCalculationWorker.ts', import.meta.url),
+      { type: 'module' },
+    );
     const message: AsyncCalculationMessage<TFn> = {
       fn,
       params,
