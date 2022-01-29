@@ -1,30 +1,31 @@
 import { DataFrame, IDataFrame } from 'data-forge';
-import { ActionAnswerBase } from '../api/actionAnswer';
-import { SurveyAnswer } from '../api/surveyAnswer';
-import { getActionAnswersForAction } from '../calculations/actionAnswers/getActionAnswerForAction';
-import { ExternalCalculationData } from '../calculations/externalData';
-import { ActionAnswerValues } from '../data/actions/action';
+import { ActionAnswerBase } from '../../api/actionAnswer';
+import { SurveyAnswer } from '../../api/surveyAnswer';
+import { getActionAnswersForAction } from '../../calculations/actionAnswers/getActionAnswerForAction';
+import { ExternalCalculationData } from '../../calculations/externalData';
+import { ActionAnswerValues } from '../../data/actions/action';
 import {
   ChangeBulbsActionAnswerValue,
   ChangeBulbsActionDetailsAnswerValue,
-} from '../data/actions/illumination/changeBulbsAction';
+} from '../../data/actions/illumination/changeBulbsAction';
 import {
   ReduceRuntimeActionAnswerValue,
   ReduceRuntimeActionDetailsAnswerValue,
-} from '../data/actions/illumination/reduceRuntimeAction';
-import { IlluminationSurveyAnswerValue } from '../data/surveys/illumination/illuminationSurveyAnswerValue';
-import { assert } from '../utils/assert';
-import { CategoryCalculationProvider, CostDescriptor } from './categoryCalculationProvider';
+} from '../../data/actions/illumination/reduceRuntimeAction';
+import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
+import { assert } from '../../utils/assert';
+import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-export class IlluminationCalculationProvider extends CategoryCalculationProvider<'illumination'> {
-  public constructor(externalCalculationData: ExternalCalculationData) {
-    super('illumination', externalCalculationData);
+class IlluminationCoreCalculations extends CategoryCoreCalculations<'illumination'> {
+  public constructor() {
+    super('illumination');
   }
 
   public override getInvestmentCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor> {
-    const { costOnReplace } = this.getMaintenanceCostFactors(surveyAnswer);
+    const { costOnReplace } = this.getMaintenanceCostFactors(externalCalculationData, surveyAnswer);
 
     return new DataFrame<number, CostDescriptor>([
       {
@@ -35,10 +36,14 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
   }
 
   public override getYearlyChangingCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
     year: number,
   ): IDataFrame<number, CostDescriptor> {
-    const { costOnReplace, runtimeInHoursPerYearPerBulb, bulbLifetime } = this.getMaintenanceCostFactors(surveyAnswer);
+    const { costOnReplace, runtimeInHoursPerYearPerBulb, bulbLifetime } = this.getMaintenanceCostFactors(
+      externalCalculationData,
+      surveyAnswer,
+    );
     const totalReplacementsUntilYear = (runtimeInHoursPerYearPerBulb * year) / bulbLifetime;
     const totalReplacementsUntilLastYear = Math.floor((runtimeInHoursPerYearPerBulb * (year - 1)) / bulbLifetime);
     const replacementsCurrentYear = totalReplacementsUntilYear - totalReplacementsUntilLastYear;
@@ -53,8 +58,11 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
     ]);
   }
 
-  private getMaintenanceCostFactors(surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>) {
-    const { bulbs } = this.externalCalculationData;
+  private getMaintenanceCostFactors(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  ) {
+    const { bulbs } = externalCalculationData;
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
     const avgElectricianWagePerHour = 12.0; // Minimum wage in Germany as of soon. :^)
     const avgElectricianWagePerBulb = avgElectricianWagePerHour / 6; // assume that it takes 10 min to change a bulb
@@ -71,9 +79,10 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
   }
 
   public override getYearlyConstantCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor> {
-    const { bulbs } = this.externalCalculationData;
+    const { bulbs } = externalCalculationData;
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
     const energyForm = { euroPerKwh: 0.25 }; // TODO: Extract from data.
     const runtimeInHoursPerYear = this.getIlluminationRuntimePerYear(surveyAnswer);
@@ -89,9 +98,10 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
   }
 
   public override getYearlyFootprintForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   ): number {
-    const { bulbs } = this.externalCalculationData;
+    const { bulbs } = externalCalculationData;
     const germanyEF = 0.624;
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
     const runtimeInHoursPerYear = this.getIlluminationRuntimePerYear(surveyAnswer);
@@ -132,6 +142,7 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
   }
 
   public override transformSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
     actionAnswers: IDataFrame<number, ActionAnswerBase<ActionAnswerValues<object, object | undefined>>>,
   ): SurveyAnswer<IlluminationSurveyAnswerValue> {
@@ -205,3 +216,5 @@ export class IlluminationCalculationProvider extends CategoryCalculationProvider
     };
   }
 }
+
+export const illuminationCoreCalculations = new IlluminationCoreCalculations();

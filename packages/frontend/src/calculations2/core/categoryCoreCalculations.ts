@@ -1,9 +1,9 @@
 import { DataFrame, IDataFrame } from 'data-forge';
-import { ActionAnswerBase } from '../api/actionAnswer';
-import { isSurveyAnswerType, SurveyAnswer } from '../api/surveyAnswer';
-import { ExternalCalculationData } from '../calculations/externalData';
-import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../data/surveys/survey';
-import { DeltaResult, getDeltaType } from '../utils/deltaType';
+import { ActionAnswerBase } from '../../api/actionAnswer';
+import { isSurveyAnswerType, SurveyAnswer } from '../../api/surveyAnswer';
+import { ExternalCalculationData } from '../../calculations/externalData';
+import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../../data/surveys/survey';
+import { DeltaResult, getDeltaType } from '../../utils/deltaType';
 
 const emptyDataFrame = new DataFrame();
 
@@ -12,28 +12,33 @@ export interface CostDescriptor {
   cost: number;
 }
 
-export abstract class CategoryCalculationProvider<
+export abstract class CategoryCoreCalculations<
   TSurveyId extends KnownSurveyId = KnownSurveyId,
   TSurveyAnswerValue extends SurveyToSurveyAnswerMap[TSurveyId] = SurveyToSurveyAnswerMap[TSurveyId],
 > {
-  protected constructor(protected surveyId: TSurveyId, protected externalCalculationData: ExternalCalculationData) {}
+  protected constructor(protected surveyId: TSurveyId) {}
 
   //
   // Investment Costs.
   //
 
   public getTotalSummedInvestmentCosts(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
   ) {
-    const surveyAnswersToUse = this.transformSurveyAnswers(surveyAnswers, transformingActionAnswers);
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
 
     if (!surveyAnswersToUse.any()) {
       return 0;
     }
 
     return surveyAnswers
-      .flatMap((surveyAnswer) => this.getInvestmentCostsForSingleSurveyAnswer(surveyAnswer))
+      .flatMap((surveyAnswer) => this.getInvestmentCostsForSingleSurveyAnswer(externalCalculationData, surveyAnswer))
       .reduce((result, cost) => result + cost.cost, 0);
   }
 
@@ -43,6 +48,7 @@ export abstract class CategoryCalculationProvider<
    * An example is the purchase of new hardware.
    */
   public abstract getInvestmentCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor>;
 
@@ -51,18 +57,25 @@ export abstract class CategoryCalculationProvider<
   //
 
   public getTotalSummedYearlyChangingCosts(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
     year: number,
   ) {
-    const surveyAnswersToUse = this.transformSurveyAnswers(surveyAnswers, transformingActionAnswers);
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
 
     if (!surveyAnswersToUse.any()) {
       return 0;
     }
 
     return surveyAnswersToUse
-      .flatMap((surveyAnswer) => this.getYearlyChangingCostsForSingleSurveyAnswer(surveyAnswer, year))
+      .flatMap((surveyAnswer) =>
+        this.getYearlyChangingCostsForSingleSurveyAnswer(externalCalculationData, surveyAnswer, year),
+      )
       .reduce((result, cost) => result + cost.cost, 0);
   }
 
@@ -72,6 +85,7 @@ export abstract class CategoryCalculationProvider<
    * of bulbs which is only required every n years depending on the bulb's usage.
    */
   public abstract getYearlyChangingCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
     year: number,
   ): IDataFrame<number, CostDescriptor>;
@@ -85,12 +99,13 @@ export abstract class CategoryCalculationProvider<
    * applying the transforming action answers.
    */
   public getTotalYearlyConstantCostsDelta(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
   ) {
     return this.getDeltaResult(
-      this.getTotalSummedYearlyConstantCosts(surveyAnswers),
-      this.getTotalSummedYearlyConstantCosts(surveyAnswers, transformingActionAnswers),
+      this.getTotalSummedYearlyConstantCosts(externalCalculationData, surveyAnswers),
+      this.getTotalSummedYearlyConstantCosts(externalCalculationData, surveyAnswers, transformingActionAnswers),
     );
   }
 
@@ -98,17 +113,24 @@ export abstract class CategoryCalculationProvider<
    * Returns the sum of all total constant costs occuring in a single year.
    */
   public getTotalSummedYearlyConstantCosts(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
   ) {
-    const surveyAnswersToUse = this.transformSurveyAnswers(surveyAnswers, transformingActionAnswers);
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
 
     if (!surveyAnswersToUse.any()) {
       return 0;
     }
 
     return surveyAnswersToUse
-      .flatMap((surveyAnswer) => this.getYearlyConstantCostsForSingleSurveyAnswer(surveyAnswer))
+      .flatMap((surveyAnswer) =>
+        this.getYearlyConstantCostsForSingleSurveyAnswer(externalCalculationData, surveyAnswer),
+      )
       .reduce((result, cost) => result + cost.cost, 0);
   }
 
@@ -118,6 +140,7 @@ export abstract class CategoryCalculationProvider<
    * generated by the same room every year.
    */
   public abstract getYearlyConstantCostsForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor>;
 
@@ -126,45 +149,65 @@ export abstract class CategoryCalculationProvider<
   //
 
   public getSummedYearlyFootprintDelta(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): DeltaResult {
     return this.getDeltaResult(
-      this.getSummedYearlyFootprint(surveyAnswers),
-      this.getSummedYearlyFootprint(surveyAnswers, transformingActionAnswers),
+      this.getSummedYearlyFootprint(externalCalculationData, surveyAnswers),
+      this.getSummedYearlyFootprint(externalCalculationData, surveyAnswers, transformingActionAnswers),
     );
   }
 
   public getSummedYearlyFootprint(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
   ) {
-    const surveyAnswersToUse = this.transformSurveyAnswers(surveyAnswers, transformingActionAnswers);
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
 
     if (!surveyAnswersToUse.any()) {
       return 0;
     }
 
     return surveyAnswersToUse
-      .map((surveyAnswer) => this.getYearlyFootprintForSingleSurveyAnswer(surveyAnswer))
+      .map((surveyAnswer) => this.getYearlyFootprintForSingleSurveyAnswer(externalCalculationData, surveyAnswer))
       .reduce((result, footprint) => result + footprint, 0);
   }
 
-  public abstract getYearlyFootprintForSingleSurveyAnswer(surveyAnswer: SurveyAnswer<TSurveyAnswerValue>): number;
+  /**
+   * Calculates the yearly footprint produced by the given survey answer (in kg per year).
+   */
+  public abstract getYearlyFootprintForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
+  ): number;
 
   //
   // Survey Answer Transformation.
   //
 
   public transformSurveyAnswers(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     actionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): IDataFrame<number, SurveyAnswer<TSurveyAnswerValue>> {
     const matchingSurveyAnswers = this.filterThisCategorysSurveyAnswers(surveyAnswers);
-    return matchingSurveyAnswers.map((surveyAnswer) => this.transformSurveyAnswer(surveyAnswer, actionAnswers));
+    return matchingSurveyAnswers.map((surveyAnswer) =>
+      this.transformSurveyAnswer(externalCalculationData, surveyAnswer, actionAnswers),
+    );
   }
 
+  /**
+   * Transforms a given survey answer using the given survey answers.
+   * The returned survey answer essentially incorporates the action answers afterwards.
+   */
   public abstract transformSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
     actionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): SurveyAnswer<TSurveyAnswerValue>;

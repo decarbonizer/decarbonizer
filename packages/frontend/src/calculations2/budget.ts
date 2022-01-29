@@ -4,8 +4,8 @@ import { ActionPlan } from '../api/actionPlan';
 import { ExternalCalculationData } from '../calculations/externalData';
 import { ChooseTimePeriodElementAnswerValue } from '../data/actions/shared/chooseTimePeriodElement';
 import { DeltaResult, getDeltaType } from '../utils/deltaType';
-import { CategoryCalculationProvider } from './categoryCalculationProvider';
-import { IlluminationCalculationProvider } from './illuminationCalculationProvider';
+import { CategoryCoreCalculations } from './core/categoryCoreCalculations';
+import { illuminationCoreCalculations } from './core/illuminationCoreCalculations';
 
 export interface BudgetChartDataEntry {
   year: number;
@@ -19,9 +19,7 @@ export function getBudgetChartData(
   fromYear: number,
   toYear: number,
 ): Array<BudgetChartDataEntry> {
-  const calculationProviders: IDataFrame<number, CategoryCalculationProvider> = new DataFrame([
-    new IlluminationCalculationProvider(externalCalculationData),
-  ]);
+  const coreCalculations: IDataFrame<number, CategoryCoreCalculations> = new DataFrame([illuminationCoreCalculations]);
 
   // All action answers enriched with their start and end date, sorted by the time when they
   // start. The sorting ensures that they are applied in the correct order when transforming
@@ -62,11 +60,19 @@ export function getBudgetChartData(
     // transformed survey answers that start in *this exact year*.
     // This means that we must diff the transformed survey answers of the previous year and this year.
     // *Only* those survey answers that changed require a reinvestment.
-    const surveyAnswersLastYear = calculationProviders.flatMap((provider) =>
-      provider.transformSurveyAnswers(externalCalculationData.surveyAnswers, activeActionAnswersLastLear),
+    const surveyAnswersLastYear = coreCalculations.flatMap((coreCalculations) =>
+      coreCalculations.transformSurveyAnswers(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        activeActionAnswersLastLear,
+      ),
     );
-    const surveyAnswersThisYear = calculationProviders.flatMap((provider) =>
-      provider.transformSurveyAnswers(externalCalculationData.surveyAnswers, activeActionAnswers),
+    const surveyAnswersThisYear = coreCalculations.flatMap((coreCalculations) =>
+      coreCalculations.transformSurveyAnswers(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        activeActionAnswers,
+      ),
     );
     const surveyAnswersWhichChangedThisYear = surveyAnswersThisYear.filter(
       (surveyAnswer) =>
@@ -75,13 +81,19 @@ export function getBudgetChartData(
             surveyAnswer._id === oldSurveyAnswer._id && isEqual(surveyAnswer.value, oldSurveyAnswer.value),
         ),
     );
-    const totalInvestmentCostsThisYear = calculationProviders
-      .map((provider) => provider.getTotalSummedInvestmentCosts(surveyAnswersWhichChangedThisYear))
+    const totalInvestmentCostsThisYear = coreCalculations
+      .map((coreCalculations) =>
+        coreCalculations.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswersWhichChangedThisYear),
+      )
       .reduce((result, cost) => result + cost, 0);
 
-    const originalConstantCost = calculationProviders
-      .map((provider) =>
-        provider.getTotalYearlyConstantCostsDelta(externalCalculationData.surveyAnswers, activeActionAnswers),
+    const originalConstantCost = coreCalculations
+      .map((coreCalculations) =>
+        coreCalculations.getTotalYearlyConstantCostsDelta(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          activeActionAnswers,
+        ),
       )
       .reduce<DeltaResult>(deltaResultReducer);
 
@@ -92,9 +104,13 @@ export function getBudgetChartData(
     const budget =
       budgetRemainingFromLastYear + budgetNewThisYear + -originalConstantCost.delta - totalInvestmentCostsThisYear;
 
-    const footprint = calculationProviders
-      .map((provider) =>
-        provider.getSummedYearlyFootprintDelta(externalCalculationData.surveyAnswers, activeActionAnswers),
+    const footprint = coreCalculations
+      .map((coreCalculations) =>
+        coreCalculations.getSummedYearlyFootprintDelta(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          activeActionAnswers,
+        ),
       )
       .reduce(deltaResultReducer);
 
