@@ -11,7 +11,7 @@ import {
 import { BusinessTravelSurveyAnswerValue } from '../../data/surveys/businessTravel/businessTravelSurveyAnswerValue';
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-export class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'businessTravel'> {
+class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'businessTravel'> {
   public constructor() {
     super('businessTravel');
   }
@@ -54,7 +54,7 @@ export class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'bu
   public override transformSurveyAnswer(
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<BusinessTravelSurveyAnswerValue>,
-    actionAnswers: IDataFrame<number, ActionAnswerBase<ActionAnswerValues<object, object | undefined>>>,
+    actionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): SurveyAnswer<BusinessTravelSurveyAnswerValue> {
     let result = surveyAnswer.value;
 

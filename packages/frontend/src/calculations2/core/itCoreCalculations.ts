@@ -15,9 +15,32 @@ import {
 import { ItSurveyAnswerValue } from '../../data/surveys/it/itSurveyAnswerValue';
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
+class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
   public constructor() {
     super('it');
+  }
+
+  /**
+   * Calculates heating produced by the current IT values.
+   */
+  public getTotalYearlyProducedHeating(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
+  ) {
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
+
+    if (!surveyAnswersToUse.any()) {
+      return 0;
+    }
+
+    return surveyAnswersToUse
+      .map((answer) => (answer.value.superServer ? answer.value.dataCenterConsumption * 0.7 : 0))
+      .reduce((a, b) => a + b, 0);
   }
 
   public override getInvestmentCostsForSingleSurveyAnswer(
@@ -95,7 +118,7 @@ export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
   public override transformSurveyAnswer(
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<ItSurveyAnswerValue>,
-    actionAnswers: IDataFrame<number, ActionAnswerBase<ActionAnswerValues<object, object | undefined>>>,
+    actionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): SurveyAnswer<ItSurveyAnswerValue> {
     let result = surveyAnswer.value;
 

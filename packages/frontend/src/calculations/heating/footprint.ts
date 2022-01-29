@@ -142,30 +142,29 @@ function getHeatingFootprintPerYearForSingleSurveyAnswer(
   answer: HeatingSurveyAnswerValue,
   availableHeatingInKwh: number,
 ): { footprint: number; availableHeatingInKwh: number } {
-  const heatingKwhPerQm = 0.1;
-
+  const heatingKwhRequiredPerQm = 0.1;
   const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
-
   const energyForm = energyForms.filter((form) => form._id === heatingType._id).first();
-  let overallkWhForHeating = heatingKwhPerQm * answer.realEstateAreaInQm;
+
+  let overallkWhRequiredForHeating = heatingKwhRequiredPerQm * answer.realEstateAreaInQm;
 
   // take produced heating through it into consideration
   let heatingLeftInKwh = availableHeatingInKwh;
-  if (availableHeatingInKwh >= overallkWhForHeating) {
-    heatingLeftInKwh = availableHeatingInKwh - overallkWhForHeating;
-
+  if (availableHeatingInKwh >= overallkWhRequiredForHeating) {
+    heatingLeftInKwh -= overallkWhRequiredForHeating;
     return { footprint: 0, availableHeatingInKwh: heatingLeftInKwh }; //all heating is compensated by it
   } else {
-    overallkWhForHeating = overallkWhForHeating - availableHeatingInKwh;
+    overallkWhRequiredForHeating -= availableHeatingInKwh;
   }
 
   if (answer.smartThermostats) {
-    overallkWhForHeating = overallkWhForHeating * 0.9;
+    overallkWhRequiredForHeating *= 0.9;
   }
-  let overallkWhConsumptionForEnergyForm = overallkWhForHeating / heatingType.productionKwh;
+
+  let overallkWhConsumptionForEnergyForm = overallkWhRequiredForHeating / heatingType.productionKwh;
 
   if (heatingType.consumptionKwh !== 0) {
-    overallkWhConsumptionForEnergyForm = overallkWhConsumptionForEnergyForm * heatingType.consumptionKwh;
+    overallkWhConsumptionForEnergyForm *= heatingType.consumptionKwh;
   }
 
   const footprint =

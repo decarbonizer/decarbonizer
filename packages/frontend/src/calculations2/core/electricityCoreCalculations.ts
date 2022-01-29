@@ -51,7 +51,7 @@ class ElectricityCoreCalculations extends CategoryCoreCalculations<'electricity'
   public override transformSurveyAnswer(
     _: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<ElectricitySurveyAnswerValue>,
-    actionAnswers: IDataFrame<number, ActionAnswerBase<ActionAnswerValues<object, object | undefined>>>,
+    actionAnswers: IDataFrame<number, ActionAnswerBase>,
   ): SurveyAnswer<ElectricitySurveyAnswerValue> {
     let result = surveyAnswer.value;
 

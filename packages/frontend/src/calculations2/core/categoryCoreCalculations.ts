@@ -5,8 +5,6 @@ import { ExternalCalculationData } from '../../calculations/externalData';
 import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../../data/surveys/survey';
 import { DeltaResult, getDeltaType } from '../../utils/deltaType';
 
-const emptyDataFrame = new DataFrame();
-
 export interface CostDescriptor {
   displayName: string;
   cost: number;
@@ -16,6 +14,8 @@ export abstract class CategoryCoreCalculations<
   TSurveyId extends KnownSurveyId = KnownSurveyId,
   TSurveyAnswerValue extends SurveyToSurveyAnswerMap[TSurveyId] = SurveyToSurveyAnswerMap[TSurveyId],
 > {
+  protected static emptyDataFrame = new DataFrame();
+
   protected constructor(protected surveyId: TSurveyId) {}
 
   //
@@ -25,7 +25,7 @@ export abstract class CategoryCoreCalculations<
   public getTotalSummedInvestmentCosts(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
-    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
   ) {
     const surveyAnswersToUse = this.transformSurveyAnswers(
       externalCalculationData,
@@ -59,7 +59,7 @@ export abstract class CategoryCoreCalculations<
   public getTotalSummedYearlyChangingCosts(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
-    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
     year: number,
   ) {
     const surveyAnswersToUse = this.transformSurveyAnswers(
@@ -115,7 +115,7 @@ export abstract class CategoryCoreCalculations<
   public getTotalSummedYearlyConstantCosts(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
-    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
   ) {
     const surveyAnswersToUse = this.transformSurveyAnswers(
       externalCalculationData,
@@ -162,7 +162,7 @@ export abstract class CategoryCoreCalculations<
   public getSummedYearlyFootprint(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
-    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = emptyDataFrame,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
   ) {
     const surveyAnswersToUse = this.transformSurveyAnswers(
       externalCalculationData,
