@@ -9,6 +9,10 @@ import {
   IncreaseDataCenterTemperatureActionAnswerValue,
   IncreaseDataCenterTemperatureActionDetailsAnswerValue,
 } from '../../data/actions/it/increaseDataCenterTemperature';
+import {
+  UseSuperServerActionAnswerValue,
+  UseSuperServerActionDetailsAnswerValue,
+} from '../../data/actions/it/useSuperServer';
 
 export function transformItSurveyAnswers(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
@@ -28,8 +32,15 @@ export function transformItSurveyAnswer(
     actionAnswers,
     'increaseDataCenterTemperature',
   );
+
+  const useSuperServerActionAnswers = getActionAnswersForAction(actionAnswers, 'useSuperServer');
+
   for (const answer of increaseDataCenterTemperatureActionAnswers) {
     result = applyIncreaseDataCenterTemperatureActionAnswer(surveyAnswer._id, result, answer.values);
+  }
+
+  for (const answer of useSuperServerActionAnswers) {
+    result = applyUseSuperServerActionAnswer(surveyAnswer._id, result, answer.values);
   }
 
   return result;
@@ -60,4 +71,26 @@ function applyIncreaseDataCenterTemperatureActionAnswer(
     dataCenterTemperature: newDataCenterTemperature,
     dataCenterConsumption: newDataCenterConsumption,
   };
+}
+
+function applyUseSuperServerActionAnswer(
+  surveyAnswerId: string,
+  surveyAnswer: ItSurveyAnswerValue,
+  actionAnswer: ActionAnswerValues<UseSuperServerActionAnswerValue, UseSuperServerActionDetailsAnswerValue>,
+): ItSurveyAnswerValue {
+  const {
+    value: { newServer },
+    detailsValue,
+  } = actionAnswer;
+
+  if (detailsValue?.surveyAnswers && !detailsValue.surveyAnswers.includes(surveyAnswerId)) {
+    return surveyAnswer;
+  }
+
+  const answer = {
+    ...surveyAnswer,
+    dataCenterEnergyForm: '00000000-0000-0000-0000-000000000001', //Water energy form
+    superServer: newServer,
+  };
+  return answer;
 }

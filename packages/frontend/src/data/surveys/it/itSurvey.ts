@@ -35,6 +35,13 @@ export const itSurvey: Survey = {
             normedUnit: 'C',
           },
           {
+            id: 'gpuServerCount',
+            required: true,
+            type: 'number',
+            label: 'How many GPU Servers are used?',
+            min: 1,
+          },
+          {
             id: 'dataCenterConsumption',
             required: true,
             type: 'number-unit',
