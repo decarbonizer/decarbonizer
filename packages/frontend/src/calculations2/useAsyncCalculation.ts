@@ -26,7 +26,7 @@ export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
 ): UseAsyncCalculationResult<TFn> {
   const externalCalculationDataQuery = useExternalCalculationData();
   const [result, setResult] = useState<UseAsyncCalculationResult<TFn>>({ isLoading: true });
-  const params = useAsyncCalculationParams(externalCalculationDataQuery, getParams);
+  const params = useAsyncCalculationParams(externalCalculationDataQuery, getParams, deps);
   const arrayifiedExternalCalculationData = useArrayifiedExternalCalculationData(externalCalculationDataQuery);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
       console.debug('useAsyncCalculation terminated worker.');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...deps, fn, params, arrayifiedExternalCalculationData]);
+  }, [fn, params, arrayifiedExternalCalculationData]);
 
   if (externalCalculationDataQuery.error) {
     return {
@@ -118,10 +118,11 @@ function useArrayifiedExternalCalculationData(
 function useAsyncCalculationParams<TFn extends AsyncCalculationFns>(
   externalCalculationDataQuery: ReturnType<typeof useExternalCalculationData>,
   getParams: GetAsyncCalculationParams<TFn>,
+  deps: DependencyList,
 ) {
   return useMemo<AsyncCalculationParams<TFn> | undefined>(
     () => (externalCalculationDataQuery.data ? getParams(externalCalculationDataQuery.data) : undefined),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [externalCalculationDataQuery],
+    [...deps, externalCalculationDataQuery],
   );
 }
