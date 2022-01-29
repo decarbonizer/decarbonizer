@@ -142,7 +142,7 @@ class IlluminationCoreCalculations extends CategoryCoreCalculations<'illuminatio
   }
 
   public override transformSurveyAnswer(
-    externalCalculationData: ExternalCalculationData,
+    _: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
     actionAnswers: IDataFrame<number, ActionAnswerBase<ActionAnswerValues<object, object | undefined>>>,
   ): SurveyAnswer<IlluminationSurveyAnswerValue> {
