@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../../calculationsLegacy/actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../utils';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import { HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue } from '../../data/actions/heating/heatLessAction';

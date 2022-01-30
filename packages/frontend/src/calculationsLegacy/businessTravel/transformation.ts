@@ -7,7 +7,7 @@ import {
   ReduceAirTravelActionDetailsAnswerValue,
 } from '../../data/actions/businessTravel/reduceAirTravelAction';
 import { BusinessTravelSurveyAnswerValue } from '../../data/surveys/businessTravel/businessTravelSurveyAnswerValue';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**

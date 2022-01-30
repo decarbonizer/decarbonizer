@@ -2,7 +2,7 @@ import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ItSurveyAnswerValue } from '../../data/surveys/it/itSurveyAnswerValue';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 import { transformItSurveyAnswer, transformItSurveyAnswers } from './transformation';
 

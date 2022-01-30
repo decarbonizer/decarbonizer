@@ -11,7 +11,7 @@ import {
   ReduceRuntimeActionDetailsAnswerValue,
 } from '../../data/actions/illumination/reduceRuntimeAction';
 import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/illuminationSurveyAnswerValue';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**

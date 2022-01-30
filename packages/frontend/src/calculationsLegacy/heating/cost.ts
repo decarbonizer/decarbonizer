@@ -8,7 +8,7 @@ import {
 } from '../../data/actions/heating/switchToHeatPumpAction';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
 import { getDeltaType } from '../../utils/deltaType';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { ExternalCalculationData } from '../../calculations/useExternalCalculationData';
 import { getTransformedProducedHeatingPerYear } from '../it/footprint';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';

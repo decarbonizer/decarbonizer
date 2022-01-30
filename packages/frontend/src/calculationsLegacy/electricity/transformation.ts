@@ -2,7 +2,7 @@ import { SurveyAnswer } from '../../api/surveyAnswer';
 import { ElectricitySurveyAnswerValue } from '../../data/surveys/electricity/electricitySurveyAnswerValue';
 import { IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
   SwitchToGreenEnergyActionAnswerValue,

@@ -12,7 +12,7 @@ import {
   SwitchToHeatPumpActionDetailsAnswerValue,
 } from '../../data/actions/heating/switchToHeatPumpAction';
 import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurveyAnswerValue';
-import { getActionAnswersForAction } from '../actionAnswers/getActionAnswerForAction';
+import { getActionAnswersForAction } from '../../calculations/utils';
 import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
 
 /**

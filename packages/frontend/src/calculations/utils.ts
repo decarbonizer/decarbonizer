@@ -1,6 +1,6 @@
 import { IDataFrame } from 'data-forge';
-import { ActionAnswerBase } from '../../api/actionAnswer';
-import { ActionsToActionAnswerMap, KnownActionId } from '../../data/actions/action';
+import { ActionAnswerBase } from '../api/actionAnswer';
+import { ActionsToActionAnswerMap, KnownActionId } from '../data/actions/action';
 
 export function getActionAnswersForAction<TActionId extends KnownActionId>(
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
