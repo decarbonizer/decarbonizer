@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../utils';
+import { getActionAnswersForAction } from '../getActionAnswersForAction';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
@@ -16,7 +16,7 @@ import { IlluminationSurveyAnswerValue } from '../../data/surveys/illumination/i
 import { assert } from '../../utils/assert';
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-class IlluminationCoreCalculations extends CategoryCoreCalculations<'illumination'> {
+export class IlluminationCoreCalculations extends CategoryCoreCalculations<'illumination'> {
   public constructor() {
     super('illumination');
   }
@@ -33,6 +33,14 @@ class IlluminationCoreCalculations extends CategoryCoreCalculations<'illuminatio
         displayName: 'Maintenance',
       },
     ]);
+  }
+
+  protected override isInitialInvestmentRequiredForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+    transformedSurveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  ): boolean {
+    return surveyAnswer.value.bulbType !== transformedSurveyAnswer.value.bulbType;
   }
 
   public override getYearlyChangingCostsForSingleSurveyAnswer(

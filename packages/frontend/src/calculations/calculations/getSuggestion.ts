@@ -59,7 +59,7 @@ export function getSuggestionForSwitchToGreenEnergyCost(externalCalculationData:
         actionId: 'switchToGreenEnergy',
         values: possibleAnswerValue,
       };
-      const result = electricityCoreCalculations.getTotalYearlyConstantCostsDelta(
+      const result = electricityCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame([possibleAction]),
@@ -119,7 +119,7 @@ export function getSuggestionForSwitchToHeatPumpCost(externalCalculationData: Ex
         actionId: 'switchToHeatPump',
         values: possibleAnswerValue,
       };
-      const result = heatingCoreCalculations.getTotalYearlyConstantCostsDelta(
+      const result = heatingCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame([possibleAction]),
@@ -177,7 +177,7 @@ export function getSuggestionForChangeBulbsCost(externalCalculationData: Externa
         actionId: 'changeBulbs',
         values: possibleAnswerValue,
       };
-      const result = illuminationCoreCalculations.getTotalYearlyConstantCostsDelta(
+      const result = illuminationCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame([possibleAction]),

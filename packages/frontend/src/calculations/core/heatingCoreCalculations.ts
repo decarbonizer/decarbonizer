@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../utils';
+import { getActionAnswersForAction } from '../getActionAnswersForAction';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import { HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue } from '../../data/actions/heating/heatLessAction';
@@ -17,7 +17,7 @@ import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurv
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 import { itCoreCalculations } from './itCoreCalculations';
 
-class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
+export class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
   public constructor() {
     super('heating');
   }
@@ -32,6 +32,14 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
         cost: this.getHeatingInstallationCostForSingleSurveyAnswer(externalCalculationData, surveyAnswer.value),
       },
     ]);
+  }
+
+  protected override isInitialInvestmentRequiredForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
+    transformedSurveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
+  ): boolean {
+    return surveyAnswer.value.radiatorKind !== transformedSurveyAnswer.value.radiatorKind;
   }
 
   public override getYearlyChangingCostsForSingleSurveyAnswer(
@@ -120,12 +128,12 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
     answer: HeatingSurveyAnswerValue,
   ) {
     const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
-    const heatingKwhPerQm = 0.1;
-    const installationCostInEuro =
-      answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
-        ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
-        : heatingType.installationCostInEuro;
-    return installationCostInEuro;
+    // const heatingKwhPerQm = 0.1;
+    // const installationCostInEuro =
+    //   answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
+    //     ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
+    //     : heatingType.installationCostInEuro;
+    return heatingType.installationCostInEuro;
   }
 
   public override getSummedYearlyFootprint(

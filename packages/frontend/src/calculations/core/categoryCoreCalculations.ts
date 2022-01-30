@@ -4,6 +4,7 @@ import { isSurveyAnswerType, SurveyAnswer } from '../../api/surveyAnswer';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { KnownSurveyId, SurveyToSurveyAnswerMap } from '../../data/surveys/survey';
 import { DeltaResult, getDeltaType } from '../../utils/deltaType';
+import isEqual from 'lodash-es/isEqual';
 
 export interface CostDescriptor {
   displayName: string;
@@ -27,18 +28,25 @@ export abstract class CategoryCoreCalculations<
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
   ) {
-    const surveyAnswersToUse = this.transformSurveyAnswers(
-      externalCalculationData,
-      surveyAnswers,
-      transformingActionAnswers,
-    );
+    return this.filterThisCategorysSurveyAnswers(surveyAnswers)
+      .flatMap((surveyAnswer) => {
+        const transformedSurveyAnswer = this.transformSurveyAnswer(
+          externalCalculationData,
+          surveyAnswer,
+          transformingActionAnswers,
+        );
+        const isInvestmentRequired = this.isInitialInvestmentRequiredForSingleSurveyAnswer(
+          externalCalculationData,
+          surveyAnswer,
+          transformedSurveyAnswer,
+        );
 
-    if (!surveyAnswersToUse.any()) {
-      return 0;
-    }
-
-    return surveyAnswersToUse
-      .flatMap((surveyAnswer) => this.getInvestmentCostsForSingleSurveyAnswer(externalCalculationData, surveyAnswer))
+        if (isInvestmentRequired) {
+          return this.getInvestmentCostsForSingleSurveyAnswer(externalCalculationData, transformedSurveyAnswer);
+        } else {
+          return [];
+        }
+      })
       .reduce((result, cost) => result + cost.cost, 0);
   }
 
@@ -52,9 +60,29 @@ export abstract class CategoryCoreCalculations<
     surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor>;
 
+  protected isInitialInvestmentRequiredForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
+    transformedSurveyAnswer: SurveyAnswer<TSurveyAnswerValue>,
+  ): boolean {
+    return !isEqual(surveyAnswer.value, transformedSurveyAnswer.value);
+  }
+
   //
   // Yearly Changing Costs.
   //
+
+  public getTotalSummedYearlyChangingCostsDelta(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
+    year: number,
+  ) {
+    return this.getDeltaResult(
+      this.getTotalSummedYearlyChangingCosts(externalCalculationData, surveyAnswers, undefined, year),
+      this.getTotalSummedYearlyChangingCosts(externalCalculationData, surveyAnswers, transformingActionAnswers, year),
+    );
+  }
 
   public getTotalSummedYearlyChangingCosts(
     externalCalculationData: ExternalCalculationData,
@@ -98,7 +126,7 @@ export abstract class CategoryCoreCalculations<
    * Returns the delta between all total constant costs occuring in a single year before and after
    * applying the transforming action answers.
    */
-  public getTotalYearlyConstantCostsDelta(
+  public getTotalSummedYearlyConstantCostsDelta(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
@@ -222,7 +250,7 @@ export abstract class CategoryCoreCalculations<
     return surveyAnswers.filter((surveyAnswer) => isSurveyAnswerType(this.surveyId, surveyAnswer)) as any;
   }
 
-  protected getDeltaResult(before: number, after: number) {
+  protected getDeltaResult(before: number, after: number): DeltaResult {
     const delta = after - before;
     const deltaType = getDeltaType(delta);
 

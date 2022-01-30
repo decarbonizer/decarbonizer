@@ -1,4 +1,4 @@
-import { Box, HStack, Tooltip, VStack, Heading, Spacer, IconButton, Icon, useBoolean } from '@chakra-ui/react';
+import { Box, HStack, Tooltip, VStack, Heading, Spacer, IconButton, Icon, useBoolean, Spinner } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { BiExpandAlt, BiCollapse } from 'react-icons/bi';
 import Card, { CardProps } from '../../../components/Card';
@@ -7,9 +7,17 @@ export interface DashboardCardProps extends CardProps {
   header?: ReactNode;
   headerControls?: ReactNode;
   isExpandable?: boolean;
+  showRevalidatingSpinner?: boolean;
 }
 
-export default function DashboardCard({ header, children, headerControls, isExpandable, ...rest }: DashboardCardProps) {
+export default function DashboardCard({
+  header,
+  children,
+  headerControls,
+  isExpandable,
+  showRevalidatingSpinner,
+  ...rest
+}: DashboardCardProps) {
   const [isExpanded, setIsExpanded] = useBoolean();
 
   return (
@@ -24,11 +32,12 @@ export default function DashboardCard({ header, children, headerControls, isExpa
       left={isExpanded ? '30rem' : rest.left}
       right={isExpanded ? '2rem' : rest.right}>
       <VStack alignItems="stretch" spacing="4" h="100%">
-        <HStack align="flex-start">
+        <HStack align="center">
           <Heading as="h3" size="sm" color="gray.600" isTruncated>
             {header}
           </Heading>
           <Spacer />
+          {showRevalidatingSpinner && <Spinner colorScheme="primary" size="sm" />}
           {headerControls}
           {isExpandable && (
             <Tooltip label={isExpanded ? 'Collapse' : 'Expand'}>
