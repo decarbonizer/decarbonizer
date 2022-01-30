@@ -42,15 +42,59 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
     return new DataFrame<number, CostDescriptor>([]);
   }
 
+  public override getTotalSummedYearlyConstantCosts(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase> = CategoryCoreCalculations.emptyDataFrame,
+    externallyProducedHeatingInKwh: number = itCoreCalculations.getTotalYearlyProducedHeating(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    ),
+  ): number {
+    const surveyAnswersToUse = this.transformSurveyAnswers(
+      externalCalculationData,
+      surveyAnswers,
+      transformingActionAnswers,
+    );
+
+    if (!surveyAnswersToUse.any()) {
+      return 0;
+    }
+
+    let cost = 0;
+    let remainingExternallyProducedHeatingInkWh = externallyProducedHeatingInKwh;
+
+    for (const surveyAnswer of surveyAnswersToUse) {
+      const originallyRequiredkWh = this.getRequiredkWhForSingleSurveyAnswer(externalCalculationData, surveyAnswer);
+      const actualRequiredkWh = originallyRequiredkWh - remainingExternallyProducedHeatingInkWh;
+      remainingExternallyProducedHeatingInkWh = Math.max(
+        0,
+        remainingExternallyProducedHeatingInkWh - originallyRequiredkWh,
+      );
+
+      if (actualRequiredkWh > 0) {
+        cost += this.getYearlyConstantCostForRequiredHeatingkWh(
+          externalCalculationData,
+          surveyAnswer,
+          actualRequiredkWh,
+        );
+      }
+    }
+
+    return cost;
+  }
+
   public override getYearlyConstantCostsForSingleSurveyAnswer(
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor> {
-    const { energyForms } = externalCalculationData;
-    const energyForm = energyForms.filter((form) => form._id === surveyAnswer.value.radiatorKind).first();
-    const avgHeatingPerYearHours = surveyAnswer.value.avgHeatingPerYear * 8; //assume heating is 8 hours on
     const requiredkWh = this.getRequiredkWhForSingleSurveyAnswer(externalCalculationData, surveyAnswer);
-    const energyFormCost = energyForm.euroPerKwh * requiredkWh * avgHeatingPerYearHours;
+    const energyFormCost = this.getYearlyConstantCostForRequiredHeatingkWh(
+      externalCalculationData,
+      surveyAnswer,
+      requiredkWh,
+    );
 
     return new DataFrame<number, CostDescriptor>([
       {
@@ -58,6 +102,17 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
         cost: energyFormCost,
       },
     ]);
+  }
+
+  private getYearlyConstantCostForRequiredHeatingkWh(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
+    requiredkWh: number,
+  ) {
+    const { energyForms } = externalCalculationData;
+    const energyForm = energyForms.filter((form) => form._id === surveyAnswer.value.radiatorKind).first();
+    const avgHeatingPerYearHours = surveyAnswer.value.avgHeatingPerYear * 8; //assume heating is 8 hours on
+    return energyForm.euroPerKwh * requiredkWh * avgHeatingPerYearHours;
   }
 
   private getHeatingInstallationCostForSingleSurveyAnswer(
@@ -94,17 +149,23 @@ class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
     }
 
     let footprint = 0;
+    let remainingExternallyProducedHeatingInkWh = externallyProducedHeatingInKwh;
 
     for (const surveyAnswer of surveyAnswersToUse) {
-      const requiredkWh = this.getRequiredkWhForSingleSurveyAnswer(externalCalculationData, surveyAnswer);
-      externallyProducedHeatingInKwh -= requiredkWh;
+      const originallyRequiredkWh = this.getRequiredkWhForSingleSurveyAnswer(externalCalculationData, surveyAnswer);
+      const actualRequiredkWh = originallyRequiredkWh - remainingExternallyProducedHeatingInkWh;
+      remainingExternallyProducedHeatingInkWh = Math.max(
+        0,
+        remainingExternallyProducedHeatingInkWh - originallyRequiredkWh,
+      );
 
-      // If there is leftover heating that was produced externally, our footprint this iteration is 0.
-      if (externallyProducedHeatingInKwh > 0) {
-        continue;
+      if (actualRequiredkWh > 0) {
+        footprint += this.getYearlyFootprintForRequiredHeatingkWh(
+          externalCalculationData,
+          surveyAnswer,
+          actualRequiredkWh,
+        );
       }
-
-      footprint += this.getYearlyFootprintForRequiredHeatingkWh(externalCalculationData, surveyAnswer, requiredkWh);
     }
 
     return footprint;
