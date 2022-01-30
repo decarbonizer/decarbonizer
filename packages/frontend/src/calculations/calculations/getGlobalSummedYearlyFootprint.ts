@@ -63,7 +63,7 @@ export function getGlobalFootprintForAllRealEstates(externalCalculationData: Ext
       return originalFootprintRealEstate;
     })
     .reduce((a, b) => a + b, 0);
-  console.log(originalFootprintAllRealEstates);
+
   const realEstatesAfterActionPlans = externalCalculationData.realEstates.map((realEstate) =>
     externalCalculationData.actionPlans.filter((actionPlan) => actionPlan.realEstateId === realEstate._id),
   );

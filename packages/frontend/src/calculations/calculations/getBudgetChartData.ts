@@ -14,6 +14,7 @@ import { itCoreCalculations } from '../core/itCoreCalculations';
 export interface BudgetChartDataEntry {
   year: number;
   budget: number;
+  profit: number;
   footprint: number;
 }
 
@@ -111,8 +112,10 @@ export function getBudgetChartData(
     const budgetNewThisYear = actionPlans
       .filter((actionPlan) => new Date(actionPlan.startDate).getFullYear() === year)
       .reduce((budget, actionPlan) => budget + actionPlan.budget, 0);
-    const budget =
-      budgetRemainingFromLastYear + budgetNewThisYear + -originalConstantCost.delta - totalInvestmentCostsThisYear;
+
+    const costs = originalConstantCost.delta + totalInvestmentCostsThisYear;
+
+    const budget = budgetRemainingFromLastYear + budgetNewThisYear - costs;
 
     const footprint = coreCalculations
       .map((coreCalculations) =>
@@ -127,6 +130,7 @@ export function getBudgetChartData(
     results.push({
       year,
       budget: Math.round(budget),
+      profit: Math.round(-costs),
       footprint: Math.round(footprint.after),
     });
   }

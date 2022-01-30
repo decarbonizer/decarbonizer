@@ -1,6 +1,10 @@
 import { SkeletonText } from '@chakra-ui/react';
+import { DataFrame } from 'data-forge';
 import { BiTargetLock } from 'react-icons/bi';
-import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
+import {
+  getGlobalSummedYearlyFootprint,
+  getGlobalSummedYearlyFootprintDelta,
+} from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
@@ -22,26 +26,35 @@ export default function NetZeroCard() {
       })
       .reduce((a, b) => a + b, 0);
 
-    const footprintAfterActions = externalCalculationData.realEstates
-      .map((realEstate) => {
-        const surveyAnswersInitital = externalCalculationData.surveyAnswers.filter(
-          (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
-        );
-        const actionAnswers = externalCalculationData.actionPlans
-          .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-          .flatMap((actionPlan) => actionPlan.actionAnswers);
-        const footprintAfterActions = getGlobalSummedYearlyFootprint(
-          externalCalculationData,
-          surveyAnswersInitital,
-          actionAnswers,
-        );
-        return footprintAfterActions;
+    const realEstatesAfterActionPlans = externalCalculationData.realEstates.map((realEstate) =>
+      externalCalculationData.actionPlans.filter((actionPlan) => actionPlan.realEstateId === realEstate._id),
+    );
+
+    const footprintRealEstateActionPlans = realEstatesAfterActionPlans
+      .map((actionPlans) => {
+        const footPrintDeltaRealEstate = actionPlans
+          .map((actionPlan) => {
+            const surveyAnswersInitital = externalCalculationData.surveyAnswers.filter(
+              (surveyAnswer) =>
+                surveyAnswer.realEstateId === actionPlan.realEstateId && surveyAnswer.value.isInitialSurvey,
+            );
+            const footprintActionPlan = getGlobalSummedYearlyFootprintDelta(
+              externalCalculationData,
+              surveyAnswersInitital,
+              new DataFrame(actionPlan.actionAnswers),
+            ).delta;
+            return footprintActionPlan;
+          })
+          .reduce((a, b) => a + b, 0);
+        return footPrintDeltaRealEstate;
       })
       .reduce((a, b) => a + b, 0);
-    return { originalFootprint, footprintAfterActions };
+
+    return { originalFootprint, footprintRealEstateActionPlans };
   });
 
-  const delta = data ? data.footprintAfterActions - data.originalFootprint : 0;
+  const delta = data ? data.footprintRealEstateActionPlans : 0;
+
   const deltaType = getDeltaType(delta);
 
   const deltaAbs = delta < 0 ? Math.abs(delta) : -Math.abs(delta);

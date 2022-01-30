@@ -10,6 +10,7 @@ import BudgetChart, { BudgetChartMode } from './BudgetChart';
 export default function BudgetPage() {
   const [actionPlans, setActionPlans] = useState<Array<ActionPlan>>([]);
   const [budgetChartMode, setBudgetChartMode] = useState<BudgetChartMode>('cost');
+  const [showProfitLine, setShowProfitLine] = useState(false);
   const [fromYear, setFromYear] = useState(new Date().getFullYear());
   const [toYear, setToYear] = useState(2050);
 
@@ -39,13 +40,21 @@ export default function BudgetPage() {
             setBudgetChartMode={setBudgetChartMode}
             actionPlans={actionPlans}
             setActionPlans={setActionPlans}
+            showProfitLine={showProfitLine}
+            setShowProfitLine={setShowProfitLine}
           />
         </Card>
       }>
       <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
         <Grid w="100%" h="100%" templateRows="10% 1fr">
           <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
-          <BudgetChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} mode={budgetChartMode} />
+          <BudgetChart
+            fromYear={fromYear}
+            toYear={toYear}
+            actionPlans={actionPlans}
+            mode={budgetChartMode}
+            showProfit={showProfitLine}
+          />
         </Grid>
       </Card>
     </DefaultPageLayout>
