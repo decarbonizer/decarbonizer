@@ -1,29 +1,23 @@
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import {
-  getHeatingCostPerYear,
-  getTransformedHeatingCostPerYear,
-  getTransformedHeatingInstallationCostPerYear,
-} from '../../../calculations/heating/cost';
+import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const heatingSurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'heating');
       const oldHeatingCostsPerYear = Math.round(
-        getHeatingCostPerYear(
+        heatingCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
-          heatingSurveyAnswers.map((answer) => answer.value),
+          externalCalculationData.surveyAnswers,
         ),
       );
       const newHeatingCostsPerYear = Math.round(
-        getTransformedHeatingCostPerYear(
+        heatingCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
@@ -34,7 +28,7 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       const oldMaintenanceCosts = years.map(() => 0);
       const newMaintenanceCosts = years.map((year) =>
         year === 1 && oldHeatingCostsPerYear !== newHeatingCostsPerYear
-          ? getTransformedHeatingInstallationCostPerYear(
+          ? heatingCoreCalculations.getTotalSummedInvestmentCosts(
               externalCalculationData,
               externalCalculationData.surveyAnswers,
               filledActionAnswersDf,

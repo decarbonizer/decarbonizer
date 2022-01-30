@@ -3,19 +3,18 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedElectricityCostPerYear } from '../../../calculations/electricity/cost';
-import { getTransformedElectricityFootprintPerYear } from '../../../calculations/electricity/footprint';
+import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => ({
-      electricityCosts: getTransformedElectricityCostPerYear(
+      electricityCosts: electricityCoreCalculations.getTotalSummedYearlyConstantCosts(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),
-      footprint: getTransformedElectricityFootprintPerYear(
+      footprint: electricityCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

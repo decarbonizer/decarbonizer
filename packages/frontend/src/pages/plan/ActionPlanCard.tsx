@@ -30,17 +30,17 @@ import { useDeleteActionPlanMutation } from '../../store/api';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
 import { ActionPlansPageParams, routes } from '../../routes';
 import { useHistory, useParams } from 'react-router';
-import { getFootprintDelta } from '../../calculations/global/footprint';
+import { getGlobalSummedYearlyFootprintDelta } from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
-import { getIlluminationElectricityCostDelta } from '../../calculations/illumination/electricityCost';
 import { TiEquals } from 'react-icons/ti';
-import { getHeatingCostDelta } from '../../calculations/heating/cost';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
+import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
+import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -59,25 +59,26 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.value.isInitialSurvey && surveyAnswer.realEstateId === realEstateId,
       );
-      const footPrintDelta = getFootprintDelta(
+      const footPrintDelta = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
-      const netZeroCalculation = getFootprintDelta(
-        externalCalculationData,
-        surveyAnswers,
-        new DataFrame(currentActionPlan.actionAnswers),
-      );
-
-      //TODO: Put this in new function which calculates all costs
-      const illuminationCosts = getIlluminationElectricityCostDelta(
+      const netZeroCalculation = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
-      const heatingCosts = getHeatingCostDelta(
+      // TODO: Aggregate all costs. Add other cost categories.
+      const illuminationCosts = illuminationCoreCalculations.getTotalYearlyConstantCostsDelta(
+        externalCalculationData,
+        surveyAnswers,
+        new DataFrame(currentActionPlan.actionAnswers),
+      );
+
+      // TODO: Aggregate all costs. Add other cost categories.
+      const heatingCosts = heatingCoreCalculations.getTotalYearlyConstantCostsDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
@@ -87,7 +88,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
 
       const delta =
         netZeroCalculation.delta < 0 ? Math.abs(netZeroCalculation.delta) : -Math.abs(netZeroCalculation.delta);
-      const achievedGoal = delta / (netZeroCalculation.originalFootprint / 100);
+      const achievedGoal = delta / (netZeroCalculation.before / 100);
       const adjustedAchievedGoal = achievedGoal > 100 ? 100 : achievedGoal.toFixed(2);
 
       const carbonFootprint = footPrintDelta ?? 0;

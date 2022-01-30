@@ -17,16 +17,17 @@ import {
   SimpleGrid,
   Portal,
 } from '@chakra-ui/react';
-import { DataFrame } from 'data-forge';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { RiDashboardFill, RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
-import { getFootprintDelta, getTransformedFootprintPerYear } from '../../calculations/global/footprint';
+import {
+  getGlobalSummedYearlyFootprint,
+  getGlobalSummedYearlyFootprintDelta,
+} from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
@@ -79,11 +80,13 @@ export default function CityCard({ realEstate }: CityCardProps) {
 
       const footprint =
         surveyAnswers.count() > 0
-          ? getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers).globalFootprint
+          ? getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers, actionAnswers)
           : 0;
 
       const footprintDelta =
-        surveyAnswers.count() > 0 ? getFootprintDelta(externalCalculationData, surveyAnswers, actionAnswers) : 0;
+        surveyAnswers.count() > 0
+          ? getGlobalSummedYearlyFootprintDelta(externalCalculationData, surveyAnswers, actionAnswers)
+          : 0;
 
       console.log(realEstate.cityName, footprintDelta);
       return {

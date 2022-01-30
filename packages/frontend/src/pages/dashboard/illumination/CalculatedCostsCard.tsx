@@ -1,23 +1,20 @@
 import { Table, Tbody, Tr, Td, SkeletonText } from '@chakra-ui/react';
-import { getTransformedIlluminationElectricityCostPerYear } from '../../../calculations/illumination/electricityCost';
-import { getTransformedIlluminationFootprintPerYear } from '../../../calculations/illumination/footprint';
-import { transformIlluminationSurveyAnswers } from '../../../calculations/illumination/transformation';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
+import { illuminationCoreCalculations } from '../../../calculations/core/illuminationCoreCalculations';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => ({
-      electricityCosts: getTransformedIlluminationElectricityCostPerYear(
+      electricityCosts: illuminationCoreCalculations.getTotalSummedYearlyConstantCosts(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),
-      footprint: getTransformedIlluminationFootprintPerYear(
+      footprint: illuminationCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
@@ -27,9 +24,11 @@ export default function CalculatedCostsCard(props: DashboardCardProps) {
   );
 
   const bulbCalculations = useCalculation(
-    ({ bulbs, surveyAnswers }) => {
-      const illuminationAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'illumination');
-      const transformedAnswers = transformIlluminationSurveyAnswers(illuminationAnswers, filledActionAnswersDf);
+    (externalCalculationData) => {
+      const { bulbs, surveyAnswers } = externalCalculationData;
+      const transformedAnswers = illuminationCoreCalculations
+        .transformSurveyAnswers(externalCalculationData, surveyAnswers, filledActionAnswersDf)
+        .map((answer) => answer.value);
       const allBulbs = transformedAnswers
         .groupBy((answer) => answer.bulbType)
         .filter((group) => group.count() > 0)

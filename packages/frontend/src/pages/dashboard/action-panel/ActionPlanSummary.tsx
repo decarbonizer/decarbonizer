@@ -5,7 +5,7 @@ import { knownActionCategories, knownActions } from '../../../data/actions/actio
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
 import { RealEstatePageParams } from '../../../routes';
-import ActionPanelAccordionButton from './ActionPanelAccordionButton';
+import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 
@@ -44,7 +44,8 @@ function ActionAnswerAccordionItem({ actionId, actionAnswer }: ActionAnswerAccor
 
   return (
     <AccordionItem>
-      <ActionPanelAccordionButton
+      <SidePanelAccordionButton
+        px="2"
         title={`${actionCategory?.name}: ${currentAction?.name}` ?? actionId}
         icon={<Icon as={currentAction?.icon} />}
       />

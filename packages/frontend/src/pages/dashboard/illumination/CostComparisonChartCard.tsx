@@ -2,20 +2,11 @@ import { Select } from '@chakra-ui/react';
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
 import { useState } from 'react';
-import {
-  getIlluminationElectricityCostPerYear,
-  getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
-import {
-  getInitialIlluminationReplacementCost,
-  getIlluminationMaintenanceCostForYear,
-  getTransformedIlluminationMaintenanceCostForYear,
-} from '../../../calculations/illumination/maintenanceCost';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import ComparisonChartCard from '../components/ComparisonChartCard';
+import { illuminationCoreCalculations } from '../../../calculations/core/illuminationCoreCalculations';
 
 type CostCategory = 'all' | 'electricity' | 'maintenance';
 
@@ -23,18 +14,14 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const illuminationSurveyAnswers = getSurveyAnswersForSurvey(
-        externalCalculationData.surveyAnswers,
-        'illumination',
-      );
       const oldElectricityCostsPerYear = Math.round(
-        getIlluminationElectricityCostPerYear(
+        illuminationCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
-          illuminationSurveyAnswers.map((answer) => answer.value),
+          externalCalculationData.surveyAnswers,
         ),
       );
       const newElectricityCostsPerYear = Math.round(
-        getTransformedIlluminationElectricityCostPerYear(
+        illuminationCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
@@ -44,28 +31,28 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       const years = new Series(range(1, 11));
       const oldMaintenanceCosts = years.map((year) =>
         Math.round(
-          getIlluminationMaintenanceCostForYear(
+          illuminationCoreCalculations.getTotalSummedYearlyChangingCosts(
             externalCalculationData,
-            illuminationSurveyAnswers.map((answer) => answer.value),
+            externalCalculationData.surveyAnswers,
+            undefined,
             year,
-          ).maintenanceCostThisYear,
+          ),
         ),
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
           year === 1
-            ? getInitialIlluminationReplacementCost(
+            ? illuminationCoreCalculations.getTotalSummedInvestmentCosts(
                 externalCalculationData,
-                illuminationSurveyAnswers,
+                externalCalculationData.surveyAnswers,
                 filledActionAnswersDf,
               )
-            : 0 +
-                getTransformedIlluminationMaintenanceCostForYear(
-                  externalCalculationData,
-                  illuminationSurveyAnswers,
-                  filledActionAnswersDf,
-                  year,
-                ).maintenanceCostThisYear,
+            : illuminationCoreCalculations.getTotalSummedYearlyChangingCosts(
+                externalCalculationData,
+                externalCalculationData.surveyAnswers,
+                filledActionAnswersDf,
+                year,
+              ),
         ),
       );
       const oldCostsPerYear = oldMaintenanceCosts.map(

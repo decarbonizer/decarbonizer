@@ -1,53 +1,31 @@
 import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
-import {
-  getIlluminationFootprintPerYear,
-  getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
-import {
-  getIlluminationElectricityCostPerYear,
-  getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
 import { useFilledActionAnswersDataFrame } from '../../dashboard/dashboardContext';
-import {
-  getHeatingFootprintPerYear,
-  getTransformedHeatingFootprintPerYear,
-} from '../../../calculations/heating/footprint';
-import { getHeatingCostPerYear, getTransformedHeatingCostPerYear } from '../../../calculations/heating/cost';
-import {
-  getElectricityFootprintPerYear,
-  getTransformedElectricityFootprintPerYear,
-} from '../../../calculations/electricity/footprint';
-import {
-  getElectricityCostPerYear,
-  getTransformedElectricityCostPerYear,
-} from '../../../calculations/electricity/cost';
-import { getItFootprintPerYear, getTransformedItFootprintPerYear } from '../../../calculations/it/footprint';
-import {
-  getBusinessTravelFootprintPerYear,
-  getTransformedBusinessTravelFootprintPerYear,
-} from '../../../calculations/businessTravel/footprint';
-import { ExternalCalculationData } from '../../../calculations/externalData';
+import { ExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { IDataFrame } from 'data-forge';
 import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
 import { SurveyAnswer } from '../../../api/surveyAnswer';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import { ReactNode } from 'react';
 import * as Pdf from '@react-pdf/renderer';
+import { illuminationCoreCalculations } from '../../../calculations/core/illuminationCoreCalculations';
+import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
+import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
+import { businessTravelCoreCalculations } from '../../../calculations/core/businessTravelCoreCalculations';
 
 interface Category<T extends keyof SurveyToSurveyAnswerMap = any> {
   surveyId: T;
   label: string;
   getFootprint: (
     externalCalculationData: ExternalCalculationData,
-    surveyAnswers: IDataFrame<number, SurveyToSurveyAnswerMap[T]>,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
   ) => number;
   getCost: (
     externalCalculationData: ExternalCalculationData,
-    surveyAnswers: IDataFrame<number, SurveyToSurveyAnswerMap[T]>,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
   ) => number;
   getTransformedFootprint: (
     externalCalculationData: ExternalCalculationData,
@@ -65,42 +43,45 @@ const categories: Category[] = [
   {
     surveyId: 'illumination',
     label: 'Illumination',
-    getFootprint: getIlluminationFootprintPerYear,
-    getCost: getIlluminationElectricityCostPerYear,
-    getTransformedFootprint: getTransformedIlluminationFootprintPerYear,
-    getTransformedCost: getTransformedIlluminationElectricityCostPerYear,
+    getFootprint: illuminationCoreCalculations.getSummedYearlyFootprint.bind(illuminationCoreCalculations),
+    getCost: illuminationCoreCalculations.getTotalSummedYearlyConstantCosts.bind(illuminationCoreCalculations),
+    getTransformedFootprint: illuminationCoreCalculations.getSummedYearlyFootprint.bind(illuminationCoreCalculations),
+    getTransformedCost:
+      illuminationCoreCalculations.getTotalSummedYearlyConstantCosts.bind(illuminationCoreCalculations),
   },
   {
     surveyId: 'heating',
     label: 'Heating',
-    getFootprint: getHeatingFootprintPerYear,
-    getCost: getHeatingCostPerYear,
-    getTransformedFootprint: getTransformedHeatingFootprintPerYear,
-    getTransformedCost: getTransformedHeatingCostPerYear,
+    getFootprint: heatingCoreCalculations.getSummedYearlyFootprint.bind(heatingCoreCalculations),
+    getCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts.bind(heatingCoreCalculations),
+    getTransformedFootprint: heatingCoreCalculations.getSummedYearlyFootprint.bind(heatingCoreCalculations),
+    getTransformedCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts.bind(heatingCoreCalculations),
   },
   {
     surveyId: 'electricity',
     label: 'Electricity',
-    getFootprint: getElectricityFootprintPerYear,
-    getCost: getElectricityCostPerYear,
-    getTransformedFootprint: getTransformedElectricityFootprintPerYear,
-    getTransformedCost: getTransformedElectricityCostPerYear,
+    getFootprint: electricityCoreCalculations.getSummedYearlyFootprint.bind(electricityCoreCalculations),
+    getCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts.bind(electricityCoreCalculations),
+    getTransformedFootprint: electricityCoreCalculations.getSummedYearlyFootprint.bind(electricityCoreCalculations),
+    getTransformedCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts.bind(electricityCoreCalculations),
   },
   {
     surveyId: 'it',
     label: 'IT',
-    getFootprint: getItFootprintPerYear,
-    getCost: () => 0,
-    getTransformedFootprint: getTransformedItFootprintPerYear,
-    getTransformedCost: () => 0,
+    getFootprint: itCoreCalculations.getSummedYearlyFootprint.bind(itCoreCalculations),
+    getCost: itCoreCalculations.getTotalSummedYearlyConstantCosts.bind(itCoreCalculations),
+    getTransformedFootprint: itCoreCalculations.getSummedYearlyFootprint.bind(itCoreCalculations),
+    getTransformedCost: itCoreCalculations.getTotalSummedYearlyConstantCosts.bind(itCoreCalculations),
   },
   {
     surveyId: 'businessTravel',
     label: 'Business Travel',
-    getFootprint: getBusinessTravelFootprintPerYear,
-    getCost: () => 0,
-    getTransformedFootprint: getTransformedBusinessTravelFootprintPerYear,
-    getTransformedCost: () => 0,
+    getFootprint: businessTravelCoreCalculations.getSummedYearlyFootprint.bind(businessTravelCoreCalculations),
+    getCost: businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts.bind(businessTravelCoreCalculations),
+    getTransformedFootprint:
+      businessTravelCoreCalculations.getSummedYearlyFootprint.bind(businessTravelCoreCalculations),
+    getTransformedCost:
+      businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts.bind(businessTravelCoreCalculations),
   },
 ];
 
@@ -109,16 +90,9 @@ export function useBudgetTableData(filledActionAnswersDf) {
     (externalCalculationData) => {
       return categories.map((category) => {
         const { surveyId, label, getFootprint, getCost, getTransformedFootprint, getTransformedCost } = category;
-        const surveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, surveyId);
 
-        const footprint = getFootprint(
-          externalCalculationData,
-          surveyAnswers.map((answer) => answer.value),
-        );
-        const cost = getCost(
-          externalCalculationData,
-          surveyAnswers.map((answer) => answer.value),
-        );
+        const footprint = getFootprint(externalCalculationData, externalCalculationData.surveyAnswers);
+        const cost = getCost(externalCalculationData, externalCalculationData.surveyAnswers);
         const transformedFootprint = getTransformedFootprint(
           externalCalculationData,
           externalCalculationData.surveyAnswers,

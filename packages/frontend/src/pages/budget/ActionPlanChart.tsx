@@ -1,7 +1,7 @@
 import { Box, BoxProps } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { ResponsiveContainer, BarChart, Tooltip, XAxis, YAxis, Bar, LabelList } from 'recharts';
-import { ActionPlan } from '../../api/actionPlan';
+import { ResponsiveContainer, BarChart, Tooltip, XAxis, YAxis, Bar, LabelList, Cell } from 'recharts';
+import { ActionPlan, ActionPlanStatus } from '../../api/actionPlan';
 
 export interface ActionPlanChartProps extends BoxProps {
   fromYear: number;
@@ -9,15 +9,21 @@ export interface ActionPlanChartProps extends BoxProps {
   actionPlans: Array<ActionPlan>;
 }
 
+const actionPlanColors: Record<ActionPlanStatus, string> = {
+  open: '#CBD5E0',
+  inProgress: '#D6BCFA',
+  finished: '#9AE6B4',
+};
+
 export default function ActionPlanChart({ fromYear, toYear, actionPlans, ...rest }: ActionPlanChartProps) {
   const data = useMemo(
     () =>
-      actionPlans.map((x) => ({
-        name: x.name,
+      actionPlans.map((actionPlan) => ({
+        ...actionPlan,
         time: [
           // For a bar spanning two values recharts requires a tuple with the two values.
-          new Date(x.startDate).getFullYear(),
-          new Date(x.endDate).getFullYear(),
+          new Date(actionPlan.startDate).getFullYear(),
+          new Date(actionPlan.endDate).getFullYear(),
         ],
       })),
     [actionPlans],
@@ -28,10 +34,13 @@ export default function ActionPlanChart({ fromYear, toYear, actionPlans, ...rest
       <ResponsiveContainer width="100%" height="100%">
         <BarChart layout="vertical" data={data ?? []} margin={{ left: 106 }}>
           <Tooltip />
-          <XAxis type="number" dataKey="time" domain={[fromYear, toYear]} allowDataOverflow hide />
+          <XAxis type="number" dataKey="time" name="Time" domain={[fromYear, toYear]} allowDataOverflow hide />
           <YAxis type="category" dataKey="name" domain={['dataMin', 'dataMax']} hide />
-          <Bar dataKey="time" fill="cornflowerblue" maxBarSize={20}>
-            <LabelList dataKey="name" position="center" />
+          <Bar dataKey="time" maxBarSize={20} radius={1000}>
+            {(data ?? []).map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={actionPlanColors[entry.status]} name="Foo" />
+            ))}
+            <LabelList dataKey="name" position="end" stroke="white" fill="white" />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
