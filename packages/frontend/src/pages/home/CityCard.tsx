@@ -26,7 +26,7 @@ import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
-import { getTransformedFootprintPerYear } from '../../calculations/global/footprint';
+import { getGlobalSummedYearlyFootprint } from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
@@ -70,11 +70,11 @@ export default function CityCard({ realEstate }: CityCardProps) {
 
       const footprint =
         surveyAnswers.count() > 0
-          ? getTransformedFootprintPerYear(
+          ? getGlobalSummedYearlyFootprint(
               externalCalculationData,
               surveyAnswers,
               new DataFrame<number, ActionAnswerBase>(),
-            ).globalFootprint
+            )
           : 0;
 
       return {

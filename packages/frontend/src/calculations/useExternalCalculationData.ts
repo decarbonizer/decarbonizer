@@ -13,6 +13,7 @@ import {
   useGetRealEstatesOfCompanyQuery,
   useGetAllSurveyAnswersQuery,
 } from '../store/api';
+import { useMemo } from 'react';
 
 /**
  * Defines externally provided data which can be used for calculations.
@@ -43,25 +44,28 @@ export function useExternalCalculationData() {
     actionPlansQuery,
   ];
 
-  if (queries.some((query) => query.isLoading)) {
-    return { isLoading: true };
-  }
+  return useMemo(() => {
+    if (queries.some((query) => query.isLoading)) {
+      return { isLoading: true };
+    }
 
-  if (queries.some((query) => query.isError)) {
-    return { isLoading: false, error: queries.find((query) => query.isError)!.error };
-  }
+    if (queries.some((query) => query.isError)) {
+      return { isLoading: false, error: queries.find((query) => query.isError)!.error };
+    }
 
-  const data: ExternalCalculationData = {
-    bulbs: new DataFrame(bulbsQuery.data),
-    energyForms: new DataFrame(energyFormsQuery.data),
-    heatingTypes: new DataFrame(heatingTypesQuery.data),
-    realEstates: new DataFrame(realEstatesQuery.data),
-    surveyAnswers: new DataFrame(surveyAnswersQuery.data),
-    actionPlans: new DataFrame(actionPlansQuery.data),
-  };
+    const data: ExternalCalculationData = {
+      bulbs: new DataFrame(bulbsQuery.data),
+      energyForms: new DataFrame(energyFormsQuery.data),
+      heatingTypes: new DataFrame(heatingTypesQuery.data),
+      realEstates: new DataFrame(realEstatesQuery.data),
+      surveyAnswers: new DataFrame(surveyAnswersQuery.data),
+      actionPlans: new DataFrame(actionPlansQuery.data),
+    };
 
-  return {
-    isLoading: false,
-    data,
-  };
+    return {
+      isLoading: false,
+      data,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, queries);
 }

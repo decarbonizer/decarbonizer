@@ -6,6 +6,8 @@ import { DashboardContext } from '../dashboardContext';
 import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
 import { FaSave } from 'react-icons/fa';
+import { RealEstatePageParams, routes } from '../../../routes';
+import { useHistory, useParams } from 'react-router';
 import { FcDataConfiguration } from 'react-icons/fc';
 import BaseDataModal from '../../../components/BaseDataModal';
 
@@ -14,6 +16,8 @@ export default function ActionPanel() {
   const baseDataDisclosure = useDisclosure();
   const { actionPlanToEdit, filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
+  const history = useHistory();
+  const { realEstateId } = useParams<RealEstatePageParams>();
 
   return (
     <VStack align="stretch" w="100%">
@@ -54,7 +58,10 @@ export default function ActionPanel() {
       {saveActionPlanDisclosure.isOpen && (
         <SaveActionPlanModal
           isOpen
-          onClose={saveActionPlanDisclosure.onClose}
+          onClose={() => {
+            saveActionPlanDisclosure.onClose();
+            history.push(routes.actionPlans({ realEstateId }));
+          }}
           actionAnswers={Object.values(filledActionAnswers).filter(Boolean)}
           actionPlan={actionPlanToEdit}
         />

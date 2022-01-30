@@ -16,9 +16,9 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         name: 'Dieter Plan 2022',
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
-        startDate: new Date('2024-01-01T01:00:00.000Z'),
-        endDate: new Date('2029-01-01T01:00:00.000Z'),
-        budget: 30_000,
+        startDate: new Date('2028-01-01T01:00:00.000Z'),
+        endDate: new Date('2036-01-01T01:00:00.000Z'),
+        budget: 0,
         status: 'open',
         actionAnswers: [
           {
@@ -61,8 +61,8 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
         startDate: new Date('2022-01-01T01:00:00.000Z'),
-        endDate: new Date('2023-01-01T01:00:00.000Z'),
-        budget: 10_000,
+        endDate: new Date('2028-01-01T01:00:00.000Z'),
+        budget: 0,
         status: 'open',
         actionAnswers: [
           {

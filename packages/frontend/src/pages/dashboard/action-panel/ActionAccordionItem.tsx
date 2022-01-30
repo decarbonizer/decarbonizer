@@ -23,8 +23,7 @@ import { Action, KnownActionId } from '../../../data/actions/action';
 import FormEngine from '../../../form-engine/FormEngine';
 import { useFormEngine } from '../../../form-engine/useFormEngine';
 import { useFormEngineChoiceOptionProviders } from '../../../form-engine/useFormEngineChoiceProviders';
-import ActionPanelAccordionButton from './ActionPanelAccordionButton';
-import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useState } from 'react';
 import { DashboardContext, useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
 import range from 'lodash-es/range';
@@ -34,10 +33,11 @@ import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
-import { useExternalCalculationData } from '../../../calculations/externalData';
+import { useExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/footprint';
-import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/getSuggestion';
+import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/calculations/getSuggestion';
+import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -52,7 +52,7 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
-  const { isLoading: dataLoading, data: externalData, error: externalDatatError } = useExternalCalculationData();
+  const { isLoading: dataLoading, data: externalData, error: externalDataError } = useExternalCalculationData();
   const { isOpen, onOpen, onClose } = useDisclosure(); //dialog for produced heating
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const {
@@ -61,7 +61,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
     error,
   } = useCalculation(
     (externalCalculationData) => ({
-      producedHeating: getTransformedProducedHeatingPerYear(
+      producedHeating: itCoreCalculations.getTotalYearlyProducedHeating(
+        externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),
@@ -112,7 +113,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   return (
     <>
       <AccordionItem key={action.id} borderWidth="0 !important">
-        <ActionPanelAccordionButton
+        <SidePanelAccordionButton
+          px="2"
           title={action.name}
           icon={<Icon as={action.icon} />}
           badge={isFilledOut ? <Text>✅</Text> : ''}

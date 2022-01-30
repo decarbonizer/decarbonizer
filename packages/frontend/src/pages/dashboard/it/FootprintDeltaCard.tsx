@@ -10,13 +10,17 @@ import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
-import { getItFootprintDelta } from '../../../calculations/it/footprint';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 
 export default function FootprintDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getItFootprintDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
+      itCoreCalculations.getSummedYearlyFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
     [filledActionAnswersDf],
   );
 
@@ -34,7 +38,7 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
           <SimpleGrid columns={2}>
             <QuickInfo icon={<HaloIcon icon={GiFootprint} colorScheme="gray" />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.footprintAfterActions).toFixed(2)}kg`}
+                label={`${Math.abs(data.after).toFixed(2)}kg`}
                 description={
                   <>
                     CO<sub>2</sub> produced per year

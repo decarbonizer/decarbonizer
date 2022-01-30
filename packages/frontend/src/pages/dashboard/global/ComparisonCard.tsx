@@ -2,7 +2,7 @@ import { Tooltip, ResponsiveContainer, Bar, BarChart, XAxis, YAxis, Legend } fro
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import distinctColors from 'distinct-colors';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
+import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
@@ -30,13 +30,13 @@ export default function ComparisonCard(props: DashboardCardProps) {
             footprint:
               thisRealEstateSurveyAnswers.count() > 0
                 ? Math.round(
-                    getTransformedFootprintPerYear(
+                    getGlobalSummedYearlyFootprint(
                       externalCalculationData,
                       thisRealEstateSurveyAnswers,
                       realEstate._id === realEstateId
                         ? filledActionAnswersDf
                         : new DataFrame<number, ActionAnswerBase>(),
-                    ).globalFootprint,
+                    ),
                   )
                 : 0,
           };

@@ -5,13 +5,13 @@ import Card from '../../components/Card';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 import ActionPlanChart from './ActionPlanChart';
 import ActionPlanSelectionPanel from './ActionPlanSelectionPanel';
-import BudgetChart from './BudgetChart';
-import FootprintBurnDownChart from './FootprintBurnDownChart';
+import BudgetChart, { BudgetChartMode } from './BudgetChart';
 
 export default function BudgetPage() {
   const [actionPlans, setActionPlans] = useState<Array<ActionPlan>>([]);
-  const fromYear = 2022;
-  const toYear = 2050;
+  const [budgetChartMode, setBudgetChartMode] = useState<BudgetChartMode>('cost');
+  const [fromYear, setFromYear] = useState(new Date().getFullYear());
+  const [toYear, setToYear] = useState(2050);
 
   return (
     <DefaultPageLayout
@@ -28,19 +28,24 @@ export default function BudgetPage() {
           px="8"
           py="4"
           size="lg">
-          <ActionPlanSelectionPanel actionPlans={actionPlans} setActionPlans={setActionPlans} />
+          <ActionPlanSelectionPanel
+            minYear={new Date().getFullYear()}
+            maxYear={2050}
+            fromYear={fromYear}
+            setFromYear={setFromYear}
+            toYear={toYear}
+            setToYear={setToYear}
+            budgetChartMode={budgetChartMode}
+            setBudgetChartMode={setBudgetChartMode}
+            actionPlans={actionPlans}
+            setActionPlans={setActionPlans}
+          />
         </Card>
       }>
       <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
         <Grid w="100%" h="100%" templateRows="10% 1fr">
           <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
-          <BudgetChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
-        </Grid>
-      </Card>
-      <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
-        <Grid w="100%" h="100%" templateRows="10% 1fr">
-          <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
-          <FootprintBurnDownChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
+          <BudgetChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} mode={budgetChartMode} />
         </Grid>
       </Card>
     </DefaultPageLayout>
