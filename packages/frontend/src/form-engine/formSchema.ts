@@ -44,6 +44,7 @@ export interface NumberFormSchemaElement extends FormSchemaBaseElement<'number'>
   placeholder?: string;
   min?: number;
   max?: number;
+  unit?: string;
 }
 
 export const knownUnitInputTemplates: Record<string, Array<AllMeasuresUnits>> = {

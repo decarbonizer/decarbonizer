@@ -6,9 +6,12 @@ import { DashboardContext } from '../dashboardContext';
 import isEmpty from 'lodash-es/isEmpty';
 import SaveActionPlanModal from './SaveActionPlanModal';
 import { FaSave } from 'react-icons/fa';
+import { FcDataConfiguration } from 'react-icons/fc';
+import BaseDataModal from '../../../components/BaseDataModal';
 
 export default function ActionPanel() {
   const saveActionPlanDisclosure = useDisclosure();
+  const baseDataDisclosure = useDisclosure();
   const { actionPlanToEdit, filledActionAnswers, setSelectedActionCategory } = useContext(DashboardContext);
   const canSaveActionPlan = Object.values(filledActionAnswers).filter((x) => !isEmpty(x)).length > 0;
 
@@ -19,6 +22,14 @@ export default function ActionPanel() {
           {actionPlanToEdit?.name ?? 'New action plan'}
         </Heading>
         <Spacer />
+        <Tooltip label="Base Data">
+          <IconButton
+            aria-label="Base Data"
+            onClick={baseDataDisclosure.onOpen}
+            variant="outline"
+            icon={<FcDataConfiguration size="20" />}
+          />
+        </Tooltip>
         <Tooltip label="Save action plan">
           <IconButton
             icon={<Icon as={FaSave} />}
@@ -39,6 +50,7 @@ export default function ActionPanel() {
           <ActionGroupAccordionItem key={i} actionCategory={actionCategory} />
         ))}
       </Accordion>
+      <BaseDataModal isOpen={baseDataDisclosure.isOpen} onClose={baseDataDisclosure.onClose} />
       {saveActionPlanDisclosure.isOpen && (
         <SaveActionPlanModal
           isOpen

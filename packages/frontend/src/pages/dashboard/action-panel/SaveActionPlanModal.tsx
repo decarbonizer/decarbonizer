@@ -177,17 +177,6 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
 
-            {/* <FormControl mt="8">
-              <FormLabel>Plan Budget</FormLabel>
-              <NumberInput defaultValue={0} {...register('status')}>
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </FormControl> */}
-
             <FormControl mt="8">
               <FormLabel>Plan Budget</FormLabel>
               <InputGroup>

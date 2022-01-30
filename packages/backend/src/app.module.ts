@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ActionPlanModule } from './action-plan/action-plan.module';
 import { AppConfig } from './app-config';
 import { AuthModule } from './auth/auth.module';
+import { BaseDataModule } from './base-data/base-data.module';
 import { BulbModule } from './bulbs/bulb.module';
 import { CompanyModule } from './companies/company.module';
 import { DebugModule } from './debug/debug.module';
@@ -30,6 +31,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     RealEstateModule,
     CompanyModule,
+    BaseDataModule,
   ],
 })
 export class AppModule {}
