@@ -17,16 +17,17 @@ import {
   SimpleGrid,
   Portal,
 } from '@chakra-ui/react';
-import { DataFrame } from 'data-forge';
 import { BiImage } from 'react-icons/bi';
 import { FaEdit } from 'react-icons/fa';
 import { RiDashboardFill, RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
-import { getGlobalSummedYearlyFootprint } from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
+import {
+  getGlobalSummedYearlyFootprint,
+  getGlobalSummedYearlyFootprintDelta,
+} from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
@@ -62,19 +63,24 @@ export default function CityCard({ realEstate }: CityCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
       );
-      // const actionAnswers = externalCalculationData.actionPlans
-      //   .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-      //   .flatMap((actionPlan) => actionPlan.actionAnswers);
+      const actionAnswers = externalCalculationData.actionPlans
+        .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
+        .flatMap((actionPlan) => actionPlan.actionAnswers);
 
       // const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
 
+      // const footprint =
+      //   surveyAnswers.count() > 0
+      //     ? getTransformedFootprintPerYear(
+      //         externalCalculationData,
+      //         surveyAnswers,
+      //         new DataFrame<number, ActionAnswerBase>(),
+      //       ).globalFootprint
+      //     : 0;
+
       const footprint =
         surveyAnswers.count() > 0
-          ? getGlobalSummedYearlyFootprint(
-              externalCalculationData,
-              surveyAnswers,
-              new DataFrame<number, ActionAnswerBase>(),
-            )
+          ? getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers, actionAnswers)
           : 0;
 
       return {

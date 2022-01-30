@@ -85,7 +85,7 @@ export const baseDataSchema: FormSchema = {
           required: false,
           type: 'number',
           unit: 'kg/year',
-          label: 'CO² of a server.',
+          label: `Carbon footprint of a server.`,
         },
         {
           id: 'reductionFactorByUsingSuperServer',
@@ -141,7 +141,6 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
   }, [initialBaseData, setValue]);
 
   const handleUpdate = async () => {
-    console.log(value);
     await updateBaseData({ realEstateId: realEstateId, body: value as any });
     onClose();
     toast({
