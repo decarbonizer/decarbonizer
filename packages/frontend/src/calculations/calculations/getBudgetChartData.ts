@@ -92,21 +92,20 @@ export function getBudgetChartData(
             surveyAnswer._id === oldSurveyAnswer._id && isEqual(surveyAnswer.value, oldSurveyAnswer.value),
         ),
     );
-    const totalInvestmentCostsThisYear = coreCalculations
-      .map((coreCalculations) =>
-        coreCalculations.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswersWhichChangedThisYear),
-      )
-      .reduce((result, cost) => result + cost, 0);
 
-    const originalConstantCost = coreCalculations
-      .map((coreCalculations) =>
-        coreCalculations.getTotalYearlyConstantCostsDelta(
-          externalCalculationData,
-          externalCalculationData.surveyAnswers,
-          activeActionAnswers,
-        ),
-      )
-      .reduce<DeltaResult>(deltaResultReducer);
+    const categoryInvestmentCostsThisYear = coreCalculations.map((coreCalculations) =>
+      coreCalculations.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswersWhichChangedThisYear),
+    );
+    const totalInvestmentCostsThisYear = categoryInvestmentCostsThisYear.reduce((result, cost) => result + cost, 0);
+
+    const categoryOriginalConstantCost = coreCalculations.map((coreCalculations) =>
+      coreCalculations.getTotalYearlyConstantCostsDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        activeActionAnswers,
+      ),
+    );
+    const originalConstantCost = categoryOriginalConstantCost.reduce<DeltaResult>(deltaResultReducer);
 
     const budgetRemainingFromLastYear = results[results.length - 1]?.budget ?? 0;
     const budgetNewThisYear = actionPlans

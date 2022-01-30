@@ -32,6 +32,10 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showP
     actionPlans,
   ]);
 
+  const handleClick = (data) => {
+    console.log(data);
+  };
+
   return (
     <Box w="100%" h="100%" pos="relative" {...rest}>
       {!isLoading && (
@@ -44,7 +48,7 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showP
             {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['auto', 'data-max']} unit="kg" />}
             {mode === 'cost' && (
               <>
-                <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€">
+                <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€" onClick={handleClick}>
                   {(data ?? []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.budget > 0 ? '#baf6d4' : '#fa8989'} />
                   ))}
