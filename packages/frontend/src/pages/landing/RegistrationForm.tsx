@@ -26,10 +26,6 @@ export default function RegistrationBox({ goToLogin }: RegistrationBoxProps) {
     }
   };
 
-  useEffect(() => {
-    console.log(companies);
-  }, [companies]);
-
   return (
     <Box w="100%">
       <form

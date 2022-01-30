@@ -42,11 +42,9 @@ export default function ActionPlanFileExportPage() {
   const { data: actionPlan, isFetching: isFetchingActionPlan } = useGetActionPlanQuery({ id: actionPlanId });
   const { providers } = useFormEngineChoiceOptionProviders(realEstateId);
 
-  const filledActionAnswers =
-    actionPlan?.actionAnswers.reduce((acc, actionAnswer) => ({ ...acc, [actionAnswer.actionId]: actionAnswer }), {}) ??
-    {};
-  const filledAnswersDf = new DataFrame(Object.values(filledActionAnswers).filter(Boolean));
-  const { data: budgetTableData, isLoading: isLoadingBudgetTableData } = useBudgetTableData(filledAnswersDf);
+  const { data: budgetTableData, isLoading: isLoadingBudgetTableData } = useBudgetTableData(
+    new DataFrame(actionPlan?.actionAnswers ?? []),
+  );
 
   if (isFetchingActionPlan || !actionPlan || isLoadingBudgetTableData || !budgetTableData || !realEstate) {
     return null;

@@ -61,7 +61,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       );
       const footPrintDelta = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
-        externalCalculationData.surveyAnswers,
+        surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
       const netZeroCalculation = getGlobalSummedYearlyFootprintDelta(
@@ -73,14 +73,14 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       // TODO: Aggregate all costs. Add other cost categories.
       const illuminationCosts = illuminationCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
-        externalCalculationData.surveyAnswers,
+        surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
       // TODO: Aggregate all costs. Add other cost categories.
       const heatingCosts = heatingCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
-        externalCalculationData.surveyAnswers,
+        surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
@@ -91,8 +91,15 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       const achievedGoal = delta / (netZeroCalculation.before / 100);
       const adjustedAchievedGoal = achievedGoal > 100 ? 100 : achievedGoal.toFixed(2);
 
+      const carbonFootprint = footPrintDelta ?? 0;
+      const unitSymbol = Math.abs(carbonFootprint.delta) >= 1000 ? 't' : 'kg';
+      const adjustedFootprint =
+        Math.abs(carbonFootprint.delta) >= 1000 ? carbonFootprint.delta / 1000 : carbonFootprint.delta;
+
       return {
         footPrintDelta,
+        adjustedFootprint,
+        unitSymbol,
         netZeroCalculation,
         illuminationCosts,
         heatingCosts,
@@ -197,7 +204,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     />
                   }>
                   <QuickInfoLabelDescription
-                    label={`${Math.abs(data.footPrintDelta.delta).toFixed(2)}kg`}
+                    label={`${Math.abs(data.adjustedFootprint).toFixed(2)}${data.unitSymbol}`}
                     description={
                       <>
                         {data.footPrintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
