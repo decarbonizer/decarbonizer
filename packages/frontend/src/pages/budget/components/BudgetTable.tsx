@@ -1,6 +1,5 @@
 import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
 import { useFilledActionAnswersDataFrame } from '../../dashboard/dashboardContext';
@@ -22,11 +21,11 @@ interface Category<T extends keyof SurveyToSurveyAnswerMap = any> {
   label: string;
   getFootprint: (
     externalCalculationData: ExternalCalculationData,
-    surveyAnswers: IDataFrame<number, SurveyToSurveyAnswerMap[T]>,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
   ) => number;
   getCost: (
     externalCalculationData: ExternalCalculationData,
-    surveyAnswers: IDataFrame<number, SurveyToSurveyAnswerMap[T]>,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
   ) => number;
   getTransformedFootprint: (
     externalCalculationData: ExternalCalculationData,
@@ -44,42 +43,45 @@ const categories: Category[] = [
   {
     surveyId: 'illumination',
     label: 'Illumination',
-    getFootprint: illuminationCoreCalculations.getSummedYearlyFootprint,
-    getCost: illuminationCoreCalculations.getTotalSummedYearlyConstantCosts,
-    getTransformedFootprint: illuminationCoreCalculations.getSummedYearlyFootprint,
-    getTransformedCost: illuminationCoreCalculations.getTotalSummedYearlyConstantCosts,
+    getFootprint: illuminationCoreCalculations.getSummedYearlyFootprint.bind(illuminationCoreCalculations),
+    getCost: illuminationCoreCalculations.getTotalSummedYearlyConstantCosts.bind(illuminationCoreCalculations),
+    getTransformedFootprint: illuminationCoreCalculations.getSummedYearlyFootprint.bind(illuminationCoreCalculations),
+    getTransformedCost:
+      illuminationCoreCalculations.getTotalSummedYearlyConstantCosts.bind(illuminationCoreCalculations),
   },
   {
     surveyId: 'heating',
     label: 'Heating',
-    getFootprint: heatingCoreCalculations.getSummedYearlyFootprint,
-    getCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts,
-    getTransformedFootprint: heatingCoreCalculations.getSummedYearlyFootprint,
-    getTransformedCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts,
+    getFootprint: heatingCoreCalculations.getSummedYearlyFootprint.bind(heatingCoreCalculations),
+    getCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts.bind(heatingCoreCalculations),
+    getTransformedFootprint: heatingCoreCalculations.getSummedYearlyFootprint.bind(heatingCoreCalculations),
+    getTransformedCost: heatingCoreCalculations.getTotalSummedYearlyConstantCosts.bind(heatingCoreCalculations),
   },
   {
     surveyId: 'electricity',
     label: 'Electricity',
-    getFootprint: electricityCoreCalculations.getSummedYearlyFootprint,
-    getCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts,
-    getTransformedFootprint: electricityCoreCalculations.getSummedYearlyFootprint,
-    getTransformedCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts,
+    getFootprint: electricityCoreCalculations.getSummedYearlyFootprint.bind(electricityCoreCalculations),
+    getCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts.bind(electricityCoreCalculations),
+    getTransformedFootprint: electricityCoreCalculations.getSummedYearlyFootprint.bind(electricityCoreCalculations),
+    getTransformedCost: electricityCoreCalculations.getTotalSummedYearlyConstantCosts.bind(electricityCoreCalculations),
   },
   {
     surveyId: 'it',
     label: 'IT',
-    getFootprint: itCoreCalculations.getSummedYearlyFootprint,
-    getCost: itCoreCalculations.getTotalSummedYearlyConstantCosts,
-    getTransformedFootprint: itCoreCalculations.getSummedYearlyFootprint,
-    getTransformedCost: itCoreCalculations.getTotalSummedYearlyConstantCosts,
+    getFootprint: itCoreCalculations.getSummedYearlyFootprint.bind(itCoreCalculations),
+    getCost: itCoreCalculations.getTotalSummedYearlyConstantCosts.bind(itCoreCalculations),
+    getTransformedFootprint: itCoreCalculations.getSummedYearlyFootprint.bind(itCoreCalculations),
+    getTransformedCost: itCoreCalculations.getTotalSummedYearlyConstantCosts.bind(itCoreCalculations),
   },
   {
     surveyId: 'businessTravel',
     label: 'Business Travel',
-    getFootprint: businessTravelCoreCalculations.getSummedYearlyFootprint,
-    getCost: businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts,
-    getTransformedFootprint: businessTravelCoreCalculations.getSummedYearlyFootprint,
-    getTransformedCost: businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts,
+    getFootprint: businessTravelCoreCalculations.getSummedYearlyFootprint.bind(businessTravelCoreCalculations),
+    getCost: businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts.bind(businessTravelCoreCalculations),
+    getTransformedFootprint:
+      businessTravelCoreCalculations.getSummedYearlyFootprint.bind(businessTravelCoreCalculations),
+    getTransformedCost:
+      businessTravelCoreCalculations.getTotalSummedYearlyConstantCosts.bind(businessTravelCoreCalculations),
   },
 ];
 
@@ -88,16 +90,9 @@ export function useBudgetTableData(filledActionAnswersDf) {
     (externalCalculationData) => {
       return categories.map((category) => {
         const { surveyId, label, getFootprint, getCost, getTransformedFootprint, getTransformedCost } = category;
-        const surveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, surveyId);
 
-        const footprint = getFootprint(
-          externalCalculationData,
-          surveyAnswers.map((answer) => answer.value),
-        );
-        const cost = getCost(
-          externalCalculationData,
-          surveyAnswers.map((answer) => answer.value),
-        );
+        const footprint = getFootprint(externalCalculationData, externalCalculationData.surveyAnswers);
+        const cost = getCost(externalCalculationData, externalCalculationData.surveyAnswers);
         const transformedFootprint = getTransformedFootprint(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
