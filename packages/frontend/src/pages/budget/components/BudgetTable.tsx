@@ -1,36 +1,36 @@
 import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import {
   getIlluminationFootprintPerYear,
   getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
+} from '../../../calculationsLegacy/illumination/footprint';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
 import {
   getIlluminationElectricityCostPerYear,
   getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
+} from '../../../calculationsLegacy/illumination/electricityCost';
 import { useFilledActionAnswersDataFrame } from '../../dashboard/dashboardContext';
 import {
   getHeatingFootprintPerYear,
   getTransformedHeatingFootprintPerYear,
-} from '../../../calculations/heating/footprint';
-import { getHeatingCostPerYear, getTransformedHeatingCostPerYear } from '../../../calculations/heating/cost';
+} from '../../../calculationsLegacy/heating/footprint';
+import { getHeatingCostPerYear, getTransformedHeatingCostPerYear } from '../../../calculationsLegacy/heating/cost';
 import {
   getElectricityFootprintPerYear,
   getTransformedElectricityFootprintPerYear,
-} from '../../../calculations/electricity/footprint';
+} from '../../../calculationsLegacy/electricity/footprint';
 import {
   getElectricityCostPerYear,
   getTransformedElectricityCostPerYear,
-} from '../../../calculations/electricity/cost';
-import { getItFootprintPerYear, getTransformedItFootprintPerYear } from '../../../calculations/it/footprint';
+} from '../../../calculationsLegacy/electricity/cost';
+import { getItFootprintPerYear, getTransformedItFootprintPerYear } from '../../../calculationsLegacy/it/footprint';
 import {
   getBusinessTravelFootprintPerYear,
   getTransformedBusinessTravelFootprintPerYear,
-} from '../../../calculations/businessTravel/footprint';
-import { ExternalCalculationData } from '../../../calculations/externalData';
+} from '../../../calculationsLegacy/businessTravel/footprint';
+import { ExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { IDataFrame } from 'data-forge';
 import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
 import { SurveyAnswer } from '../../../api/surveyAnswer';

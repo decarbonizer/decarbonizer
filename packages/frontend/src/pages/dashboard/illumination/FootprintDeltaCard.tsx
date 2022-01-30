@@ -8,7 +8,7 @@ import HaloIcon from '../../../components/HaloIcon';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getIlluminationFootprintDelta } from '../../../calculations/illumination/footprint';
+import { getIlluminationFootprintDelta } from '../../../calculationsLegacy/illumination/footprint';
 import { BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
 

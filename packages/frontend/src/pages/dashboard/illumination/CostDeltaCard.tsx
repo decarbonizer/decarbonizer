@@ -7,7 +7,7 @@ import HaloIcon from '../../../components/HaloIcon';
 import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getIlluminationElectricityCostDelta } from '../../../calculations/illumination/electricityCost';
+import { getIlluminationElectricityCostDelta } from '../../../calculationsLegacy/illumination/electricityCost';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { TiEquals } from 'react-icons/ti';
 

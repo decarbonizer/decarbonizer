@@ -30,15 +30,15 @@ import { useDeleteActionPlanMutation } from '../../store/api';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
 import { ActionPlansPageParams, routes } from '../../routes';
 import { useHistory, useParams } from 'react-router';
-import { getFootprintDelta } from '../../calculations/global/footprint';
+import { getFootprintDelta } from '../../calculationsLegacy/global/footprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
-import { getIlluminationElectricityCostDelta } from '../../calculations/illumination/electricityCost';
+import { getIlluminationElectricityCostDelta } from '../../calculationsLegacy/illumination/electricityCost';
 import { TiEquals } from 'react-icons/ti';
-import { getHeatingCostDelta } from '../../calculations/heating/cost';
+import { getHeatingCostDelta } from '../../calculationsLegacy/heating/cost';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
 

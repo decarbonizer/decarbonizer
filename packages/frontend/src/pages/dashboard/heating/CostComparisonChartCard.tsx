@@ -1,6 +1,6 @@
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
@@ -9,7 +9,7 @@ import {
   getHeatingCostPerYear,
   getTransformedHeatingCostPerYear,
   getTransformedHeatingInstallationCostPerYear,
-} from '../../../calculations/heating/cost';
+} from '../../../calculationsLegacy/heating/cost';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

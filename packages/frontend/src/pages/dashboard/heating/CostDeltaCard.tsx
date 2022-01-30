@@ -8,7 +8,7 @@ import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getHeatingCostDelta } from '../../../calculations/heating/cost';
+import { getHeatingCostDelta } from '../../../calculationsLegacy/heating/cost';
 import { TiEquals } from 'react-icons/ti';
 
 export default function CostDeltaCard(props: DashboardCardProps) {

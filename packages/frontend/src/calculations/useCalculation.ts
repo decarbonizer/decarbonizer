@@ -1,5 +1,5 @@
 import { DependencyList, useMemo } from 'react';
-import { ExternalCalculationData, useExternalCalculationData } from './externalData';
+import { ExternalCalculationData, useExternalCalculationData } from './useExternalCalculationData';
 
 export type Calculation<T> = (externalCalculationData: ExternalCalculationData) => T;
 

@@ -1,8 +1,8 @@
 import { Table, Tbody, Tr, Td, SkeletonText } from '@chakra-ui/react';
-import { getTransformedIlluminationElectricityCostPerYear } from '../../../calculations/illumination/electricityCost';
-import { getTransformedIlluminationFootprintPerYear } from '../../../calculations/illumination/footprint';
-import { transformIlluminationSurveyAnswers } from '../../../calculations/illumination/transformation';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getTransformedIlluminationElectricityCostPerYear } from '../../../calculationsLegacy/illumination/electricityCost';
+import { getTransformedIlluminationFootprintPerYear } from '../../../calculationsLegacy/illumination/footprint';
+import { transformIlluminationSurveyAnswers } from '../../../calculationsLegacy/illumination/transformation';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';

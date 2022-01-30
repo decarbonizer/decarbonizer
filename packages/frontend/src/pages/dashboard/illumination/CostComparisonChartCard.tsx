@@ -5,13 +5,13 @@ import { useState } from 'react';
 import {
   getIlluminationElectricityCostPerYear,
   getTransformedIlluminationElectricityCostPerYear,
-} from '../../../calculations/illumination/electricityCost';
+} from '../../../calculationsLegacy/illumination/electricityCost';
 import {
   getInitialIlluminationReplacementCost,
   getIlluminationMaintenanceCostForYear,
   getTransformedIlluminationMaintenanceCostForYear,
-} from '../../../calculations/illumination/maintenanceCost';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+} from '../../../calculationsLegacy/illumination/maintenanceCost';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';

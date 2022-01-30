@@ -8,7 +8,7 @@ import HaloIcon from '../../../components/HaloIcon';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getHeatingFootprintDelta } from '../../../calculations/heating/footprint';
+import { getHeatingFootprintDelta } from '../../../calculationsLegacy/heating/footprint';
 import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
 

@@ -3,11 +3,11 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedItElectricityCostPerYear } from '../../../calculations/it/cost';
+import { getTransformedItElectricityCostPerYear } from '../../../calculationsLegacy/it/cost';
 import {
   getTransformedItFootprintPerYear,
   getTransformedProducedHeatingPerYear,
-} from '../../../calculations/it/footprint';
+} from '../../../calculationsLegacy/it/footprint';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

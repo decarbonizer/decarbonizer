@@ -1,7 +1,7 @@
 import { SkeletonText } from '@chakra-ui/react';
 import { BiTargetLock } from 'react-icons/bi';
 import { useParams } from 'react-router';
-import { getNetZero } from '../../../calculations/global/netZero';
+import { getNetZero } from '../../../calculationsLegacy/global/netZero';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';

@@ -33,10 +33,10 @@ import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
-import { useExternalCalculationData } from '../../../calculations/externalData';
+import { useExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/footprint';
-import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/getSuggestion';
+import { getTransformedProducedHeatingPerYear } from '../../../calculationsLegacy/it/footprint';
+import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculationsLegacy/getSuggestion';
 import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
 
 export interface ActionAccordionItemProps {

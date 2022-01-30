@@ -14,8 +14,8 @@ import {
 } from 'recharts';
 import { ActionPlan } from '../../api/actionPlan';
 import { useCalculation } from '../../calculations/useCalculation';
-import { getBudgetChartData } from '../../calculations2/calculations/getBudgetChartData';
-import { useAsyncCalculation } from '../../calculations2/useAsyncCalculation';
+import { getBudgetChartData } from '../../calculations/calculations/getBudgetChartData';
+import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 
 export type BudgetChartMode = 'cost' | 'co2';
 

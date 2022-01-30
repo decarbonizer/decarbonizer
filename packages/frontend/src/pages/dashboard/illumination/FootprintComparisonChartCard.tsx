@@ -1,12 +1,12 @@
 import {
   getIlluminationFootprintPerYear,
   getTransformedIlluminationFootprintPerYear,
-} from '../../../calculations/illumination/footprint';
+} from '../../../calculationsLegacy/illumination/footprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {

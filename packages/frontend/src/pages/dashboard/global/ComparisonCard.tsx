@@ -2,7 +2,7 @@ import { Tooltip, ResponsiveContainer, Bar, BarChart, XAxis, YAxis, Legend } fro
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import distinctColors from 'distinct-colors';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
+import { getTransformedFootprintPerYear } from '../../../calculationsLegacy/global/footprint';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../../api/actionAnswer';

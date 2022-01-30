@@ -10,7 +10,7 @@ import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
-import { getItFootprintDelta } from '../../../calculations/it/footprint';
+import { getItFootprintDelta } from '../../../calculationsLegacy/it/footprint';
 
 export default function FootprintDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

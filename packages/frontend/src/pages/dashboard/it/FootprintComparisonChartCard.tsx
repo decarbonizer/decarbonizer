@@ -2,9 +2,9 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import { getItFootprintPerYear, getTransformedItFootprintPerYear } from '../../../calculations/it/footprint';
+import { getItFootprintPerYear, getTransformedItFootprintPerYear } from '../../../calculationsLegacy/it/footprint';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

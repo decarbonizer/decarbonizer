@@ -2,7 +2,7 @@ import { Select } from '@chakra-ui/react';
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
 import { useState } from 'react';
-import { getSurveyAnswersForSurvey } from '../../../calculations/surveyAnswers/getSurveyAnswersForSurvey';
+import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
@@ -11,8 +11,11 @@ import {
   getItMaintenanceCostForYear,
   getInitialItReplacementCost,
   getTransformedItMaintenanceCostForYear,
-} from '../../../calculations/it/maintenanceCost';
-import { getItElectricityCostPerYear, getTransformedItElectricityCostPerYear } from '../../../calculations/it/cost';
+} from '../../../calculationsLegacy/it/maintenanceCost';
+import {
+  getItElectricityCostPerYear,
+  getTransformedItElectricityCostPerYear,
+} from '../../../calculationsLegacy/it/cost';
 
 type CostCategory = 'all' | 'electricity' | 'maintenance';
 

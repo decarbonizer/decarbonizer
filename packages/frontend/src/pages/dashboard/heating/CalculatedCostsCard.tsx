@@ -3,9 +3,9 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedHeatingCostPerYear } from '../../../calculations/heating/cost';
-import { getTransformedHeatingFootprintPerYear } from '../../../calculations/heating/footprint';
-import { getTransformedProducedHeatingPerYear } from '../../../calculations/it/footprint';
+import { getTransformedHeatingCostPerYear } from '../../../calculationsLegacy/heating/cost';
+import { getTransformedHeatingFootprintPerYear } from '../../../calculationsLegacy/heating/footprint';
+import { getTransformedProducedHeatingPerYear } from '../../../calculationsLegacy/it/footprint';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

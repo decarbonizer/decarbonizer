@@ -3,8 +3,8 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedElectricityCostPerYear } from '../../../calculations/electricity/cost';
-import { getTransformedElectricityFootprintPerYear } from '../../../calculations/electricity/footprint';
+import { getTransformedElectricityCostPerYear } from '../../../calculationsLegacy/electricity/cost';
+import { getTransformedElectricityFootprintPerYear } from '../../../calculationsLegacy/electricity/footprint';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();

@@ -26,7 +26,7 @@ import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
-import { getTransformedFootprintPerYear } from '../../calculations/global/footprint';
+import { getTransformedFootprintPerYear } from '../../calculationsLegacy/global/footprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
