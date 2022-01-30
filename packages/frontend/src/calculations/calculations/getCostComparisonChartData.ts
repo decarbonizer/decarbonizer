@@ -16,7 +16,7 @@ export function getCostComparisonCardData(
   const transformingActionAnswersDf = new DataFrame(transformingActionAnswers);
   const coreCalculations = categoryCoreCalculationsMap[category];
 
-  const years = new Series(range(1, 11));
+  const years = new Series(range(1, toYear));
   const totalSummedYearlyConstantCosts = coreCalculations.getTotalSummedYearlyConstantCostsDelta(
     externalCalculationData,
     surveyAnswersDf,
