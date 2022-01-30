@@ -88,7 +88,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
 
       const delta =
         netZeroCalculation.delta < 0 ? Math.abs(netZeroCalculation.delta) : -Math.abs(netZeroCalculation.delta);
-      const achievedGoal = delta / (netZeroCalculation.originalFootprint / 100);
+      const achievedGoal = delta / (netZeroCalculation.before / 100);
       const adjustedAchievedGoal = achievedGoal > 100 ? 100 : achievedGoal.toFixed(2);
 
       return {
