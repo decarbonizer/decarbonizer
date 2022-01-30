@@ -4,13 +4,13 @@ import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../../calculations/useExternalCalculationData';
-import { getTransformedHeatingFootprintPerYear } from '../heating/footprint';
-import { getTransformedIlluminationFootprintPerYear } from '../illumination/footprint';
-import { getTransformedElectricityFootprintPerYear } from '../electricity/footprint';
-import { getTransformedBusinessTravelFootprintPerYear } from '../businessTravel/footprint';
-import { getTransformedItFootprintPerYear, getTransformedProducedHeatingPerYear } from '../it/footprint';
 import { ActionPlan } from '../../api/actionPlan';
 import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
+import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
+import { businessTravelCoreCalculations } from '../../calculations/core/businessTravelCoreCalculations';
+import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
+import { itCoreCalculations } from '../../calculations/core/itCoreCalculations';
+import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
 
 export function getFootprintForYearRange(
   externalCalculationData: ExternalCalculationData,
@@ -98,26 +98,28 @@ export function getTransformedFootprintPerYear(
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
 ) {
-  const electricityFootprint = getTransformedElectricityFootprintPerYear(
+  const electricityFootprint = electricityCoreCalculations.getSummedYearlyFootprint(
     externalCalculationData,
     surveyAnswers,
     actionAnswers,
   );
-  const illuminationFootprint = getTransformedIlluminationFootprintPerYear(
+  const illuminationFootprint = illuminationCoreCalculations.getSummedYearlyFootprint(
     externalCalculationData,
     surveyAnswers,
     actionAnswers,
   );
-  const itFootprint = getTransformedItFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers);
-  const producedHeatingByItInKwh = getTransformedProducedHeatingPerYear(surveyAnswers, actionAnswers);
-  const heatingFootprint = getTransformedHeatingFootprintPerYear(
+  const itFootprint = itCoreCalculations.getSummedYearlyFootprint(
     externalCalculationData,
     surveyAnswers,
     actionAnswers,
-    producedHeatingByItInKwh,
+  );
+  const heatingFootprint = heatingCoreCalculations.getSummedYearlyFootprint(
+    externalCalculationData,
+    surveyAnswers,
+    actionAnswers,
   );
 
-  const businessTravelFootprint = getTransformedBusinessTravelFootprintPerYear(
+  const businessTravelFootprint = businessTravelCoreCalculations.getSummedYearlyFootprint(
     externalCalculationData,
     surveyAnswers,
     actionAnswers,

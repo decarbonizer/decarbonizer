@@ -36,11 +36,11 @@ import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
-import { getIlluminationElectricityCostDelta } from '../../calculationsLegacy/illumination/electricityCost';
 import { TiEquals } from 'react-icons/ti';
-import { getHeatingCostDelta } from '../../calculationsLegacy/heating/cost';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
+import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
+import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -70,14 +70,15 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
-      //TODO: Put this in new function which calculates all costs
-      const illuminationCosts = getIlluminationElectricityCostDelta(
+      // TODO: Aggregate all costs. Add other cost categories.
+      const illuminationCosts = illuminationCoreCalculations.getTotalYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
-      const heatingCosts = getHeatingCostDelta(
+      // TODO: Aggregate all costs. Add other cost categories.
+      const heatingCosts = heatingCoreCalculations.getTotalYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
