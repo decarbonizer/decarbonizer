@@ -22,17 +22,6 @@ export abstract class CategoryCoreCalculations<
   // Investment Costs.
   //
 
-  public getTotalSummedYearlyInvestmentCostsDelta(
-    externalCalculationData: ExternalCalculationData,
-    surveyAnswers: IDataFrame<number, SurveyAnswer>,
-    transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
-  ) {
-    return this.getDeltaResult(
-      this.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswers),
-      this.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswers, transformingActionAnswers),
-    );
-  }
-
   public getTotalSummedInvestmentCosts(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
