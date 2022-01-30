@@ -34,6 +34,14 @@ export class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'>
     ]);
   }
 
+  protected override isInitialInvestmentRequiredForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
+    transformedSurveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
+  ): boolean {
+    return surveyAnswer.value.radiatorKind !== transformedSurveyAnswer.value.radiatorKind;
+  }
+
   public override getYearlyChangingCostsForSingleSurveyAnswer(
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
@@ -120,12 +128,12 @@ export class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'>
     answer: HeatingSurveyAnswerValue,
   ) {
     const heatingType = heatingTypes.filter((heatingType) => heatingType._id === answer.radiatorKind).first();
-    const heatingKwhPerQm = 0.1;
-    const installationCostInEuro =
-      answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
-        ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
-        : heatingType.installationCostInEuro;
-    return installationCostInEuro;
+    // const heatingKwhPerQm = 0.1;
+    // const installationCostInEuro =
+    //   answer.radiatorKind === '00000000-0000-0000-0000-000000000000'
+    //     ? ((heatingKwhPerQm * answer.realEstateAreaInQm * 8) / 4) * heatingType.installationCostInEuro
+    //     : heatingType.installationCostInEuro;
+    return heatingType.installationCostInEuro;
   }
 
   public override getSummedYearlyFootprint(
