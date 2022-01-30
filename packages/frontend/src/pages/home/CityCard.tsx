@@ -26,7 +26,7 @@ import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { RealEstate } from '../../api/realEstate';
-import { getTransformedFootprintPerYear } from '../../calculations/global/footprint';
+import { getFootprintDelta, getTransformedFootprintPerYear } from '../../calculations/global/footprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
@@ -62,21 +62,30 @@ export default function CityCard({ realEstate }: CityCardProps) {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
       );
-      // const actionAnswers = externalCalculationData.actionPlans
-      //   .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-      //   .flatMap((actionPlan) => actionPlan.actionAnswers);
+      const actionAnswers = externalCalculationData.actionPlans
+        .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
+        .flatMap((actionPlan) => actionPlan.actionAnswers);
 
       // const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
 
+      // const footprint =
+      //   surveyAnswers.count() > 0
+      //     ? getTransformedFootprintPerYear(
+      //         externalCalculationData,
+      //         surveyAnswers,
+      //         new DataFrame<number, ActionAnswerBase>(),
+      //       ).globalFootprint
+      //     : 0;
+
       const footprint =
         surveyAnswers.count() > 0
-          ? getTransformedFootprintPerYear(
-              externalCalculationData,
-              surveyAnswers,
-              new DataFrame<number, ActionAnswerBase>(),
-            ).globalFootprint
+          ? getTransformedFootprintPerYear(externalCalculationData, surveyAnswers, actionAnswers).globalFootprint
           : 0;
 
+      const footprintDelta =
+        surveyAnswers.count() > 0 ? getFootprintDelta(externalCalculationData, surveyAnswers, actionAnswers) : 0;
+
+      console.log(realEstate.cityName, footprintDelta);
       return {
         footprint,
       };

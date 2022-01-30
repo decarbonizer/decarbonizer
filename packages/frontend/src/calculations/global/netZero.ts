@@ -8,7 +8,7 @@ export function getNetZero(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
   actionAnswers: IDataFrame<number, ActionAnswerBase>,
-  realEstateId: string,
+  realEstateId?: string,
 ) {
   const surveyAnswersInitial = surveyAnswers.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
   // const actionPlans = externalCalculationData.actionPlans.filter(

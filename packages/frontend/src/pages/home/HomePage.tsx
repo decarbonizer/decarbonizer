@@ -11,6 +11,7 @@ import { useState } from 'react';
 import SortingSelection, { SortValueChangedArgs, SortCategory } from '../../components/SortingSelection';
 import EmptyState from '../../components/EmptyState';
 import { useGetRealEstatesOfCompanyQuery } from '../../store/api';
+import GlobalSection from './global/GlobalSection';
 
 export default function HomePage() {
   const { isLoading: isLoadingRealEstates, data: realEstates } = useGetRealEstatesOfCompanyQuery();
@@ -52,6 +53,7 @@ export default function HomePage() {
           <Searchbar placeholder="Search for real estate" onChange={setSearchValue} />
         </>
       }>
+      <GlobalSection />
       <Wrap spacing="8">
         {!searchValue && (
           <WrapItem>

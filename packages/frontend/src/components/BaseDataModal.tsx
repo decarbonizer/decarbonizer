@@ -85,7 +85,7 @@ export const baseDataSchema: FormSchema = {
           required: false,
           type: 'number',
           unit: 'kg/year',
-          label: 'CO² of a server.',
+          label: `Carbon footprint of a server.`,
         },
         {
           id: 'reductionFactorByUsingSuperServer',
