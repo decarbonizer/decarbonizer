@@ -52,12 +52,12 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
       headerControls={
         <Select
           size="sm"
-          maxW="40"
+          maxW="44"
           defaultValue="all"
           onChange={(e) => setSelectedCostCategory(e.target.value as CostCategory)}>
           <option value="all">All</option>
-          <option value="constant">Electricity</option>
-          <option value="changing">Maintenance</option>
+          <option value="constant">Recurring costs</option>
+          <option value="changing">Maintenance cost</option>
         </Select>
       }
       header="Cost comparison over 10 years"
