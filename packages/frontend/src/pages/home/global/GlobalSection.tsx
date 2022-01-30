@@ -8,7 +8,7 @@ import GlobalFootprintCard from './GlobalFootprintCard';
 import NetZeroCard from './NetZeroCard';
 
 export default function GlobalSection() {
-  const { isLoading, data, error } = useCalculation((externalCalculationData) => {
+  const { data } = useCalculation((externalCalculationData) => {
     return externalCalculationData.realEstates
       .map((realEstate) => {
         const surveyAnswersInitital = externalCalculationData.surveyAnswers.filter(
@@ -34,11 +34,7 @@ export default function GlobalSection() {
       <Grid templateRows={'1fr'} templateColumns={'repeat(5, 1fr)'} gap={10} pt="4">
         <GlobalFootprintCard />
         <NetZeroCard />
-        {data ? (
-          <DashboardCard>
-            <CarbonTreeCard carbonFootprint={data} />
-          </DashboardCard>
-        ) : (
+        {data && (
           <DashboardCard>
             <CarbonTreeCard carbonFootprint={0} />
           </DashboardCard>
