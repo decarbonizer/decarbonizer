@@ -8,15 +8,15 @@ import HaloIcon from '../../../components/HaloIcon';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getElectricityFootprintDelta } from '../../../calculationsLegacy/electricity/footprint';
 import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
+import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
 
 export default function FootprintDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getElectricityFootprintDelta(
+      electricityCoreCalculations.getSummedYearlyFootprintDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

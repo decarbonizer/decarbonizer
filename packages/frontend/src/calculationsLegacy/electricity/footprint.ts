@@ -1,16 +1,12 @@
 import { ExternalCalculationData } from '../../calculations/useExternalCalculationData';
-import { DataFrame, IDataFrame } from 'data-forge';
-import { SurveyAnswer } from '../../api/surveyAnswer';
+import { DataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-import { transformElectricitySurveyAnswers } from './transformation';
-import { ElectricitySurveyAnswerValue } from '../../data/surveys/electricity/electricitySurveyAnswerValue';
-import { getSurveyAnswersForSurvey } from '../surveyAnswers/getSurveyAnswersForSurvey';
-import { getDeltaType } from '../../utils/deltaType';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
   SwitchToGreenEnergyActionAnswerValue,
   SwitchToGreenEnergyDetailsAnswerValue,
 } from '../../data/actions/electricity/switchToGreenEnergy';
+import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
 
 /**
  * Returns id of energy form which reduces Co2 the most.
@@ -27,7 +23,7 @@ export function getSuggestionForSwitchToGreenEnergyFootprint(externalCalculation
         actionId: 'switchToGreenEnergy',
         values: possibleAnswerValue,
       };
-      const result = getElectricityFootprintDelta(
+      const result = electricityCoreCalculations.getSummedYearlyFootprintDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame([possibleAction]),
@@ -40,61 +36,4 @@ export function getSuggestionForSwitchToGreenEnergyFootprint(externalCalculation
     { difference: 0, energyFormId: undefined },
   );
   return { newEnergyForm: result.energyFormId };
-}
-
-export function getElectricityFootprintDelta(
-  externalCalculationData: ExternalCalculationData,
-  surveyAnswers: IDataFrame<number, SurveyAnswer>,
-  actionAnswers: IDataFrame<number, ActionAnswerBase>,
-) {
-  const illuminationSurveyAnswers = getSurveyAnswersForSurvey(surveyAnswers, 'electricity');
-  const originalFootprint = getElectricityFootprintPerYear(
-    externalCalculationData,
-    illuminationSurveyAnswers.map((answer) => answer.value),
-  );
-
-  const footprintAfterActions = getTransformedElectricityFootprintPerYear(
-    externalCalculationData,
-    externalCalculationData.surveyAnswers,
-    actionAnswers,
-  );
-
-  const delta = footprintAfterActions - originalFootprint;
-  const deltaType = getDeltaType(delta);
-
-  return {
-    originalFootprint,
-    footprintAfterActions,
-    delta,
-    deltaType,
-  };
-}
-
-export function getTransformedElectricityFootprintPerYear(
-  externalCalculationData: ExternalCalculationData,
-  surveyAnswers: IDataFrame<number, SurveyAnswer>,
-  actionAnswers: IDataFrame<number, ActionAnswerBase>,
-) {
-  const transformedAnswers = transformElectricitySurveyAnswers(surveyAnswers, actionAnswers);
-  return getElectricityFootprintPerYear(externalCalculationData, transformedAnswers);
-}
-
-export function getElectricityFootprintPerYear(
-  externalCalculationData: ExternalCalculationData,
-  surveyAnswers: IDataFrame<number, ElectricitySurveyAnswerValue>,
-) {
-  if (surveyAnswers.count() === 0) {
-    return 0;
-  }
-  return surveyAnswers
-    .map((answer) => getElectricityFootprintPerYearForSingleSurveyAnswer(externalCalculationData, answer))
-    .aggregate((a, b) => a + b);
-}
-
-function getElectricityFootprintPerYearForSingleSurveyAnswer(
-  { energyForms }: ExternalCalculationData,
-  answer: ElectricitySurveyAnswerValue,
-) {
-  const energyForm = energyForms.filter((energyForm) => energyForm._id === answer.energyForm).first();
-  return energyForm.co2PerGramPerKwh * answer.avgConsumptionPerYear;
 }

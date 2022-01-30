@@ -1,28 +1,23 @@
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import {
-  getElectricityCostPerYear,
-  getTransformedElectricityCostPerYear,
-} from '../../../calculationsLegacy/electricity/cost';
+import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
 
 export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const electricitySurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'electricity');
       const oldCostsPerYear = Math.round(
-        getElectricityCostPerYear(
+        electricityCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
-          electricitySurveyAnswers.map((answer) => answer.value),
+          externalCalculationData.surveyAnswers,
         ),
       );
       const newCostsPerYear = Math.round(
-        getTransformedElectricityCostPerYear(
+        electricityCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
