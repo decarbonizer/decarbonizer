@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../utils';
+import { getActionAnswersForAction } from '../getActionAnswersForAction';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import { HeatLessActionAnswerValue, HeatLessActionDetailsAnswerValue } from '../../data/actions/heating/heatLessAction';
@@ -17,7 +17,7 @@ import { HeatingSurveyAnswerValue } from '../../data/surveys/heating/heatingSurv
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 import { itCoreCalculations } from './itCoreCalculations';
 
-class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
+export class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'> {
   public constructor() {
     super('heating');
   }

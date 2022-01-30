@@ -71,14 +71,14 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       );
 
       // TODO: Aggregate all costs. Add other cost categories.
-      const illuminationCosts = illuminationCoreCalculations.getTotalYearlyConstantCostsDelta(
+      const illuminationCosts = illuminationCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
 
       // TODO: Aggregate all costs. Add other cost categories.
-      const heatingCosts = heatingCoreCalculations.getTotalYearlyConstantCostsDelta(
+      const heatingCosts = heatingCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),

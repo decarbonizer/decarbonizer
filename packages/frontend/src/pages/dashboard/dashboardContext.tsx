@@ -1,5 +1,5 @@
 import { DataFrame } from 'data-forge';
-import { createContext, Dispatch, SetStateAction, useContext } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useMemo } from 'react';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { ActionPlan } from '../../api/actionPlan';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../data/actions/action';
@@ -20,5 +20,5 @@ export interface DashboardContextValue {
 
 export function useFilledActionAnswersDataFrame() {
   const { filledActionAnswers } = useContext(DashboardContext);
-  return new DataFrame(Object.values(filledActionAnswers).filter(Boolean));
+  return useMemo(() => new DataFrame(Object.values(filledActionAnswers).filter(Boolean)), [filledActionAnswers]);
 }

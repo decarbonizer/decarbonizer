@@ -5,23 +5,30 @@ import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
 import { GiFootprint } from 'react-icons/gi';
 import HaloIcon from '../../../components/HaloIcon';
-import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
-import { illuminationCoreCalculations } from '../../../calculations/core/illuminationCoreCalculations';
+import { useAsyncCalculation } from '../../../calculations/useAsyncCalculation';
+import { KnownCategoryCoreCalculationsId } from '../../../calculations/core/coreCalculations';
+import { useParams } from 'react-router';
+import { RealEstatePageParams } from '../../../routes';
 
-export default function FootprintDeltaCard(props: DashboardCardProps) {
+export interface FootprintDeltaCardProps extends DashboardCardProps {
+  coreCalculationsId: KnownCategoryCoreCalculationsId;
+}
+
+export default function FootprintDeltaCard({ coreCalculationsId, ...rest }: FootprintDeltaCardProps) {
+  const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
-  const { isLoading, data, error } = useCalculation(
-    (externalCalculationData) =>
-      illuminationCoreCalculations.getSummedYearlyFootprintDelta(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        filledActionAnswersDf,
-      ),
-    [filledActionAnswersDf],
+  const { isLoading, data, error } = useAsyncCalculation(
+    'getFootprintDeltaCardData',
+    (externalCalculationData) => [
+      coreCalculationsId,
+      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
+      filledActionAnswersDf.toArray(),
+    ],
+    [coreCalculationsId, filledActionAnswersDf, realEstateId],
   );
 
   return (
@@ -31,14 +38,15 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
           CO<sub>2</sub> footprint
         </>
       }
-      {...props}>
+      showRevalidatingSpinner={isLoading}
+      {...rest}>
       <InlineErrorDisplay error={error}>
-        {isLoading && <SkeletonText />}
+        {!data && <SkeletonText />}
         {data && (
           <SimpleGrid columns={2}>
             <QuickInfo icon={<HaloIcon icon={GiFootprint} colorScheme="gray" />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.after).toFixed(2)}kg`}
+                label={`${Math.abs(data.summedYearlyFootprintDelta.after).toFixed(2)}kg`}
                 description={
                   <>
                     CO<sub>2</sub> produced per year
@@ -49,15 +57,15 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
             <QuickInfo
               icon={
                 <HaloIcon
-                  icon={mapDeltaType(data.deltaType, BiTrendingUp, BiTrendingDown, TiEquals)}
-                  colorScheme={mapDeltaType(data!.deltaType, 'red', 'green', 'gray')}
+                  icon={mapDeltaType(data.summedYearlyFootprintDelta.deltaType, BiTrendingUp, BiTrendingDown, TiEquals)}
+                  colorScheme={mapDeltaType(data.summedYearlyFootprintDelta.deltaType, 'red', 'green', 'gray')}
                 />
               }>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.delta).toFixed(2)}kg`}
+                label={`${Math.abs(data.summedYearlyFootprintDelta.delta).toFixed(2)}kg`}
                 description={
                   <>
-                    {data!.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
+                    {data.summedYearlyFootprintDelta.deltaType === 'decrease' ? 'less' : 'more'} CO<sub>2</sub> produced
                   </>
                 }
               />

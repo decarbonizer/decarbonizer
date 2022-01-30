@@ -5,7 +5,7 @@ import { ActionPlan } from '../../api/actionPlan';
 import { ActionCategory, KnownActionId } from '../../data/actions/action';
 import { RealEstatePageParams } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
-import ActionChartsSection from './ActionChartsSection';
+import ActionChartsSection from './action-charts-section/ActionChartsSection';
 import ChartSectionHeader from './components/ChartSectionHeader';
 import { DashboardContext, FilledActionAnswers } from './dashboardContext';
 import GlobalChartsSection from './GlobalChartsSection';
