@@ -1,7 +1,7 @@
 import { SkeletonText } from '@chakra-ui/react';
 import distinctColors from 'distinct-colors';
 import { ResponsiveContainer, BarChart, Tooltip, XAxis, YAxis, Bar, Legend } from 'recharts';
-import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
+import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import DashboardCard, { DashboardCardProps } from '../../dashboard/components/DashboardCard';
@@ -26,11 +26,11 @@ export default function ComparisonCard(props: DashboardCardProps) {
           footprint:
             thisRealEstateSurveyAnswers.count() > 0
               ? Math.round(
-                  getTransformedFootprintPerYear(
+                  getGlobalSummedYearlyFootprint(
                     externalCalculationData,
                     thisRealEstateSurveyAnswers,
                     thisRealEstateActionAnswers,
-                  ).globalFootprint,
+                  ),
                 )
               : 0,
         };

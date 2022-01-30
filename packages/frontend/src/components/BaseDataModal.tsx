@@ -141,7 +141,6 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
   }, [initialBaseData, setValue]);
 
   const handleUpdate = async () => {
-    console.log(value);
     await updateBaseData({ realEstateId: realEstateId, body: value as any });
     onClose();
     toast({

@@ -83,12 +83,6 @@ export default function CityCard({ realEstate }: CityCardProps) {
           ? getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers, actionAnswers)
           : 0;
 
-      const footprintDelta =
-        surveyAnswers.count() > 0
-          ? getGlobalSummedYearlyFootprintDelta(externalCalculationData, surveyAnswers, actionAnswers)
-          : 0;
-
-      console.log(realEstate.cityName, footprintDelta);
       return {
         footprint,
       };

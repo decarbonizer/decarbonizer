@@ -1,5 +1,5 @@
 import { Flex, Grid, Heading } from '@chakra-ui/react';
-import { getTransformedFootprintPerYear } from '../../../calculations/global/footprint';
+import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import DashboardCard from '../../dashboard/components/DashboardCard';
 import CarbonTreeCard from '../../dashboard/global/CarbonTreeCard';
@@ -17,11 +17,7 @@ export default function GlobalSection() {
         const actionAnswers = externalCalculationData.actionPlans
           .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
           .flatMap((actionPlan) => actionPlan.actionAnswers);
-        const footprint = getTransformedFootprintPerYear(
-          externalCalculationData,
-          surveyAnswersInitital,
-          actionAnswers,
-        ).globalFootprint;
+        const footprint = getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswersInitital, actionAnswers);
         return footprint;
       })
       .reduce((a, b) => a + b, 0);
