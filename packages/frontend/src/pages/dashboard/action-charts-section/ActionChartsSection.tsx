@@ -24,7 +24,7 @@ export default function ActionChartsSection({ isNarrow }: ActionChartsSectionPro
       gap="6">
       <FootprintDeltaCard coreCalculationsId={coreCalculationsId} />
       <CostDeltaCard gridRow={isNarrow ? undefined : '2'} coreCalculationsId={coreCalculationsId} />
-      <CalculatedCostsCard gridRow={isNarrow ? undefined : 'span 2'} />
+      <CalculatedCostsCard gridRow={isNarrow ? undefined : 'span 2'} coreCalculationsId={coreCalculationsId} />
       <FootprintComparisonChartCard coreCalculationsId={coreCalculationsId} />
       <CostComparisonChartCard coreCalculationsId={coreCalculationsId} />
     </Grid>

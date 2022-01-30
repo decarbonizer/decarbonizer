@@ -2,7 +2,6 @@ import { Select, SkeletonText } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import ComparisonChartCard from '../components/ComparisonChartCard';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
 import { useAsyncCalculation } from '../../../calculations/useAsyncCalculation';
