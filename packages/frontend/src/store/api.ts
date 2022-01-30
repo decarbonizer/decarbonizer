@@ -9,6 +9,7 @@ import { ActionPlan, ActionPlanCreate, ActionPlanUpdate } from '../api/actionPla
 import { HeatingType } from '../api/heatingType';
 import { RegisterPost } from '../api/register';
 import { Company } from '../api/company';
+import { BaseData } from '../api/baseData';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -24,7 +25,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['ActionPlans', 'RealEstate', 'SurveyAnswer'],
+  tagTypes: ['ActionPlans', 'RealEstate', 'SurveyAnswer', 'BaseData'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResult, LoginPost>({
       query: (body) => ({
@@ -193,6 +194,20 @@ export const api = createApi({
       }),
       invalidatesTags: ['ActionPlans'],
     }),
+    getBaseDataForRealEstate: builder.query<BaseData, { realEstateId: string }>({
+      query: ({ realEstateId }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/baseData`,
+      }),
+      providesTags: ['BaseData'],
+    }),
+    updateBaseData: builder.mutation<BaseData, { realEstateId: string; body: BaseData }>({
+      query: ({ realEstateId, body }) => ({
+        url: `/api/v1/realEstates/${realEstateId}/baseData`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['BaseData'],
+    }),
   }),
 });
 
@@ -225,4 +240,7 @@ export const {
   useCreateActionPlanMutation,
   useDeleteActionPlanMutation,
   useUpdateActionPlanMutation,
+
+  useGetBaseDataForRealEstateQuery,
+  useUpdateBaseDataMutation,
 } = api;
