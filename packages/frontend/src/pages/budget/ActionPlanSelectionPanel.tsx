@@ -21,6 +21,7 @@ import {
   RangeSliderTrack,
   RangeSliderMark,
   useDisclosure,
+  Switch,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
@@ -49,6 +50,8 @@ export interface ActionPlanSelectionPanelProps {
   setBudgetChartMode: Dispatch<SetStateAction<BudgetChartMode>>;
   actionPlans: Array<ActionPlan>;
   setActionPlans: Dispatch<SetStateAction<Array<ActionPlan>>>;
+  showProfitLine: boolean;
+  setShowProfitLine: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ActionPlanSelectionPanel({
@@ -62,6 +65,8 @@ export default function ActionPlanSelectionPanel({
   setBudgetChartMode,
   actionPlans,
   setActionPlans,
+  showProfitLine,
+  setShowProfitLine,
 }: ActionPlanSelectionPanelProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { data: allActionPlans } = useGetAllActionPlansForRealEstateQuery({ realEstateId });
@@ -106,6 +111,16 @@ export default function ActionPlanSelectionPanel({
                   </Button>
                 </ButtonGroup>
               </FormControl>
+              {budgetChartMode === 'cost' && (
+                <FormControl display="flex">
+                  <FormLabel>Profit</FormLabel>
+                  <Switch
+                    id="show-costs"
+                    isChecked={showProfitLine}
+                    onChange={(e) => setShowProfitLine(e.target.checked)}
+                  />
+                </FormControl>
+              )}
               <FormControl>
                 <FormLabel htmlFor="mode">Years:</FormLabel>
                 <RangeSlider

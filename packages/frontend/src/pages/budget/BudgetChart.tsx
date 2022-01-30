@@ -1,11 +1,11 @@
 import { Box, BoxProps, Center, Spinner } from '@chakra-ui/react';
-import { DataFrame } from 'data-forge';
 import {
   Area,
   Bar,
   Cell,
   ComposedChart,
   Legend,
+  Line,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -13,8 +13,6 @@ import {
   YAxis,
 } from 'recharts';
 import { ActionPlan } from '../../api/actionPlan';
-import { useCalculation } from '../../calculations/useCalculation';
-import { getBudgetChartData } from '../../calculations/calculations/getBudgetChartData';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 
 export type BudgetChartMode = 'cost' | 'co2';
@@ -24,9 +22,10 @@ export interface BudgetChartProps extends BoxProps {
   toYear: number;
   actionPlans: Array<ActionPlan>;
   mode: BudgetChartMode;
+  showProfit: boolean;
 }
 
-export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...rest }: BudgetChartProps) {
+export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showProfit, ...rest }: BudgetChartProps) {
   const { isLoading, data } = useAsyncCalculation('getBudgetChartData', (_) => [actionPlans, fromYear, toYear], [
     fromYear,
     toYear,
@@ -43,12 +42,6 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...re
             <XAxis dataKey="year" domain={[fromYear, toYear]} allowDataOverflow />
             {mode === 'cost' && <YAxis width={100} domain={['auto', 'data-max']} unit="€" />}
             {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['auto', 'data-max']} unit="kg" />}
-            {/* <Bar dataKey="totalOriginalCost" name="Cost Without Action Plans" fill="#bAf6d4" unit="€" />
-          <Bar dataKey="totalNewCost" name="Cost With Action Plans" fill="#9AE6B4" unit="€" />
-          <Bar dataKey="delta" name="Cost Delta" opacity={0.6} fill="gray" unit="€" />
-          <Line dataKey="accumulatedSavings" name="Savings" stroke="purple" unit="€" />
-          <Line dataKey="totalNewInvestmentCosts" name="Maintenance Costs" stroke="red" unit="€" /> */}
-
             {mode === 'cost' && (
               <>
                 <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€">
@@ -57,6 +50,7 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, ...re
                   ))}
                 </Bar>
                 <ReferenceLine y={0} stroke="black" />
+                {showProfit && <Line dataKey="profit" name="Profits" stroke="#F6E05E" unit="€" strokeWidth="3" />}
               </>
             )}
             {mode === 'co2' && (
