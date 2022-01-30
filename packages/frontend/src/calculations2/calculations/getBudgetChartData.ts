@@ -25,10 +25,10 @@ export function getBudgetChartData(
 ): Array<BudgetChartDataEntry> {
   const coreCalculations: IDataFrame<number, CategoryCoreCalculations> = new DataFrame([
     illuminationCoreCalculations,
-    // businessTravelCoreCalculations,
-    // electricityCoreCalculations,
-    // // heatingCoreCalculations,
-    // itCoreCalculations,
+    businessTravelCoreCalculations,
+    electricityCoreCalculations,
+    heatingCoreCalculations,
+    itCoreCalculations,
   ]);
 
   // All action answers enriched with their start and end date, sorted by the time when they

@@ -37,7 +37,7 @@ export abstract class CategoryCoreCalculations<
       return 0;
     }
 
-    return surveyAnswers
+    return surveyAnswersToUse
       .flatMap((surveyAnswer) => this.getInvestmentCostsForSingleSurveyAnswer(externalCalculationData, surveyAnswer))
       .reduce((result, cost) => result + cost.cost, 0);
   }

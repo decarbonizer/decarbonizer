@@ -17,13 +17,13 @@ export interface SurveyAnswerUpdate extends ApiObjectUpdate {
 
 /**
  * Evaluates whether the given survey answer relates to a known survey.
- * @param surveyType The type of survey to check for.
+ * @param surveyId The type of survey to check for.
  * @param answer The survey answer.
  * @returns `true` if the survey answer's value has the shape of the known survey; `false` if not.
  */
 export function isSurveyAnswerType<SurveyId extends KnownSurveyId>(
-  surveyType: KnownSurveyId,
+  surveyId: KnownSurveyId,
   answer: SurveyAnswer,
 ): answer is SurveyAnswer<SurveyToSurveyAnswerMap[SurveyId]> {
-  return answer.surveyId === surveyType;
+  return answer.surveyId === surveyId;
 }
