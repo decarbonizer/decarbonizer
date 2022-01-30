@@ -4,10 +4,7 @@ import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
 import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import {
-  getBusinessTravelFootprintPerYear,
-  getTransformedBusinessTravelFootprintPerYear,
-} from '../../../calculationsLegacy/businessTravel/footprint';
+import { businessTravelCoreCalculations } from '../../../calculations/core/businessTravelCoreCalculations';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
@@ -17,11 +14,11 @@ export default function FootprintComparisonChartCard(props: DashboardCardProps) 
         externalCalculationData.surveyAnswers,
         'businessTravel',
       );
-      const oldFootprintPerYear = getBusinessTravelFootprintPerYear(
+      const oldFootprintPerYear = businessTravelCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
-        businessTravelSurveyAnswers.map((answer) => answer.value),
+        businessTravelSurveyAnswers,
       );
-      const newFootprintPerYear = getTransformedBusinessTravelFootprintPerYear(
+      const newFootprintPerYear = businessTravelCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
