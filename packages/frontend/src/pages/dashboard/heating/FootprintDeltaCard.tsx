@@ -8,15 +8,19 @@ import HaloIcon from '../../../components/HaloIcon';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getHeatingFootprintDelta } from '../../../calculationsLegacy/heating/footprint';
 import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
+import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
 
 export default function FootprintDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getHeatingFootprintDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
+      heatingCoreCalculations.getSummedYearlyFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
     [filledActionAnswersDf],
   );
 
@@ -34,7 +38,7 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
           <SimpleGrid columns={2}>
             <QuickInfo icon={<HaloIcon icon={GiFootprint} colorScheme="gray" />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.footprintAfterActions).toFixed(2)}kg`}
+                label={`${Math.abs(data.after).toFixed(2)}kg`}
                 description={
                   <>
                     CO<sub>2</sub> produced per year

@@ -2,23 +2,18 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import range from 'lodash-es/range';
-import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import {
-  getHeatingFootprintPerYear,
-  getTransformedHeatingFootprintPerYear,
-} from '../../../calculationsLegacy/heating/footprint';
+import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
 
 export default function FootprintComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const heatingSurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'heating');
-      const oldFootprintPerYear = getHeatingFootprintPerYear(
+      const oldFootprintPerYear = heatingCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
-        heatingSurveyAnswers.map((answer) => answer.value),
+        externalCalculationData.surveyAnswers,
       );
-      const newFootprintPerYear = getTransformedHeatingFootprintPerYear(
+      const newFootprintPerYear = heatingCoreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

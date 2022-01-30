@@ -38,7 +38,7 @@ export default function FootprintDeltaCard(props: DashboardCardProps) {
           <SimpleGrid columns={2}>
             <QuickInfo icon={<HaloIcon icon={GiFootprint} colorScheme="gray" />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.footprintAfterActions).toFixed(2)}kg`}
+                label={`${Math.abs(data.after).toFixed(2)}kg`}
                 description={
                   <>
                     CO<sub>2</sub> produced per year

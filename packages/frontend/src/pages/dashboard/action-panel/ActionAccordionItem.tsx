@@ -35,9 +35,9 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 import { useExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getTransformedProducedHeatingPerYear } from '../../../calculationsLegacy/it/footprint';
 import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculationsLegacy/getSuggestion';
 import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 
 export interface ActionAccordionItemProps {
   action: Action;
@@ -61,7 +61,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
     error,
   } = useCalculation(
     (externalCalculationData) => ({
-      producedHeating: getTransformedProducedHeatingPerYear(
+      producedHeating: itCoreCalculations.getTotalYearlyProducedHeating(
+        externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,
       ),

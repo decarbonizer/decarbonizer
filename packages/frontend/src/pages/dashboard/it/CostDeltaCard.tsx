@@ -8,14 +8,18 @@ import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { getItCostDelta } from '../../../calculationsLegacy/it/cost';
 import { TiEquals } from 'react-icons/ti';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 
 export default function CostDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      getItCostDelta(externalCalculationData, externalCalculationData.surveyAnswers, filledActionAnswersDf),
+      itCoreCalculations.getTotalYearlyConstantCostsDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        filledActionAnswersDf,
+      ),
     [filledActionAnswersDf],
   );
 
@@ -28,7 +32,7 @@ export default function CostDeltaCard(props: DashboardCardProps) {
             <QuickInfo
               icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.costAfterActions).toFixed(2)}€`}
+                label={`${Math.abs(data.after).toFixed(2)}€`}
                 description="electricity costs per year"
               />
             </QuickInfo>

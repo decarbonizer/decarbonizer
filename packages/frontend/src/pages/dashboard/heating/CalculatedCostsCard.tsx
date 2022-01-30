@@ -3,25 +3,25 @@ import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import { getTransformedHeatingCostPerYear } from '../../../calculationsLegacy/heating/cost';
-import { getTransformedHeatingFootprintPerYear } from '../../../calculationsLegacy/heating/footprint';
-import { getTransformedProducedHeatingPerYear } from '../../../calculationsLegacy/it/footprint';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
+import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
 
 export default function CalculatedCostsCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
       return {
-        producedHeating: getTransformedProducedHeatingPerYear(
-          externalCalculationData.surveyAnswers,
-          filledActionAnswersDf,
-        ),
-        footprint: getTransformedHeatingFootprintPerYear(
+        producedHeating: itCoreCalculations.getTotalYearlyProducedHeating(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
         ),
-        heatingCosts: getTransformedHeatingCostPerYear(
+        footprint: heatingCoreCalculations.getSummedYearlyFootprint(
+          externalCalculationData,
+          externalCalculationData.surveyAnswers,
+          filledActionAnswersDf,
+        ),
+        heatingCosts: heatingCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,

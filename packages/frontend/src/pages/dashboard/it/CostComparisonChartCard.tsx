@@ -2,20 +2,11 @@ import { Select } from '@chakra-ui/react';
 import { Series } from 'data-forge';
 import range from 'lodash-es/range';
 import { useState } from 'react';
-import { getSurveyAnswersForSurvey } from '../../../calculationsLegacy/surveyAnswers/getSurveyAnswersForSurvey';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import { DashboardCardProps } from '../components/DashboardCard';
 import ComparisonChartCard from '../components/ComparisonChartCard';
-import {
-  getItMaintenanceCostForYear,
-  getInitialItReplacementCost,
-  getTransformedItMaintenanceCostForYear,
-} from '../../../calculationsLegacy/it/maintenanceCost';
-import {
-  getItElectricityCostPerYear,
-  getTransformedItElectricityCostPerYear,
-} from '../../../calculationsLegacy/it/cost';
+import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 
 type CostCategory = 'all' | 'electricity' | 'maintenance';
 
@@ -23,15 +14,14 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { data, isLoading, error } = useCalculation(
     (externalCalculationData) => {
-      const itSurveyAnswers = getSurveyAnswersForSurvey(externalCalculationData.surveyAnswers, 'it');
       const oldElectricityCostsPerYear = Math.round(
-        getItElectricityCostPerYear(
+        itCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
-          itSurveyAnswers.map((answer) => answer.value),
+          externalCalculationData.surveyAnswers,
         ),
       );
       const newElectricityCostsPerYear = Math.round(
-        getTransformedItElectricityCostPerYear(
+        itCoreCalculations.getTotalSummedYearlyConstantCosts(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           filledActionAnswersDf,
@@ -41,19 +31,28 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
       const years = new Series(range(1, 11));
       const oldMaintenanceCosts = years.map((year) =>
         Math.round(
-          getItMaintenanceCostForYear(
-            itSurveyAnswers.map((answer) => answer.value),
+          itCoreCalculations.getTotalSummedYearlyChangingCosts(
+            externalCalculationData,
+            externalCalculationData.surveyAnswers,
+            undefined,
             year,
-          ).maintenanceCostThisYear,
+          ),
         ),
       );
       const newMaintenanceCosts = years.map((year) =>
         Math.round(
           year === 1
-            ? getInitialItReplacementCost(itSurveyAnswers, filledActionAnswersDf)
+            ? itCoreCalculations.getTotalSummedInvestmentCosts(
+                externalCalculationData,
+                externalCalculationData.surveyAnswers,
+              )
             : 0 +
-                getTransformedItMaintenanceCostForYear(itSurveyAnswers, filledActionAnswersDf, year)
-                  .maintenanceCostThisYear,
+                itCoreCalculations.getTotalSummedYearlyChangingCosts(
+                  externalCalculationData,
+                  externalCalculationData.surveyAnswers,
+                  filledActionAnswersDf,
+                  year,
+                ),
         ),
       );
       const oldCostsPerYear = oldMaintenanceCosts.map(
@@ -78,7 +77,6 @@ export default function CostComparisonChartCard(props: DashboardCardProps) {
     [filledActionAnswersDf],
   );
   const [selectedCostCategory, setSelectedCostCategory] = useState<CostCategory>('all');
-
   const { oldDataKey, newDataKey } = getDataKeys();
 
   return (
