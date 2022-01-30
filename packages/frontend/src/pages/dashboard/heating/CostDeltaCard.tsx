@@ -32,7 +32,7 @@ export default function CostDeltaCard(props: DashboardCardProps) {
             <QuickInfo
               icon={<HaloIcon icon={BiEuro} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>
               <QuickInfoLabelDescription
-                label={`${Math.abs(data.costAfterActions).toFixed(2)}€`}
+                label={`${Math.abs(data.after).toFixed(2)}€`}
                 description="heating costs per year"
               />
             </QuickInfo>
