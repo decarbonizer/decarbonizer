@@ -1,7 +1,7 @@
 import { SkeletonText } from '@chakra-ui/skeleton';
 import { GiFootprint } from 'react-icons/gi';
 import { useParams } from 'react-router';
-import { getTransformedFootprintPerYear } from '../../../calculationsLegacy/global/footprint';
+import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
@@ -24,7 +24,7 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
       //   .flatMap((actionPlan) => actionPlan.actionAnswers);
 
       // const allActionAnswers = actionAnswers ? [...actionAnswers, ...filledActionAnswersDf] : filledActionAnswersDf;
-      const footprint = getTransformedFootprintPerYear(
+      const footprint = getGlobalSummedYearlyFootprint(
         externalCalculationData,
         surveyAnswers,
         //new DataFrame(allActionAnswers),
@@ -37,7 +37,7 @@ export default function GlobalFootprintCard(props: DashboardCardProps) {
     [filledActionAnswersDf],
   );
 
-  const carbonFootprint = data?.footprint.globalFootprint ?? 0;
+  const carbonFootprint = data?.footprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 

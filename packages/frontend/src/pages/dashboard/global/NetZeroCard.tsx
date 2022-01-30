@@ -1,7 +1,7 @@
 import { SkeletonText } from '@chakra-ui/react';
 import { BiTargetLock } from 'react-icons/bi';
 import { useParams } from 'react-router';
-import { getNetZero } from '../../../calculationsLegacy/global/netZero';
+import { getNetZero } from '../../../calculations/calculations/getNetZero';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
@@ -20,7 +20,7 @@ export default function NetZeroCard() {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
-      const netZero = getNetZero(externalCalculationData, surveyAnswers, filledActionAnswersDf, realEstateId);
+      const netZero = getNetZero(externalCalculationData, surveyAnswers, filledActionAnswersDf);
 
       return {
         netZero,

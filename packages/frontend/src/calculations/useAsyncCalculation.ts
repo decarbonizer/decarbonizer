@@ -19,6 +19,17 @@ export type GetAsyncCalculationParams<TFn extends AsyncCalculationFns> = (
   externalCalculationData: ExternalCalculationData,
 ) => AsyncCalculationParams<TFn>;
 
+/**
+ * Asynchronously executes a well-known calculation function on a worker thread and returns a lifecycle
+ * object representing the calculation's state.
+ * @param fn The name of the calculation function to be invoked.
+ *   This function must be registered in the [`./useAsyncCalculationWorker.ts`](./useAsyncCalculationWorker.ts) file.
+ *   See the file and its comments for details.
+ * @param getParams A function which, when invoked with the given external calculation data, returns
+ *   an array with the parameters to be passed to the calculation function.
+ * @param deps A React dependency list which defines dependencies for triggering recalculations.
+ * @returns A lifecycle object representing the state of the calculation.
+ */
 export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
   fn: TFn,
   getParams: GetAsyncCalculationParams<TFn>,

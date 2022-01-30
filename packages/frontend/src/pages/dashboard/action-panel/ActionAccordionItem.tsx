@@ -35,7 +35,7 @@ import { useGetAllSurveyAnswersForRealEstateQuery } from '../../../store/api';
 import { useActionSchema } from '../../../data/actions/useActionSchema';
 import { useExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { useCalculation } from '../../../calculations/useCalculation';
-import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculationsLegacy/getSuggestion';
+import { getSuggestionForCost, getSuggestionForFootprint } from '../../../calculations/calculations/getSuggestion';
 import SidePanelAccordionButton from '../../../components/SidePanelAccordionButton';
 import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 

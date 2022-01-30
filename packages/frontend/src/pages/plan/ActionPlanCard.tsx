@@ -30,7 +30,7 @@ import { useDeleteActionPlanMutation } from '../../store/api';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
 import { ActionPlansPageParams, routes } from '../../routes';
 import { useHistory, useParams } from 'react-router';
-import { getFootprintDelta } from '../../calculationsLegacy/global/footprint';
+import { getGlobalSummedYearlyFootprintDelta } from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
 import { DataFrame } from 'data-forge';
 import { mapDeltaType } from '../../utils/deltaType';
@@ -59,12 +59,12 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.value.isInitialSurvey && surveyAnswer.realEstateId === realEstateId,
       );
-      const footPrintDelta = getFootprintDelta(
+      const footPrintDelta = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
-      const netZeroCalculation = getFootprintDelta(
+      const netZeroCalculation = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
