@@ -36,7 +36,7 @@ export default function GlobalSection() {
         <NetZeroCard />
         {data && (
           <DashboardCard>
-            <CarbonTreeCard carbonFootprint={0} />
+            <CarbonTreeCard carbonFootprint={data} />
           </DashboardCard>
         )}
         <ComparisonCard gridColumn={'span 2'} />
