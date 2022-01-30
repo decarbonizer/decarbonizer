@@ -61,6 +61,14 @@ export default function NavBarBreadcrumbs() {
         </Breadcrumb>
         <RealEstateLocationPicker currentPage="Budget Management" />
       </Route>
+      <Route exact path={routes.actionPlanFileExport.route}>
+        <Breadcrumb {...breadcrumbProps}>
+          <HomeItem />
+          <RealEstateItem />
+          <ActionPlanItem isCurrentPage marginRight="-3" />
+        </Breadcrumb>
+        <RealEstateLocationPicker currentPage="Action Plan Overview" />
+      </Route>
     </Switch>
   );
 }

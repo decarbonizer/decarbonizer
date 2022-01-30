@@ -1,5 +1,5 @@
 import { Flex, Grid, Heading } from '@chakra-ui/react';
-import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
+import { getGlobalFootprintForAllRealEstates } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import DashboardCard from '../../dashboard/components/DashboardCard';
 import CarbonTreeCard from '../../dashboard/global/CarbonTreeCard';
@@ -8,20 +8,9 @@ import GlobalFootprintCard from './GlobalFootprintCard';
 import NetZeroCard from './NetZeroCard';
 
 export default function GlobalSection() {
-  const { data } = useCalculation((externalCalculationData) => {
-    return externalCalculationData.realEstates
-      .map((realEstate) => {
-        const surveyAnswersInitital = externalCalculationData.surveyAnswers.filter(
-          (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
-        );
-        const actionAnswers = externalCalculationData.actionPlans
-          .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-          .flatMap((actionPlan) => actionPlan.actionAnswers);
-        const footprint = getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswersInitital, actionAnswers);
-        return footprint;
-      })
-      .reduce((a, b) => a + b, 0);
-  });
+  const { data } = useCalculation((externalCalculationData) =>
+    getGlobalFootprintForAllRealEstates(externalCalculationData),
+  );
   return (
     <Flex flexDir="column" pb="10">
       <Heading as="h2" size="lg">

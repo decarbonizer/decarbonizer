@@ -1,6 +1,6 @@
 import { SkeletonText } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
-import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
+import { getGlobalFootprintForAllRealEstates } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import HaloIcon from '../../../components/HaloIcon';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
@@ -9,20 +9,9 @@ import QuickInfo from '../../dashboard/components/QuickInfo';
 import QuickInfoLabelDescription from '../../dashboard/components/QuickInfoLabelDescription';
 
 export default function GlobalFootprintCard() {
-  const { isLoading, data, error } = useCalculation((externalCalculationData) => {
-    return externalCalculationData.realEstates
-      .map((realEstate) => {
-        const surveyAnswersInitital = externalCalculationData.surveyAnswers.filter(
-          (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
-        );
-        const actionAnswers = externalCalculationData.actionPlans
-          .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-          .flatMap((actionPlan) => actionPlan.actionAnswers);
-        const footprint = getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswersInitital, actionAnswers);
-        return footprint;
-      })
-      .reduce((a, b) => a + b, 0);
-  });
+  const { isLoading, data, error } = useCalculation((externalCalculationData) =>
+    getGlobalFootprintForAllRealEstates(externalCalculationData),
+  );
 
   const carbonFootprint = data ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';

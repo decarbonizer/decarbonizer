@@ -54,7 +54,7 @@ export default function NetZeroCard() {
     <DashboardCard header="Company's goal achieved by">
       <InlineErrorDisplay error={error}>
         {isLoading && <SkeletonText />}
-        {delta && (
+        {data && (
           <QuickInfo
             icon={<HaloIcon icon={BiTargetLock} colorScheme={mapDeltaType(deltaType, 'red', 'green', 'gray')} />}>
             <QuickInfoLabelDescription label={`${newAdjustedAchievedGoal.toFixed(1)}%`} />

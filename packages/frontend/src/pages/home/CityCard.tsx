@@ -44,6 +44,7 @@ import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { FiMoreHorizontal } from 'react-icons/fi';
+import { DataFrame } from 'data-forge';
 
 export interface CityCardProps {
   realEstate: RealEstate;
@@ -61,36 +62,34 @@ export default function CityCard({ realEstate }: CityCardProps) {
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) => {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
-        (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id,
+        (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id && surveyAnswer.value.isInitialSurvey,
       );
-      const actionAnswers = externalCalculationData.actionPlans
-        .filter((actionPlan) => actionPlan.realEstateId === realEstate._id)
-        .flatMap((actionPlan) => actionPlan.actionAnswers);
+      const actionPlansRealEstate = externalCalculationData.actionPlans.filter(
+        (actionPlan) => actionPlan.realEstateId === realEstate._id,
+      );
+      const originalFootprint = getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers);
 
-      // const allActionAnswers = actionAnswers ? new DataFrame(actionAnswers) : new DataFrame<number, ActionAnswerBase>();
+      const actionPlanFootprints = actionPlansRealEstate
+        .map((actionPlan) => {
+          const footprintActionPlan = getGlobalSummedYearlyFootprintDelta(
+            externalCalculationData,
+            surveyAnswers,
+            new DataFrame(actionPlan.actionAnswers),
+          ).delta;
+          return footprintActionPlan;
+        })
+        .reduce((a, b) => a + b, 0);
 
-      // const footprint =
-      //   surveyAnswers.count() > 0
-      //     ? getTransformedFootprintPerYear(
-      //         externalCalculationData,
-      //         surveyAnswers,
-      //         new DataFrame<number, ActionAnswerBase>(),
-      //       ).globalFootprint
-      //     : 0;
-
-      const footprint =
-        surveyAnswers.count() > 0
-          ? getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers, actionAnswers)
-          : 0;
+      const overallFootprint = originalFootprint + actionPlanFootprints;
 
       return {
-        footprint,
+        overallFootprint,
       };
     },
     [realEstate._id],
   );
 
-  const carbonFootprint = data?.footprint ?? 0;
+  const carbonFootprint = data?.overallFootprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 

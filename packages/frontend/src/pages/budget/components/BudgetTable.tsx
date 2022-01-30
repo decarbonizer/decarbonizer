@@ -4,7 +4,7 @@ import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
 import { useFilledActionAnswersDataFrame } from '../../dashboard/dashboardContext';
 import { ExternalCalculationData } from '../../../calculations/useExternalCalculationData';
-import { IDataFrame } from 'data-forge';
+import { DataFrame, IDataFrame } from 'data-forge';
 import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
 import { SurveyAnswer } from '../../../api/surveyAnswer';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
@@ -15,6 +15,7 @@ import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreC
 import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
 import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
 import { businessTravelCoreCalculations } from '../../../calculations/core/businessTravelCoreCalculations';
+import { ActionPlan } from '../../../api/actionPlan';
 
 interface Category<T extends keyof SurveyToSurveyAnswerMap = any> {
   surveyId: T;
@@ -85,7 +86,7 @@ const categories: Category[] = [
   },
 ];
 
-export function useBudgetTableData(filledActionAnswersDf) {
+export function useBudgetTableData(filledActionAnswersDf: IDataFrame<number, ActionAnswerBase>) {
   return useCalculation(
     (externalCalculationData) => {
       return categories.map((category) => {
@@ -118,9 +119,8 @@ export function useBudgetTableData(filledActionAnswersDf) {
   );
 }
 
-export default function BudgetTable() {
-  const filledAnswersDf = useFilledActionAnswersDataFrame();
-  const { data, isLoading, error } = useBudgetTableData(filledAnswersDf);
+export default function BudgetTable(props: { actionPlan: ActionPlan }) {
+  const { data, isLoading, error } = useBudgetTableData(new DataFrame(props.actionPlan.actionAnswers));
 
   return (
     <InlineErrorDisplay error={error}>

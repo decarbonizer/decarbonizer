@@ -20,6 +20,7 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
   RangeSliderMark,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
@@ -33,7 +34,9 @@ import { AiOutlineLineChart } from 'react-icons/ai';
 import { MdPendingActions } from 'react-icons/md';
 import { GiFootprint } from 'react-icons/gi';
 import { BiEuro } from 'react-icons/bi';
+import { BsTable } from 'react-icons/bs';
 import { BudgetChartMode } from './BudgetChart';
+import BudgetTableModal from './components/BudgetTableModal';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -66,6 +69,7 @@ export default function ActionPlanSelectionPanel({
   const [fromYearTooltipValue, setFromYearTooltipValue] = useState(fromYear);
   const [toYearTooltipValue, setToYearTooltipValue] = useState(toYear);
   const [showYearTooltips, setShowYearTooltips] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     // Force check all action plans when the available action plans change.
@@ -156,6 +160,14 @@ export default function ActionPlanSelectionPanel({
                 <HStack key={actionPlan._id} w="100%">
                   <Checkbox value={actionPlan._id}>{actionPlan.name}</Checkbox>
                   <Spacer />
+                  <Tooltip label="Summary table">
+                    <IconButton
+                      variant="ghost"
+                      aria-label="Summary table"
+                      icon={<BsTable size="13" />}
+                      onClick={onOpen}
+                    />
+                  </Tooltip>
                   <Tooltip label="Edit...">
                     <IconButton
                       variant="ghost"
@@ -164,13 +176,13 @@ export default function ActionPlanSelectionPanel({
                       onClick={() => setActionPlanToEdit(actionPlan)}
                     />
                   </Tooltip>
+                  <BudgetTableModal isOpen={isOpen} onClose={onClose} actionPlan={actionPlan} />
                 </HStack>
               ))}
             </CheckboxGroup>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-
       {actionPlanToEdit && (
         <SaveActionPlanModal isOpen actionPlan={actionPlanToEdit} onClose={() => setActionPlanToEdit(undefined)} />
       )}
