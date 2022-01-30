@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../utils';
+import { getActionAnswersForAction } from '../getActionAnswersForAction';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
@@ -11,7 +11,7 @@ import {
 import { BusinessTravelSurveyAnswerValue } from '../../data/surveys/businessTravel/businessTravelSurveyAnswerValue';
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'businessTravel'> {
+export class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'businessTravel'> {
   public constructor() {
     super('businessTravel');
   }

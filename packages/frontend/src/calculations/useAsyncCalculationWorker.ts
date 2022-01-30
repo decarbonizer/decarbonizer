@@ -1,6 +1,10 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ExternalCalculationData } from './useExternalCalculationData';
 import { getBudgetChartData } from './calculations/getBudgetChartData';
+import { getCostDeltaCardData } from './calculations/getCostDeltaCardData';
+import { getFootprintDeltaCardData } from './calculations/getFootprintDeltaCardData';
+import { getFootprintComparisonCardData } from './calculations/getFootprintComparisonCardData';
+import { getCostComparisonCardData } from './calculations/getCostComparisonChartData';
 
 // The core of the worker is simple:
 // We maintain a dictionary `asyncCalculations` which maps the calculation functions to their own function name.
@@ -18,6 +22,10 @@ const createAsyncCalculationsDict = <T extends { [K in keyof T]: AsyncCalculatio
 const asyncCalculations = createAsyncCalculationsDict({
   // Register new calculation functions to be runnable via `useAsyncCalculation` below.
   getBudgetChartData,
+  getCostDeltaCardData,
+  getCostComparisonCardData,
+  getFootprintDeltaCardData,
+  getFootprintComparisonCardData,
 });
 
 type Tail<T extends any[]> = T extends [any, ...infer Tail] ? Tail : any[];
@@ -72,7 +80,7 @@ onmessage = (e: MessageEvent<Partial<AsyncCalculationMessage> | undefined>) => {
   }
 
   try {
-    const result = fn(externalCalculationData, ...message.params);
+    const result = (fn as any)(externalCalculationData, ...message.params);
     const resultMessage: AsyncCalculationResultMessage = { result };
     postMessage(resultMessage);
   } catch (e) {

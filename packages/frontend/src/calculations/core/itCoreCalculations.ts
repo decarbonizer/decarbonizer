@@ -1,7 +1,7 @@
 import { DataFrame, IDataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
-import { getActionAnswersForAction } from '../utils';
+import { getActionAnswersForAction } from '../getActionAnswersForAction';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ActionAnswerValues } from '../../data/actions/action';
 import {
@@ -15,7 +15,7 @@ import {
 import { ItSurveyAnswerValue } from '../../data/surveys/it/itSurveyAnswerValue';
 import { CategoryCoreCalculations, CostDescriptor } from './categoryCoreCalculations';
 
-class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
+export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
   public constructor() {
     super('it');
   }

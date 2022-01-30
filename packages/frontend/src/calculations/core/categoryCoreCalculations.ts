@@ -22,6 +22,17 @@ export abstract class CategoryCoreCalculations<
   // Investment Costs.
   //
 
+  public getTotalSummedYearlyInvestmentCostsDelta(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
+  ) {
+    return this.getDeltaResult(
+      this.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswers),
+      this.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswers, transformingActionAnswers),
+    );
+  }
+
   public getTotalSummedInvestmentCosts(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
@@ -55,6 +66,18 @@ export abstract class CategoryCoreCalculations<
   //
   // Yearly Changing Costs.
   //
+
+  public getTotalSummedYearlyChangingCostsDelta(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswers: IDataFrame<number, SurveyAnswer>,
+    transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
+    year: number,
+  ) {
+    return this.getDeltaResult(
+      this.getTotalSummedYearlyChangingCosts(externalCalculationData, surveyAnswers, undefined, year),
+      this.getTotalSummedYearlyChangingCosts(externalCalculationData, surveyAnswers, transformingActionAnswers, year),
+    );
+  }
 
   public getTotalSummedYearlyChangingCosts(
     externalCalculationData: ExternalCalculationData,
@@ -98,7 +121,7 @@ export abstract class CategoryCoreCalculations<
    * Returns the delta between all total constant costs occuring in a single year before and after
    * applying the transforming action answers.
    */
-  public getTotalYearlyConstantCostsDelta(
+  public getTotalSummedYearlyConstantCostsDelta(
     externalCalculationData: ExternalCalculationData,
     surveyAnswers: IDataFrame<number, SurveyAnswer>,
     transformingActionAnswers: IDataFrame<number, ActionAnswerBase>,
@@ -222,7 +245,7 @@ export abstract class CategoryCoreCalculations<
     return surveyAnswers.filter((surveyAnswer) => isSurveyAnswerType(this.surveyId, surveyAnswer)) as any;
   }
 
-  protected getDeltaResult(before: number, after: number) {
+  protected getDeltaResult(before: number, after: number): DeltaResult {
     const delta = after - before;
     const deltaType = getDeltaType(delta);
 

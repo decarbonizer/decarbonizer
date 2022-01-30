@@ -15,7 +15,7 @@ export default function CostDeltaCard(props: DashboardCardProps) {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) =>
-      illuminationCoreCalculations.getTotalYearlyConstantCostsDelta(
+      illuminationCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
         filledActionAnswersDf,

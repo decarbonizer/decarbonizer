@@ -99,7 +99,7 @@ export function getBudgetChartData(
 
     const originalConstantCost = coreCalculations
       .map((coreCalculations) =>
-        coreCalculations.getTotalYearlyConstantCostsDelta(
+        coreCalculations.getTotalSummedYearlyConstantCostsDelta(
           externalCalculationData,
           externalCalculationData.surveyAnswers,
           activeActionAnswers,
