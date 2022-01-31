@@ -1,4 +1,5 @@
 import { Box, BoxProps, Center, Spinner } from '@chakra-ui/react';
+import { useState } from 'react';
 import {
   Area,
   Bar,
@@ -13,7 +14,9 @@ import {
   YAxis,
 } from 'recharts';
 import { ActionPlan } from '../../api/actionPlan';
+import { BudgetChartDataEntry } from '../../calculations/calculations/getBudgetChartData';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
+import BudgetChartDetailModal from './BudgetChartDetailModal';
 
 export type BudgetChartMode = 'cost' | 'co2';
 
@@ -26,6 +29,7 @@ export interface BudgetChartProps extends BoxProps {
 }
 
 export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showProfit, ...rest }: BudgetChartProps) {
+  const [dataEntry, setDataEntry] = useState<BudgetChartDataEntry | undefined>();
   const { isLoading, data } = useAsyncCalculation('getBudgetChartData', (_) => [actionPlans, fromYear, toYear], [
     fromYear,
     toYear,
@@ -33,6 +37,7 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showP
   ]);
 
   const handleClick = (data) => {
+    setDataEntry(data);
     console.log(data);
   };
 
@@ -70,12 +75,12 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showP
           </ComposedChart>
         </ResponsiveContainer>
       )}
-
       {isLoading && (
         <Center pos="absolute" top={0} left={0} w="100%" h="100%">
           <Spinner color="primary.500" emptyColor="gray.200" size="xl" thickness="4px" />
         </Center>
       )}
+      {dataEntry && <BudgetChartDetailModal isOpen onClose={() => setDataEntry(undefined)} data={dataEntry} />};
     </Box>
   );
 }

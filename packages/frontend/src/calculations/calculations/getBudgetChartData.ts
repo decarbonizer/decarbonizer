@@ -15,6 +15,8 @@ export interface BudgetChartDataEntry {
   year: number;
   budget: number;
   profit: number;
+  categoryInvestmentCostsThisYear: Array<number>;
+  categoryOriginalConstantCost: Array<DeltaResult>;
   footprint: number;
 }
 
@@ -131,6 +133,8 @@ export function getBudgetChartData(
       budget: Math.round(budget),
       profit: Math.round(-costs),
       footprint: Math.round(footprint.after),
+      categoryInvestmentCostsThisYear: categoryInvestmentCostsThisYear.toArray(),
+      categoryOriginalConstantCost: categoryOriginalConstantCost.toArray(),
     });
   }
 
