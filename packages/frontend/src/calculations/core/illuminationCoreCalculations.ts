@@ -35,6 +35,14 @@ export class IlluminationCoreCalculations extends CategoryCoreCalculations<'illu
     ]);
   }
 
+  protected override isInitialInvestmentRequiredForSingleSurveyAnswer(
+    externalCalculationData: ExternalCalculationData,
+    surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+    transformedSurveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
+  ): boolean {
+    return surveyAnswer.value.bulbType !== transformedSurveyAnswer.value.bulbType;
+  }
+
   public override getYearlyChangingCostsForSingleSurveyAnswer(
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,

@@ -67,6 +67,9 @@ export function getBudgetChartData(
     const activeActionAnswersLastLear = linearizedActionAnswers
       .where((x) => x.startDate.getFullYear() < year)
       .map((x) => x.answer);
+    const activeActionAnswersThisYear = linearizedActionAnswers
+      .where((x) => x.startDate.getFullYear() === year)
+      .map((x) => x.answer);
 
     // Investment Costs:
     // The calculation here is complicated: We need to find the investment costs of *exactly those*
@@ -96,8 +99,13 @@ export function getBudgetChartData(
     );
 
     const categoryInvestmentCostsThisYear = coreCalculations.map((coreCalculations) =>
-      coreCalculations.getTotalSummedInvestmentCosts(externalCalculationData, surveyAnswersWhichChangedThisYear),
+      coreCalculations.getTotalSummedInvestmentCosts(
+        externalCalculationData,
+        surveyAnswersLastYear,
+        activeActionAnswersThisYear,
+      ),
     );
+
     const totalInvestmentCostsThisYear = categoryInvestmentCostsThisYear.reduce((result, cost) => result + cost, 0);
 
     const categoryOriginalConstantCost = coreCalculations.map((coreCalculations) =>
