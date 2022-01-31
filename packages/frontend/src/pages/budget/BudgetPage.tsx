@@ -3,16 +3,28 @@ import { useState } from 'react';
 import { ActionPlan } from '../../api/actionPlan';
 import Card from '../../components/Card';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
+import { useLocalStorage } from '../../utils/useLocalStorage';
 import ActionPlanChart from './ActionPlanChart';
 import ActionPlanSelectionPanel from './ActionPlanSelectionPanel';
-import BudgetChart, { BudgetChartMode } from './BudgetChart';
+import BudgetChart, { BudgetChartConfig } from './BudgetChart';
+
+const minYear = new Date().getFullYear();
+const maxYear = 2050;
 
 export default function BudgetPage() {
   const [actionPlans, setActionPlans] = useState<Array<ActionPlan>>([]);
-  const [budgetChartMode, setBudgetChartMode] = useState<BudgetChartMode>('cost');
-  const [showProfitLine, setShowProfitLine] = useState(false);
-  const [fromYear, setFromYear] = useState(new Date().getFullYear());
-  const [toYear, setToYear] = useState(2050);
+  const [budgetChartConfig, setBudgetChartConfig] = useLocalStorage<BudgetChartConfig>(
+    '@decarbonizer/budget:chartConfig',
+    {
+      fromYear: minYear,
+      toYear: maxYear,
+      mode: 'cost',
+      showGrid: false,
+      showProfit: false,
+      showReferenceBudget: false,
+      referenceBudget: 10_000,
+    },
+  );
 
   return (
     <DefaultPageLayout
@@ -30,31 +42,23 @@ export default function BudgetPage() {
           py="4"
           size="lg">
           <ActionPlanSelectionPanel
-            minYear={new Date().getFullYear()}
-            maxYear={2050}
-            fromYear={fromYear}
-            setFromYear={setFromYear}
-            toYear={toYear}
-            setToYear={setToYear}
-            budgetChartMode={budgetChartMode}
-            setBudgetChartMode={setBudgetChartMode}
+            minYear={minYear}
+            maxYear={maxYear}
             actionPlans={actionPlans}
             setActionPlans={setActionPlans}
-            showProfitLine={showProfitLine}
-            setShowProfitLine={setShowProfitLine}
+            budgetChartConfig={budgetChartConfig}
+            setBudgetChartConfig={setBudgetChartConfig}
           />
         </Card>
       }>
       <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
         <Grid w="100%" h="100%" templateRows="10% 1fr">
-          <ActionPlanChart fromYear={fromYear} toYear={toYear} actionPlans={actionPlans} />
-          <BudgetChart
-            fromYear={fromYear}
-            toYear={toYear}
+          <ActionPlanChart
+            fromYear={budgetChartConfig.fromYear}
+            toYear={budgetChartConfig.toYear}
             actionPlans={actionPlans}
-            mode={budgetChartMode}
-            showProfit={showProfitLine}
           />
+          <BudgetChart minYear={minYear} maxYear={maxYear} actionPlans={actionPlans} config={budgetChartConfig} />
         </Grid>
       </Card>
     </DefaultPageLayout>

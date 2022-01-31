@@ -9,7 +9,7 @@ export default function ComparisonChartTooltip(props: DefaultTooltipContentProps
     ...props.payload,
     {
       name: `Savings after ${year} years`,
-      value: oldFootprint - newFootprint,
+      value: newFootprint - oldFootprint,
     },
   ];
 

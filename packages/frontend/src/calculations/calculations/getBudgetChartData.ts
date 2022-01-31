@@ -110,7 +110,6 @@ export function getBudgetChartData(
       .reduce((budget, actionPlan) => budget + actionPlan.budget, 0);
 
     const costs = originalConstantCost.delta + totalInvestmentCostsThisYear;
-
     const budget = budgetRemainingFromLastYear + budgetNewThisYear - costs;
 
     const footprint = coreCalculations

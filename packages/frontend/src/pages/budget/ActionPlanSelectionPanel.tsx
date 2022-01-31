@@ -20,8 +20,12 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
   RangeSliderMark,
-  useDisclosure,
   Switch,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
@@ -36,45 +40,33 @@ import { MdPendingActions } from 'react-icons/md';
 import { GiFootprint } from 'react-icons/gi';
 import { BiEuro } from 'react-icons/bi';
 import { BsTable } from 'react-icons/bs';
-import { BudgetChartMode } from './BudgetChart';
+import { BudgetChartConfig } from './BudgetChart';
 import BudgetTableModal from './components/BudgetTableModal';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
   maxYear: number;
-  fromYear: number;
-  setFromYear: Dispatch<SetStateAction<number>>;
-  toYear: number;
-  setToYear: Dispatch<SetStateAction<number>>;
-  budgetChartMode: BudgetChartMode;
-  setBudgetChartMode: Dispatch<SetStateAction<BudgetChartMode>>;
   actionPlans: Array<ActionPlan>;
   setActionPlans: Dispatch<SetStateAction<Array<ActionPlan>>>;
-  showProfitLine: boolean;
-  setShowProfitLine: Dispatch<SetStateAction<boolean>>;
+  budgetChartConfig: BudgetChartConfig;
+  setBudgetChartConfig: (value: SetStateAction<BudgetChartConfig | null | undefined>) => void;
 }
 
 export default function ActionPlanSelectionPanel({
   minYear,
   maxYear,
-  fromYear,
-  setFromYear,
-  toYear,
-  setToYear,
-  budgetChartMode,
-  setBudgetChartMode,
   actionPlans,
   setActionPlans,
-  showProfitLine,
-  setShowProfitLine,
+  budgetChartConfig,
+  setBudgetChartConfig,
 }: ActionPlanSelectionPanelProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { data: allActionPlans } = useGetAllActionPlansForRealEstateQuery({ realEstateId });
   const [actionPlanToEdit, setActionPlanToEdit] = useState<ActionPlan | undefined>(undefined);
-  const [fromYearTooltipValue, setFromYearTooltipValue] = useState(fromYear);
-  const [toYearTooltipValue, setToYearTooltipValue] = useState(toYear);
+  const [fromYearTooltipValue, setFromYearTooltipValue] = useState(budgetChartConfig.fromYear);
+  const [toYearTooltipValue, setToYearTooltipValue] = useState(budgetChartConfig.toYear);
   const [showYearTooltips, setShowYearTooltips] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [budgetTableActionPlan, setBudgetTableActionPlan] = useState<ActionPlan | undefined>(undefined);
 
   useEffect(() => {
     // Force check all action plans when the available action plans change.
@@ -97,33 +89,24 @@ export default function ActionPlanSelectionPanel({
                 <ButtonGroup id="mode" isAttached variant="outline">
                   <Button
                     leftIcon={<Icon as={BiEuro} />}
-                    isActive={budgetChartMode === 'cost'}
-                    isDisabled={budgetChartMode === 'cost'}
-                    onClick={() => setBudgetChartMode('cost')}>
+                    isActive={budgetChartConfig.mode === 'cost'}
+                    isDisabled={budgetChartConfig.mode === 'cost'}
+                    onClick={() => setBudgetChartConfig({ ...budgetChartConfig, mode: 'cost' })}>
                     Budget
                   </Button>
                   <Button
                     leftIcon={<Icon as={GiFootprint} />}
-                    isActive={budgetChartMode === 'co2'}
-                    isDisabled={budgetChartMode === 'co2'}
-                    onClick={() => setBudgetChartMode('co2')}>
+                    isActive={budgetChartConfig.mode === 'co2'}
+                    isDisabled={budgetChartConfig.mode === 'co2'}
+                    onClick={() => setBudgetChartConfig({ ...budgetChartConfig, mode: 'co2' })}>
                     Carbon Footprint
                   </Button>
                 </ButtonGroup>
               </FormControl>
-              {budgetChartMode === 'cost' && (
-                <FormControl display="flex">
-                  <FormLabel>Profit</FormLabel>
-                  <Switch
-                    id="show-costs"
-                    isChecked={showProfitLine}
-                    onChange={(e) => setShowProfitLine(e.target.checked)}
-                  />
-                </FormControl>
-              )}
               <FormControl>
-                <FormLabel htmlFor="mode">Years:</FormLabel>
+                <FormLabel htmlFor="mode">Show years:</FormLabel>
                 <RangeSlider
+                  mb="8"
                   colorScheme="primary"
                   aria-label={['min', 'max']}
                   min={minYear}
@@ -137,8 +120,11 @@ export default function ActionPlanSelectionPanel({
                     setShowYearTooltips(true);
                   }}
                   onChangeEnd={([from, to]) => {
-                    setFromYear(from);
-                    setToYear(to);
+                    setBudgetChartConfig({
+                      ...budgetChartConfig,
+                      fromYear: from,
+                      toYear: to,
+                    });
                     setShowYearTooltips(false);
                   }}>
                   <RangeSliderMark mt="2" value={minYear}>
@@ -158,6 +144,57 @@ export default function ActionPlanSelectionPanel({
                   </Tooltip>
                 </RangeSlider>
               </FormControl>
+              {budgetChartConfig.mode === 'cost' && (
+                <>
+                  <FormControl d="flex" alignItems="center" gap="2">
+                    <Switch
+                      id="show-grid"
+                      colorScheme="primary"
+                      size="lg"
+                      isChecked={budgetChartConfig.showGrid}
+                      onChange={(e) => setBudgetChartConfig({ ...budgetChartConfig, showGrid: e.target.checked })}
+                    />
+                    <FormLabel>Show Grid</FormLabel>
+                  </FormControl>
+                  <FormControl d="flex" alignItems="center" gap="2">
+                    <Switch
+                      id="show-costs"
+                      colorScheme="primary"
+                      size="lg"
+                      isChecked={budgetChartConfig.showProfit}
+                      onChange={(e) => setBudgetChartConfig({ ...budgetChartConfig, showProfit: e.target.checked })}
+                    />
+                    <FormLabel>Show Profit Line</FormLabel>
+                  </FormControl>
+                  <FormControl d="flex" alignItems="center" gap="2">
+                    <Switch
+                      id="show-reference-budget"
+                      colorScheme="primary"
+                      size="lg"
+                      isChecked={budgetChartConfig.showReferenceBudget}
+                      onChange={(e) =>
+                        setBudgetChartConfig({ ...budgetChartConfig, showReferenceBudget: e.target.checked })
+                      }
+                    />
+                    <FormLabel>Show Budget Line</FormLabel>
+                  </FormControl>
+                  <NumberInput
+                    min={0}
+                    step={1000}
+                    placeholder="Budget"
+                    value={budgetChartConfig.referenceBudget}
+                    onChange={(e) =>
+                      setBudgetChartConfig({ ...budgetChartConfig, referenceBudget: isNaN(+e) ? 0 : +e })
+                    }
+                    isDisabled={!budgetChartConfig.showReferenceBudget}>
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </>
+              )}
             </VStack>
           </AccordionPanel>
         </AccordionItem>
@@ -180,7 +217,7 @@ export default function ActionPlanSelectionPanel({
                       variant="ghost"
                       aria-label="Summary table"
                       icon={<BsTable size="13" />}
-                      onClick={onOpen}
+                      onClick={() => setBudgetTableActionPlan(actionPlan)}
                     />
                   </Tooltip>
                   <Tooltip label="Edit...">
@@ -191,7 +228,6 @@ export default function ActionPlanSelectionPanel({
                       onClick={() => setActionPlanToEdit(actionPlan)}
                     />
                   </Tooltip>
-                  <BudgetTableModal isOpen={isOpen} onClose={onClose} actionPlan={actionPlan} />
                 </HStack>
               ))}
             </CheckboxGroup>
@@ -200,6 +236,13 @@ export default function ActionPlanSelectionPanel({
       </Accordion>
       {actionPlanToEdit && (
         <SaveActionPlanModal isOpen actionPlan={actionPlanToEdit} onClose={() => setActionPlanToEdit(undefined)} />
+      )}
+      {budgetTableActionPlan && (
+        <BudgetTableModal
+          isOpen
+          actionPlan={budgetTableActionPlan}
+          onClose={() => setBudgetTableActionPlan(undefined)}
+        />
       )}
     </VStack>
   );
