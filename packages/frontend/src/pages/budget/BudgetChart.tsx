@@ -1,5 +1,5 @@
 import { Box, BoxProps, Center, Spinner } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Area,
   Bar,
@@ -15,7 +15,9 @@ import {
   YAxis,
 } from 'recharts';
 import { ActionPlan } from '../../api/actionPlan';
+import { BudgetChartDataEntry } from '../../calculations/calculations/getBudgetChartData';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
+import BudgetChartDetailModal from './BudgetChartDetailModal';
 
 export type BudgetChartMode = 'cost' | 'co2';
 
@@ -43,6 +45,7 @@ export default function BudgetChart({
   config: { fromYear, toYear, mode, showGrid, showProfit, referenceBudget, showReferenceBudget },
   ...rest
 }: BudgetChartProps) {
+  const [dataEntry, setDataEntry] = useState<BudgetChartDataEntry | undefined>();
   const { isLoading, data } = useAsyncCalculation('getBudgetChartData', () => [actionPlans, minYear, maxYear], [
     minYear,
     maxYear,
@@ -52,6 +55,10 @@ export default function BudgetChart({
     () => (data ?? []).filter((x) => x.year >= fromYear && x.year <= toYear),
     [data, fromYear, toYear],
   );
+
+  const handleClick = (data) => {
+    setDataEntry(data);
+  };
 
   return (
     <Box w="100%" h="100%" pos="relative" {...rest}>
@@ -66,7 +73,7 @@ export default function BudgetChart({
             {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['auto', 'data-max']} unit="kg" />}
             {mode === 'cost' && (
               <>
-                <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€">
+                <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€" onClick={handleClick}>
                   {filteredData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.budget > 0 ? '#baf6d4' : '#fa8989'} />
                   ))}
@@ -96,12 +103,12 @@ export default function BudgetChart({
           </ComposedChart>
         </ResponsiveContainer>
       )}
-
       {isLoading && (
         <Center pos="absolute" top={0} left={0} w="100%" h="100%">
           <Spinner color="primary.500" emptyColor="gray.200" size="xl" thickness="4px" />
         </Center>
       )}
+      {dataEntry && <BudgetChartDetailModal isOpen onClose={() => setDataEntry(undefined)} data={dataEntry} />};
     </Box>
   );
 }

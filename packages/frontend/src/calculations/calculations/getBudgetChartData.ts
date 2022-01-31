@@ -14,8 +14,12 @@ export interface BudgetChartDataEntry {
   year: number;
   budget: number;
   profit: number;
+  categoryInvestmentCostsThisYear: Array<number>;
+  categoryOriginalConstantCost: Array<DeltaResult>;
   footprint: number;
 }
+
+export const categories = ['Illumination', 'BusinessTravel', 'Electricity', 'Heating', 'IT'];
 
 export function getBudgetChartData(
   externalCalculationData: ExternalCalculationData,
@@ -80,25 +84,25 @@ export function getBudgetChartData(
         activeActionAnswersLastLear,
       ),
     );
-    const totalInvestmentCostsThisYear = coreCalculations
-      .map((coreCalculations) =>
-        coreCalculations.getTotalSummedInvestmentCosts(
-          externalCalculationData,
-          surveyAnswersLastYear,
-          activeActionAnswersThisYear,
-        ),
-      )
-      .reduce((result, cost) => result + cost, 0);
 
-    const originalConstantCost = coreCalculations
-      .map((coreCalculations) =>
-        coreCalculations.getTotalSummedYearlyConstantCostsDelta(
-          externalCalculationData,
-          externalCalculationData.surveyAnswers,
-          activeActionAnswers,
-        ),
-      )
-      .reduce<DeltaResult>(deltaResultReducer);
+    const categoryInvestmentCostsThisYear = coreCalculations.map((coreCalculations) =>
+      coreCalculations.getTotalSummedInvestmentCosts(
+        externalCalculationData,
+        surveyAnswersLastYear,
+        activeActionAnswersThisYear,
+      ),
+    );
+
+    const totalInvestmentCostsThisYear = categoryInvestmentCostsThisYear.reduce((result, cost) => result + cost, 0);
+
+    const categoryOriginalConstantCost = coreCalculations.map((coreCalculations) =>
+      coreCalculations.getTotalSummedYearlyConstantCostsDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        activeActionAnswers,
+      ),
+    );
+    const originalConstantCost = categoryOriginalConstantCost.reduce<DeltaResult>(deltaResultReducer);
 
     const budgetRemainingFromLastYear = results[results.length - 1]?.budget ?? 0;
     const budgetNewThisYear = actionPlans
@@ -123,6 +127,8 @@ export function getBudgetChartData(
       budget: Math.round(budget),
       profit: Math.round(-costs),
       footprint: Math.round(footprint.after),
+      categoryInvestmentCostsThisYear: categoryInvestmentCostsThisYear.toArray(),
+      categoryOriginalConstantCost: categoryOriginalConstantCost.toArray(),
     });
   }
 
