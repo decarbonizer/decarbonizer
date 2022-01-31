@@ -38,7 +38,6 @@ export default function BudgetChart({ fromYear, toYear, actionPlans, mode, showP
 
   const handleClick = (data) => {
     setDataEntry(data);
-    console.log(data);
   };
 
   return (

@@ -20,6 +20,8 @@ export interface BudgetChartDataEntry {
   footprint: number;
 }
 
+export const categories = ['Illumination', 'BusinessTravel', 'Electricity', 'Heating', 'IT'];
+
 export function getBudgetChartData(
   externalCalculationData: ExternalCalculationData,
   actionPlans: Array<ActionPlan>,
@@ -82,20 +84,6 @@ export function getBudgetChartData(
         externalCalculationData.surveyAnswers,
         activeActionAnswersLastLear,
       ),
-    );
-    const surveyAnswersThisYear = coreCalculations.flatMap((coreCalculations) =>
-      coreCalculations.transformSurveyAnswers(
-        externalCalculationData,
-        externalCalculationData.surveyAnswers,
-        activeActionAnswers,
-      ),
-    );
-    const surveyAnswersWhichChangedThisYear = surveyAnswersThisYear.filter(
-      (surveyAnswer) =>
-        !surveyAnswersLastYear.any(
-          (oldSurveyAnswer) =>
-            surveyAnswer._id === oldSurveyAnswer._id && isEqual(surveyAnswer.value, oldSurveyAnswer.value),
-        ),
     );
 
     const categoryInvestmentCostsThisYear = coreCalculations.map((coreCalculations) =>
