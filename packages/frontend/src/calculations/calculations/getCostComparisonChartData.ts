@@ -45,19 +45,22 @@ export function getCostComparisonCardData(
   return years
     .map((year) => ({
       year: year,
-      totalCostsBefore: totalCostsBeforePerYear.take(year).sum(),
-      totalCostsAfter: totalCostsAfterPerYear.take(year).sum() + totalSummedInvestmentCosts,
-      totalConstantCostsBefore: totalSummedYearlyConstantCosts.before * year,
-      totalConstantCostsAfter: totalSummedYearlyConstantCosts.after * year,
-      totalChangingCostsBefore: totalSummedYearlyChangingCostsPerYear
-        .take(year)
-        .map((x) => x.before)
-        .sum(),
-      totalChangingCostsAfter:
+      totalCostsBefore: Math.round(totalCostsBeforePerYear.take(year).sum()),
+      totalCostsAfter: Math.round(totalCostsAfterPerYear.take(year).sum() + totalSummedInvestmentCosts),
+      totalConstantCostsBefore: Math.round(totalSummedYearlyConstantCosts.before * year),
+      totalConstantCostsAfter: Math.round(totalSummedYearlyConstantCosts.after * year),
+      totalChangingCostsBefore: Math.round(
+        totalSummedYearlyChangingCostsPerYear
+          .take(year)
+          .map((x) => x.before)
+          .sum(),
+      ),
+      totalChangingCostsAfter: Math.round(
         totalSummedYearlyChangingCostsPerYear
           .take(year)
           .map((x) => x.after)
           .sum() + totalSummedInvestmentCosts,
+      ),
     }))
     .toArray();
 }

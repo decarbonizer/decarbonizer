@@ -1,5 +1,4 @@
 import { IDataFrame, DataFrame } from 'data-forge';
-import isEqual from 'lodash-es/isEqual';
 import { ActionPlan } from '../../api/actionPlan';
 import { ExternalCalculationData } from '../useExternalCalculationData';
 import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
