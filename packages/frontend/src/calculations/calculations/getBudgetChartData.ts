@@ -135,11 +135,11 @@ export function getBudgetChartData(
   return results;
 }
 
-function deltaResultReducer(a: DeltaResult | undefined, b: DeltaResult) {
+function deltaResultReducer(a: DeltaResult, b: DeltaResult) {
   return {
-    after: a?.after ?? 0 + b.after,
-    before: a?.before ?? 0 + b.before,
-    delta: a?.delta ?? 0 + b.delta,
-    deltaType: getDeltaType((a?.delta ?? 0) + b.delta),
+    after: a.after + b.after,
+    before: a.before + b.before,
+    delta: a.delta + b.delta,
+    deltaType: getDeltaType(a.delta + b.delta),
   };
 }
