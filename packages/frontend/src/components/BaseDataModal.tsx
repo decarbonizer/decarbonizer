@@ -209,7 +209,7 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button width="40" right="6" colorScheme="green" onClick={handleUpdate}>
+          <Button colorScheme="green" onClick={handleUpdate}>
             Update
           </Button>
         </ModalFooter>

@@ -8,8 +8,14 @@ import { BaseDataService } from './base-data.service';
 @ApiTags('BaseData')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-export class ActionPlanController {
+export class BaseDataController {
   constructor(private readonly baseDataService: BaseDataService) {}
+
+  @Get('baseData')
+  @ApiResponse({ status: HttpStatus.OK, type: [BaseData] })
+  async getAll() {
+    return await this.baseDataService.getAllForCurrentCompany();
+  }
 
   @Get('realEstates/:realEstateId/baseData')
   @ApiResponse({ status: HttpStatus.OK, type: [BaseData] })

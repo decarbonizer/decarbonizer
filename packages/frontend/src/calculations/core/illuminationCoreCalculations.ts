@@ -71,9 +71,11 @@ export class IlluminationCoreCalculations extends CategoryCoreCalculations<'illu
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   ) {
     const { bulbs } = externalCalculationData;
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
+    console.log('baseData: ', baseData);
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
-    const avgElectricianWagePerHour = 12.0; // Minimum wage in Germany as of soon. :^)
-    const avgElectricianWagePerBulb = avgElectricianWagePerHour / 6; // assume that it takes 10 min to change a bulb
+    const avgElectricianWagePerBulb =
+      baseData.salaryElectricianMaintenanceWorkerPerHour / (60 / baseData.timeToChangeOneBulb);
     const runtimeInHoursPerYear = this.getIlluminationRuntimePerYear(surveyAnswer);
     const runtimeInHoursPerYearPerBulb = runtimeInHoursPerYear / surveyAnswer.value.lampCount;
     const costOnReplace =

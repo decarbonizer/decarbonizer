@@ -194,6 +194,12 @@ export const api = createApi({
       }),
       invalidatesTags: ['ActionPlans'],
     }),
+    getAllBaseData: builder.query<Array<BaseData>, void>({
+      query: () => ({
+        url: 'api/v1/baseData',
+      }),
+      providesTags: ['BaseData'],
+    }),
     getBaseDataForRealEstate: builder.query<BaseData, { realEstateId: string }>({
       query: ({ realEstateId }) => ({
         url: `/api/v1/realEstates/${realEstateId}/baseData`,
@@ -242,5 +248,6 @@ export const {
   useUpdateActionPlanMutation,
 
   useGetBaseDataForRealEstateQuery,
+  useGetAllBaseDataQuery,
   useUpdateBaseDataMutation,
 } = api;

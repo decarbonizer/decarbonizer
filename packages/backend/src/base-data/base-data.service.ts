@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { AuthService } from '../auth/auth.service';
 import { GenericCrudService } from '../common/services/generic-crud.service';
+import { RealEstateService } from '../real-estate/real-estate.service';
 import { BaseDataRepository } from './base-data.repository';
 import { BaseData } from './base-data.schema';
 
 @Injectable()
 export class BaseDataService extends GenericCrudService<BaseData, BaseData, BaseData, BaseDataRepository> {
-  constructor(baseDataRepository: BaseDataRepository, private readonly authService: AuthService) {
+  constructor(baseDataRepository: BaseDataRepository, private readonly realEstateService: RealEstateService) {
     super(baseDataRepository);
+  }
+
+  async getAllForCurrentCompany() {
+    const thisCompanysRealEstates = await this.realEstateService.getAllForCurrentCompany();
+    return await Promise.all(thisCompanysRealEstates.map((realEstate) => this.getForRealEstate(realEstate._id!)));
   }
 
   async getForRealEstate(realEstateId: string): Promise<BaseData> {
