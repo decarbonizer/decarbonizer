@@ -72,7 +72,6 @@ export class IlluminationCoreCalculations extends CategoryCoreCalculations<'illu
   ) {
     const { bulbs } = externalCalculationData;
     const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
-    console.log('baseData: ', baseData);
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
     const avgElectricianWagePerBulb =
       baseData.salaryElectricianMaintenanceWorkerPerHour / (60 / baseData.timeToChangeOneBulb);
@@ -112,10 +111,10 @@ export class IlluminationCoreCalculations extends CategoryCoreCalculations<'illu
     surveyAnswer: SurveyAnswer<IlluminationSurveyAnswerValue>,
   ): number {
     const { bulbs } = externalCalculationData;
-    const germanyEF = 0.624;
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
     const bulb = bulbs.filter((bulb) => bulb._id === surveyAnswer.value.bulbType).first();
     const runtimeInHoursPerYear = this.getIlluminationRuntimePerYear(surveyAnswer);
-    return bulb.productionKwh * runtimeInHoursPerYear * germanyEF * surveyAnswer.value.lampCount;
+    return bulb.productionKwh * runtimeInHoursPerYear * baseData.illuminationEF * surveyAnswer.value.lampCount;
   }
 
   private getIlluminationRuntimePerYear(

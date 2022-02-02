@@ -201,19 +201,21 @@ export class HeatingCoreCalculations extends CategoryCoreCalculations<'heating'>
   }
 
   private getRequiredkWhForSingleSurveyAnswer(
-    { heatingTypes }: ExternalCalculationData,
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<HeatingSurveyAnswerValue>,
   ) {
-    const heatingKwhRequiredPerQm = 0.1;
-    const heatingType = heatingTypes
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
+
+    const heatingType = externalCalculationData.heatingTypes
       .filter((heatingType) => heatingType._id === surveyAnswer.value.radiatorKind)
       .first();
     const smartThermostatFactor = surveyAnswer.value.smartThermostats ? 0.9 : 1.0;
-    const heatingTypeConsumptionFactor = heatingType.consumptionKwh === 0 ? 1.0 : heatingType.consumptionKwh;
+    const heatingTypeConsumptionFactor =
+      heatingType.consumptionKwh === 0 ? baseData.heatingKwHPerQm : heatingType.consumptionKwh;
 
     return (
       (surveyAnswer.value.realEstateAreaInQm *
-        heatingKwhRequiredPerQm *
+        baseData.heatingKwHPerQm *
         smartThermostatFactor *
         heatingTypeConsumptionFactor) /
       heatingType.productionKwh

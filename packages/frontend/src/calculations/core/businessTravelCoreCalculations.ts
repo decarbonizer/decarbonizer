@@ -42,12 +42,11 @@ export class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'bu
     externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<BusinessTravelSurveyAnswerValue>,
   ): number {
-    const shortTravelEmissionsPerKm = 0.15353;
-    const longTravelEmissionsPerKm = 0.19309;
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
 
     return (
-      surveyAnswer.value.shortTraveling * shortTravelEmissionsPerKm +
-      surveyAnswer.value.longTraveling * longTravelEmissionsPerKm
+      surveyAnswer.value.shortTraveling * baseData.shortTravelEF +
+      surveyAnswer.value.longTraveling * baseData.longTravelEF
     );
   }
 

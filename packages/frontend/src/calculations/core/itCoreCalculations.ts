@@ -50,7 +50,7 @@ export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
     return new DataFrame<number, CostDescriptor>([
       {
         displayName: 'Replacement cost',
-        cost: this.getItReplacementCosts(surveyAnswer.value),
+        cost: this.getItReplacementCosts(externalCalculationData, surveyAnswer),
       },
     ]);
   }
@@ -60,9 +60,10 @@ export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
     surveyAnswer: SurveyAnswer<ItSurveyAnswerValue>,
     year: number,
   ): IDataFrame<number, CostDescriptor> {
-    const costOnReplace = this.getItReplacementCosts(surveyAnswer.value);
-    const totalReplacementsUntilYear = year / 8;
-    const totalReplacementsUntilLastYear = Math.floor((year - 1) / 8);
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
+    const costOnReplace = this.getItReplacementCosts(externalCalculationData, surveyAnswer);
+    const totalReplacementsUntilYear = year / baseData.serverLifeTime;
+    const totalReplacementsUntilLastYear = Math.floor((year - 1) / baseData.serverLifeTime);
     const replacementsCurrentYear = totalReplacementsUntilYear - totalReplacementsUntilLastYear;
     const replacementsThisYear = Math.floor(replacementsCurrentYear); //replace servers every 8 years
     const maintenanceCostThisYear = replacementsThisYear * costOnReplace;
@@ -75,44 +76,50 @@ export class ItCoreCalculations extends CategoryCoreCalculations<'it'> {
     ]);
   }
 
-  private getItReplacementCosts(answer: ItSurveyAnswerValue) {
-    const serverPrice = answer.superServer ? 2000 : 1200;
-    const avgServerAdminWagePerHour = 100.0;
-    const avgServerAdminWagePerServer = avgServerAdminWagePerHour * 6; // assume that it takes 6 hours to install and configure a new server
+  private getItReplacementCosts(
+    externalCalculationData: ExternalCalculationData,
+    answer: SurveyAnswer<ItSurveyAnswerValue>,
+  ) {
+    const baseData = this.getRealEstateBaseData(externalCalculationData, answer.realEstateId);
+    const serverPrice = answer.value.superServer ? baseData.superServerCost : baseData.normalServerCost;
+    const avgServerAdminWagePerHour = baseData.salaryItMaintenanceWorkerPerHour;
+    const avgServerAdminWagePerServer = avgServerAdminWagePerHour * baseData.serverMaintenanceTime; // assume that it takes 6 hours to install and configure a new server
     //supermicro superserver costs about 200 Euro and normal server (e.g. dell) costs 1200 Euro
-    return serverPrice * answer.gpuServerCount + answer.gpuServerCount * avgServerAdminWagePerServer;
+    return serverPrice * answer.value.gpuServerCount + answer.value.gpuServerCount * avgServerAdminWagePerServer;
   }
 
   public override getYearlyConstantCostsForSingleSurveyAnswer(
-    { energyForms }: ExternalCalculationData,
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<ItSurveyAnswerValue>,
   ): IDataFrame<number, CostDescriptor> {
-    const energyForm = energyForms
+    const energyForm = externalCalculationData.energyForms
       .filter((energyForm) => energyForm._id === surveyAnswer.value.dataCenterEnergyForm)
       .first();
 
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
+
     const cost = surveyAnswer.value.superServer
-      ? energyForm.euroPerKwh * surveyAnswer.value.dataCenterConsumption * 0.3
+      ? energyForm.euroPerKwh * surveyAnswer.value.dataCenterConsumption * baseData.reductionFactorByUsingSuperServer
       : energyForm.euroPerKwh * surveyAnswer.value.dataCenterConsumption;
 
     return new DataFrame<number, CostDescriptor>([{ displayName: 'Electricity cost', cost }]);
   }
 
   public override getYearlyFootprintForSingleSurveyAnswer(
-    { energyForms }: ExternalCalculationData,
+    externalCalculationData: ExternalCalculationData,
     surveyAnswer: SurveyAnswer<ItSurveyAnswerValue>,
   ): number {
-    const footprintPerServer = 320; // 320 kg/year for servers that are on premise or in data center
-    const energyForm = energyForms
+    const baseData = this.getRealEstateBaseData(externalCalculationData, surveyAnswer.realEstateId);
+    const energyForm = externalCalculationData.energyForms
       .filter((energyForm) => energyForm._id === surveyAnswer.value.dataCenterEnergyForm)
       .first();
 
     let energyFootprint = (energyForm.co2PerGramPerKwh / 1000) * surveyAnswer.value.dataCenterConsumption;
     if (surveyAnswer.value.superServer) {
-      energyFootprint = energyFootprint * 0.3; // energy consumption is approximately 70% lower
+      energyFootprint = energyFootprint * baseData.reductionFactorByUsingSuperServer; // energy consumption is approximately 70% lower
     }
 
-    return footprintPerServer * surveyAnswer.value.gpuServerCount + energyFootprint;
+    return baseData.footPrintServer * surveyAnswer.value.gpuServerCount + energyFootprint;
   }
 
   public override transformSurveyAnswer(
