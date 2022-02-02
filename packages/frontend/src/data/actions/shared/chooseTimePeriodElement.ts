@@ -9,5 +9,5 @@ export const chooseTimePeriodElement: DatesFormSchemaElement = {
 };
 
 export interface ChooseTimePeriodElementAnswerValue {
-  timePeriod?: DateRange;
+  chooseTimePeriod?: DateRange;
 }

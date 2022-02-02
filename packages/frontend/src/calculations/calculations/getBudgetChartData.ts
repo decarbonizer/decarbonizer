@@ -42,8 +42,8 @@ export function getBudgetChartData(
     .flatMap((actionPlan) =>
       actionPlan.actionAnswers.map((answer) => {
         const detailsValue = (answer.values.detailsValue ?? {}) as ChooseTimePeriodElementAnswerValue;
-        const startDate = new Date(detailsValue.timePeriod?.startDate ?? actionPlan.startDate);
-        const endDate = new Date(detailsValue.timePeriod?.endDate ?? actionPlan.endDate);
+        const startDate = new Date(detailsValue.chooseTimePeriod?.startDate ?? actionPlan.startDate);
+        const endDate = new Date(detailsValue.chooseTimePeriod?.endDate ?? actionPlan.endDate);
 
         return {
           actionPlan,
