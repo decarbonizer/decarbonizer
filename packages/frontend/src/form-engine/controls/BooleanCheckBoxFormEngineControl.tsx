@@ -5,7 +5,6 @@ import { Checkbox, Flex } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
-import { View, Text } from '@react-pdf/renderer';
 
 export default function BooleanCheckBoxFormEngineControl({
   element,
@@ -23,9 +22,14 @@ export default function BooleanCheckBoxFormEngineControl({
     return (
       <DefaultFormControlLayout element={element}>
         {value ? (
-          <Checkbox isChecked> {element.label}</Checkbox>
+          <Checkbox colorScheme="primary" isChecked>
+            {' '}
+            {element.label}
+          </Checkbox>
         ) : (
-          <Checkbox isChecked={false}>{element.label}</Checkbox>
+          <Checkbox colorScheme="primary" isChecked={false}>
+            {element.label}
+          </Checkbox>
         )}
       </DefaultFormControlLayout>
     );
@@ -37,6 +41,7 @@ export default function BooleanCheckBoxFormEngineControl({
         <Checkbox
           disabled={ruleEvaluationResult.disable}
           isChecked={value ?? false}
+          colorScheme="primary"
           onChange={(e) => {
             setValue(e.target.checked);
           }}>

@@ -36,7 +36,7 @@ export default function NumberFormEngineControl({ element }: FormEngineControlPr
               min={element.min}
               max={element.max}
               onChange={(newValue) => setValue(isNaN(+newValue) ? undefined : +newValue)}>
-              <NumberInputField borderRightRadius={0} />
+              <NumberInputField borderRightRadius={0} textAlign="right" />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
@@ -52,7 +52,7 @@ export default function NumberFormEngineControl({ element }: FormEngineControlPr
           min={element.min}
           max={element.max}
           onChange={(newValue) => setValue(isNaN(+newValue) ? undefined : +newValue)}>
-          <NumberInputField />
+          <NumberInputField textAlign="right" />
           <NumberInputStepper>
             <NumberIncrementStepper /> <NumberDecrementStepper />
           </NumberInputStepper>

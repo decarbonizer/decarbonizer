@@ -1,6 +1,5 @@
 import { Tooltip, ResponsiveContainer, Bar, BarChart, XAxis, YAxis, Legend } from 'recharts';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
-import distinctColors from 'distinct-colors';
 import { useCalculation } from '../../../calculations/useCalculation';
 import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
@@ -10,8 +9,7 @@ import { RealEstatePageParams } from '../../../routes';
 import { DataFrame } from 'data-forge';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/react';
-
-const palette = distinctColors({ count: 100 });
+import { palette } from '../../../utils/colorsChart';
 
 export default function ComparisonCard(props: DashboardCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
@@ -59,7 +57,6 @@ export default function ComparisonCard(props: DashboardCardProps) {
               {Object.entries(data).map(([realEstateName], i) => (
                 <Bar
                   key={realEstateName}
-                  label="Test"
                   dataKey={realEstateName}
                   stackId="co2"
                   fill={palette[i]}

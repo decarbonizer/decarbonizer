@@ -11,7 +11,6 @@ import DashboardCard from '../components/DashboardCard';
 import QuickInfo from '../components/QuickInfo';
 import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
-import { DataFrame } from 'data-forge';
 
 export default function NetZeroCard() {
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
@@ -21,12 +20,8 @@ export default function NetZeroCard() {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
         (surveyAnswer) => surveyAnswer.realEstateId === realEstateId,
       );
-      const actionAnswers = externalCalculationData.actionPlans
-        .filter((actionPlan) => actionPlan.realEstateId === realEstateId)
-        .flatMap((actionPlan) => actionPlan.actionAnswers);
 
-      const allActionAnswers = actionAnswers ? [...actionAnswers, ...filledActionAnswersDf] : filledActionAnswersDf;
-      const netZero = getNetZero(externalCalculationData, surveyAnswers, new DataFrame(allActionAnswers), realEstateId);
+      const netZero = getNetZero(externalCalculationData, surveyAnswers, realEstateId, filledActionAnswersDf);
 
       return {
         netZero,

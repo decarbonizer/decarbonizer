@@ -32,8 +32,8 @@ import { ActionPlansPageParams, routes } from '../../routes';
 import { useHistory, useParams } from 'react-router';
 import { getGlobalSummedYearlyFootprintDelta } from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../calculations/useCalculation';
-import { DataFrame } from 'data-forge';
-import { mapDeltaType } from '../../utils/deltaType';
+import { DataFrame, IDataFrame } from 'data-forge';
+import { DeltaResult, mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
 import { TiEquals } from 'react-icons/ti';
@@ -41,6 +41,13 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
 import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
 import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
+import { getNetZero } from '../../calculations/calculations/getNetZero';
+import { ActionAnswerBase } from '../../api/actionAnswer';
+import { businessTravelCoreCalculations } from '../../calculations/core/businessTravelCoreCalculations';
+import { CategoryCoreCalculations } from '../../calculations/core/categoryCoreCalculations';
+import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
+import { itCoreCalculations } from '../../calculations/core/itCoreCalculations';
+import { deltaResultReducer } from '../../calculations/calculations/getBudgetChartData';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -54,6 +61,14 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
   const toast = useToast();
   const history = useHistory();
 
+  const coreCalculations: IDataFrame<number, CategoryCoreCalculations> = new DataFrame([
+    illuminationCoreCalculations,
+    businessTravelCoreCalculations,
+    electricityCoreCalculations,
+    heatingCoreCalculations,
+    itCoreCalculations,
+  ]);
+
   const { isLoading, data, error } = useCalculation(
     (externalCalculationData) => {
       const surveyAnswers = externalCalculationData.surveyAnswers.filter(
@@ -64,32 +79,29 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         surveyAnswers,
         new DataFrame(currentActionPlan.actionAnswers),
       );
-      const netZeroCalculation = getGlobalSummedYearlyFootprintDelta(
+
+      const netZeroCalculationNew = getNetZero(
         externalCalculationData,
         surveyAnswers,
-        new DataFrame(currentActionPlan.actionAnswers),
+        realEstateId,
+        new DataFrame<number, ActionAnswerBase>(),
+        currentActionPlan._id,
       );
 
-      // TODO: Aggregate all costs. Add other cost categories.
-      const illuminationCosts = illuminationCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
-        externalCalculationData,
-        surveyAnswers,
-        new DataFrame(currentActionPlan.actionAnswers),
+      const categoryOriginalConstantCost = coreCalculations.map((coreCalculations) =>
+        coreCalculations.getTotalSummedYearlyConstantCostsDelta(
+          externalCalculationData,
+          surveyAnswers,
+          new DataFrame(currentActionPlan.actionAnswers),
+        ),
       );
 
-      // TODO: Aggregate all costs. Add other cost categories.
-      const heatingCosts = heatingCoreCalculations.getTotalSummedYearlyConstantCostsDelta(
-        externalCalculationData,
-        surveyAnswers,
-        new DataFrame(currentActionPlan.actionAnswers),
-      );
+      const originalConstantCost = categoryOriginalConstantCost.reduce<DeltaResult>(deltaResultReducer);
 
-      const combinedCosts = heatingCosts.delta + illuminationCosts.delta;
-
-      const delta =
-        netZeroCalculation.delta < 0 ? Math.abs(netZeroCalculation.delta) : -Math.abs(netZeroCalculation.delta);
-      const achievedGoal = delta / (netZeroCalculation.before / 100);
-      const adjustedAchievedGoal = achievedGoal > 100 ? 100 : achievedGoal.toFixed(2);
+      const adjustedAchievedGoal =
+        netZeroCalculationNew.newAdjustedAchievedGoal > 100
+          ? 100
+          : netZeroCalculationNew.newAdjustedAchievedGoal.toFixed(2);
 
       const carbonFootprint = footPrintDelta ?? 0;
       const unitSymbol = Math.abs(carbonFootprint.delta) >= 1000 ? 't' : 'kg';
@@ -100,11 +112,9 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         footPrintDelta,
         adjustedFootprint,
         unitSymbol,
-        netZeroCalculation,
-        illuminationCosts,
-        heatingCosts,
-        combinedCosts,
+        netZeroCalculationNew,
         adjustedAchievedGoal,
+        originalConstantCost,
       };
     },
 
@@ -216,7 +226,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                   icon={
                     <HaloIcon
                       icon={BiTargetLock}
-                      colorScheme={mapDeltaType(data?.netZeroCalculation.deltaType, 'red', 'green', 'gray')}
+                      colorScheme={mapDeltaType(data?.netZeroCalculationNew.deltaType, 'green', 'red', 'gray')}
                     />
                   }>
                   <QuickInfoLabelDescription
@@ -224,38 +234,34 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     description={
                       <>
                         Net-Zero
-                        {data.illuminationCosts.deltaType === 'decrease' ? ` increased ` : ` decreased `}
+                        {data.netZeroCalculationNew.deltaType === 'decrease' ? ' decreased ' : ' increased '}
                         by {data.adjustedAchievedGoal}%
                       </>
                     }
                   />
                 </QuickInfo>
-                {/* <QuickInfo
-              icon={
-                <HaloIcon
-                  icon={BiEuro}
-                  colorScheme={mapDeltaType(data.illuminationCosts.deltaType, 'red', 'green', 'gray')}
-                />
-              }>
-              <QuickInfoLabelDescription
-                label={`${Math.abs(data.illuminationCosts.costAfterActions).toFixed(2)}€`}
-                description="electricity costs per year"
-              />
-            </QuickInfo> */}
                 <QuickInfo
                   icon={
                     <HaloIcon
                       icon={
-                        data.combinedCosts === 0 ? TiEquals : data.combinedCosts > 0 ? BiTrendingUp : BiTrendingDown
+                        data.originalConstantCost.delta === 0
+                          ? TiEquals
+                          : data.originalConstantCost.delta > 0
+                          ? BiTrendingUp
+                          : BiTrendingDown
                       }
-                      colorScheme={mapDeltaType(data!.illuminationCosts.deltaType, 'red', 'green', 'gray')}
+                      colorScheme={mapDeltaType(data!.originalConstantCost.deltaType, 'red', 'green', 'gray')}
                     />
                   }>
                   <QuickInfoLabelDescription
-                    label={`${Math.abs(data.combinedCosts).toFixed(2)}€`}
+                    label={`${Math.abs(data.originalConstantCost.delta).toFixed(2)}€`}
                     description={
                       <>
-                        {data.combinedCosts === 0 ? 'equal' : data.combinedCosts < 0 ? 'less ' : 'more '} electricity
+                        {data.originalConstantCost.delta === 0
+                          ? 'equal'
+                          : data.originalConstantCost.delta < 0
+                          ? 'decreased '
+                          : 'increased '}{' '}
                         costs
                       </>
                     }
