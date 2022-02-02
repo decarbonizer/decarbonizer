@@ -1,5 +1,6 @@
 import {
   Button,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,6 +17,7 @@ import { RealEstatePageParams } from '../routes';
 import { useGetBaseDataForRealEstateQuery, useUpdateBaseDataMutation } from '../store/api';
 import { useEffect } from 'react';
 import { FormSchema } from '../form-engine/formSchema';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 export const baseDataSchema: FormSchema = {
   pages: [
@@ -44,6 +46,18 @@ export const baseDataSchema: FormSchema = {
           unit: 'kwh/m²',
           label: 'Heating costs.',
         },
+        {
+          id: 'illuminationEF',
+          required: false,
+          type: 'number',
+          label: 'Emission factor for illumination.',
+          helperText: 'EF is needed for the calculation of the footprint.',
+        },
+      ],
+    },
+    {
+      name: 'Base Data',
+      elements: [
         {
           id: 'salaryItMaintenanceWorkerPerHour',
           required: false,
@@ -93,6 +107,11 @@ export const baseDataSchema: FormSchema = {
           type: 'number',
           label: 'Reduction factor by using a super server.',
         },
+      ],
+    },
+    {
+      name: 'Base Data',
+      elements: [
         {
           id: 'shortTravelEF',
           required: false,
@@ -105,13 +124,6 @@ export const baseDataSchema: FormSchema = {
           required: false,
           type: 'number',
           label: 'Emission factor for long travel flights.',
-          helperText: 'EF is needed for the calculation of the footprint.',
-        },
-        {
-          id: 'illuminationEF',
-          required: false,
-          type: 'number',
-          label: 'Emission factor for illumination.',
           helperText: 'EF is needed for the calculation of the footprint.',
         },
       ],
@@ -127,10 +139,18 @@ export interface BaseDataModalProps {
 export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const initialBaseData = useGetBaseDataForRealEstateQuery({ realEstateId });
-  const { value, page, ruleEvaluationResults, validationErrors, handleValueChanged, setValue } = useFormEngine(
-    baseDataSchema,
-    initialBaseData.data,
-  );
+  const {
+    value,
+    page,
+    ruleEvaluationResults,
+    validationErrors,
+    canGoToNext,
+    canGoToPrevious,
+    goToPrevious,
+    goToNext,
+    handleValueChanged,
+    setValue,
+  } = useFormEngine(baseDataSchema, initialBaseData.data);
   const [updateBaseData] = useUpdateBaseDataMutation();
   const toast = useToast();
 
@@ -152,7 +172,7 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
     });
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Base Data Overview</ModalHeader>
@@ -165,6 +185,24 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
             ruleEvaluationResults={ruleEvaluationResults}
             validationErrors={validationErrors}
             onValueChanged={handleValueChanged}
+            buttonPrevious={
+              <IconButton
+                isDisabled={!canGoToPrevious}
+                aria-label="back"
+                icon={<IoIosArrowBack />}
+                variant="ghost"
+                onClick={goToPrevious}
+              />
+            }
+            buttonNext={
+              <IconButton
+                isDisabled={!canGoToNext}
+                aria-label="next"
+                icon={<IoIosArrowForward />}
+                variant="ghost"
+                onClick={goToNext}
+              />
+            }
           />
         </ModalBody>
         <ModalFooter>
