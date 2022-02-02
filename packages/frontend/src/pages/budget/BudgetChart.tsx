@@ -73,19 +73,19 @@ export default function BudgetChart({
             {mode === 'co2' && <YAxis yAxisId="co2" width={100} domain={['auto', 'data-max']} unit="kg" />}
             {mode === 'cost' && (
               <>
-                <Bar dataKey="budget" stackId="cost" name="Budget" fill="#9AE6B477" unit="€" onClick={handleClick}>
+                <Bar dataKey="budget" stackId="cost" name="Budget" unit="€" onClick={handleClick}>
                   {filteredData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.budget > 0 ? '#baf6d4' : '#fa8989'} />
+                    <Cell key={`cell-${index}`} fill={entry.budget > 0 ? '#48BB78' : '#F56565'} />
                   ))}
                 </Bar>
                 <ReferenceLine y={0} stroke="black" />
-                {showProfit && <Line dataKey="profit" name="Profits" stroke="#F6E05E" unit="€" strokeWidth="3" />}
+                {showProfit && <Line dataKey="profit" name="Profits" stroke="#0BC5EA" unit="€" strokeWidth="3" />}
                 {showReferenceBudget && (
                   <ReferenceLine
                     y={-referenceBudget}
-                    stroke="#E53E3E"
+                    stroke="#9B2C2C"
                     strokeWidth={2}
-                    label={{ position: 'insideTopRight', value: 'Budget' }}
+                    label={{ position: 'insideTopRight', value: 'Credit line' }}
                   />
                 )}
               </>
@@ -95,9 +95,9 @@ export default function BudgetChart({
                 yAxisId="co2"
                 dataKey="footprint"
                 name="Carbon Footprint"
-                stroke="#9AE6B4"
+                stroke="#4299e1"
                 strokeWidth={3}
-                fill="#9AE6B477"
+                fill="#4299e1"
               />
             )}
           </ComposedChart>

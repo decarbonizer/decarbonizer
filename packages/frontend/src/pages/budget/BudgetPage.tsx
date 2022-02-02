@@ -8,7 +8,7 @@ import ActionPlanChart from './ActionPlanChart';
 import ActionPlanSelectionPanel from './ActionPlanSelectionPanel';
 import BudgetChart, { BudgetChartConfig } from './BudgetChart';
 
-const minYear = new Date().getFullYear();
+const minYear = 2020;
 const maxYear = 2050;
 
 export default function BudgetPage() {
