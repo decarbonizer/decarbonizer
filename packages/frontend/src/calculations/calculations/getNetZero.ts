@@ -8,14 +8,18 @@ import { getGlobalSummedYearlyFootprintDelta } from './getGlobalSummedYearlyFoot
 export function getNetZero(
   externalCalculationData: ExternalCalculationData,
   surveyAnswers: IDataFrame<number, SurveyAnswer>,
-  actionAnswers: IDataFrame<number, ActionAnswerBase>,
   realEstateId: string,
+  actionAnswers: IDataFrame<number, ActionAnswerBase>,
+  actionPlanId?: string,
 ) {
   const surveyAnswersInitial = surveyAnswers.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
-  const actionPlans = externalCalculationData.actionPlans.filter(
-    (actionPlan) => actionPlan.realEstateId === realEstateId,
-  );
-  const netZeroSum = actionPlans
+  const actionPlans = actionPlanId
+    ? externalCalculationData.actionPlans.filter(
+        (actionPlan) => actionPlan.realEstateId === realEstateId && actionPlan._id === actionPlanId,
+      )
+    : externalCalculationData.actionPlans.filter((actionPlan) => actionPlan.realEstateId === realEstateId);
+
+  const netZeroSumActionPlan = actionPlans
     .map((actionPlan) => {
       const footprintDelta = getGlobalSummedYearlyFootprintDelta(
         externalCalculationData,
@@ -29,9 +33,27 @@ export function getNetZero(
     })
     .reduce((a, b) => a + b, 0);
 
-  const deltaType = getDeltaType(netZeroSum);
+  const footprintFilledActionAnswers = getGlobalSummedYearlyFootprintDelta(
+    externalCalculationData,
+    surveyAnswersInitial,
+    actionAnswers,
+  );
 
-  const newAdjustedAchievedGoal = netZeroSum > 100 ? 100 : netZeroSum;
+  const footprintFilledActionAnswersDelta =
+    footprintFilledActionAnswers.delta <= 0
+      ? Math.abs(footprintFilledActionAnswers.delta)
+      : -Math.abs(footprintFilledActionAnswers.delta);
 
-  return { netZeroSum, newAdjustedAchievedGoal, deltaType };
+  const netZeroFilledActionAnswers = footprintFilledActionAnswersDelta / (footprintFilledActionAnswers.before / 100);
+
+  const newAdjustedAchievedGoalFilledAction = netZeroFilledActionAnswers > 100 ? 100 : netZeroFilledActionAnswers;
+
+  const newAdjustedAchievedGoal = netZeroSumActionPlan + newAdjustedAchievedGoalFilledAction;
+
+  const netZeroDelta =
+    footprintFilledActionAnswers.delta === 0 ? netZeroSumActionPlan : newAdjustedAchievedGoal - netZeroSumActionPlan;
+
+  const deltaType = getDeltaType(netZeroDelta);
+
+  return { newAdjustedAchievedGoal, deltaType };
 }

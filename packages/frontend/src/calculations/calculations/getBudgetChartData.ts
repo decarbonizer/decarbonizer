@@ -135,7 +135,7 @@ export function getBudgetChartData(
   return results;
 }
 
-function deltaResultReducer(a: DeltaResult, b: DeltaResult) {
+export function deltaResultReducer(a: DeltaResult, b: DeltaResult) {
   return {
     after: a.after + b.after,
     before: a.before + b.before,
