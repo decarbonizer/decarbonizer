@@ -12,14 +12,17 @@ import {
   useGetAllHeatingTypesQuery,
   useGetRealEstatesOfCompanyQuery,
   useGetAllSurveyAnswersQuery,
+  useGetAllBaseDataQuery,
 } from '../store/api';
 import { useMemo } from 'react';
+import { BaseData } from '../api/baseData';
 
 /**
  * Defines externally provided data which can be used for calculations.
  * This data (mostly) comes from the backend.
  */
 export interface ExternalCalculationData {
+  baseData: IDataFrame<number, BaseData>;
   bulbs: IDataFrame<number, Bulb>;
   energyForms: IDataFrame<number, EnergyForm>;
   heatingTypes: IDataFrame<number, HeatingType>;
@@ -29,6 +32,7 @@ export interface ExternalCalculationData {
 }
 
 export function useExternalCalculationData() {
+  const baseDataQuery = useGetAllBaseDataQuery();
   const bulbsQuery = useGetAllBulbsQuery();
   const energyFormsQuery = useGetAllEnergyFormsQuery();
   const heatingTypesQuery = useGetAllHeatingTypesQuery();
@@ -54,6 +58,7 @@ export function useExternalCalculationData() {
     }
 
     const data: ExternalCalculationData = {
+      baseData: new DataFrame(baseDataQuery.data),
       bulbs: new DataFrame(bulbsQuery.data),
       energyForms: new DataFrame(energyFormsQuery.data),
       heatingTypes: new DataFrame(heatingTypesQuery.data),

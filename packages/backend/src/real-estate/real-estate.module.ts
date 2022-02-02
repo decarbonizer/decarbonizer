@@ -17,6 +17,6 @@ import { RealEstateSeeder } from './real-estate.seeder';
   ],
   controllers: [RealEstateController],
   providers: [RealEstateService, RealEstateRepository, RealEstateSeeder],
-  exports: [RealEstateSeeder],
+  exports: [RealEstateSeeder, RealEstateService, RealEstateRepository],
 })
 export class RealEstateModule {}

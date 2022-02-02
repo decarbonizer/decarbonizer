@@ -250,6 +250,10 @@ export abstract class CategoryCoreCalculations<
     return surveyAnswers.filter((surveyAnswer) => isSurveyAnswerType(this.surveyId, surveyAnswer)) as any;
   }
 
+  protected getRealEstateBaseData(externalCalculationData: ExternalCalculationData, realEstateId: string) {
+    return externalCalculationData.baseData.filter((baseData) => baseData.realEstateId === realEstateId).first();
+  }
+
   protected getDeltaResult(before: number, after: number): DeltaResult {
     const delta = after - before;
     const deltaType = getDeltaType(delta);
