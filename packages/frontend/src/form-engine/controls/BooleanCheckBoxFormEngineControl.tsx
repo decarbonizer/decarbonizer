@@ -23,9 +23,14 @@ export default function BooleanCheckBoxFormEngineControl({
     return (
       <DefaultFormControlLayout element={element}>
         {value ? (
-          <Checkbox isChecked> {element.label}</Checkbox>
+          <Checkbox colorScheme="primary" isChecked>
+            {' '}
+            {element.label}
+          </Checkbox>
         ) : (
-          <Checkbox isChecked={false}>{element.label}</Checkbox>
+          <Checkbox colorScheme="primary" isChecked={false}>
+            {element.label}
+          </Checkbox>
         )}
       </DefaultFormControlLayout>
     );
@@ -37,6 +42,7 @@ export default function BooleanCheckBoxFormEngineControl({
         <Checkbox
           disabled={ruleEvaluationResult.disable}
           isChecked={value ?? false}
+          colorScheme="primary"
           onChange={(e) => {
             setValue(e.target.checked);
           }}>
