@@ -5,7 +5,6 @@ import { Checkbox, Flex } from '@chakra-ui/react';
 import DefaultFormControlLayout from './DefaultFormControlLayout';
 import { useContext } from 'react';
 import { FormEnginePropsContext } from '../FormEngine';
-import { View, Text } from '@react-pdf/renderer';
 
 export default function BooleanCheckBoxFormEngineControl({
   element,
