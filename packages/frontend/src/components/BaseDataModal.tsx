@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   IconButton,
   Modal,
@@ -172,38 +173,40 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
     });
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="md">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Base Data Overview</ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody>
-          <FormEngine
-            schema={baseDataSchema}
-            value={value}
-            page={page}
-            ruleEvaluationResults={ruleEvaluationResults}
-            validationErrors={validationErrors}
-            onValueChanged={handleValueChanged}
-            buttonPrevious={
-              <IconButton
-                isDisabled={!canGoToPrevious}
-                aria-label="back"
-                icon={<IoIosArrowBack />}
-                variant="ghost"
-                onClick={goToPrevious}
-              />
-            }
-            buttonNext={
-              <IconButton
-                isDisabled={!canGoToNext}
-                aria-label="next"
-                icon={<IoIosArrowForward />}
-                variant="ghost"
-                onClick={goToNext}
-              />
-            }
-          />
+          <Box w="100%" minH="3xl">
+            <FormEngine
+              schema={baseDataSchema}
+              value={value}
+              page={page}
+              ruleEvaluationResults={ruleEvaluationResults}
+              validationErrors={validationErrors}
+              onValueChanged={handleValueChanged}
+              buttonPrevious={
+                <IconButton
+                  isDisabled={!canGoToPrevious}
+                  aria-label="back"
+                  icon={<IoIosArrowBack />}
+                  variant="ghost"
+                  onClick={goToPrevious}
+                />
+              }
+              buttonNext={
+                <IconButton
+                  isDisabled={!canGoToNext}
+                  aria-label="next"
+                  icon={<IoIosArrowForward />}
+                  variant="ghost"
+                  onClick={goToNext}
+                />
+              }
+            />
+          </Box>
         </ModalBody>
         <ModalFooter>
           <Button width="40" right="6" colorScheme="green" onClick={handleUpdate}>
