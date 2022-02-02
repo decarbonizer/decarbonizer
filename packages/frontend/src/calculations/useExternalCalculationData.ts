@@ -40,6 +40,7 @@ export function useExternalCalculationData() {
   const surveyAnswersQuery = useGetAllSurveyAnswersQuery();
   const actionPlansQuery = useGetAllActionPlansQuery();
   const queries = [
+    baseDataQuery,
     bulbsQuery,
     energyFormsQuery,
     heatingTypesQuery,
