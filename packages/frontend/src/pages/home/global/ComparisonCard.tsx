@@ -1,12 +1,10 @@
 import { SkeletonText } from '@chakra-ui/react';
-import distinctColors from 'distinct-colors';
 import { ResponsiveContainer, BarChart, Tooltip, XAxis, YAxis, Bar, Legend } from 'recharts';
 import { getGlobalSummedYearlyFootprint } from '../../../calculations/calculations/getGlobalSummedYearlyFootprint';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
+import { palette } from '../../../utils/colorsChart';
 import DashboardCard, { DashboardCardProps } from '../../dashboard/components/DashboardCard';
-
-const palette = distinctColors({ count: 100 });
 
 export default function ComparisonCard(props: DashboardCardProps) {
   const { isLoading, data, error } = useCalculation((externalCalculationData) => {
@@ -51,7 +49,6 @@ export default function ComparisonCard(props: DashboardCardProps) {
               {Object.entries(data).map(([realEstateName], i) => (
                 <Bar
                   key={realEstateName}
-                  label="Test"
                   dataKey={realEstateName}
                   stackId="co2"
                   fill={palette[i]}
