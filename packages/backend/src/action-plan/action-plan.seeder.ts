@@ -30,7 +30,6 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
               },
             },
           },
-          { actionId: 'useSuperServer', values: { value: { newServer: true } } },
           {
             actionId: 'increaseDataCenterTemperature',
             values: { value: { newDataCenterTemperature: 25 } },
