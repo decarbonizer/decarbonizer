@@ -9,14 +9,16 @@ import { electricityCoreCalculations } from '../core/electricityCoreCalculations
 import { heatingCoreCalculations } from '../core/heatingCoreCalculations';
 import { illuminationCoreCalculations } from '../core/illuminationCoreCalculations';
 import { itCoreCalculations } from '../core/itCoreCalculations';
-
+import { ActionAnswerBase } from '../../api/actionAnswer';
 export interface BudgetChartDataEntry {
   year: number;
   budget: number;
   profit: number;
+  categoryFootprintThisYear: Array<DeltaResult>;
   categoryInvestmentCostsThisYear: Array<number>;
   categoryOriginalConstantCost: Array<DeltaResult>;
   footprint: number;
+  originalFootprint: number;
 }
 
 export const categories = ['Illumination', 'BusinessTravel', 'Electricity', 'Heating', 'IT'];
@@ -60,6 +62,15 @@ export function getBudgetChartData(
   // certain data requires the results from the year(s) before. That doesn't work well with the
   // available functional alternatives like `map()`.
   const results: Array<BudgetChartDataEntry> = [];
+  const originalFootprint = coreCalculations
+    .map((coreCalculations) =>
+      coreCalculations.getSummedYearlyFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        new DataFrame<number, ActionAnswerBase>(),
+      ),
+    )
+    .reduce(deltaResultReducer);
 
   for (let year = fromYear; year <= toYear; year++) {
     const activeActionAnswers = linearizedActionAnswers
@@ -112,21 +123,28 @@ export function getBudgetChartData(
     const costs = originalConstantCost.delta + totalInvestmentCostsThisYear;
     const budget = budgetRemainingFromLastYear + budgetNewThisYear - costs;
 
-    const footprint = coreCalculations
-      .map((coreCalculations) =>
-        coreCalculations.getSummedYearlyFootprintDelta(
-          externalCalculationData,
-          externalCalculationData.surveyAnswers,
-          activeActionAnswers,
-        ),
-      )
-      .reduce(deltaResultReducer);
+    const footprintRemainingFromLastYear = results[results.length - 1]?.footprint ?? 0;
+    const categoryFootprintThisYear = coreCalculations.map((coreCalculations) =>
+      coreCalculations.getSummedYearlyFootprintDelta(
+        externalCalculationData,
+        externalCalculationData.surveyAnswers,
+        activeActionAnswersThisYear,
+      ),
+    );
+    const footprintNewThisYear = categoryFootprintThisYear.reduce(deltaResultReducer);
+
+    const footprint =
+      footprintNewThisYear.delta === 0 && activeActionAnswers.toArray().length === 0
+        ? footprintNewThisYear.after
+        : footprintRemainingFromLastYear + footprintNewThisYear.delta;
 
     results.push({
       year,
       budget: Math.round(budget),
       profit: Math.round(-costs),
-      footprint: Math.round(footprint.after),
+      footprint: footprint < 0 ? 0 : Math.round(footprint),
+      originalFootprint: Math.round(originalFootprint.after),
+      categoryFootprintThisYear: categoryFootprintThisYear.toArray(),
       categoryInvestmentCostsThisYear: categoryInvestmentCostsThisYear.toArray(),
       categoryOriginalConstantCost: categoryOriginalConstantCost.toArray(),
     });

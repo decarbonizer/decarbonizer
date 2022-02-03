@@ -18,13 +18,12 @@ export interface SavingChartDataEntry {
   percentage: number;
 }
 
-export interface PieDetailChartProps {
+export interface PieBudgetDetailChartProps {
   investmentCosts: Array<number>;
   originalCosts: Array<DeltaResult>;
-  profit: number;
 }
 
-export default function PieDetailChart({ investmentCosts, originalCosts, profit }: PieDetailChartProps) {
+export default function PieBudgetDetailChart({ investmentCosts, originalCosts }: PieBudgetDetailChartProps) {
   const dataCosts: Array<CostChartDataEntry> = [];
   const dataSavings: Array<SavingChartDataEntry> = [];
 
@@ -41,33 +40,43 @@ export default function PieDetailChart({ investmentCosts, originalCosts, profit 
     }
   };
 
-  for (let i = 0; i < investmentCosts.length; i++) {
-    const cost = Math.round(investmentCosts[i] + originalCosts[i].delta);
-    const percentage = Math.round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(profit)) * 100 * 100) / 100;
+  const profitAll = investmentCosts.map((investmentCost, index) => {
+    return investmentCost + originalCosts[index].delta;
+  });
+
+  let costTotal = 0;
+  let savingsTotal = 0;
+  profitAll.map((category) => (category > 0 ? (costTotal += category) : (savingsTotal += category)));
+
+  profitAll.map((cost, i) => {
+    const percentage = Math.round((cost / Math.abs(costTotal)) * 100 * 100) / 100;
+    const percentageSavings = Math.round((cost / Math.abs(savingsTotal)) * 100 * 100) / 100;
+
     if (cost < 0) {
       dataSavings.push({
         name: categories[i],
-        saving: Math.abs(cost),
-        percentage: percentage,
+        saving: Math.round(Math.abs(cost)),
+        percentage: Math.abs(percentageSavings),
       });
       dataCosts.push({
         name: categories[i],
         cost: 0,
-        percentage: percentage,
+        percentage: Math.abs(percentage),
       });
     } else {
       dataSavings.push({
         name: categories[i],
         saving: 0,
-        percentage: percentage,
+        percentage: Math.abs(percentageSavings),
       });
       dataCosts.push({
         name: categories[i],
-        cost: Math.abs(cost),
-        percentage: percentage,
+        cost: Math.round(Math.abs(cost)),
+        percentage: Math.abs(percentage),
       });
     }
-  }
+  });
+
   const newDataCosts = dataCosts.filter((category) => category.cost > 0);
   const newDataSavings = dataSavings.filter((category) => category.saving > 0);
 
