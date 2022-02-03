@@ -14,7 +14,7 @@ export interface BudgetChartDataEntry {
   year: number;
   budget: number;
   profit: number;
-  categoryFootprintThisYear: Array<DeltaResult>;
+  // categoryFootprintThisYear: Array<DeltaResult>;
   categoryInvestmentCostsThisYear: Array<number>;
   categoryOriginalConstantCost: Array<DeltaResult>;
   footprint: number;
@@ -123,20 +123,15 @@ export function getBudgetChartData(
     const costs = originalConstantCost.delta + totalInvestmentCostsThisYear;
     const budget = budgetRemainingFromLastYear + budgetNewThisYear - costs;
 
-    const footprintRemainingFromLastYear = results[results.length - 1]?.footprint ?? 0;
     const categoryFootprintThisYear = coreCalculations.map((coreCalculations) =>
-      coreCalculations.getSummedYearlyFootprintDelta(
+      coreCalculations.getSummedYearlyFootprint(
         externalCalculationData,
         externalCalculationData.surveyAnswers,
-        activeActionAnswersThisYear,
+        activeActionAnswers,
       ),
     );
-    const footprintNewThisYear = categoryFootprintThisYear.reduce(deltaResultReducer);
 
-    const footprint =
-      footprintNewThisYear.delta === 0 && activeActionAnswers.toArray().length === 0
-        ? footprintNewThisYear.after
-        : footprintRemainingFromLastYear + footprintNewThisYear.delta;
+    const footprint = categoryFootprintThisYear.aggregate((a, b) => a + b);
 
     results.push({
       year,
@@ -144,7 +139,7 @@ export function getBudgetChartData(
       profit: Math.round(-costs),
       footprint: footprint < 0 ? 0 : Math.round(footprint),
       originalFootprint: Math.round(originalFootprint.after),
-      categoryFootprintThisYear: categoryFootprintThisYear.toArray(),
+      // categoryFootprintThisYear: categoryFootprintThisYear.toArray(),
       categoryInvestmentCostsThisYear: categoryInvestmentCostsThisYear.toArray(),
       categoryOriginalConstantCost: categoryOriginalConstantCost.toArray(),
     });

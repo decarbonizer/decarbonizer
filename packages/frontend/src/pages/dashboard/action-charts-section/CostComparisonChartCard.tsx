@@ -1,4 +1,16 @@
-import { Select, SkeletonText, Text } from '@chakra-ui/react';
+import {
+  Select,
+  SkeletonText,
+  Text,
+  HStack,
+  Button,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItemOption,
+  MenuList,
+  MenuOptionGroup,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
@@ -9,6 +21,7 @@ import { KnownCategoryCoreCalculationsId } from '../../../calculations/core/core
 import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Legend, Area, Tooltip } from 'recharts';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import ComparisonChartTooltip from './ComparisonChartTooltip';
+import { BiChevronDown } from 'react-icons/bi';
 
 type CostCategory = 'all' | 'constant' | 'changing';
 
@@ -34,6 +47,7 @@ export interface CostComparisonChartCardProps extends DashboardCardProps {
 export default function CostComparisonChartCard({ coreCalculationsId, ...rest }: CostComparisonChartCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  // const [surveyAnswers, setSurveyAnswers] = useState();
   const { isLoading, data, error } = useAsyncCalculation(
     'getCostComparisonCardData',
     (externalCalculationData) => [
@@ -60,15 +74,33 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
   return (
     <DashboardCard
       headerControls={
-        <Select
-          size="sm"
-          maxW="44"
-          defaultValue="all"
-          onChange={(e) => setSelectedCostCategory(e.target.value as CostCategory)}>
-          <option value="all">All</option>
-          <option value="constant">Recurring costs</option>
-          <option value="changing">Maintenance cost</option>
-        </Select>
+        <HStack>
+          {/* <Menu closeOnSelect={false}>
+            <MenuButton px={4} py={2} borderRadius="md" borderWidth="1px" rightIcon={<BiChevronDown />}>
+              Surveys
+            </MenuButton>
+            <MenuList minWidth="240px">
+              <MenuOptionGroup type="radio">
+                <MenuItemOption value="all">All</MenuItemOption>
+              </MenuOptionGroup>
+              <MenuDivider />
+              <MenuOptionGroup title="Surveys" type="checkbox">
+                <MenuItemOption value="email">Email</MenuItemOption>
+                <MenuItemOption value="phone">Phone</MenuItemOption>
+                <MenuItemOption value="country">Country</MenuItemOption>
+              </MenuOptionGroup>
+            </MenuList>
+          </Menu> */}
+          <Select
+            size="sm"
+            maxW="44"
+            defaultValue="all"
+            onChange={(e) => setSelectedCostCategory(e.target.value as CostCategory)}>
+            <option value="all">All</option>
+            <option value="constant">Recurring costs</option>
+            <option value="changing">Maintenance cost</option>
+          </Select>
+        </HStack>
       }
       header="Cost comparison over 10 years"
       isExpandable
