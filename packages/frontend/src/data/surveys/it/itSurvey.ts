@@ -11,6 +11,14 @@ export const itSurvey: Survey = {
         name: 'IT',
         elements: [
           {
+            id: 'realEstateName',
+            required: true,
+            type: 'string',
+            label: 'Where are the servers located?',
+            helperText:
+              'The location or data center for which you want to record IT data.\nExamples: Server Room, Data Center 1, ...',
+          },
+          {
             id: 'isInitialSurvey',
             required: true,
             type: 'boolean',
