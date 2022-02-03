@@ -6,6 +6,7 @@ import { getFootprintDeltaCardData } from './calculations/getFootprintDeltaCardD
 import { getFootprintComparisonCardData } from './calculations/getFootprintComparisonCardData';
 import { getCostComparisonCardData } from './calculations/getCostComparisonChartData';
 import { getCalculatedCostsCardData } from './calculations/getCalculatedCostsCardData';
+import { getCostBreakEvenPointData } from './calculations/getCostBreakEvenPointData';
 
 // The core of the worker is simple:
 // We maintain a dictionary `asyncCalculations` which maps the calculation functions to their own function name.
@@ -28,6 +29,7 @@ const asyncCalculations = createAsyncCalculationsDict({
   getFootprintDeltaCardData,
   getFootprintComparisonCardData,
   getCalculatedCostsCardData,
+  getCostBreakEvenPointData,
 });
 
 type Tail<T extends any[]> = T extends [any, ...infer Tail] ? Tail : any[];

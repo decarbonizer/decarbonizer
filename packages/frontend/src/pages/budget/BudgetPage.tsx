@@ -1,5 +1,19 @@
-import { Grid } from '@chakra-ui/react';
+import {
+  Grid,
+  Heading,
+  HStack,
+  IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Spacer,
+} from '@chakra-ui/react';
 import { useState } from 'react';
+import { FaRegQuestionCircle } from 'react-icons/fa';
 import { ActionPlan } from '../../api/actionPlan';
 import Card from '../../components/Card';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
@@ -51,7 +65,44 @@ export default function BudgetPage() {
           />
         </Card>
       }>
-      <Card w="100%" h="100%" pr="8" py="4" borderBottomRadius={0} borderTopRightRadius={0} isStatic>
+      <Card w="100%" h="100%" pr="8" py="10" pt={3} borderBottomRadius={0} borderTopRightRadius={0} isStatic>
+        <HStack pl="8">
+          {budgetChartConfig.mode === 'cost' ? (
+            <Heading size="lg">Cumulative Cost and Saving Budget Chart</Heading>
+          ) : (
+            <Heading size="lg">Produced carbon footprint Burn-Down-Chart</Heading>
+          )}
+
+          <Spacer />
+          <Popover placement="left-end">
+            <PopoverTrigger>
+              <IconButton variant="ghost" aria-label="info" icon={<FaRegQuestionCircle size="25" />} />
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>Additional information</PopoverHeader>
+              {budgetChartConfig.mode === 'cost' ? (
+                <PopoverBody>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                  et ea rebum.
+                </PopoverBody>
+              ) : (
+                <PopoverBody>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                  et ea rebum.
+                </PopoverBody>
+              )}
+              <PopoverBody>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
+                ea rebum.
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        </HStack>
         <Grid w="100%" h="100%" templateRows="10% 1fr">
           <ActionPlanChart
             fromYear={budgetChartConfig.fromYear}

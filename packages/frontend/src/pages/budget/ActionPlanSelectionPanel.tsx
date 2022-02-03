@@ -29,9 +29,9 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { ActionPlan } from '../../api/actionPlan';
-import { RealEstatePageParams } from '../../routes';
+import { RealEstatePageParams, routes } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
 import SidePanelAccordionButton from '../../components/SidePanelAccordionButton';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
@@ -42,6 +42,7 @@ import { BiEuro } from 'react-icons/bi';
 import { BsTable } from 'react-icons/bs';
 import { BudgetChartConfig } from './BudgetChart';
 import BudgetTableModal from './components/BudgetTableModal';
+import { RiDashboardFill } from 'react-icons/ri';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -67,6 +68,7 @@ export default function ActionPlanSelectionPanel({
   const [toYearTooltipValue, setToYearTooltipValue] = useState(budgetChartConfig.toYear);
   const [showYearTooltips, setShowYearTooltips] = useState(false);
   const [budgetTableActionPlan, setBudgetTableActionPlan] = useState<ActionPlan | undefined>(undefined);
+  const history = useHistory();
 
   useEffect(() => {
     // Force check all action plans when the available action plans change.
@@ -176,7 +178,7 @@ export default function ActionPlanSelectionPanel({
                         setBudgetChartConfig({ ...budgetChartConfig, showReferenceBudget: e.target.checked })
                       }
                     />
-                    <FormLabel>Show Budget Line</FormLabel>
+                    <FormLabel>Show Credit Line</FormLabel>
                   </FormControl>
                   <NumberInput
                     min={0}
@@ -220,6 +222,18 @@ export default function ActionPlanSelectionPanel({
                       onClick={() => setBudgetTableActionPlan(actionPlan)}
                     />
                   </Tooltip>
+                  <Tooltip label="Dashboard">
+                    <IconButton
+                      aria-label="Dashboard"
+                      variant="ghost"
+                      icon={<Icon as={RiDashboardFill} />}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id }));
+                      }}></IconButton>
+                  </Tooltip>
+
                   <Tooltip label="Edit...">
                     <IconButton
                       variant="ghost"
@@ -235,7 +249,12 @@ export default function ActionPlanSelectionPanel({
         </AccordionItem>
       </Accordion>
       {actionPlanToEdit && (
-        <SaveActionPlanModal isOpen actionPlan={actionPlanToEdit} onClose={() => setActionPlanToEdit(undefined)} />
+        <SaveActionPlanModal
+          isOpen
+          actionPlan={actionPlanToEdit}
+          isBudgetPage={true}
+          onClose={() => setActionPlanToEdit(undefined)}
+        />
       )}
       {budgetTableActionPlan && (
         <BudgetTableModal

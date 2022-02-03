@@ -1,4 +1,4 @@
-import { Select, SkeletonText } from '@chakra-ui/react';
+import { Select, SkeletonText, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useFilledActionAnswersDataFrame } from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
@@ -44,6 +44,17 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
     ],
     [coreCalculationsId, filledActionAnswersDf, realEstateId],
   );
+
+  const { data: breakEvenData, error: breakEvenError } = useAsyncCalculation(
+    'getCostBreakEvenPointData',
+    (externalCalculationData) => [
+      coreCalculationsId,
+      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
+      filledActionAnswersDf.toArray(),
+    ],
+    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+  );
+
   const [selectedCostCategory, setSelectedCostCategory] = useState<CostCategory>('all');
 
   return (
@@ -100,6 +111,14 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
           </ResponsiveContainer>
         )}
       </InlineErrorDisplay>
+      {!!filledActionAnswersDf.toArray().length &&
+        selectedCostCategory === 'changing' &&
+        breakEvenData?.breakEvenCostOld !== 0 &&
+        breakEvenData?.breakEvenCostNew !== 0 && (
+          <InlineErrorDisplay error={breakEvenError}>
+            <Text textAlign="center">Maintenance Break-Even-Point in {breakEvenData?.breakEvenYear} years </Text>
+          </InlineErrorDisplay>
+        )}
     </DashboardCard>
   );
 }

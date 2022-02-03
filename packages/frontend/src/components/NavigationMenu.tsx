@@ -12,7 +12,7 @@ export interface PageNavigation {
   display: string;
 }
 
-export type PageDisplayTypes = 'Survey Overview' | 'Dashboard' | 'Action Plan Overview' | 'Budget Management';
+export type PageDisplayTypes = 'Survey Overview' | 'New Action Plan' | 'Action Plan Overview' | 'Budget Management';
 
 export interface NavigationMenuProps {
   currentPage: PageDisplayTypes;
@@ -23,7 +23,11 @@ export default function NavigationMenu({ currentPage, realEstateId }: Navigation
   const history = useHistory();
   const pages: PageNavigation[] = [
     { value: routes.surveys({ realEstateId }), display: 'Survey Overview', icon: <Icon as={RiSurveyLine} /> },
-    { value: routes.realEstateDashboard({ realEstateId }), display: 'Dashboard', icon: <Icon as={MdDashboard} /> },
+    {
+      value: routes.realEstateDashboard({ realEstateId }),
+      display: 'New Action Plan',
+      icon: <Icon as={MdDashboard} />,
+    },
     {
       value: routes.actionPlans({ realEstateId }),
       display: 'Action Plan Overview',

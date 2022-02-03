@@ -35,7 +35,7 @@ export default function NavBarBreadcrumbs() {
           <HomeItem />
           <RealEstateItem isCurrentPage marginRight="-3" />
         </Breadcrumb>
-        <RealEstateLocationPicker currentPage="Dashboard" />
+        <RealEstateLocationPicker currentPage="New Action Plan" />
       </Route>
       <Route exact path={routes.surveys.route}>
         <Breadcrumb {...breadcrumbProps}>

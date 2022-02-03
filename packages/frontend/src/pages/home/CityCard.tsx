@@ -139,7 +139,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
                 Surveys
               </MenuItem>
               <MenuItem icon={<Icon as={RiDashboardFill} />} onClick={() => goToDashboard(realEstate._id)}>
-                Dashboard
+                New Action Plan
               </MenuItem>
               <MenuItem icon={<Icon as={MdPendingActions} />} onClick={() => goToActionPlanOverview(realEstate._id)}>
                 Action Plans

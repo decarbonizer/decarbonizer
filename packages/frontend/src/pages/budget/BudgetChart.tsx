@@ -108,7 +108,7 @@ export default function BudgetChart({
           <Spinner color="primary.500" emptyColor="gray.200" size="xl" thickness="4px" />
         </Center>
       )}
-      {dataEntry && <BudgetChartDetailModal isOpen onClose={() => setDataEntry(undefined)} data={dataEntry} />};
+      {dataEntry && <BudgetChartDetailModal isOpen onClose={() => setDataEntry(undefined)} data={dataEntry} />}
     </Box>
   );
 }

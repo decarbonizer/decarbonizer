@@ -19,10 +19,10 @@ import {
 } from '@chakra-ui/react';
 import { ActionPlanSummary } from './ActionPlanSummary';
 import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { ActionPlan, ActionPlanCreate, ActionPlanStatus, ActionPlanUpdate } from '../../../api/actionPlan';
 import DateRangePicker, { DateRange } from '../../../components/DateRangePicker';
-import { RealEstatePageParams } from '../../../routes';
+import { RealEstatePageParams, routes } from '../../../routes';
 import { useCreateActionPlanMutation, useUpdateActionPlanMutation } from '../../../store/api';
 import range from 'lodash-es/range';
 import { ActionAnswerBase } from '../../../api/actionAnswer';
@@ -32,6 +32,7 @@ export interface SaveActionPlanModalProps {
   onClose(): void;
   actionPlan?: ActionPlan;
   actionAnswers?: Array<ActionAnswerBase>;
+  isBudgetPage?: boolean;
 }
 
 interface FormValues {
@@ -41,7 +42,13 @@ interface FormValues {
   status: ActionPlanStatus;
 }
 
-export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, actionPlan }: SaveActionPlanModalProps) {
+export default function SaveActionPlanModal({
+  isOpen,
+  onClose,
+  actionAnswers,
+  actionPlan,
+  isBudgetPage,
+}: SaveActionPlanModalProps) {
   const defaultValues: FormValues | undefined = actionPlan
     ? {
         name: actionPlan.name,
@@ -63,6 +70,7 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
   const [createActionPlan, { isLoading: isLoadingCreate }] = useCreateActionPlanMutation();
   const [updateActionPlan, { isLoading: isLoadingUpdate }] = useUpdateActionPlanMutation();
   const toast = useToast();
+  const history = useHistory();
 
   const onSubmit = (data: FormValues) => {
     if (actionPlan) {
@@ -126,6 +134,9 @@ export default function SaveActionPlanModal({ isOpen, onClose, actionAnswers, ac
             isClosable: true,
           }),
         );
+    }
+    {
+      !isBudgetPage && history.push(routes.actionPlans({ realEstateId }));
     }
   };
 
