@@ -26,6 +26,13 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
@@ -40,9 +47,11 @@ import { MdPendingActions } from 'react-icons/md';
 import { GiFootprint } from 'react-icons/gi';
 import { BiEuro } from 'react-icons/bi';
 import { BsTable } from 'react-icons/bs';
+import { FaRegQuestionCircle } from 'react-icons/fa';
 import { BudgetChartConfig } from './BudgetChart';
 import BudgetTableModal from './components/BudgetTableModal';
 import { RiDashboardFill } from 'react-icons/ri';
+import LegendForActionPlanStatusColor from './LegendForActionPlanStatusColor';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -202,7 +211,28 @@ export default function ActionPlanSelectionPanel({
         </AccordionItem>
 
         <AccordionItem borderWidth="0 !important">
-          <SidePanelAccordionButton title="Action Plans" icon={<Icon as={MdPendingActions} />} />
+          <SidePanelAccordionButton
+            title="Action Plans"
+            icon={<Icon as={MdPendingActions} />}
+            buttons={
+              <Tooltip hasArrow label="Legend">
+                <Popover>
+                  <PopoverTrigger>
+                    <IconButton variant="ghost" aria-label="info" icon={<FaRegQuestionCircle size="17" />} />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>Action Plan Status Legend</PopoverHeader>
+
+                    <PopoverBody>
+                      <LegendForActionPlanStatusColor />
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              </Tooltip>
+            }
+          />
           <AccordionPanel>
             <CheckboxGroup
               colorScheme="primary"
