@@ -11,6 +11,13 @@ export const businessTravelSurvey: Survey = {
         name: 'Business Travel',
         elements: [
           {
+            id: 'employeeName',
+            required: true,
+            type: 'string',
+            label: 'Who fills out current survey?',
+            helperText: 'Please specify the name.',
+          },
+          {
             id: 'isInitialSurvey',
             required: true,
             type: 'boolean',

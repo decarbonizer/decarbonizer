@@ -1,4 +1,5 @@
 export interface ItSurveyAnswerValue {
+  realEstateName: string;
   isInitialSurvey: boolean;
   dataCenterEnergyForm: string;
   dataCenterTemperature: number;

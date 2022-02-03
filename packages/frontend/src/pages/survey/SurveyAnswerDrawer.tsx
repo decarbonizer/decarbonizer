@@ -102,7 +102,9 @@ export function SurveyAnswerDrawer({ isOpen, onClose, surveyAnswers }: SurveyAns
                 <Tr key={surveyAnswer._id}>
                   <Td display="flex">
                     <VStack align="flex-start">
-                      <Text>{(surveyAnswer.value as any).realEstateName}</Text>
+                      <Text>
+                        {(surveyAnswer.value as any).realEstateName ?? (surveyAnswer.value as any).employeeName}
+                      </Text>
                       <HStack>
                         <Badge>Created: {new Date(surveyAnswer.createdAt).toLocaleDateString()}</Badge>
                         <Badge>Modified: {new Date(surveyAnswer.updatedAt).toLocaleDateString()}</Badge>

@@ -343,6 +343,32 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
           avgConsumptionPerYear: 50,
         },
       },
+      {
+        _id: 'cce9da83-434c-4616-9374-659d821d1949',
+        value: {
+          realEstateName: 'Data Center 1',
+          isInitialSurvey: true,
+          dataCenterEnergyForm: '00000000-0000-0000-0000-000000000010',
+          dataCenterTemperature: 17,
+          gpuServerCount: 3,
+          dataCenterConsumption: 20000,
+        },
+        realEstateId: '00000000-0000-0000-0000-000000000002',
+        surveyId: 'it',
+        userId: '00000000-0000-0000-0000-000000000000',
+      },
+      {
+        _id: '72ade50e-23fa-433d-b7a1-0d1d9767dbe5',
+        value: {
+          isInitialSurvey: true,
+          longTraveling: 43030,
+          shortTraveling: 10000,
+          employeeName: 'Max Mustermann',
+        },
+        realEstateId: '00000000-0000-0000-0000-000000000002',
+        surveyId: 'businessTravel',
+        userId: '00000000-0000-0000-0000-000000000000',
+      },
     ];
   }
 }

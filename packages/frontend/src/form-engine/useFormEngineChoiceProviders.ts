@@ -42,7 +42,7 @@ export function useFormEngineChoiceOptionProviders(realEstateId: string) {
     currentRealEstateHeatingSurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'heating'),
     currentRealEstateElectricitySurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'electricity'),
     currentRealEstateItSurveyAnswers: makeSurveyAnswerProvider(surveyAnswersQuery.data ?? [], 'it'),
-    currentRealEstateBusinessTravelSurveyAnswers: makeSurveyAnswerProvider(
+    currentRealEstateBusinessTravelSurveyAnswers: makeBusinessTravelSurveyAnswerProvider(
       surveyAnswersQuery.data ?? [],
       'businessTravel',
     ),
@@ -61,6 +61,17 @@ function makeSurveyAnswerProvider(surveyAnswers: Array<SurveyAnswer>, surveyId?:
     .map((surveyAnswer) => ({
       value: surveyAnswer._id,
       display: (surveyAnswer.value as any).realEstateName,
+    }))
+    .orderBy((option) => option.display)
+    .toArray();
+}
+
+function makeBusinessTravelSurveyAnswerProvider(surveyAnswers: Array<SurveyAnswer>, surveyId?: KnownSurveyId) {
+  return new DataFrame(surveyAnswers)
+    .filter((answer) => (surveyId ? answer.surveyId === surveyId : true))
+    .map((surveyAnswer) => ({
+      value: surveyAnswer._id,
+      display: (surveyAnswer.value as any).employeeName,
     }))
     .orderBy((option) => option.display)
     .toArray();
