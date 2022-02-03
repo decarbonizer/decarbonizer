@@ -94,6 +94,118 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         startDate: new Date('2023-02-28T23:00:00.000Z'),
         name: "Peter's Plan",
       },
+      // {
+      //   _id: 'd8955a77-f60f-4ed8-aa5d-76917ce60919',
+      //   actionAnswers: [
+      //     {
+      //       actionId: 'changeBulbs',
+      //       values: {
+      //         value: {
+      //           newBulb: '00000000-0000-0000-0000-000000000003',
+      //         },
+      //         detailsValue: {
+      //           surveyAnswers: ['00000000-0000-0000-0000-000000000014', '00000000-0000-0000-0000-000000000010'],
+      //           priority: 'high',
+      //           chooseTimePeriod: {
+      //             startDate: '2024-01-31T23:00:00.000Z',
+      //           },
+      //         },
+      //       },
+      //     },
+      //   ],
+      //   realEstateId: '00000000-0000-0000-0000-000000000002',
+      //   userId: '00000000-0000-0000-0000-000000000000',
+      //   status: 'open',
+      //   budget: 1500,
+      //   endDate: new Date('2027-01-01T00:00:00.000Z'),
+      //   startDate: new Date('2022-12-31T23:00:00.000Z'),
+      //   name: 'Plan A',
+      // },
+      // {
+      //   _id: '39ed5319-5d4f-402d-9ac7-1aa80f634fa8',
+      //   actionAnswers: [
+      //     {
+      //       actionId: 'changeBulbs',
+      //       values: {
+      //         value: {
+      //           newBulb: '00000000-0000-0000-0000-000000000003',
+      //         },
+      //         detailsValue: {
+      //           priority: 'high',
+      //         },
+      //       },
+      //     },
+      //     {
+      //       actionId: 'switchToHeatPump',
+      //       values: {
+      //         value: {
+      //           newHeatPump: '00000000-0000-0000-0000-000000000001',
+      //         },
+      //         detailsValue: {
+      //           priority: 'high',
+      //           chooseTimePeriod: {
+      //             startDate: new Date('2030-01-31T23:00:00.000Z'),
+      //           },
+      //         },
+      //       },
+      //     },
+      //   ],
+      //   realEstateId: '00000000-0000-0000-0000-000000000002',
+      //   userId: '00000000-0000-0000-0000-000000000000',
+      //   status: 'open',
+      //   budget: 0,
+      //   endDate: new Date('2035-01-01T00:00:00.000Z'),
+      //   startDate: new Date('2026-12-31T23:00:00.000Z'),
+      //   name: 'Plan B',
+      // },
+      // {
+      //   _id: 'dbdf56a0-91db-4cbe-8bd8-6bf0c4644d54',
+      //   actionAnswers: [
+      //     {
+      //       actionId: 'increaseDataCenterTemperature',
+      //       values: {
+      //         value: {
+      //           newDataCenterTemperature: 20,
+      //         },
+      //       },
+      //     },
+      //     {
+      //       actionId: 'useSuperServer',
+      //       values: {
+      //         value: {
+      //           newServer: true,
+      //         },
+      //         detailsValue: {
+      //           chooseTimePeriod: {
+      //             startDate: new Date('2039-01-31T23:00:00.000Z'),
+      //           },
+      //           priority: 'high',
+      //         },
+      //       },
+      //     },
+      //     {
+      //       actionId: 'switchToGreenEnergy',
+      //       values: {
+      //         value: {
+      //           newEnergyForm: '00000000-0000-0000-0000-000000000000',
+      //         },
+      //         detailsValue: {
+      //           chooseTimePeriod: {
+      //             startDate: new Date('2034-01-31T23:00:00.000Z'),
+      //           },
+      //           priority: 'high',
+      //         },
+      //       },
+      //     },
+      //   ],
+      //   realEstateId: '00000000-0000-0000-0000-000000000002',
+      //   userId: '00000000-0000-0000-0000-000000000000',
+      //   status: 'open',
+      //   budget: 0,
+      //   endDate: new Date('2040-01-01T00:00:00.000Z'),
+      //   startDate: new Date('2035-01-31T23:00:00.000Z'),
+      //   name: 'Plan C',
+      // },
     ];
   }
 }
