@@ -12,68 +12,52 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
   protected override getSeed(): Array<ActionPlan> {
     return [
       {
-        _id: '6072d9ed-bb02-4809-a1a0-a677a60e35ff',
-        name: 'Dieter Plan 2022',
-        realEstateId: '00000000-0000-0000-0000-000000000002',
-        userId: '00000000-0000-0000-0000-000000000000',
-        startDate: new Date('2028-01-01T01:00:00.000Z'),
-        endDate: new Date('2036-01-01T01:00:00.000Z'),
-        budget: 0,
-        status: 'open',
+        _id: 'a0214d5d-17b0-4b39-9ece-ea7a53cd6869',
         actionAnswers: [
+          { actionId: 'changeBulbs', values: { value: { newBulb: '00000000-0000-0000-0000-000000000003' } } },
           {
-            actionId: 'changeBulbs',
-            values: {
-              value: {
-                newBulb: '00000000-0000-0000-0000-000000000000',
-              },
-            },
+            actionId: 'reduceRuntime',
+            values: { value: { dailyRuntimeReductionInDays: 0.03125 } },
           },
+          { actionId: 'useSuperServer', values: { value: { newServer: true } } },
           {
-            actionId: 'integrateSmartRadiatorThermostats',
-            values: {
-              value: {
-                newSmartTemperature: true,
-              },
-            },
-          },
-          {
-            actionId: 'switchToHeatPump',
-            values: {
-              value: {
-                newHeatPump: '00000000-0000-0000-0000-000000000001',
-              },
-            },
+            actionId: 'increaseDataCenterTemperature',
+            values: { value: { newDataCenterTemperature: 25 } },
           },
           {
             actionId: 'switchToGreenEnergy',
-            values: {
-              value: {
-                newEnergyForm: '00000000-0000-0000-0000-000000000009',
-              },
-            },
+            values: { value: { newEnergyForm: '00000000-0000-0000-0000-000000000004' } },
           },
         ],
-      },
-      {
-        _id: '77a11e98-9c73-4273-ae6e-ae650cfe6030',
-        name: 'Hans Plan 2022',
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
-        startDate: new Date('2022-01-01T01:00:00.000Z'),
-        endDate: new Date('2028-01-01T01:00:00.000Z'),
-        budget: 0,
         status: 'open',
+        budget: 0,
+        endDate: new Date('2033-02-28T23:00:00.000Z'),
+        startDate: new Date('2028-02-28T23:00:00.000Z'),
+        name: "Patrik's Plan",
+      },
+      {
+        _id: '7501ec26-6fb3-4af1-9e42-a96dfbc9a5e1',
         actionAnswers: [
+          { actionId: 'changeBulbs', values: { value: { newBulb: '00000000-0000-0000-0000-000000000003' } } },
+          { actionId: 'switchToHeatPump', values: { value: { newHeatPump: '00000000-0000-0000-0000-000000000001' } } },
           {
-            actionId: 'changeBulbs',
-            values: {
-              value: {
-                newBulb: '00000000-0000-0000-0000-000000000003',
-              },
-            },
+            actionId: 'switchToGreenEnergy',
+            values: { value: { newEnergyForm: '00000000-0000-0000-0000-000000000000' } },
+          },
+          {
+            actionId: 'increaseDataCenterTemperature',
+            values: { value: { newDataCenterTemperature: 20 } },
           },
         ],
+        realEstateId: '00000000-0000-0000-0000-000000000002',
+        userId: '00000000-0000-0000-0000-000000000000',
+        status: 'open',
+        budget: 15000,
+        endDate: new Date('2028-01-31T23:00:00.000Z'),
+        startDate: new Date('2023-02-28T23:00:00.000Z'),
+        name: "Peter's Plan",
       },
     ];
   }
