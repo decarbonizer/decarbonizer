@@ -109,48 +109,51 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
       <InlineErrorDisplay error={error}>
         {!data && <SkeletonText />}
         {data && (
-          <ResponsiveContainer width="100%" height="100%" minHeight={200}>
-            <AreaChart
-              data={data}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 15,
-              }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
-              <YAxis />
-              <Tooltip content={ComparisonChartTooltip} formatter={(value, label) => [`${value}€`, label]} />
-              <Legend />
-              <Area
-                type="monotone"
-                dataKey={dataKeys[selectedCostCategory].before}
-                name="Old costs"
-                stroke="#9AE6B4"
-                strokeWidth={3}
-                fill="#9AE6B477"
-              />
-              <Area
-                type="monotone"
-                dataKey={dataKeys[selectedCostCategory].after}
-                name="New costs"
-                stroke="#B794F4"
-                strokeWidth={3}
-                fill="#B794F477"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <>
+            <ResponsiveContainer width="100%" height="100%" minHeight={200}>
+              <AreaChart
+                data={data}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 15,
+                }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} />
+                <YAxis />
+                <Tooltip content={ComparisonChartTooltip} formatter={(value, label) => [`${value}€`, label]} />
+                <Legend />
+                <Area
+                  type="monotone"
+                  dataKey={dataKeys[selectedCostCategory].before}
+                  name="Old costs"
+                  stroke="#9AE6B4"
+                  strokeWidth={3}
+                  fill="#9AE6B477"
+                />
+                <Area
+                  type="monotone"
+                  dataKey={dataKeys[selectedCostCategory].after}
+                  name="New costs"
+                  stroke="#B794F4"
+                  strokeWidth={3}
+                  fill="#B794F477"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+            {filledActionAnswersDf.any() &&
+              !breakEvenError &&
+              selectedCostCategory === 'changing' &&
+              breakEvenData?.breakEvenCostOld !== 0 &&
+              breakEvenData?.breakEvenCostNew !== 0 && (
+                <Text layerStyle="hint" textAlign="center">
+                  First break-even-point reached in ~{breakEvenData?.breakEvenYear} years.
+                </Text>
+              )}
+          </>
         )}
       </InlineErrorDisplay>
-      {!!filledActionAnswersDf.toArray().length &&
-        selectedCostCategory === 'changing' &&
-        breakEvenData?.breakEvenCostOld !== 0 &&
-        breakEvenData?.breakEvenCostNew !== 0 && (
-          <InlineErrorDisplay error={breakEvenError}>
-            <Text textAlign="center">Maintenance Break-Even-Point in {breakEvenData?.breakEvenYear} years </Text>
-          </InlineErrorDisplay>
-        )}
     </DashboardCard>
   );
 }
