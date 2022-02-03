@@ -26,17 +26,10 @@ export default function BudgetChartDetailModal({ isOpen, onClose, data, mode }: 
         <ModalHeader>Year {data.year} details</ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody>
-          {mode === 'cost' ? (
-            <PieBudgetDetailChart
-              investmentCosts={data.categoryInvestmentCostsThisYear}
-              originalCosts={data.categoryOriginalConstantCost}
-            />
-          ) : (
-            <PieFootprintDetailChart
-              categoriesFootprint={data.categoryFootprintThisYear}
-              originalFootprint={data.originalFootprint}
-            />
-          )}
+          <PieBudgetDetailChart
+            investmentCosts={data.categoryInvestmentCostsThisYear}
+            originalCosts={data.categoryOriginalConstantCost}
+          />
         </ModalBody>
         <ModalFooter></ModalFooter>
       </ModalContent>
