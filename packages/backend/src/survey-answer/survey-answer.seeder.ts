@@ -369,6 +369,20 @@ export class SurveyAnswerSeeder extends DefaultDbSeeder<SurveyAnswer> {
         surveyId: 'businessTravel',
         userId: '00000000-0000-0000-0000-000000000000',
       },
+      {
+        _id: '3b267a53-da9c-4c4c-ac73-d336d1246b76',
+        value: {
+          realEstateName: 'Data Center 2',
+          isInitialSurvey: true,
+          dataCenterEnergyForm: '00000000-0000-0000-0000-000000000009',
+          dataCenterTemperature: 17,
+          gpuServerCount: 2,
+          dataCenterConsumption: 7000,
+        },
+        realEstateId: '00000000-0000-0000-0000-000000000002',
+        surveyId: 'it',
+        userId: '00000000-0000-0000-0000-000000000000',
+      },
     ];
   }
 }
