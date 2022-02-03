@@ -81,8 +81,10 @@ export class BusinessTravelCoreCalculations extends CategoryCoreCalculations<'bu
 
     return {
       ...surveyAnswer,
-      shortTraveling: surveyAnswer.shortTraveling - lessShortTraveling,
-      longTraveling: surveyAnswer.longTraveling - lessLongTraveling,
+      shortTraveling: lessShortTraveling
+        ? surveyAnswer.shortTraveling - lessShortTraveling
+        : surveyAnswer.shortTraveling,
+      longTraveling: lessLongTraveling ? surveyAnswer.longTraveling - lessLongTraveling : surveyAnswer.longTraveling,
     };
   }
 }
