@@ -216,7 +216,7 @@ export default function ActionPlanSelectionPanel({
             icon={<Icon as={MdPendingActions} />}
             buttons={
               <Tooltip hasArrow label="Legend">
-                <Popover>
+                <Popover trigger="hover">
                   <PopoverTrigger>
                     <IconButton variant="ghost" aria-label="info" icon={<FaRegQuestionCircle size="17" />} />
                   </PopoverTrigger>
