@@ -98,6 +98,10 @@ export default function ActionPlanFileExportPage() {
                 wrap={false}>
                 <Text style={{ color: '#094D13', fontWeight: 'bold' }}>Budget table</Text>
                 <RawBudgetTable data={budgetTableData} isPdfView />
+                <Text style={{ marginTop: 10, fontSize: '12' }}>Legend</Text>
+                <Text style={{ fontSize: '11', marginLeft: '8' }}>
+                  Grayed out rows: No actions/surveys in this category
+                </Text>
               </View>
             </View>
           </Page>

@@ -1,8 +1,7 @@
-import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack, Heading } from '@chakra-ui/react';
 import { useCalculation } from '../../../calculations/useCalculation';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
-import { useFilledActionAnswersDataFrame } from '../../dashboard/dashboardContext';
 import { ExternalCalculationData } from '../../../calculations/useExternalCalculationData';
 import { DataFrame, IDataFrame } from 'data-forge';
 import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
@@ -126,6 +125,12 @@ export default function BudgetTable(props: { actionPlan: ActionPlan }) {
     <InlineErrorDisplay error={error}>
       {isLoading && <SkeletonText />}
       {data && <RawBudgetTable data={data} />}
+      <Heading size="xs" pt="8">
+        Legend
+      </Heading>
+      <Text pl="5" pt="2" fontSize="sm">
+        Grayed out rows: No actions applied in this category.
+      </Text>
     </InlineErrorDisplay>
   );
 }
