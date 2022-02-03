@@ -19,6 +19,8 @@ export interface BudgetChartDataEntry {
   categoryOriginalConstantCost: Array<DeltaResult>;
   footprint: number;
   originalFootprint: number;
+  footprintSavings: number;
+  footprintSavingsPercent: number;
 }
 
 export const categories = ['Illumination', 'BusinessTravel', 'Electricity', 'Heating', 'IT'];
@@ -62,6 +64,7 @@ export function getBudgetChartData(
   // certain data requires the results from the year(s) before. That doesn't work well with the
   // available functional alternatives like `map()`.
   const results: Array<BudgetChartDataEntry> = [];
+
   const originalFootprint = coreCalculations
     .map((coreCalculations) =>
       coreCalculations.getSummedYearlyFootprintDelta(
@@ -133,12 +136,18 @@ export function getBudgetChartData(
 
     const footprint = categoryFootprintThisYear.aggregate((a, b) => a + b);
 
+    const footprintSavings = originalFootprint.after - footprint;
+
+    const footprintSavingsPercent = Math.round((footprintSavings / originalFootprint.after) * 100 * 100) / 100;
+
     results.push({
       year,
       budget: Math.round(budget),
       profit: Math.round(-costs),
       footprint: footprint < 0 ? 0 : Math.round(footprint),
       originalFootprint: Math.round(originalFootprint.after),
+      footprintSavings: Math.round(footprintSavings),
+      footprintSavingsPercent: footprintSavingsPercent,
       // categoryFootprintThisYear: categoryFootprintThisYear.toArray(),
       categoryInvestmentCostsThisYear: categoryInvestmentCostsThisYear.toArray(),
       categoryOriginalConstantCost: categoryOriginalConstantCost.toArray(),

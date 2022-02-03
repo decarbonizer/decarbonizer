@@ -37,9 +37,9 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         realEstateId: '00000000-0000-0000-0000-000000000002',
         userId: '00000000-0000-0000-0000-000000000000',
         status: 'open',
-        budget: 15000,
+        budget: 0,
         endDate: new Date('2028-01-01T00:00:00.000Z'),
-        startDate: new Date('2022-12-31T23:00:00.000Z'),
+        startDate: new Date('2022-02-08T23:00:00.000Z'),
         name: 'Plan A',
       },
       {

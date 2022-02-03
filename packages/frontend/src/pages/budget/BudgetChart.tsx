@@ -18,6 +18,7 @@ import { ActionPlan } from '../../api/actionPlan';
 import { BudgetChartDataEntry } from '../../calculations/calculations/getBudgetChartData';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 import BudgetChartDetailModal from './BudgetChartDetailModal';
+import { DefaultTooltipContent } from 'recharts/lib/component/DefaultTooltipContent';
 
 export type BudgetChartMode = 'cost' | 'co2';
 
@@ -60,12 +61,26 @@ export default function BudgetChart({
     setDataEntry(data);
   };
 
+  const CustomTooltip = ({ payload }: any) => {
+    if (payload?.length) {
+      const newPayload = [
+        { name: payload[0].name, value: payload[0].value, unit: 'kg' },
+        { name: 'Savings', value: payload[0].payload.footprintSavings, unit: 'kg' },
+        { name: 'Savings %', value: payload[0].payload.footprintSavingsPercent, unit: '%' },
+      ];
+
+      return <DefaultTooltipContent payload={newPayload} />;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <Box w="100%" h="100%" pos="relative" {...rest}>
       {!isLoading && (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={filteredData}>
-            <Tooltip />
+            {mode === 'cost' ? <Tooltip /> : <Tooltip content={<CustomTooltip />} />}
             <Legend />
             {showGrid && <CartesianGrid />}
             <XAxis dataKey="year" allowDataOverflow />
