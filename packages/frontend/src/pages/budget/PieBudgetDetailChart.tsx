@@ -5,7 +5,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { categories } from '../../calculations/calculations/getBudgetChartData';
 import { DeltaResult } from '../../utils/deltaType';
 import { DefaultTooltipContent } from 'recharts/lib/component/DefaultTooltipContent';
-import { palette } from '../../utils/colorsChart';
+import { reversedPalette } from '../../utils/colorsChart';
 
 export interface CostChartDataEntry {
   name: string;
@@ -40,40 +40,88 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
     }
   };
 
-  const profitAll = investmentCosts.map((investmentCost, index) => {
-    return investmentCost + originalCosts[index].delta;
-  });
-
   let costTotal = 0;
   let savingsTotal = 0;
-  profitAll.map((category) => (category > 0 ? (costTotal += category) : (savingsTotal += category)));
 
-  profitAll.map((cost, i) => {
-    const percentage = Math.round((cost / Math.abs(costTotal)) * 100 * 100) / 100;
-    const percentageSavings = Math.round((cost / Math.abs(savingsTotal)) * 100 * 100) / 100;
-
-    if (cost < 0) {
-      dataSavings.push({
-        name: categories[i],
-        saving: Math.round(Math.abs(cost)),
-        percentage: Math.abs(percentageSavings),
-      });
-      dataCosts.push({
-        name: categories[i],
-        cost: 0,
-        percentage: Math.abs(percentage),
-      });
+  investmentCosts.map((investmentCost, index) => {
+    if (investmentCost > 0) {
+      costTotal += investmentCost;
     } else {
-      dataSavings.push({
-        name: categories[i],
-        saving: 0,
-        percentage: Math.abs(percentageSavings),
-      });
-      dataCosts.push({
-        name: categories[i],
-        cost: Math.round(Math.abs(cost)),
-        percentage: Math.abs(percentage),
-      });
+      savingsTotal += investmentCost;
+    }
+    if (originalCosts[index].delta > 0) {
+      costTotal += originalCosts[index].delta;
+    } else {
+      savingsTotal += originalCosts[index].delta;
+    }
+  });
+
+  investmentCosts.map((investmentCost, i) => {
+    let percentCost;
+    let percentSaving;
+    // investmentCosts = costs
+    if (investmentCost > 0) {
+      // investmentcosts = costs , originalCost[i].delta = costs
+      if (originalCosts[i].delta > 0) {
+        percentCost =
+          Math.round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(costTotal)) * 100 * 100) / 100;
+        dataCosts.push({
+          name: categories[i],
+          cost: Math.round(investmentCosts[i] + originalCosts[i].delta),
+          percentage: percentCost,
+        });
+        dataSavings.push({
+          name: categories[i],
+          saving: 0,
+          percentage: 0,
+        });
+        // investmentcosts = costs , originalCost[i].delta <= 0 -->  savings
+      } else {
+        percentCost = Math.round((investmentCosts[i] / Math.abs(costTotal)) * 100 * 100) / 100;
+        percentSaving = Math.round((originalCosts[i].delta / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        dataCosts.push({
+          name: categories[i],
+          cost: Math.round(investmentCosts[i]),
+          percentage: percentCost,
+        });
+        dataSavings.push({
+          name: categories[i],
+          saving: Math.round(Math.abs(originalCosts[i].delta)),
+          percentage: Math.abs(percentSaving),
+        });
+      }
+
+      // investmentCost <= 0 --> savings
+    } else {
+      // investmentcosts = savings , originalCost[i].delta <= 0 -->  savings
+      if (originalCosts[i].delta <= 0) {
+        percentSaving =
+          Math.round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        dataCosts.push({
+          name: categories[i],
+          cost: 0,
+          percentage: 0,
+        });
+        dataSavings.push({
+          name: categories[i],
+          saving: Math.round(Math.abs(investmentCosts[i] + originalCosts[i].delta)),
+          percentage: Math.abs(percentSaving),
+        });
+        // investmentcosts = savings , originalCost[i].delta > 0 = Costs
+      } else {
+        percentCost = Math.round((originalCosts[i].delta / Math.abs(costTotal)) * 100 * 100) / 100;
+        percentSaving = Math.round((investmentCosts[i] / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        dataCosts.push({
+          name: categories[i],
+          cost: Math.round(originalCosts[i].delta),
+          percentage: percentCost,
+        });
+        dataSavings.push({
+          name: categories[i],
+          saving: Math.round(Math.abs(investmentCosts[i])),
+          percentage: Math.abs(percentSaving),
+        });
+      }
     }
   });
 
@@ -89,7 +137,7 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
             <PieChart>
               <Pie data={newDataCosts} dataKey="cost" innerRadius={80} outerRadius={130} paddingAngle={3} label>
                 {newDataCosts.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={palette[index % palette.length]} />
+                  <Cell key={`cell-${index}`} fill={reversedPalette[index % reversedPalette.length]} />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
@@ -109,7 +157,7 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
             <PieChart>
               <Pie data={newDataSavings} dataKey="saving" innerRadius={80} outerRadius={130} paddingAngle={3} label>
                 {newDataSavings.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={palette[index % palette.length]} />
+                  <Cell key={`cell-${index}`} fill={reversedPalette[index % reversedPalette.length]} />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />

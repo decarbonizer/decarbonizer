@@ -21,11 +21,7 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
                 newBulb: '00000000-0000-0000-0000-000000000003',
               },
               detailsValue: {
-                surveyAnswers: [
-                  '00000000-0000-0000-0000-000000000014',
-                  '00000000-0000-0000-0000-000000000010',
-                  '00000000-0000-0000-0000-000000000011',
-                ],
+                surveyAnswers: ['00000000-0000-0000-0000-000000000014', '00000000-0000-0000-0000-000000000010'],
                 priority: 'high',
                 chooseTimePeriod: {
                   startDate: new Date('2024-01-31T23:00:00.000Z'),

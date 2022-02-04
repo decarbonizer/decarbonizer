@@ -10,6 +10,7 @@ import { heatingCoreCalculations } from '../core/heatingCoreCalculations';
 import { illuminationCoreCalculations } from '../core/illuminationCoreCalculations';
 import { itCoreCalculations } from '../core/itCoreCalculations';
 import { ActionAnswerBase } from '../../api/actionAnswer';
+
 export interface BudgetChartDataEntry {
   year: number;
   budget: number;
