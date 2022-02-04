@@ -13,7 +13,7 @@ export class BaseDataSeeder extends DefaultDbSeeder<BaseData> {
     return [
       {
         realEstateId: '00000000-0000-0000-0000-000000000002',
-        salaryElectricianMaintenanceWorkerPerHour: 75, // €/h
+        salaryElectricianMaintenanceWorkerPerHour: 12, // €/h
         timeToChangeOneBulb: 10, // min/Stk
         salaryItMaintenanceWorkerPerHour: 100, // €/h
         reductionFactorByUsingSuperServer: 0.3,

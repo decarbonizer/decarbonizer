@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ActionPlanModule } from '../action-plan/action-plan.module';
-import { ActionPlanSeeder } from '../action-plan/action-plan.seeder';
+import { BaseDataModule } from '../base-data/base-data.module';
 import { BulbModule } from '../bulbs/bulb.module';
 import { CompanyModule } from '../companies/company.module';
 import { EnergyFormModule } from '../energy-form/energy-form.module';
@@ -25,6 +25,7 @@ import { DebugController } from './debug.controller';
     SurveyAnswerModule,
     ActionPlanModule,
     CompanyModule,
+    BaseDataModule,
   ],
 })
 export class DebugModule {}

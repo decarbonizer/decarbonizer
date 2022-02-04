@@ -20,7 +20,7 @@ export class BaseDataService extends GenericCrudService<BaseData, BaseData, Base
       (await this.repository.tryGetById(realEstateId)) ?? {
         _id: realEstateId,
         realEstateId: realEstateId,
-        salaryElectricianMaintenanceWorkerPerHour: 75, // €/h
+        salaryElectricianMaintenanceWorkerPerHour: 12, // €/h
         timeToChangeOneBulb: 10, // min/Stk
         salaryItMaintenanceWorkerPerHour: 100, // €/h
         reductionFactorByUsingSuperServer: 0.3,
