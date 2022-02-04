@@ -2,6 +2,7 @@ import {
   Grid,
   Heading,
   HStack,
+  Icon,
   IconButton,
   Popover,
   PopoverArrow,
@@ -11,9 +12,11 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Spacer,
+  Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaRegQuestionCircle } from 'react-icons/fa';
+import { IoInformationCircleOutline } from 'react-icons/io5';
 import { ActionPlan } from '../../api/actionPlan';
 import Card from '../../components/Card';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
@@ -68,9 +71,13 @@ export default function BudgetPage() {
       <Card w="100%" h="100%" pr="8" py="10" pt={3} borderBottomRadius={0} borderTopRightRadius={0} isStatic>
         <HStack pl="8">
           {budgetChartConfig.mode === 'cost' ? (
-            <Heading size="lg">Cumulative Cost and Saving Budget Chart</Heading>
+            <Heading size="lg" pb="3">
+              Cost and Saving Budget Chart
+            </Heading>
           ) : (
-            <Heading size="lg">Produced carbon footprint Burn-Down-Chart</Heading>
+            <Heading size="lg" pb="3">
+              Burn-Down-Chart Carbon Footprint
+            </Heading>
           )}
 
           <Spacer />
@@ -81,25 +88,26 @@ export default function BudgetPage() {
             <PopoverContent>
               <PopoverArrow />
               <PopoverCloseButton />
-              <PopoverHeader>Additional information</PopoverHeader>
+              <PopoverHeader>
+                <HStack>
+                  <Icon as={IoInformationCircleOutline} fontSize="25" />
+                  <Text>Additional information</Text>
+                </HStack>
+              </PopoverHeader>
               {budgetChartConfig.mode === 'cost' ? (
                 <PopoverBody>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                  et ea rebum.
+                  <p>The budget chart shows a cumulative graph of the cost and savings.</p>
+                  <br />
+                  Meaning: Costs and savings are transferrd to the next year.
                 </PopoverBody>
               ) : (
                 <PopoverBody>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                  et ea rebum.
+                  <p>The burn-down chart shows how much footprint is produced each year.</p>
+                  <br />
+                  In addition it shows the overall percentage how much you have saved this year in comparison to the
+                  beginning.
                 </PopoverBody>
               )}
-              <PopoverBody>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-                ea rebum.
-              </PopoverBody>
             </PopoverContent>
           </Popover>
         </HStack>
