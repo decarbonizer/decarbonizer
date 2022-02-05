@@ -1,4 +1,7 @@
-import { useFilledActionAnswersDataFrame } from '../dashboardContext';
+import {
+  useFilledActionAnswersDataFrame,
+  useTransformedSurveyAnswersForThisActionPlanDashboard,
+} from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import { KnownCategoryCoreCalculationsId } from '../../../calculations/core/coreCalculations';
 import { SkeletonText } from '@chakra-ui/react';
@@ -19,15 +22,12 @@ export default function FootprintComparisonChartCard({
 }: FootprintComparisonChartCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const surveyAnswers = useTransformedSurveyAnswersForThisActionPlanDashboard();
   const { isLoading, data, error } = useAsyncCalculation(
     'getFootprintComparisonCardData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-      11,
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray(), 11],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
   return (
