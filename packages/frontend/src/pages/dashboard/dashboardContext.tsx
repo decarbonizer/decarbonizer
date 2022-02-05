@@ -29,7 +29,10 @@ export function useFilledActionAnswersDataFrame() {
 export function useTransformedSurveyAnswersForThisActionPlanDashboard() {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const { actionPlanToEdit } = useContext(DashboardContext);
-  const thisPlansStartYear = actionPlanToEdit ? new Date(actionPlanToEdit.endDate) : undefined;
+  const thisPlansStartYear = useMemo(
+    () => (actionPlanToEdit ? new Date(actionPlanToEdit.endDate) : undefined),
+    [actionPlanToEdit],
+  );
 
   return useAsyncCalculation(
     'getSurveyAnswersTransformedByActionPlans',
