@@ -40,7 +40,7 @@ import {
 } from '../../store/api';
 import QuickInfo from '../dashboard/components/QuickInfo';
 import QuickInfoLabelDescription from '../dashboard/components/QuickInfoLabelDescription';
-import CarbonTreeCard from '../dashboard/global/CarbonTreeCard';
+import CarbonTreeQuickInfo from '../dashboard/global/CarbonTreeQuickInfo';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { FiMoreHorizontal } from 'react-icons/fi';
@@ -210,7 +210,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
                 </QuickInfo>
               )}
             </InlineErrorDisplay>
-            <CarbonTreeCard carbonFootprint={carbonFootprint} />
+            <CarbonTreeQuickInfo carbonFootprint={carbonFootprint} isLoading={false} />
           </VStack>
         </SimpleGrid>
 
