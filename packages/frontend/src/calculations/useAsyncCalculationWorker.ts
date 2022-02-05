@@ -13,6 +13,7 @@ import { getGlobalRealEstateFootprintCardData } from './calculations/getGlobalRe
 import { getRealEstateFootprintComparisonCardData } from './calculations/getRealEstateFootprintComparisonCardData';
 import { getGlobalCompanyFootprintCardData } from './calculations/getGlobalCompanyFootprintCardData';
 import { getActionPlanCardData } from './calculations/getActionPlanCardData';
+import { getCityCardData } from './calculations/getCityCardData';
 
 // The core of the worker is simple:
 // We maintain a dictionary `asyncCalculations` which maps the calculation functions to their own function name.
@@ -40,6 +41,7 @@ const asyncCalculations = createAsyncCalculationsDict({
   getNetZero,
   getGlobalRealEstateFootprintCardData,
   getGlobalCompanyFootprintCardData,
+  getCityCardData,
   getRealEstateFootprintComparisonCardData,
   getActionPlanCardData,
 });
