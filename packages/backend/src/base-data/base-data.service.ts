@@ -38,7 +38,7 @@ export class BaseDataService extends GenericCrudService<BaseData, BaseData, Base
   }
 
   async updateForRealEstate(baseData: BaseData) {
-    await this.repository.tryRemoveById(baseData._id ?? '');
+    await this.repository.tryRemoveById(baseData._id ?? baseData.realEstateId ?? '');
     await this.repository.add(baseData);
   }
 }
