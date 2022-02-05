@@ -7,6 +7,7 @@ import { getFootprintComparisonCardData } from './calculations/getFootprintCompa
 import { getCostComparisonCardData } from './calculations/getCostComparisonChartData';
 import { getCalculatedCostsCardData } from './calculations/getCalculatedCostsCardData';
 import { getCostBreakEvenPointData } from './calculations/getCostBreakEvenPointData';
+import { getSurveyAnswersTransformedByActionPlans } from './calculations/getSurveyAnswersTransformedByActionPlans';
 
 // The core of the worker is simple:
 // We maintain a dictionary `asyncCalculations` which maps the calculation functions to their own function name.
@@ -23,6 +24,7 @@ const createAsyncCalculationsDict = <T extends { [K in keyof T]: AsyncCalculatio
 
 const asyncCalculations = createAsyncCalculationsDict({
   // Register new calculation functions to be runnable via `useAsyncCalculation` below.
+  getSurveyAnswersTransformedByActionPlans,
   getBudgetChartData,
   getCostDeltaCardData,
   getCostComparisonCardData,

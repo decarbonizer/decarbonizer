@@ -5,30 +5,28 @@ import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
 import { GiFootprint } from 'react-icons/gi';
 import HaloIcon from '../../../components/HaloIcon';
-import { useFilledActionAnswersDataFrame } from '../dashboardContext';
+import {
+  useFilledActionAnswersDataFrame,
+  useTransformedSurveyAnswersForThisActionPlanDashboard,
+} from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
 import { TiEquals } from 'react-icons/ti';
 import { useAsyncCalculation } from '../../../calculations/useAsyncCalculation';
 import { KnownCategoryCoreCalculationsId } from '../../../calculations/core/coreCalculations';
-import { useParams } from 'react-router';
-import { RealEstatePageParams } from '../../../routes';
 
 export interface FootprintDeltaCardProps extends DashboardCardProps {
   coreCalculationsId: KnownCategoryCoreCalculationsId;
 }
 
 export default function FootprintDeltaCard({ coreCalculationsId, ...rest }: FootprintDeltaCardProps) {
-  const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const surveyAnswers = useTransformedSurveyAnswersForThisActionPlanDashboard();
   const { isLoading, data, error } = useAsyncCalculation(
     'getFootprintDeltaCardData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray()],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, surveyAnswers],
   );
 
   return (
