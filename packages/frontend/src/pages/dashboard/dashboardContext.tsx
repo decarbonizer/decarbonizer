@@ -33,14 +33,17 @@ export function useTransformedSurveyAnswersForThisActionPlanDashboard() {
     () => (actionPlanToEdit ? new Date(actionPlanToEdit.endDate) : undefined),
     [actionPlanToEdit],
   );
+  console.info(thisPlansStartYear);
 
   return useAsyncCalculation(
     'getSurveyAnswersTransformedByActionPlans',
     (externalCalculationData) => [
       externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      externalCalculationData.actionPlans.filter((x) => x.realEstateId === realEstateId).toArray(),
+      externalCalculationData.actionPlans
+        .filter((x) => x._id !== actionPlanToEdit?._id && x.realEstateId === realEstateId)
+        .toArray(),
       thisPlansStartYear,
     ],
-    [thisPlansStartYear, realEstateId],
+    [thisPlansStartYear, realEstateId, actionPlanToEdit],
   );
 }
