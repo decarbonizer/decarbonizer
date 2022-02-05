@@ -72,6 +72,23 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         startDate: new Date('2028-12-31T23:00:00.000Z'),
         name: 'Plan B',
       },
+      {
+        _id: 'dc179787-0f0e-452b-8af3-cc334e09afa3',
+        actionAnswers: [
+          { actionId: 'reduceAirTravel', values: { value: { lessLongTraveling: 18000 } } },
+          {
+            actionId: 'increaseDataCenterTemperature',
+            values: { value: { newDataCenterTemperature: 23 } },
+          },
+        ],
+        realEstateId: '00000000-0000-0000-0000-000000000002',
+        userId: '00000000-0000-0000-0000-000000000000',
+        status: 'open',
+        budget: 0,
+        endDate: new Date('2036-01-01T00:00:00.000Z'),
+        startDate: new Date('2035-01-01T00:00:00.000Z'),
+        name: "Alexandra's Plan",
+      },
       // {
       //   _id: 'dbdf56a0-91db-4cbe-8bd8-6bf0c4644d54',
       //   actionAnswers: [
