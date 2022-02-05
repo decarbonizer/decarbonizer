@@ -1,5 +1,5 @@
 import { Flex, Grid } from '@chakra-ui/react';
-import ComparisonCard from './global/ComparisonCard';
+import RealEstateFootprintComparisonCard from './global/RealEstateFootprintComparisonCard';
 import GlobalFootprintCard from './global/GlobalFootprintCard';
 import NetZeroCard from './global/NetZeroCard';
 
@@ -16,7 +16,7 @@ export default function GlobalChartsSection({ isNarrow }: GlobalChartsSectionPro
         gap={6}>
         <GlobalFootprintCard />
         <NetZeroCard />
-        <ComparisonCard gridColumn={isNarrow ? undefined : 'span 2'} />
+        <RealEstateFootprintComparisonCard gridColumn={isNarrow ? undefined : 'span 2'} />
       </Grid>
     </Flex>
   );
