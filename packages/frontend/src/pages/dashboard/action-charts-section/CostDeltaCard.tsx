@@ -5,7 +5,10 @@ import QuickInfoLabelDescription from '../components/QuickInfoLabelDescription';
 import { mapDeltaType } from '../../../utils/deltaType';
 import HaloIcon from '../../../components/HaloIcon';
 import { BiEuro, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
-import { useFilledActionAnswersDataFrame } from '../dashboardContext';
+import {
+  useFilledActionAnswersDataFrame,
+  useTransformedSurveyAnswersForThisActionPlanDashboard,
+} from '../dashboardContext';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import { TiEquals } from 'react-icons/ti';
 import { useAsyncCalculation } from '../../../calculations/useAsyncCalculation';
@@ -20,14 +23,12 @@ export interface CostDeltaCardProps extends DashboardCardProps {
 export default function CostDeltaCard({ coreCalculationsId, ...rest }: CostDeltaCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const surveyAnswers = useTransformedSurveyAnswersForThisActionPlanDashboard();
   const { isLoading, data, error } = useAsyncCalculation(
     'getCostDeltaCardData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray()],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
   return (
