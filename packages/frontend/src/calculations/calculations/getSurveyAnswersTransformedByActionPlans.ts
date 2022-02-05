@@ -14,7 +14,7 @@ export function getSurveyAnswersTransformedByActionPlans(
   const surveyAnswersDf = new DataFrame(surveyAnswers);
   const transformingActionPlansDf = new DataFrame(transformingActionPlans);
   const linearizedActionAnswers = linearizeActionPlanAnswers(transformingActionPlansDf)
-    .filter((x) => !maxActionAnswerDate || x.endDate <= maxActionAnswerDate)
+    .filter((x) => !maxActionAnswerDate || x.startDate <= maxActionAnswerDate)
     .map((x) => x.answer);
 
   return allCategoryCoreCalculations.flatMap(
