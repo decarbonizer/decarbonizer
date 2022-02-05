@@ -1,11 +1,9 @@
 import { DataFrame } from 'data-forge';
 import { createContext, Dispatch, SetStateAction, useContext, useMemo } from 'react';
-import { useParams } from 'react-router';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { ActionPlan } from '../../api/actionPlan';
-import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../data/actions/action';
-import { RealEstatePageParams } from '../../routes';
+import { useTransformedSurveyAnswers } from '../../utils/useTransformedSurveyAnswers';
 
 export const DashboardContext = createContext<DashboardContextValue>(null!);
 
@@ -27,23 +25,6 @@ export function useFilledActionAnswersDataFrame() {
 }
 
 export function useTransformedSurveyAnswersForThisActionPlanDashboard() {
-  const { realEstateId } = useParams<RealEstatePageParams>();
   const { actionPlanToEdit } = useContext(DashboardContext);
-  const thisPlansStartYear = useMemo(
-    () => (actionPlanToEdit ? new Date(actionPlanToEdit.endDate) : undefined),
-    [actionPlanToEdit],
-  );
-  console.info(thisPlansStartYear);
-
-  return useAsyncCalculation(
-    'getSurveyAnswersTransformedByActionPlans',
-    (externalCalculationData) => [
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      externalCalculationData.actionPlans
-        .filter((x) => x._id !== actionPlanToEdit?._id && x.realEstateId === realEstateId)
-        .toArray(),
-      thisPlansStartYear,
-    ],
-    [thisPlansStartYear, realEstateId, actionPlanToEdit],
-  );
+  return useTransformedSurveyAnswers(actionPlanToEdit);
 }
