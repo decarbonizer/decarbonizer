@@ -12,7 +12,10 @@ import {
   MenuOptionGroup,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useFilledActionAnswersDataFrame } from '../dashboardContext';
+import {
+  useFilledActionAnswersDataFrame,
+  useTransformedSurveyAnswersForThisActionPlanDashboard,
+} from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
@@ -48,25 +51,19 @@ export default function CostComparisonChartCard({ coreCalculationsId, ...rest }:
   const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
   // const [surveyAnswers, setSurveyAnswers] = useState();
+  const surveyAnswers = useTransformedSurveyAnswersForThisActionPlanDashboard();
   const { isLoading, data, error } = useAsyncCalculation(
     'getCostComparisonCardData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-      11,
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray(), 11],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
   const { data: breakEvenData, error: breakEvenError } = useAsyncCalculation(
     'getCostBreakEvenPointData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray()],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
   const [selectedCostCategory, setSelectedCostCategory] = useState<CostCategory>('all');
