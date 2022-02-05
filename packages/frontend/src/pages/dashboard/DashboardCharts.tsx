@@ -58,7 +58,8 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
       <SimpleGrid columns={isComparingPlans ? 2 : 1} gap={8}>
         <GlobalChartsSection isNarrow={isComparingPlans} />
         {isComparingPlans && (
-          <DashboardContext.Provider value={{ ...dashboardContext, filledActionAnswers: {} }}>
+          <DashboardContext.Provider
+            value={{ ...dashboardContext, filledActionAnswers: {}, actionPlanToEdit: actionPlanComparand }}>
             <GlobalChartsSection isNarrow={isComparingPlans} />
           </DashboardContext.Provider>
         )}
@@ -78,7 +79,11 @@ export default function DashboardCharts({ selectedActionCategory }: DashboardCha
             </Box>
             {isComparingPlans && (
               <DashboardContext.Provider
-                value={{ ...dashboardContext, filledActionAnswers: actionPlanComparandAnswers }}>
+                value={{
+                  ...dashboardContext,
+                  filledActionAnswers: actionPlanComparandAnswers,
+                  actionPlanToEdit: actionPlanComparand,
+                }}>
                 <ActionChartsSection isNarrow={isComparingPlans} />
               </DashboardContext.Provider>
             )}
