@@ -42,7 +42,6 @@ import { CgExport } from 'react-icons/all';
 import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
 import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
 import { getNetZero } from '../../calculations/calculations/getNetZero';
-import { ActionAnswerBase } from '../../api/actionAnswer';
 import { businessTravelCoreCalculations } from '../../calculations/core/businessTravelCoreCalculations';
 import { CategoryCoreCalculations } from '../../calculations/core/categoryCoreCalculations';
 import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
@@ -82,9 +81,9 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
 
       const netZeroCalculationNew = getNetZero(
         externalCalculationData,
-        surveyAnswers,
+        surveyAnswers.toArray(),
         realEstateId,
-        new DataFrame<number, ActionAnswerBase>(),
+        [],
         currentActionPlan._id,
       );
 

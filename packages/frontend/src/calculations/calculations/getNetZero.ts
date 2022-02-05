@@ -1,4 +1,4 @@
-import { DataFrame, IDataFrame } from 'data-forge';
+import { DataFrame } from 'data-forge';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { getDeltaType } from '../../utils/deltaType';
@@ -7,12 +7,15 @@ import { getGlobalSummedYearlyFootprintDelta } from './getGlobalSummedYearlyFoot
 
 export function getNetZero(
   externalCalculationData: ExternalCalculationData,
-  surveyAnswers: IDataFrame<number, SurveyAnswer>,
+  surveyAnswers: Array<SurveyAnswer>,
   realEstateId: string,
-  actionAnswers: IDataFrame<number, ActionAnswerBase>,
+  actionAnswers: Array<ActionAnswerBase>,
   actionPlanId?: string,
 ) {
-  const surveyAnswersInitial = surveyAnswers.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
+  const surveyAnswersDf = new DataFrame(surveyAnswers);
+  const actionAnswersDf = new DataFrame(actionAnswers);
+
+  const surveyAnswersInitial = surveyAnswersDf.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
   const actionPlans = actionPlanId
     ? externalCalculationData.actionPlans.filter(
         (actionPlan) => actionPlan.realEstateId === realEstateId && actionPlan._id === actionPlanId,
@@ -36,7 +39,7 @@ export function getNetZero(
   const footprintFilledActionAnswers = getGlobalSummedYearlyFootprintDelta(
     externalCalculationData,
     surveyAnswersInitial,
-    actionAnswers,
+    actionAnswersDf,
   );
 
   const footprintFilledActionAnswersDelta =
