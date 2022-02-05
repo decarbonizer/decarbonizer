@@ -7,12 +7,12 @@ import { linearizeActionPlanAnswers } from './utils';
 
 export function getRealEstateFootprintComparisonCardData(
   externalCalculationData: ExternalCalculationData,
-  thisRealEstatesSurveyAnswers: Array<SurveyAnswer>,
-  transformingActionAnswers: Array<ActionAnswerBase>,
-  thisRealEstateId: string,
+  thisRealEstatesSurveyAnswers: Array<SurveyAnswer> | undefined,
+  transformingActionAnswers: Array<ActionAnswerBase> | undefined,
+  thisRealEstateId: string | undefined,
 ) {
-  const transformingActionAnswersDf = new DataFrame(transformingActionAnswers);
-  const thisRealEstatesSurveyAnswersDf = new DataFrame(thisRealEstatesSurveyAnswers);
+  const transformingActionAnswersDf = new DataFrame(transformingActionAnswers ?? []);
+  const thisRealEstatesSurveyAnswersDf = new DataFrame(thisRealEstatesSurveyAnswers ?? []);
 
   return externalCalculationData.realEstates
     .map((realEstate) => {

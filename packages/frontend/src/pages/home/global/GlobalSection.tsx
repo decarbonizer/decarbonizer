@@ -3,7 +3,7 @@ import { getGlobalFootprintForAllRealEstates } from '../../../calculations/calcu
 import { useCalculation } from '../../../calculations/useCalculation';
 import DashboardCard from '../../dashboard/components/DashboardCard';
 import CarbonTreeCard from '../../dashboard/global/CarbonTreeCard';
-import ComparisonCard from './ComparisonCard';
+import GlobalRealEstateFootprintComparisonCard from './GlobalRealEstateFootprintComparisonCard';
 import GlobalFootprintCard from './GlobalFootprintCard';
 import NetZeroCard from './NetZeroCard';
 
@@ -24,7 +24,7 @@ export default function GlobalSection() {
             <CarbonTreeCard carbonFootprint={data} />
           </DashboardCard>
         )}
-        <ComparisonCard gridColumn={'span 2'} />
+        <GlobalRealEstateFootprintComparisonCard gridColumn={'span 2'} />
       </Grid>
     </Flex>
   );
