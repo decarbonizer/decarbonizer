@@ -33,7 +33,6 @@ export function useTransformedSurveyAnswersForThisActionPlanDashboard() {
     () => (actionPlanToEdit ? new Date(actionPlanToEdit.endDate) : undefined),
     [actionPlanToEdit],
   );
-  console.info(thisPlansStartYear);
 
   return useAsyncCalculation(
     'getSurveyAnswersTransformedByActionPlans',

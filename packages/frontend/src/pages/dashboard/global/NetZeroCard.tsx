@@ -32,7 +32,7 @@ export default function NetZeroCard() {
         {data && (
           <QuickInfo
             icon={<HaloIcon icon={BiTargetLock} colorScheme={mapDeltaType(data.deltaType, 'green', 'red', 'gray')} />}>
-            <QuickInfoLabelDescription label={`${data.newAdjustedAchievedGoal.toFixed(1)}%`} />
+            <QuickInfoLabelDescription label={`${data.newAdjustedAchievedGoal}%`} />
           </QuickInfo>
         )}
       </InlineErrorDisplay>
