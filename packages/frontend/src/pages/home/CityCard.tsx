@@ -24,11 +24,6 @@ import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { RealEstate } from '../../api/realEstate';
-import {
-  getGlobalSummedYearlyFootprint,
-  getGlobalSummedYearlyFootprintDelta,
-} from '../../calculations/calculations/getGlobalSummedYearlyFootprint';
-import { useCalculation } from '../../calculations/useCalculation';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import HaloIcon from '../../components/HaloIcon';
@@ -44,7 +39,7 @@ import CarbonTreeQuickInfo from '../dashboard/global/CarbonTreeQuickInfo';
 import CreateRealEstateModal from './CreateRealEstateModal';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import { DataFrame } from 'data-forge';
+import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 
 export interface CityCardProps {
   realEstate: RealEstate;
@@ -58,38 +53,9 @@ export default function CityCard({ realEstate }: CityCardProps) {
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const history = useHistory();
   const toast = useToast();
+  const { isLoading, data, error } = useAsyncCalculation('getCityCardData', () => [realEstate._id], [realEstate._id]);
 
-  const { isLoading, data, error } = useCalculation(
-    (externalCalculationData) => {
-      const surveyAnswers = externalCalculationData.surveyAnswers.filter(
-        (surveyAnswer) => surveyAnswer.realEstateId === realEstate._id && surveyAnswer.value.isInitialSurvey,
-      );
-      const actionPlansRealEstate = externalCalculationData.actionPlans.filter(
-        (actionPlan) => actionPlan.realEstateId === realEstate._id,
-      );
-      const originalFootprint = getGlobalSummedYearlyFootprint(externalCalculationData, surveyAnswers);
-
-      const actionPlanFootprints = actionPlansRealEstate
-        .map((actionPlan) => {
-          const footprintActionPlan = getGlobalSummedYearlyFootprintDelta(
-            externalCalculationData,
-            surveyAnswers,
-            new DataFrame(actionPlan.actionAnswers),
-          ).delta;
-          return footprintActionPlan;
-        })
-        .reduce((a, b) => a + b, 0);
-
-      const overallFootprint = originalFootprint + actionPlanFootprints;
-
-      return {
-        overallFootprint,
-      };
-    },
-    [realEstate._id],
-  );
-
-  const carbonFootprint = data?.overallFootprint ?? 0;
+  const carbonFootprint = data?.footprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
