@@ -167,8 +167,8 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
     await updateBaseData({ realEstateId: realEstateId, body: value as any });
     onClose();
     toast({
-      title: 'Core paraemters updated.',
-      description: 'Core parameters has been successfully updated.',
+      title: 'Core parameters updated.',
+      description: 'The core parameters have been successfully updated.',
       status: 'success',
       duration: 5000,
       isClosable: true,

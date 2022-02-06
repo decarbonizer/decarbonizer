@@ -159,8 +159,8 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
                   placeholder="Get recommendation for lowest..."
                   value={suggestion}
                   onChange={(e) => handleSuggestionsClick(e)}>
-                  <option value="footprint">footrpint</option>
-                  <option value="cost">cost</option>
+                  <option value="footprint">Footprint</option>
+                  <option value="cost">Cost</option>
                 </Select>
               )}
 
