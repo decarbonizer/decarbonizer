@@ -33,6 +33,12 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Portal,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
@@ -49,10 +55,11 @@ import { BiEuro } from 'react-icons/bi';
 import { BsTable } from 'react-icons/bs';
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import { BudgetChartConfig } from './BudgetChart';
-import BudgetTableModal from './components/BudgetTableModal';
-import { RiDashboardFill } from 'react-icons/ri';
 import LegendForActionPlanStatusColor from './LegendForActionPlanStatusColor';
 import { Link } from 'react-router-dom';
+import BudgetTableModal from './BudgetTableModal';
+import { FiMoreHorizontal } from 'react-icons/fi';
+import { CgExport } from 'react-icons/cg';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -156,18 +163,18 @@ export default function ActionPlanSelectionPanel({
                   </Tooltip>
                 </RangeSlider>
               </FormControl>
+              <FormControl d="flex" alignItems="center" gap="2">
+                <Switch
+                  id="show-grid"
+                  colorScheme="primary"
+                  size="lg"
+                  isChecked={budgetChartConfig.showGrid}
+                  onChange={(e) => setBudgetChartConfig({ ...budgetChartConfig, showGrid: e.target.checked })}
+                />
+                <FormLabel>Show Grid</FormLabel>
+              </FormControl>
               {budgetChartConfig.mode === 'cost' && (
                 <>
-                  <FormControl d="flex" alignItems="center" gap="2">
-                    <Switch
-                      id="show-grid"
-                      colorScheme="primary"
-                      size="lg"
-                      isChecked={budgetChartConfig.showGrid}
-                      onChange={(e) => setBudgetChartConfig({ ...budgetChartConfig, showGrid: e.target.checked })}
-                    />
-                    <FormLabel>Show Grid</FormLabel>
-                  </FormControl>
                   <FormControl d="flex" alignItems="center" gap="2">
                     <Switch
                       id="show-costs"
@@ -245,27 +252,31 @@ export default function ActionPlanSelectionPanel({
                 <HStack key={actionPlan._id} w="100%">
                   <Checkbox value={actionPlan._id}>{actionPlan.name}</Checkbox>
                   <Spacer />
-                  <Tooltip label="Summary table">
-                    <IconButton
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label="Options"
+                      icon={<Icon as={FiMoreHorizontal} />}
                       variant="ghost"
-                      aria-label="Summary table"
-                      icon={<BsTable size="13" />}
-                      onClick={() => setBudgetTableActionPlan(actionPlan)}
                     />
-                  </Tooltip>
-                  <Tooltip label="Dashboard">
-                    <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id })}>
-                      <IconButton aria-label="Dashboard" variant="ghost" icon={<Icon as={RiDashboardFill} />} />
-                    </Link>
-                  </Tooltip>
-                  <Tooltip label="Edit...">
-                    <IconButton
-                      variant="ghost"
-                      aria-label="Edit..."
-                      icon={<Icon as={FaEdit} />}
-                      onClick={() => setActionPlanToEdit(actionPlan)}
-                    />
-                  </Tooltip>
+                    <Portal>
+                      <MenuList transform="">
+                        <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id })}>
+                          <MenuItem icon={<Icon as={BsTable} />}>Dashboard</MenuItem>
+                        </Link>
+                        <Link to={routes.actionPlanFileExport({ realEstateId, actionPlanId: actionPlan._id })}>
+                          <MenuItem icon={<Icon as={CgExport} />}>Export</MenuItem>
+                        </Link>
+                        <MenuDivider />
+                        <MenuItem icon={<Icon as={BsTable} />} onClick={() => setBudgetTableActionPlan(actionPlan)}>
+                          Summary Table...
+                        </MenuItem>
+                        <MenuItem icon={<Icon as={FaEdit} />} onClick={() => setActionPlanToEdit(actionPlan)}>
+                          Edit...
+                        </MenuItem>
+                      </MenuList>
+                    </Portal>
+                  </Menu>
                 </HStack>
               ))}
             </CheckboxGroup>

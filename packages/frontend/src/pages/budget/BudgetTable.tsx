@@ -1,20 +1,20 @@
 import { Box, Table, TableCellProps, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack, Heading } from '@chakra-ui/react';
-import { useCalculation } from '../../../calculations/useCalculation';
-import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
+import { useCalculation } from '../../calculations/useCalculation';
+import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { SkeletonText } from '@chakra-ui/skeleton';
-import { ExternalCalculationData } from '../../../calculations/useExternalCalculationData';
+import { ExternalCalculationData } from '../../calculations/useExternalCalculationData';
 import { DataFrame, IDataFrame } from 'data-forge';
-import { SurveyToSurveyAnswerMap } from '../../../data/surveys/survey';
-import { SurveyAnswer } from '../../../api/surveyAnswer';
-import { ActionAnswerBase } from '../../../api/actionAnswer';
+import { SurveyToSurveyAnswerMap } from '../../data/surveys/survey';
+import { SurveyAnswer } from '../../api/surveyAnswer';
+import { ActionAnswerBase } from '../../api/actionAnswer';
 import { ReactNode } from 'react';
 import * as Pdf from '@react-pdf/renderer';
-import { illuminationCoreCalculations } from '../../../calculations/core/illuminationCoreCalculations';
-import { heatingCoreCalculations } from '../../../calculations/core/heatingCoreCalculations';
-import { electricityCoreCalculations } from '../../../calculations/core/electricityCoreCalculations';
-import { itCoreCalculations } from '../../../calculations/core/itCoreCalculations';
-import { businessTravelCoreCalculations } from '../../../calculations/core/businessTravelCoreCalculations';
-import { ActionPlan } from '../../../api/actionPlan';
+import { illuminationCoreCalculations } from '../../calculations/core/illuminationCoreCalculations';
+import { heatingCoreCalculations } from '../../calculations/core/heatingCoreCalculations';
+import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
+import { itCoreCalculations } from '../../calculations/core/itCoreCalculations';
+import { businessTravelCoreCalculations } from '../../calculations/core/businessTravelCoreCalculations';
+import { ActionPlan } from '../../api/actionPlan';
 
 interface Category<T extends keyof SurveyToSurveyAnswerMap = any> {
   surveyId: T;

@@ -12,7 +12,7 @@ import { useFormEngineChoiceOptionProviders } from '../../form-engine/useFormEng
 import { knownActionCategories, knownActions } from '../../data/actions/action';
 import { useActionSchema } from '../../data/actions/useActionSchema';
 import FormEngine from '../../form-engine/FormEngine';
-import { RawBudgetTable, useBudgetTableData } from '../budget/components/BudgetTable';
+import { RawBudgetTable, useBudgetTableData } from '../budget/BudgetTable';
 import { DataFrame } from 'data-forge';
 
 // curl https://fonts.googleapis.com/css2\?family\=EB+Garamond:ital,wght@0,400\;0,700\;1,400
