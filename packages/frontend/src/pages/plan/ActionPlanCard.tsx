@@ -15,6 +15,7 @@ import {
   MenuList,
   Portal,
   Box,
+  MenuDivider,
 } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
 import { BiTargetLock, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
@@ -47,6 +48,7 @@ import { CategoryCoreCalculations } from '../../calculations/core/categoryCoreCa
 import { electricityCoreCalculations } from '../../calculations/core/electricityCoreCalculations';
 import { itCoreCalculations } from '../../calculations/core/itCoreCalculations';
 import { deltaResultReducer } from '../../calculations/calculations/getBudgetChartData';
+import { Link } from 'react-router-dom';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -145,24 +147,13 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         />
         <Portal>
           <MenuList transform="">
-            <MenuItem
-              icon={<Icon as={RiDashboardFill} />}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
-              }}>
-              Dashboard
-            </MenuItem>
-            <MenuItem
-              icon={<Icon as={CgExport} />}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                history.push(routes.actionPlanFileExport({ realEstateId, actionPlanId: currentActionPlan._id }));
-              }}>
-              Export
-            </MenuItem>
+            <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id })}>
+              <MenuItem icon={<Icon as={RiDashboardFill} />}>Dashboard</MenuItem>
+            </Link>
+            <Link to={routes.actionPlanFileExport({ realEstateId, actionPlanId: currentActionPlan._id })}>
+              <MenuItem icon={<Icon as={CgExport} />}>Export</MenuItem>
+            </Link>
+            <MenuDivider />
             <MenuItem
               icon={<Icon as={FaEdit} />}
               onClick={(e) => {
