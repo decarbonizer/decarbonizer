@@ -135,49 +135,57 @@ export default function CityCard({ realEstate }: CityCardProps) {
           </Text>
         </VStack>
 
-        <SimpleGrid flexGrow={1} align="center" columns={2} p="8">
+        <SimpleGrid flexGrow={1} align="center" columns={2} p="8" gap={2}>
           <VStack align="flex-start">
-            <p>
-              <b>Size of the office:</b> {realEstate.area} m<sup>2</sup>
-            </p>
-            <p>
-              <b>Number of employees: </b>
-              {realEstate.employees}
-            </p>
-            <br />
-            <br />
-            <p>
-              <b>Number of surveys: </b>
-              {surveyAnswers ? surveyAnswers.length : 0}
-            </p>
-            <p>
-              <b>Number of action plans: </b>
-              {actionPlans ? actionPlans.length : 0}
-            </p>
+            {surveyAnswers && actionPlans ? (
+              <>
+                <p>
+                  <b>Size of the office:</b> {realEstate.area} m<sup>2</sup>
+                </p>
+                <p>
+                  <b>Number of employees: </b>
+                  {realEstate.employees}
+                </p>
+                <br />
+                <br />
+                <p>
+                  <b>Number of surveys: </b>
+                  {surveyAnswers ? surveyAnswers.length : 0}
+                </p>
+                <p>
+                  <b>Number of action plans: </b>
+                  {actionPlans ? actionPlans.length : 0}
+                </p>
+              </>
+            ) : (
+              <SkeletonText w="100%" noOfLines={9} />
+            )}
           </VStack>
-          <VStack align="flex-start" spacing="4">
-            <InlineErrorDisplay error={error}>
-              {isLoading && <SkeletonText />}
+          <InlineErrorDisplay error={error}>
+            <VStack align="flex-start" spacing="4">
+              {!data && <SkeletonText w="100%" noOfLines={9} />}
               {data && (
-                <QuickInfo icon={<HaloIcon icon={GiFootprint} />}>
-                  <QuickInfoLabelDescription
-                    label={
-                      <>
-                        {adjustedFootprint.toFixed(1)}
-                        {unitSymbol}
-                      </>
-                    }
-                    description={
-                      <>
-                        CO<sub>2</sub> produced
-                      </>
-                    }
-                  />
-                </QuickInfo>
+                <>
+                  <QuickInfo icon={<HaloIcon icon={GiFootprint} />}>
+                    <QuickInfoLabelDescription
+                      label={
+                        <>
+                          {adjustedFootprint.toFixed(1)}
+                          {unitSymbol}
+                        </>
+                      }
+                      description={
+                        <>
+                          CO<sub>2</sub> produced
+                        </>
+                      }
+                    />
+                  </QuickInfo>
+                  <CarbonTreeQuickInfo carbonFootprint={carbonFootprint} isLoading={false} />
+                </>
               )}
-            </InlineErrorDisplay>
-            <CarbonTreeQuickInfo carbonFootprint={carbonFootprint} isLoading={false} />
-          </VStack>
+            </VStack>
+          </InlineErrorDisplay>
         </SimpleGrid>
 
         <DeleteAlertDialog
