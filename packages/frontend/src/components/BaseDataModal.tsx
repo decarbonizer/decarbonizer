@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   IconButton,
@@ -23,7 +25,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 export const baseDataSchema: FormSchema = {
   pages: [
     {
-      name: 'Base Data',
+      name: 'Core Parameters',
       elements: [
         {
           id: 'salaryElectricianMaintenanceWorkerPerHour',
@@ -57,7 +59,7 @@ export const baseDataSchema: FormSchema = {
       ],
     },
     {
-      name: 'Base Data',
+      name: 'Core Parameters',
       elements: [
         {
           id: 'salaryItMaintenanceWorkerPerHour',
@@ -111,7 +113,7 @@ export const baseDataSchema: FormSchema = {
       ],
     },
     {
-      name: 'Base Data',
+      name: 'Core Parameters',
       elements: [
         {
           id: 'shortTravelEF',
@@ -165,21 +167,27 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
     await updateBaseData({ realEstateId: realEstateId, body: value as any });
     onClose();
     toast({
-      title: 'Base data updated.',
-      description: 'Base data has been successfully updated.',
+      title: 'Core paraemters updated.',
+      description: 'Core parameters has been successfully updated.',
       status: 'success',
       duration: 5000,
       isClosable: true,
     });
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Base Data Overview</ModalHeader>
+        <ModalHeader>Core Parameters Overview</ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody>
           <Box w="100%" minH="3xl">
+            <Alert status="info" fontSize="sm" mb="3">
+              <AlertIcon />
+              Core parameters are values which are uses for the calculations. Normally default values, which should be a
+              good fit for most companies, are used. But you can change them so that they more realistically match your
+              company.
+            </Alert>
             <FormEngine
               schema={baseDataSchema}
               value={value}
