@@ -22,9 +22,9 @@ export default function ActionPanel() {
           {actionPlanToEdit?.name ?? 'New action plan'}
         </Heading>
         <Spacer />
-        <Tooltip label="Base Data">
+        <Tooltip label="Core Parameters">
           <IconButton
-            aria-label="Base Data"
+            aria-label="Core Parameters"
             onClick={baseDataDisclosure.onOpen}
             variant="outline"
             icon={<FcDataConfiguration size="20" />}

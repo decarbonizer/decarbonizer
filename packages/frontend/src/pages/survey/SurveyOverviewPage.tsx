@@ -41,9 +41,9 @@ export default function SurveyOverviewPage() {
       title="Surveys"
       actions={
         <HStack>
-          <Tooltip label="Base Data">
+          <Tooltip label="Core Parameters">
             <IconButton
-              aria-label="Base Data"
+              aria-label="Core Parameters"
               onClick={onOpen}
               variant="outline"
               icon={<FcDataConfiguration size="20" />}
