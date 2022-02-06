@@ -25,13 +25,14 @@ export default function NetZeroCard() {
     [filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
+  console.log(data);
   return (
     <DashboardCard header="Goal achieved by" showRevalidatingSpinner={isLoading}>
       <InlineErrorDisplay error={error}>
         {!data && <SkeletonText />}
         {data && (
           <QuickInfo
-            icon={<HaloIcon icon={BiTargetLock} colorScheme={mapDeltaType(data.deltaType, 'green', 'red', 'gray')} />}>
+            icon={<HaloIcon icon={BiTargetLock} colorScheme={mapDeltaType(data.deltaType, 'red', 'green', 'gray')} />}>
             <QuickInfoLabelDescription label={`${data.newAdjustedAchievedGoal}%`} />
           </QuickInfo>
         )}

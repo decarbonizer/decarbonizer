@@ -37,6 +37,7 @@ import { TiEquals } from 'react-icons/ti';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
+import { useTransformedSurveyAnswers } from '../../utils/useTransformedSurveyAnswers';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -50,15 +51,13 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
   const toast = useToast();
   const history = useHistory();
 
+  const surveyAnswers = useTransformedSurveyAnswers(currentActionPlan);
   const actionAnswers = currentActionPlan.actionAnswers;
   const { isLoading, data, error } = useAsyncCalculation(
     'getActionPlanCardData',
-    (externalCalculationData) => [
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === currentActionPlan.realEstateId).toArray(),
-      realEstateId,
-      actionAnswers,
-    ],
-    [actionAnswers, realEstateId],
+    () => [surveyAnswers.data!, realEstateId, actionAnswers],
+    { skip: !surveyAnswers.data },
+    [surveyAnswers, actionAnswers, realEstateId],
   );
 
   const carbonFootprint = data?.actionPlanFootprintDelta.delta ?? 0;
@@ -175,12 +174,14 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     />
                   }>
                   <QuickInfoLabelDescription
-                    label={<>{`${data.netZero.newAdjustedAchievedGoal}%`}</>}
+                    label={<>{data.netZero.deltaType === 'same' ? '0%' : `${data.netZero.newAdjustedAchievedGoal}%`}</>}
                     description={
                       <>
-                        Net-Zero
-                        {data?.netZero.deltaType === 'decrease' ? ' increased ' : ' decreased '}
-                        by {data.netZero.newAdjustedAchievedGoal}%
+                        {data.netZero.deltaType === 'same'
+                          ? 'change in net-zero'
+                          : data?.netZero.deltaType === 'decrease'
+                          ? `Net-Zero increased by ${data.netZero.newAdjustedAchievedGoal}%`
+                          : `Net-zero decreased by ${data.netZero.newAdjustedAchievedGoal}% `}
                       </>
                     }
                   />
@@ -203,7 +204,7 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
                     description={
                       <>
                         {data.originalConstantCost.delta === 0
-                          ? 'equal'
+                          ? 'increased'
                           : data.originalConstantCost.delta < 0
                           ? 'decreased '
                           : 'increased '}{' '}

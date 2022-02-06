@@ -6,7 +6,7 @@ import { RealEstatePageParams } from '../routes';
 
 export function useTransformedSurveyAnswers(actionPlan: ActionPlan | undefined) {
   const { realEstateId } = useParams<RealEstatePageParams>();
-  const thisPlansStartYear = useMemo(() => (actionPlan ? new Date(actionPlan.endDate) : undefined), [actionPlan]);
+  const thisPlansStartYear = useMemo(() => (actionPlan ? new Date(actionPlan.startDate) : undefined), [actionPlan]);
 
   return useAsyncCalculation(
     'getSurveyAnswersTransformedByActionPlans',
