@@ -7,7 +7,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { ActionPlan } from '../../../api/actionPlan';
+import { ActionPlan } from '../../api/actionPlan';
 import BudgetTable from './BudgetTable';
 
 export interface BudgetTableModalProps {
