@@ -22,7 +22,6 @@ import { FaEdit } from 'react-icons/fa';
 import { RiDashboardFill, RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { GiFootprint } from 'react-icons/gi';
 import { MdDeleteForever, MdPendingActions } from 'react-icons/md';
-import { useHistory } from 'react-router';
 import { RealEstate } from '../../api/realEstate';
 import Card from '../../components/Card';
 import DeleteAlertDialog from '../../components/DeleteAlertDialog';
@@ -40,26 +39,26 @@ import CreateRealEstateModal from './CreateRealEstateModal';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
+import { Link } from 'react-router-dom';
 
-export interface CityCardProps {
+export interface RealEstateCardProps {
   realEstate: RealEstate;
 }
 
-export default function CityCard({ realEstate }: CityCardProps) {
+export default function RealEstateCard({ realEstate }: RealEstateCardProps) {
   const [deleteRealEstateMutation] = useDeleteRealEstateMutation();
   const { data: surveyAnswers } = useGetAllSurveyAnswersForRealEstateQuery({ realEstateId: realEstate._id });
   const { data: actionPlans } = useGetAllActionPlansForRealEstateQuery({ realEstateId: realEstate._id });
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
-  const history = useHistory();
+  const { data, error } = useAsyncCalculation('getCityCardData', () => [realEstate._id], [realEstate._id]);
   const toast = useToast();
-  const { isLoading, data, error } = useAsyncCalculation('getCityCardData', () => [realEstate._id], [realEstate._id]);
 
   const carbonFootprint = data?.footprint ?? 0;
   const unitSymbol = carbonFootprint >= 1000 ? 't' : 'kg';
   const adjustedFootprint = carbonFootprint >= 1000 ? carbonFootprint / 1000 : carbonFootprint;
 
-  const onConfirm = async (city) => {
+  const onConfirmDelete = async (city) => {
     await deleteRealEstateMutation({ id: city._id });
     toast({
       title: 'City deleted.',
@@ -69,18 +68,6 @@ export default function CityCard({ realEstate }: CityCardProps) {
       isClosable: true,
     });
   };
-
-  function goToSurveyOverview(realEstateId: string) {
-    history.push(routes.surveys({ realEstateId }));
-  }
-
-  function goToDashboard(realEstateId: string) {
-    history.push(routes.realEstateDashboard({ realEstateId }));
-  }
-
-  function goToActionPlanOverview(realEstateId: string) {
-    history.push(routes.actionPlans({ realEstateId }));
-  }
 
   return (
     <Card display="flex" flexDir="column" w="xl" h="xl">
@@ -101,20 +88,18 @@ export default function CityCard({ realEstate }: CityCardProps) {
           />
           <Portal>
             <MenuList transform="">
-              <MenuItem icon={<Icon as={RiSurveyLine} />} onClick={() => goToSurveyOverview(realEstate._id)}>
-                Surveys
-              </MenuItem>
-              <MenuItem icon={<Icon as={RiDashboardFill} />} onClick={() => goToDashboard(realEstate._id)}>
-                New Action Plan
-              </MenuItem>
-              <MenuItem icon={<Icon as={MdPendingActions} />} onClick={() => goToActionPlanOverview(realEstate._id)}>
-                Action Plans
-              </MenuItem>
-              <MenuItem
-                icon={<Icon as={RiMoneyEuroCircleLine} />}
-                onClick={() => history.push(routes.actionPlansBudgetOverview({ realEstateId: realEstate._id }))}>
-                Action Plan Budgets
-              </MenuItem>
+              <Link to={routes.surveys({ realEstateId: realEstate._id })}>
+                <MenuItem icon={<Icon as={RiSurveyLine} />}>Surveys</MenuItem>
+              </Link>
+              <Link to={routes.realEstateDashboard({ realEstateId: realEstate._id })}>
+                <MenuItem icon={<Icon as={RiDashboardFill} />}>New Action Plan</MenuItem>
+              </Link>
+              <Link to={routes.actionPlans({ realEstateId: realEstate._id })}>
+                <MenuItem icon={<Icon as={MdPendingActions} />}>Action Plans</MenuItem>
+              </Link>
+              <Link to={routes.actionPlansBudgetOverview({ realEstateId: realEstate._id })}>
+                <MenuItem icon={<Icon as={RiMoneyEuroCircleLine} />}>Action Plan Budgets</MenuItem>
+              </Link>
               <MenuDivider />
               <MenuItem icon={<Icon as={FaEdit} />} onClick={onOpenEditModal}>
                 Edit...
@@ -191,7 +176,7 @@ export default function CityCard({ realEstate }: CityCardProps) {
         <DeleteAlertDialog
           isOpen={isOpenAlert}
           onCancel={onCloseAlert}
-          onConfirm={() => onConfirm(realEstate)}
+          onConfirm={() => onConfirmDelete(realEstate)}
           deleteTextHeader={`Delete ${realEstate.cityName}?`}
           deleteTextDialog={`Are you sure you want to delete ${realEstate.cityName}?`}
         />
