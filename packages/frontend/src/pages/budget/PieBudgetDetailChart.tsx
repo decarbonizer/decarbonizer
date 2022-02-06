@@ -6,6 +6,7 @@ import { categories } from '../../calculations/calculations/getBudgetChartData';
 import { DeltaResult } from '../../utils/deltaType';
 import { DefaultTooltipContent } from 'recharts/lib/component/DefaultTooltipContent';
 import { reversedPalette } from '../../utils/colorsChart';
+import { round } from 'lodash-es';
 
 export interface CostChartDataEntry {
   name: string;
@@ -63,8 +64,7 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
     if (investmentCost > 0) {
       // investmentcosts = costs , originalCost[i].delta = costs
       if (originalCosts[i].delta > 0) {
-        percentCost =
-          Math.round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(costTotal)) * 100 * 100) / 100;
+        percentCost = round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(costTotal)) * 100, 1);
         dataCosts.push({
           name: categories[i],
           cost: Math.round(investmentCosts[i] + originalCosts[i].delta),
@@ -77,8 +77,8 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
         });
         // investmentcosts = costs , originalCost[i].delta <= 0 -->  savings
       } else {
-        percentCost = Math.round((investmentCosts[i] / Math.abs(costTotal)) * 100 * 100) / 100;
-        percentSaving = Math.round((originalCosts[i].delta / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        percentCost = round((investmentCosts[i] / Math.abs(costTotal)) * 100, 1);
+        percentSaving = round((originalCosts[i].delta / Math.abs(savingsTotal)) * 100, 1);
         dataCosts.push({
           name: categories[i],
           cost: Math.round(investmentCosts[i]),
@@ -95,8 +95,7 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
     } else {
       // investmentcosts = savings , originalCost[i].delta <= 0 -->  savings
       if (originalCosts[i].delta <= 0) {
-        percentSaving =
-          Math.round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        percentSaving = round(((investmentCosts[i] + originalCosts[i].delta) / Math.abs(savingsTotal)) * 100, 1);
         dataCosts.push({
           name: categories[i],
           cost: 0,
@@ -109,8 +108,8 @@ export default function PieBudgetDetailChart({ investmentCosts, originalCosts }:
         });
         // investmentcosts = savings , originalCost[i].delta > 0 = Costs
       } else {
-        percentCost = Math.round((originalCosts[i].delta / Math.abs(costTotal)) * 100 * 100) / 100;
-        percentSaving = Math.round((investmentCosts[i] / Math.abs(savingsTotal)) * 100 * 100) / 100;
+        percentCost = round((originalCosts[i].delta / Math.abs(costTotal)) * 100, 1);
+        percentSaving = round((investmentCosts[i] / Math.abs(savingsTotal)) * 100, 1);
         dataCosts.push({
           name: categories[i],
           cost: Math.round(originalCosts[i].delta),

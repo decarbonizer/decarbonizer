@@ -1,59 +1,40 @@
-import { DataFrame, IDataFrame } from 'data-forge';
+import { DataFrame } from 'data-forge';
+import { round } from 'lodash-es';
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { SurveyAnswer } from '../../api/surveyAnswer';
 import { getDeltaType } from '../../utils/deltaType';
 import { ExternalCalculationData } from '../useExternalCalculationData';
-import { getGlobalSummedYearlyFootprintDelta } from './getGlobalSummedYearlyFootprint';
+import { getGlobalSummedYearlyFootprint, getGlobalSummedYearlyFootprintDelta } from './getGlobalSummedYearlyFootprint';
 
 export function getNetZero(
   externalCalculationData: ExternalCalculationData,
-  surveyAnswers: IDataFrame<number, SurveyAnswer>,
+  surveyAnswers: Array<SurveyAnswer>,
   realEstateId: string,
-  actionAnswers: IDataFrame<number, ActionAnswerBase>,
-  actionPlanId?: string,
+  actionAnswers: Array<ActionAnswerBase>,
 ) {
-  const surveyAnswersInitial = surveyAnswers.filter((surveyAnswer) => surveyAnswer.value.isInitialSurvey);
-  const actionPlans = actionPlanId
-    ? externalCalculationData.actionPlans.filter(
-        (actionPlan) => actionPlan.realEstateId === realEstateId && actionPlan._id === actionPlanId,
-      )
-    : externalCalculationData.actionPlans.filter((actionPlan) => actionPlan.realEstateId === realEstateId);
+  const surveyAnswersDf = new DataFrame(surveyAnswers);
+  const actionAnswersDf = new DataFrame(actionAnswers);
 
-  const netZeroSumActionPlan = actionPlans
-    .map((actionPlan) => {
-      const footprintDelta = getGlobalSummedYearlyFootprintDelta(
-        externalCalculationData,
-        surveyAnswersInitial,
-        new DataFrame(actionPlan.actionAnswers),
-      );
-      const delta = footprintDelta.delta < 0 ? Math.abs(footprintDelta.delta) : -Math.abs(footprintDelta.delta);
-      const newAchievedGoal = delta / (footprintDelta.before / 100);
-
-      return newAchievedGoal;
-    })
-    .reduce((a, b) => a + b, 0);
-
-  const footprintFilledActionAnswers = getGlobalSummedYearlyFootprintDelta(
+  const originalRealEstateFootprint = getGlobalSummedYearlyFootprint(
     externalCalculationData,
-    surveyAnswersInitial,
-    actionAnswers,
+    externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId && x.value.isInitialSurvey),
+    new DataFrame<number, ActionAnswerBase>(),
   );
 
-  const footprintFilledActionAnswersDelta =
-    footprintFilledActionAnswers.delta <= 0
-      ? Math.abs(footprintFilledActionAnswers.delta)
-      : -Math.abs(footprintFilledActionAnswers.delta);
+  const footprintAfterAll = getGlobalSummedYearlyFootprintDelta(
+    externalCalculationData,
+    surveyAnswersDf,
+    actionAnswersDf,
+  );
 
-  const netZeroFilledActionAnswers = footprintFilledActionAnswersDelta / (footprintFilledActionAnswers.before / 100);
+  const netZero = round(
+    ((originalRealEstateFootprint - footprintAfterAll.after) / originalRealEstateFootprint) * 100,
+    1,
+  );
 
-  const newAdjustedAchievedGoalFilledAction = netZeroFilledActionAnswers > 100 ? 100 : netZeroFilledActionAnswers;
+  const newAdjustedAchievedGoal = netZero > 100 ? 100 : netZero;
 
-  const newAdjustedAchievedGoal = netZeroSumActionPlan + newAdjustedAchievedGoalFilledAction;
-
-  const netZeroDelta =
-    footprintFilledActionAnswers.delta === 0 ? netZeroSumActionPlan : newAdjustedAchievedGoal - netZeroSumActionPlan;
-
-  const deltaType = getDeltaType(netZeroDelta);
+  const deltaType = getDeltaType(footprintAfterAll.delta);
 
   return { newAdjustedAchievedGoal, deltaType };
 }

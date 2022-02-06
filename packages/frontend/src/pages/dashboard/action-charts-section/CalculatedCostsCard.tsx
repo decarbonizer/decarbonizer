@@ -1,6 +1,9 @@
 import { Table, Tbody, Tr, Td, SkeletonText } from '@chakra-ui/react';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
-import { useFilledActionAnswersDataFrame } from '../dashboardContext';
+import {
+  useFilledActionAnswersDataFrame,
+  useTransformedSurveyAnswersForThisActionPlanDashboard,
+} from '../dashboardContext';
 import DashboardCard, { DashboardCardProps } from '../components/DashboardCard';
 import { useParams } from 'react-router';
 import { RealEstatePageParams } from '../../../routes';
@@ -14,14 +17,12 @@ export interface CalculatedCostsCardProps extends DashboardCardProps {
 export default function CalculatedCostsCard({ coreCalculationsId, ...rest }: CalculatedCostsCardProps) {
   const { realEstateId } = useParams<RealEstatePageParams>();
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
+  const surveyAnswers = useTransformedSurveyAnswersForThisActionPlanDashboard();
   const { isLoading, data, error } = useAsyncCalculation(
     'getCalculatedCostsCardData',
-    (externalCalculationData) => [
-      coreCalculationsId,
-      externalCalculationData.surveyAnswers.filter((x) => x.realEstateId === realEstateId).toArray(),
-      filledActionAnswersDf.toArray(),
-    ],
-    [coreCalculationsId, filledActionAnswersDf, realEstateId],
+    () => [coreCalculationsId, surveyAnswers.data!, filledActionAnswersDf.toArray()],
+    { skip: !surveyAnswers.data },
+    [coreCalculationsId, filledActionAnswersDf, realEstateId, surveyAnswers],
   );
 
   return (

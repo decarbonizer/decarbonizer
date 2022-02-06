@@ -12,7 +12,7 @@ import { Route, Switch, useParams } from 'react-router';
 import { RealEstatePageParams, routes } from '../routes';
 import { useGetRealEstateQuery } from '../store/api';
 import { Link } from 'react-router-dom';
-import NavigationMenu, { PageDisplayTypes } from '../components/NavigationMenu';
+import NavigationMenu, { PageDisplayTypes } from './NavBarBreadcrumbsMenu';
 
 export default function NavBarBreadcrumbs() {
   const breadcrumbProps: BreadcrumbProps = {

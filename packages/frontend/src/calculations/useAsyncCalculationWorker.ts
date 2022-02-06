@@ -7,6 +7,14 @@ import { getFootprintComparisonCardData } from './calculations/getFootprintCompa
 import { getCostComparisonCardData } from './calculations/getCostComparisonChartData';
 import { getCalculatedCostsCardData } from './calculations/getCalculatedCostsCardData';
 import { getCostBreakEvenPointData } from './calculations/getCostBreakEvenPointData';
+import { getSurveyAnswersTransformedByActionPlans } from './calculations/getSurveyAnswersTransformedByActionPlans';
+import { getNetZero } from './calculations/getNetZero';
+import { getGlobalRealEstateFootprintCardData } from './calculations/getGlobalRealEstateFootprintCardData';
+import { getRealEstateFootprintComparisonCardData } from './calculations/getRealEstateFootprintComparisonCardData';
+import { getGlobalCompanyFootprintCardData } from './calculations/getGlobalCompanyFootprintCardData';
+import { getActionPlanCardData } from './calculations/getActionPlanCardData';
+import { getCityCardData } from './calculations/getCityCardData';
+import { getGlobalCompanyNetZeroCardData } from './calculations/getGlobalCompanyNetZeroCardData';
 
 // The core of the worker is simple:
 // We maintain a dictionary `asyncCalculations` which maps the calculation functions to their own function name.
@@ -23,6 +31,7 @@ const createAsyncCalculationsDict = <T extends { [K in keyof T]: AsyncCalculatio
 
 const asyncCalculations = createAsyncCalculationsDict({
   // Register new calculation functions to be runnable via `useAsyncCalculation` below.
+  getSurveyAnswersTransformedByActionPlans,
   getBudgetChartData,
   getCostDeltaCardData,
   getCostComparisonCardData,
@@ -30,6 +39,13 @@ const asyncCalculations = createAsyncCalculationsDict({
   getFootprintComparisonCardData,
   getCalculatedCostsCardData,
   getCostBreakEvenPointData,
+  getNetZero,
+  getGlobalRealEstateFootprintCardData,
+  getGlobalCompanyFootprintCardData,
+  getCityCardData,
+  getRealEstateFootprintComparisonCardData,
+  getActionPlanCardData,
+  getGlobalCompanyNetZeroCardData,
 });
 
 type Tail<T extends any[]> = T extends [any, ...infer Tail] ? Tail : any[];

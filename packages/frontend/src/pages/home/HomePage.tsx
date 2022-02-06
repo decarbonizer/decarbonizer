@@ -3,7 +3,7 @@ import DefaultPageLayout from '../../components/DefaultPageLayout';
 import { GoPlus } from 'react-icons/go';
 import Card from '../../components/Card';
 import CreateRealEstateModal from './CreateRealEstateModal';
-import CityCard from './CityCard';
+import RealEstateCard from './RealEstateCard';
 import cloud from '../../img/cloud.svg';
 import Searchbar from '../../components/Searchbar';
 import orderBy from 'lodash-es/orderBy';
@@ -72,7 +72,7 @@ export default function HomePage() {
         ) : (
           sortedRealEstates!.map((city) => (
             <WrapItem key={city._id}>
-              <CityCard key={city._id} realEstate={city} />
+              <RealEstateCard key={city._id} realEstate={city} />
             </WrapItem>
           ))
         )}

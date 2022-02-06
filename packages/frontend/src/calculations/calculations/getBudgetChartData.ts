@@ -1,7 +1,6 @@
 import { IDataFrame, DataFrame } from 'data-forge';
 import { ActionPlan } from '../../api/actionPlan';
 import { ExternalCalculationData } from '../useExternalCalculationData';
-import { ChooseTimePeriodElementAnswerValue } from '../../data/actions/shared/chooseTimePeriodElement';
 import { DeltaResult, getDeltaType } from '../../utils/deltaType';
 import { businessTravelCoreCalculations } from '../core/businessTravelCoreCalculations';
 import { CategoryCoreCalculations } from '../core/categoryCoreCalculations';
@@ -10,7 +9,7 @@ import { heatingCoreCalculations } from '../core/heatingCoreCalculations';
 import { illuminationCoreCalculations } from '../core/illuminationCoreCalculations';
 import { itCoreCalculations } from '../core/itCoreCalculations';
 import { ActionAnswerBase } from '../../api/actionAnswer';
-
+import { linearizeActionPlanAnswers } from './utils';
 export interface BudgetChartDataEntry {
   year: number;
   budget: number;
@@ -43,23 +42,7 @@ export function getBudgetChartData(
   // All action answers enriched with their start and end date, sorted by the time when they
   // start. The sorting ensures that they are applied in the correct order when transforming
   // survey answers.
-  const linearizedActionAnswers = new DataFrame(actionPlans)
-    .flatMap((actionPlan) =>
-      actionPlan.actionAnswers.map((answer) => {
-        const detailsValue = (answer.values.detailsValue ?? {}) as ChooseTimePeriodElementAnswerValue;
-        const startDate = new Date(detailsValue.chooseTimePeriod?.startDate ?? actionPlan.startDate);
-        const endDate = new Date(detailsValue.chooseTimePeriod?.endDate ?? actionPlan.endDate);
-
-        return {
-          actionPlan,
-          answer,
-          startDate,
-          endDate,
-        };
-      }),
-    )
-    .orderBy((x) => x.startDate)
-    .thenBy((x) => x.endDate);
+  const linearizedActionAnswers = linearizeActionPlanAnswers(new DataFrame(actionPlans));
 
   // Using the imperative approach to calculate data for the corresponding years here because
   // certain data requires the results from the year(s) before. That doesn't work well with the

@@ -9,6 +9,10 @@ import type {
   AsyncCalculationResultMessage,
 } from './useAsyncCalculationWorker';
 
+export interface UseAsyncCalculationConfig {
+  skip?: boolean;
+}
+
 export interface UseAsyncCalculationResult<TFn extends AsyncCalculationFns> {
   isLoading: boolean;
   data?: AsyncCalculationResult<TFn>;
@@ -19,6 +23,19 @@ export type GetAsyncCalculationParams<TFn extends AsyncCalculationFns> = (
   externalCalculationData: ExternalCalculationData,
 ) => AsyncCalculationParams<TFn>;
 
+export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
+  fn: TFn,
+  getParams: GetAsyncCalculationParams<TFn>,
+  deps?: DependencyList,
+): UseAsyncCalculationResult<TFn>;
+
+export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
+  fn: TFn,
+  getParams: GetAsyncCalculationParams<TFn>,
+  config: UseAsyncCalculationConfig,
+  deps?: DependencyList,
+): UseAsyncCalculationResult<TFn>;
+
 /**
  * Asynchronously executes a well-known calculation function on a worker thread and returns a lifecycle
  * object representing the calculation's state.
@@ -27,23 +44,57 @@ export type GetAsyncCalculationParams<TFn extends AsyncCalculationFns> = (
  *   See the file and its comments for details.
  * @param getParams A function which, when invoked with the given external calculation data, returns
  *   an array with the parameters to be passed to the calculation function.
- * @param deps A React dependency list which defines dependencies for triggering recalculations.
+ * @param _configOrDeps A config object or a React dependency list which defines dependencies for triggering recalculations.
+ * @param _deps A React dependency list which defines dependencies for triggering recalculations. Only used if a config is used.
  * @returns A lifecycle object representing the state of the calculation.
  */
 export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
   fn: TFn,
   getParams: GetAsyncCalculationParams<TFn>,
-  deps: DependencyList = [],
+  _configOrDeps: DependencyList | UseAsyncCalculationConfig = {},
+  _deps: DependencyList = [],
 ): UseAsyncCalculationResult<TFn> {
+  const deps = isConfig(_configOrDeps) ? _deps : _configOrDeps;
+  const config = isConfig(_configOrDeps) ? _configOrDeps : {};
+  const skip = config.skip ?? false;
+
   const externalCalculationDataQuery = useExternalCalculationData();
   const [result, setResult] = useState<UseAsyncCalculationResult<TFn>>({ isLoading: true });
-  const params = useAsyncCalculationParams(externalCalculationDataQuery, getParams, deps);
+  const params = useAsyncCalculationParams(externalCalculationDataQuery, getParams, skip, deps);
   const arrayifiedExternalCalculationData = useArrayifiedExternalCalculationData(externalCalculationDataQuery);
 
   useEffect(() => {
-    if (!arrayifiedExternalCalculationData || !params) {
+    if (externalCalculationDataQuery.error) {
+      setResult({
+        isLoading: false,
+        data: undefined,
+        error: externalCalculationDataQuery.error,
+      });
       return;
     }
+
+    if (skip || !externalCalculationDataQuery.data || !arrayifiedExternalCalculationData || !params) {
+      setResult((prev) =>
+        prev.isLoading
+          ? prev
+          : {
+              isLoading: true,
+              data: prev.data,
+              error: prev.error,
+            },
+      );
+      return;
+    }
+
+    setResult((prev) =>
+      prev.isLoading
+        ? prev
+        : {
+            isLoading: true,
+            data: prev.data,
+            error: prev.error,
+          },
+    );
 
     const worker = new Worker(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -51,6 +102,7 @@ export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
       new URL('./useAsyncCalculationWorker.ts', import.meta.url),
       { type: 'module' },
     );
+
     const message: AsyncCalculationMessage<TFn> = {
       fn,
       params,
@@ -70,39 +122,12 @@ export function useAsyncCalculation<TFn extends AsyncCalculationFns>(
     worker.postMessage(message);
     console.debug('useAsyncCalculation started worker with message: ', message);
 
-    setResult((prev) =>
-      prev.isLoading
-        ? prev
-        : {
-            isLoading: true,
-            data: prev.data,
-            error: prev.error,
-          },
-    );
-
     return () => {
       worker.removeEventListener('message', handleMessage);
       worker.terminate();
       console.debug('useAsyncCalculation terminated worker.');
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fn, params, arrayifiedExternalCalculationData]);
-
-  if (externalCalculationDataQuery.error) {
-    return {
-      isLoading: false,
-      data: undefined,
-      error: externalCalculationDataQuery.error,
-    };
-  }
-
-  if (!externalCalculationDataQuery.data) {
-    return {
-      isLoading: true,
-      data: undefined,
-      error: undefined,
-    };
-  }
+  }, [fn, params, skip, externalCalculationDataQuery, arrayifiedExternalCalculationData]);
 
   return result;
 }
@@ -129,11 +154,16 @@ function useArrayifiedExternalCalculationData(
 function useAsyncCalculationParams<TFn extends AsyncCalculationFns>(
   externalCalculationDataQuery: ReturnType<typeof useExternalCalculationData>,
   getParams: GetAsyncCalculationParams<TFn>,
+  skip: boolean,
   deps: DependencyList,
 ) {
   return useMemo<AsyncCalculationParams<TFn> | undefined>(
-    () => (externalCalculationDataQuery.data ? getParams(externalCalculationDataQuery.data) : undefined),
+    () => (externalCalculationDataQuery.data && !skip ? getParams(externalCalculationDataQuery.data) : undefined),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [...deps, externalCalculationDataQuery],
+    [...deps, externalCalculationDataQuery, skip],
   );
+}
+
+function isConfig(depsOrConfig: DependencyList | UseAsyncCalculationConfig): depsOrConfig is UseAsyncCalculationConfig {
+  return !Array.isArray(depsOrConfig);
 }

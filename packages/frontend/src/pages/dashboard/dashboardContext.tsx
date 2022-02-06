@@ -3,6 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useMemo } from 're
 import { ActionAnswerBase } from '../../api/actionAnswer';
 import { ActionPlan } from '../../api/actionPlan';
 import { ActionCategory, ActionsToActionAnswerMap } from '../../data/actions/action';
+import { useTransformedSurveyAnswers } from '../../utils/useTransformedSurveyAnswers';
 
 export const DashboardContext = createContext<DashboardContextValue>(null!);
 
@@ -21,4 +22,9 @@ export interface DashboardContextValue {
 export function useFilledActionAnswersDataFrame() {
   const { filledActionAnswers } = useContext(DashboardContext);
   return useMemo(() => new DataFrame(Object.values(filledActionAnswers).filter(Boolean)), [filledActionAnswers]);
+}
+
+export function useTransformedSurveyAnswersForThisActionPlanDashboard() {
+  const { actionPlanToEdit } = useContext(DashboardContext);
+  return useTransformedSurveyAnswers(actionPlanToEdit);
 }

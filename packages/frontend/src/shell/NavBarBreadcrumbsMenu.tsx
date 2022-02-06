@@ -3,8 +3,8 @@ import { ReactElement } from 'react';
 import { RiSurveyLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDashboard, MdPendingActions } from 'react-icons/md';
-import { useHistory } from 'react-router';
 import { routes } from '../routes';
+import { Link } from 'react-router-dom';
 
 export interface PageNavigation {
   icon?: ReactElement;
@@ -14,13 +14,12 @@ export interface PageNavigation {
 
 export type PageDisplayTypes = 'Survey Overview' | 'New Action Plan' | 'Action Plan Overview' | 'Budget Management';
 
-export interface NavigationMenuProps {
+export interface NavBarBreadcrumbsMenuProps {
   currentPage: PageDisplayTypes;
   realEstateId: string;
 }
 
-export default function NavigationMenu({ currentPage, realEstateId }: NavigationMenuProps) {
-  const history = useHistory();
+export default function NavigationMenu({ currentPage, realEstateId }: NavBarBreadcrumbsMenuProps) {
   const pages: PageNavigation[] = [
     { value: routes.surveys({ realEstateId }), display: 'Survey Overview', icon: <Icon as={RiSurveyLine} /> },
     {
@@ -54,9 +53,11 @@ export default function NavigationMenu({ currentPage, realEstateId }: Navigation
       />
       <MenuList>
         {filteredPages.map((page) => (
-          <MenuItem key={page.value} value={page.value} icon={page.icon} onClick={() => history.push(page.value)}>
-            {page.display}
-          </MenuItem>
+          <Link key={page.value} to={page.value}>
+            <MenuItem value={page.value} icon={page.icon}>
+              {page.display}
+            </MenuItem>
+          </Link>
         ))}
       </MenuList>
     </Menu>
