@@ -184,8 +184,8 @@ export default function BaseDataModal({ isOpen, onClose }: BaseDataModalProps) {
           <Box w="100%" minH="3xl">
             <Alert status="info" fontSize="sm" mb="3">
               <AlertIcon />
-              Core parameters are values which are uses for the calculations. Normally default values, which should be a
-              good fit for most companies, are used. But you can change them so that they more realistically match your
+              Core parameters are values which are used for the calculations. Normally default values which should be a
+              good fit for most companies are used. But you can change them so that they more realistically match your
               company.
             </Alert>
             <FormEngine
