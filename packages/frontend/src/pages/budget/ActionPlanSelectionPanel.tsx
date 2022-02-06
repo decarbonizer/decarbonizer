@@ -52,6 +52,7 @@ import { BudgetChartConfig } from './BudgetChart';
 import BudgetTableModal from './components/BudgetTableModal';
 import { RiDashboardFill } from 'react-icons/ri';
 import LegendForActionPlanStatusColor from './LegendForActionPlanStatusColor';
+import { Link } from 'react-router-dom';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -253,17 +254,10 @@ export default function ActionPlanSelectionPanel({
                     />
                   </Tooltip>
                   <Tooltip label="Dashboard">
-                    <IconButton
-                      aria-label="Dashboard"
-                      variant="ghost"
-                      icon={<Icon as={RiDashboardFill} />}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id }));
-                      }}></IconButton>
+                    <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id })}>
+                      <IconButton aria-label="Dashboard" variant="ghost" icon={<Icon as={RiDashboardFill} />} />
+                    </Link>
                   </Tooltip>
-
                   <Tooltip label="Edit...">
                     <IconButton
                       variant="ghost"

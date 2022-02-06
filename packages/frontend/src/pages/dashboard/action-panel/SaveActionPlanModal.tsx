@@ -135,9 +135,8 @@ export default function SaveActionPlanModal({
           }),
         );
     }
-    {
-      !isBudgetPage && history.push(routes.actionPlans({ realEstateId }));
-    }
+
+    !isBudgetPage && history.push(routes.actionPlans({ realEstateId }));
   };
 
   return (

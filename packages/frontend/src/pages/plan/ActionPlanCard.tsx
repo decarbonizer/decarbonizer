@@ -15,6 +15,7 @@ import {
   MenuList,
   Portal,
   Box,
+  MenuDivider,
 } from '@chakra-ui/react';
 import { GiFootprint } from 'react-icons/gi';
 import { BiTargetLock, BiTrendingDown, BiTrendingUp } from 'react-icons/bi';
@@ -29,7 +30,7 @@ import DeleteAlertDialog from '../../components/DeleteAlertDialog';
 import { useDeleteActionPlanMutation } from '../../store/api';
 import SaveActionPlanModal from '../dashboard/action-panel/SaveActionPlanModal';
 import { ActionPlansPageParams, routes } from '../../routes';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { mapDeltaType } from '../../utils/deltaType';
 import InlineErrorDisplay from '../../components/InlineErrorDisplay';
 import { RiDashboardFill } from 'react-icons/ri';
@@ -38,6 +39,7 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/all';
 import { useAsyncCalculation } from '../../calculations/useAsyncCalculation';
 import { useTransformedSurveyAnswers } from '../../utils/useTransformedSurveyAnswers';
+import { Link } from 'react-router-dom';
 
 export interface ActionPlanCardProps {
   currentActionPlan: ActionPlan;
@@ -49,7 +51,6 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
   const { isOpen: isOpenEditModal, onOpen: onOpenEditModal, onClose: onCloseEditModal } = useDisclosure();
   const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
   const toast = useToast();
-  const history = useHistory();
 
   const surveyAnswers = useTransformedSurveyAnswers(currentActionPlan);
   const actionAnswers = currentActionPlan.actionAnswers;
@@ -89,24 +90,13 @@ export default function ActionPlanCard({ currentActionPlan }: ActionPlanCardProp
         />
         <Portal>
           <MenuList transform="">
-            <MenuItem
-              icon={<Icon as={RiDashboardFill} />}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                history.push(routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id }));
-              }}>
-              Dashboard
-            </MenuItem>
-            <MenuItem
-              icon={<Icon as={CgExport} />}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                history.push(routes.actionPlanFileExport({ realEstateId, actionPlanId: currentActionPlan._id }));
-              }}>
-              Export
-            </MenuItem>
+            <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: currentActionPlan._id })}>
+              <MenuItem icon={<Icon as={RiDashboardFill} />}>Dashboard</MenuItem>
+            </Link>
+            <Link to={routes.actionPlanFileExport({ realEstateId, actionPlanId: currentActionPlan._id })}>
+              <MenuItem icon={<Icon as={CgExport} />}>Export</MenuItem>
+            </Link>
+            <MenuDivider />
             <MenuItem
               icon={<Icon as={FaEdit} />}
               onClick={(e) => {
