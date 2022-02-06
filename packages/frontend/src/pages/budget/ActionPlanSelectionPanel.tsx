@@ -60,6 +60,7 @@ import { Link } from 'react-router-dom';
 import BudgetTableModal from './BudgetTableModal';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { CgExport } from 'react-icons/cg';
+import { RiDashboardFill } from 'react-icons/ri';
 
 export interface ActionPlanSelectionPanelProps {
   minYear: number;
@@ -85,7 +86,6 @@ export default function ActionPlanSelectionPanel({
   const [toYearTooltipValue, setToYearTooltipValue] = useState(budgetChartConfig.toYear);
   const [showYearTooltips, setShowYearTooltips] = useState(false);
   const [budgetTableActionPlan, setBudgetTableActionPlan] = useState<ActionPlan | undefined>(undefined);
-  const history = useHistory();
 
   useEffect(() => {
     // Force check all action plans when the available action plans change.
@@ -262,7 +262,7 @@ export default function ActionPlanSelectionPanel({
                     <Portal>
                       <MenuList transform="">
                         <Link to={routes.realEstateDashboard({ realEstateId, actionPlanId: actionPlan._id })}>
-                          <MenuItem icon={<Icon as={BsTable} />}>Dashboard</MenuItem>
+                          <MenuItem icon={<Icon as={RiDashboardFill} />}>Dashboard</MenuItem>
                         </Link>
                         <Link to={routes.actionPlanFileExport({ realEstateId, actionPlanId: actionPlan._id })}>
                           <MenuItem icon={<Icon as={CgExport} />}>Export</MenuItem>
