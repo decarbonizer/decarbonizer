@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { GenericCrudService } from '../common/services/generic-crud.service';
 import { RealEstateRepository } from './real-estate.repository';
-import { RealEstate, RealEstateCreate, RealEstateUpdate } from './real-estate.schema';
+import { RealEstate, RealEstateUpdate } from './real-estate.schema';
 
 @Injectable()
 export class RealEstateService extends GenericCrudService<
@@ -17,7 +17,7 @@ export class RealEstateService extends GenericCrudService<
 
   async getAllForCurrentCompany() {
     const companyId = this.authService.getCurrentUserCompanyId();
-    return await this.repository.getAll({ companyId });
+    return await this.repository.getAll({ companyId }, { cityName: 'asc' });
   }
 
   protected async mapCreateToEntity(entity: Omit<RealEstate, 'companyId'>): Promise<RealEstate> {
