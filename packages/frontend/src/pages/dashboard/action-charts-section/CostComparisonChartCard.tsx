@@ -1,16 +1,4 @@
-import {
-  Select,
-  SkeletonText,
-  Text,
-  HStack,
-  Button,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
-} from '@chakra-ui/react';
+import { Select, SkeletonText, Text, HStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
   useFilledActionAnswersDataFrame,
@@ -24,7 +12,6 @@ import { KnownCategoryCoreCalculationsId } from '../../../calculations/core/core
 import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Legend, Area, Tooltip } from 'recharts';
 import InlineErrorDisplay from '../../../components/InlineErrorDisplay';
 import ComparisonChartTooltip from './ComparisonChartTooltip';
-import { BiChevronDown } from 'react-icons/bi';
 
 type CostCategory = 'all' | 'constant' | 'changing';
 

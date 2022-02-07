@@ -42,7 +42,7 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ActionPlan } from '../../api/actionPlan';
 import { RealEstatePageParams, routes } from '../../routes';
 import { useGetAllActionPlansForRealEstateQuery } from '../../store/api';
@@ -91,7 +91,7 @@ export default function ActionPlanSelectionPanel({
     // Force check all action plans when the available action plans change.
     // Happens e.g. when the data is loaded for the first time or when sth. updates.
     setActionPlans(allActionPlans ?? []);
-  }, [allActionPlans]);
+  }, [allActionPlans, setActionPlans]);
 
   return (
     <VStack align="flex-start">

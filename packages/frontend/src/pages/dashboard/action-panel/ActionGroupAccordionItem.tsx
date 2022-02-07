@@ -22,7 +22,7 @@ interface ActionGroupAccordionContentProps {
   actionCategory: ActionCategory;
 }
 
-function ActionGroupAccordionContent({ isExpanded, actionCategory }: ActionGroupAccordionContentProps) {
+function ActionGroupAccordionContent({ actionCategory }: ActionGroupAccordionContentProps) {
   const { filledActionAnswers } = useContext(DashboardContext);
   const countOfFilledAnswers = Object.values(filledActionAnswers).filter((filledAction) =>
     actionCategory.actions.some((action) => action.id === filledAction?.actionId),

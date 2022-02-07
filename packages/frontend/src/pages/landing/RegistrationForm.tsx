@@ -1,5 +1,5 @@
 import { Input, Button, Heading, Divider, VStack, Box, FormControl, FormErrorMessage, Select } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGetAllCompaniesQuery, useRegisterMutation } from '../../store/api';
 import { loggedIn } from '../../store/auth';
 import { useAppDispatch } from '../../store/store';

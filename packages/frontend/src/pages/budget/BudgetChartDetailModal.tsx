@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { BudgetChartDataEntry } from '../../calculations/calculations/getBudgetChartData';
 import PieBudgetDetailChart from './PieBudgetDetailChart';
-import PieFootprintDetailChart from './PieFootprintDetailChart';
 
 export interface BudgetChartDetailModalProps {
   isOpen: boolean;
@@ -18,7 +17,7 @@ export interface BudgetChartDetailModalProps {
   mode: string;
 }
 
-export default function BudgetChartDetailModal({ isOpen, onClose, data, mode }: BudgetChartDetailModalProps) {
+export default function BudgetChartDetailModal({ isOpen, onClose, data }: BudgetChartDetailModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="5xl">
       <ModalOverlay />
@@ -31,7 +30,7 @@ export default function BudgetChartDetailModal({ isOpen, onClose, data, mode }: 
             originalCosts={data.categoryOriginalConstantCost}
           />
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter />
       </ModalContent>
     </Modal>
   );

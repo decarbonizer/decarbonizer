@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, Length, Min } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 import { Document } from 'mongoose';
 import { DbObjectSchema } from '../common/db/db-object-schema.decorator';
 import { DbObject } from '../common/db/db-object.schema';

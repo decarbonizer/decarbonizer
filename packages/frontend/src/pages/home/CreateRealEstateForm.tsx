@@ -32,7 +32,7 @@ export default function CreateRealEstateForm({ onClose, realEstate }: CreateReal
   const [image, setImage] = useState(realEstate?.image ?? '');
   const [error, setError] = useState('');
   const [createRealEstate, { isLoading: isAdding }] = useCreateRealEstateMutation();
-  const [updateRealEstate, { isLoading: isUpdatingRealEstate }] = useUpdateRealEstateMutation();
+  const [updateRealEstate] = useUpdateRealEstateMutation();
 
   const addNewRealEstate = async () => {
     try {

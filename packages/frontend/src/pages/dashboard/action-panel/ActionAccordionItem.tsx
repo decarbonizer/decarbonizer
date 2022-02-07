@@ -52,14 +52,10 @@ export function ActionAccordionItem({ action }: ActionAccordionItemProps) {
   const { value, setValue, page, ruleEvaluationResults, validationErrors, handleValueChanged } = useFormEngine(schema);
   const isFilledOut = !isEmpty(value);
   const detailsModalDisclosure = useDisclosure();
-  const { isLoading: dataLoading, data: externalData, error: externalDataError } = useExternalCalculationData();
+  const { data: externalData } = useExternalCalculationData();
   const { isOpen, onOpen, onClose } = useDisclosure(); //dialog for produced heating
   const filledActionAnswersDf = useFilledActionAnswersDataFrame();
-  const {
-    data,
-    isLoading: calculationLoading,
-    error,
-  } = useCalculation(
+  const { data } = useCalculation(
     (externalCalculationData) => ({
       producedHeating: itCoreCalculations.getTotalYearlyProducedHeating(
         externalCalculationData,
