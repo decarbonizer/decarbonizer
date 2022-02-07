@@ -7,7 +7,6 @@ import {
   ChooseSurveyAnswerElementAnswerValue,
 } from '../shared/chooseSurveyAnswerElement';
 
-//TODO: forSurvey 'businessTravel' + create heating survey, options: 'businessTravel'
 export const increaseDataCenterTemperature: Action = {
   id: 'increaseDataCenterTemperature',
   name: 'Increase data center temperature',
