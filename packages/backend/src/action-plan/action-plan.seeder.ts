@@ -36,7 +36,7 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         budget: 0,
         endDate: new Date('2028-01-01T00:00:00.000Z'),
         startDate: new Date('2022-02-08T23:00:00.000Z'),
-        name: 'Plan A',
+        name: "Anna's plan",
       },
       {
         _id: '39ed5319-5d4f-402d-9ac7-1aa80f634fa8',
@@ -70,7 +70,7 @@ export class ActionPlanSeeder extends DefaultDbSeeder<ActionPlan> {
         budget: 0,
         endDate: new Date('2035-01-01T00:00:00.000Z'),
         startDate: new Date('2028-12-31T23:00:00.000Z'),
-        name: 'Plan B',
+        name: "Bob's plan",
       },
       {
         _id: 'dc179787-0f0e-452b-8af3-cc334e09afa3',

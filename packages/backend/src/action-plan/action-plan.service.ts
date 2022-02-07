@@ -17,12 +17,12 @@ export class ActionPlanService extends GenericCrudService<
 
   async getAllForCurrentUser() {
     const userId = this.authService.getCurrentUserId();
-    return await this.repository.getAll({ userId });
+    return await this.repository.getAll({ userId }, { startDate: 'asc' });
   }
 
   async getAllForRealEstate(realEstateId: string) {
     const userId = this.authService.getCurrentUserId();
-    return await this.repository.getAll({ userId, realEstateId });
+    return await this.repository.getAll({ userId, realEstateId }, { startDate: 'asc' });
   }
 
   protected async mapCreateToEntity(entity: Omit<ActionPlan, 'userId'>): Promise<ActionPlan> {

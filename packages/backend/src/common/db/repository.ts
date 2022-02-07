@@ -13,8 +13,8 @@ export abstract class Repository<T extends DbObject> {
   /**
    * Returns all entities within the repository.
    */
-  async getAll(filter?: Partial<T>): Promise<Array<T>> {
-    const docs = await this.model.find(filter as any);
+  async getAll(filter?: Partial<T>, sort?: Partial<Record<keyof T, 'asc' | 'desc'>>): Promise<Array<T>> {
+    const docs = await this.model.find(filter as any).sort(sort);
     return docs.map((doc) => doc.toObject() as unknown as T);
   }
 
