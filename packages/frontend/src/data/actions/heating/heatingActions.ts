@@ -1,7 +1,6 @@
 import { ActionCategory } from '../action';
 import { GiHeatHaze } from 'react-icons/gi';
 import { switchToHeatPumpAction } from './switchToHeatPumpAction';
-import { heatLessAction } from './heatLessAction';
 import { integrateSmartRadiatorThermostats } from './integrateSmartRadiatorThermostats';
 import { HeatingSurveyAnswerValue } from '../../surveys/heating/heatingSurveyAnswerValue';
 

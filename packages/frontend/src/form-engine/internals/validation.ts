@@ -7,7 +7,6 @@ import {
   FormEngineValue,
 } from '../types';
 import checkConditions, { CheckConditionsConfig } from 'json-conditions';
-import { RiSafariFill } from 'react-icons/ri';
 
 export function validateForm(
   elements: Array<FormSchemaElement>,
