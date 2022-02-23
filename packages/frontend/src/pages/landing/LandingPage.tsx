@@ -18,7 +18,7 @@ export default function LandingPage() {
 
   return (
     <Flex minH="100%" backgroundImage={bg}>
-      <Box w="100%" grow={1}>
+      <Box w="100%" flexGrow={1}>
         <Hero />
       </Box>
       <Flex
