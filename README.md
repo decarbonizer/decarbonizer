@@ -1,74 +1,47 @@
 # Decarbonizer
 
+Decarbonizer is a web application which helps companies assess, plan and ultimately reduce their
+global carbon footprint.
 
-## Getting Started
+Decarbonizer has been created as part of the [SEBA Lab Course](https://web.archive.org/web/20220223132439/https://wwwmatthes.in.tum.de/pages/18witnulbiwl6/SEBA-Lab-Course)
+at the [TUM](https://www.tum.de/) by the following team members:
 
-We are using a monorepo using [Lerna](https://github.com/lerna/lerna) and [NPM workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
-The repository contains both the backend and the frontend components.
+- [Alexandra](https://github.com/sashatalalasha) (🔧 Developer)
+- [Manu](https://github.com/manuelroemer) (🔧 Developer)
+- [Nhu](https://github.com/MinhNhuD) (🔧 Developer)
+- [Vanessa](https://github.com/vanessakrohn) (🔧 Developer)
+- [Burak](https://github.com/boz1) (💬 University Advisor)
+- [Martin](#) (👑 Product Owner | External Advisor)
+- [Monja](https://www.linkedin.com/in/monja-puggel-23774167) (👑 Product Owner | External Advisor)
 
-### Required Tooling
+## Goals and Context
 
-In order to run the projects, an **NPM version >= 7** is required. Use the following command(s) to check
-your local NPM version and to update it if necessary.
+As mentioned above, Decarbonizer was created as a student project at a university during one semester.
+We had to give two graded presentations with live demos. Grading was done entirely based on the
+presentation and thus the UI.
+This means that our primary goal with the project and codebase was the following:
 
-```sh
-# Check your version:
-npm --version
+**✨ Develop a good looking, feature-rich _MVP_ which performs well during the demos. ✨**
 
-# Update NPM (only necessary if your version is less than 7):
-npm i -g npm@latest
-```
+**To summarize the point:** We tried to keep our codebase as clean as possible within the given
+context, but naturally, there are rough edges and taken shortcuts which would have to be ironed out
+before being able to transition from an MVP to a production version of Decarbonizer.
 
-### Project Dependencies
+Examples of this are, for example, the (sometimes missing) authentication/authorization of endpoints,
+code duplication, inexisting code documentation, etc.
+Should there be any kind of public interest in this project, such issues would be good starting
+points for improvement.
 
-You can easily (re-)install the dependencies using `lerna bootstrap`:
+## Links
 
-```sh
-npx lerna bootstrap
-```
+Please see the following links for additional information about Decarbonizer:
 
-If something goes wrong during the installation or if you want to make a clean reinstall it may be helpful
-to purge your current package installation. This can simply be done via:
-
-```sh
-npm run uninstall-packages
-
-# Afterwards, reinstall the dependencies:
-npx lerna bootstrap
-```
-
-### Backend Configuration
-
-The backend requires a MongoDB connection in order to run properly.
-The connection string must be configured in the [`packages/backend/.env`](./packages/backend/.env) file.
-To get started, you can **copy** and then **rename** the [`packages/backend/.env.example`](./packages/backend/.env.example)
-file to `.env` and fill it with your custom values.
-
-### Running the Frontend and Backend
-
-To run **both** the frontend and backend project at the same time, simply run `npm start` in the
-repository's root directory.
-
-If you want to run the projects individually for some reason, you can do so by navigating to their
-respective directory and then running `npm start` there:
-
-```sh
-# At the example of the frontend:
-cd packages/frontend/src
-npm start
-```
-Then open http://localhost:1234 in your browser.
-
-### Formatting and Linting
-
-The repository is using [Prettier](https://prettier.io/) for formatting and [ESLint](https://eslint.org/) for linting.
-You can format/lint all files in the project via the following commands from the repository's root directory:
-
-```sh
-npm run format
-npm run lint
-```
-
+- [💻 Getting Started and Running the Application](./docs/getting-started.md)<br/>
+  _How to setup the development environment and run Decarbonizer locally with dummy data._
+- [📸 Screenshot Tour](./docs/tour.md)<br/>
+  _A small showcase of Decarbonizer's most important features._
+- [👋🏻 Contributing](./docs/contributing.md)<br/>
+  _A statement about the project's state and contributing guidelines._
 
 ## License
 
