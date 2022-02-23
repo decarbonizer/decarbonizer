@@ -94,13 +94,13 @@ export default function RealEstateBox() {
           {realEstates.map((city, index) => (
             <TabPanel key={index} roundedBottom="md" height="100%" position="relative">
               <Box>
-                <SimpleGrid columns={2} rows={2} spacing={10} h="xs">
+                <SimpleGrid columns={2} spacing={10} h="xs">
                   <Center>
                     <Box alignItems="center">
                       <p>{city.description}</p>
                     </Box>
                   </Center>
-                  <SimpleGrid rows={2}>
+                  <SimpleGrid>
                     <Center>
                       <Icon
                         as={BiCube}
@@ -110,7 +110,7 @@ export default function RealEstateBox() {
                       />
                     </Center>
                     <Center>
-                      <SimpleGrid rows={2} spacing={5}>
+                      <SimpleGrid spacing={5}>
                         <Box>
                           <p>
                             <b>Size of the office:</b> {city.area} m<sup>2</sup>
