@@ -120,7 +120,7 @@ export default function RealEstateCard({ realEstate }: RealEstateCardProps) {
           </Text>
         </VStack>
 
-        <SimpleGrid flexGrow={1} align="center" columns={2} p="8" gap={2}>
+        <SimpleGrid flexGrow={1} alignItems="center" columns={2} p="8" gap={2}>
           <VStack align="flex-start">
             {surveyAnswers && actionPlans ? (
               <>
