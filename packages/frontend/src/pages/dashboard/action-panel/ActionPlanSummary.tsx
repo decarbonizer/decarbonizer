@@ -50,7 +50,7 @@ function ActionAnswerAccordionItem({ actionId, actionAnswer }: ActionAnswerAccor
         icon={<Icon as={currentAction?.icon} />}
       />
       <AccordionPanel>
-        <Grid templateColumns="repeat(2,1fr)" w="100%" align="flex-start">
+        <Grid templateColumns="repeat(2,1fr)" w="100%" alignItems="flex-start">
           <FormEngine
             value={actionAnswer.values.value}
             isViewOnly
