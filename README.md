@@ -27,7 +27,7 @@ This means that our primary goal with the project and codebase was the following
 context, but naturally, there are rough edges and taken shortcuts which would have to be ironed out
 before being able to transition from an MVP to a production version of Decarbonizer.
 
-Examples of this are, for example, the (sometimes missing) authentication/authorization of endpoints,
+Examples of this are the (sometimes missing) authentication/authorization of endpoints,
 code duplication, inexisting code documentation, etc.
 Should there be any kind of public interest in this project, such issues would be good starting
 points for improvement.
