@@ -37,8 +37,8 @@ npx lerna bootstrap
 ## Backend Configuration
 
 The backend requires a MongoDB connection in order to run properly.
-The connection string must be configured in the [`./../packages/backend/src/.env`](./../packages/backend/src/.env) file.
-To get started, you can **copy** and then **rename** the [`./../packages/backend/src/.env.example`](./../src/packages/backend/src/.env.example)
+The connection string must be configured in the [`./../packages/backend/.env`](./../packages/backend/.env) file.
+To get started, you can **copy** and then **rename** the [`./../packages/backend/.env.example`](./../src/packages/backend/.env.example)
 file to `.env` and fill it with your custom values.
 
 ## Running the Frontend and Backend
